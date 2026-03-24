@@ -1,13 +1,14 @@
+import { lazy, Suspense } from "react";
+
+const Hero3DScene = lazy(() => import("./Hero3DScene"));
+
 const HeroSection = () => {
   return (
     <section className="snap-section relative min-h-screen overflow-hidden bg-background">
       <div className="absolute inset-0">
-        <iframe
-          src="https://my.spline.design/ticktockinteractivelanding-iGikwv60VbyZBfhah4IvESxV/"
-          className="w-full h-full border-0"
-          title="Interactive 3D Background"
-          loading="lazy"
-        />
+        <Suspense fallback={<div className="w-full h-full bg-background" />}>
+          <Hero3DScene />
+        </Suspense>
       </div>
     </section>
   );
