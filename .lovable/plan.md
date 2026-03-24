@@ -1,69 +1,86 @@
 
 
-# Food Import Landing Page — Full-Section Scroll with Parallax & Animations
+# Updated Plan — Exact Design Match with Animated Gradients
 
-## Overview
-Recreate the client's food import business landing page with full-section scroll snapping, parallax hero effects, and rich micro-interactions throughout.
+## Summary
+Rework all components to precisely match the reference image, including animated/shifting gradients, exact layout structures, and correct text content.
 
-## Sections (each snaps into view on scroll)
+---
 
-### 1. Navigation Bar (Fixed)
-- Dark green sticky navbar with logo, nav links (About, Brands, Products), Login button, and "Contact Us" CTA
-- Subtle backdrop blur effect
+## Changes by Component
 
-### 2. Hero Section (Parallax)
-- Dark gradient background with parallax-scrolling background imagery
-- Badge: "Premium Food Imports"
-- Large headline: "BRINGING THE WORLD'S FINEST FOODS TO YOUR TABLE"
-- Subtitle text about sourcing and importing
-- Two CTAs: "Contact Us" and "Take The Quiz →"
-- Floating/animated food product images
+### 1. Navbar (`Navbar.tsx`)
+- Convert to a **pill-shaped floating navbar** centered at top with `rounded-full`, dark green bg, ~max-w-4xl
+- Logo on left (green circle with leaf icon), nav links centered, Login + Contact Us on right
+- All contained in a single rounded pill bar with padding
 
-### 3. Client Logos Bar
-- Scrolling or static logo strip (ADIRA, ADIRA INC, Holcim, MNC, TELKOMSEL)
-- Subtle fade-in animation
+### 2. Hero Section (`HeroSection.tsx`)
+- Keep dark green background with parallax
+- **Add animated gradient**: use CSS `@keyframes gradient-shift` to slowly animate a multi-stop radial/linear gradient background (shifting hue/position over ~8s)
+- Wrap left-side content (badge, heading, subtitle, CTAs) inside a **rounded-2xl bordered card** with semi-transparent dark bg and subtle border — matching the reference's boxed content area
+- **Remove** the right-side floating cards/orbs entirely — reference shows no floating elements
+- Keep the "Premium Food Imports" badge, headline, subtitle, and two CTA buttons
 
-### 4. Featured Products Section
-- Section title with description
-- 3 product cards with dark gradient backgrounds, product images, "Shop Now" buttons
-- Cards animate in with staggered fade-up on scroll, hover lift/glow effects
+### 3. Logo Strip (`LogoStrip.tsx`)
+- Keep existing marquee animation — already close to reference
 
-### 5. Why Choose Us Section
-- "Why Choose Us" badge + heading + subtitle
-- 3 feature cards: Quality Assurance, Global Sourcing, Efficient Distribution
-- Cards with icons, hover scale and shadow effects
-- Staggered entrance animations
+### 4. Featured Products (`FeaturedProducts.tsx`)
+- Rename all products to **"Daily Multivitamin"** with subtitle "Nutritional Supplements"
+- Keep 3-card grid with dark gradient cards
+- **Add animated gradient** on each card's image area: CSS keyframe that shifts the gradient colors/positions subtly on loop
+- Keep hover lift + glow effects
 
-### 6. Categories Section
-- Heading + description
-- Carousel/slider with category cards (Processed Foods, Grains & Staples)
-- Navigation dots and arrows
-- Cards with hover effects
+### 5. Why Choose Us (`WhyChooseUs.tsx`)
+- Update heading to: **"Reliable Food Import Solutions for Your Business"**
+- Update subtitle to: "Go steadily sourcing with a strong global network, strict quality control, and efficient logistics."
+- Keep 3 feature cards with staggered entrance animations
 
-### 7. Stats & Social Proof Section
-- Descriptive text
-- Animated counter stats: 10+ Years, 200+ Clients, 500+ Products, 25+ Countries
-- Avatar groups beside each stat
-- "Get Started →" CTA button with hover animation
+### 6. Categories Section (`CategoriesSection.tsx`)
+- Convert from 4-column grid to **2-visible-card carousel/slider**
+- Each card: blue/teal icon at top, title, description text
+- Add **prev/next arrow buttons** and **dot indicators** below
+- Add animated gradient backgrounds on cards
 
-### 8. Dark Stats Banner
-- Dark background strip with large animated counters: 120K+ Products Delivered, 150+ Active Partnerships, 32K+ Orders Fulfilled
+### 7. Stats Section (`StatsSection.tsx`)
+- Change to **staggered/zigzag layout** — alternating vertical offsets on stat cards
+- Keep animated counters and hover effects
 
-### 9. FAQ Section
-- "FAQs" badge + "Frequently Asked Questions" heading
-- Accordion items with smooth expand/collapse animations
-- Questions about food import topics
-- Hover highlight on each item
+### 8. Dark Stats Banner (`DarkStatsBanner.tsx`)
+- Add **animated gradient background**: slowly shifting radial gradients behind the stats
+- Keep counter animations
 
-### 10. Footer
-- Dark background with logo, tagline, Quick Links, and social links (Facebook, LinkedIn)
-- Copyright notice
+### 9. FAQ Section (`FAQSection.tsx`)
+- Convert to **2-column layout**: left side has badge + heading + description paragraph; right side has accordion
+- Style accordion items with **dark green/forest background** and white text
+- Use `+` icon instead of chevron for expand trigger
 
-## Technical Approach
-- **Scroll Snap**: CSS `scroll-snap-type: y mandatory` on the main container with each section as a snap point
-- **Parallax**: CSS transform-based parallax on the hero background
-- **Animations**: Intersection Observer-based reveal animations (fade-in, slide-up, scale-in, counter animations)
-- **Hover Effects**: Scale transforms, shadow transitions, underline animations on links
-- **Color Palette**: Dark green (#1a2e1a), white, light grays matching the design
-- **Responsive**: Mobile-friendly with adjusted layouts
+### 10. Footer (`Footer.tsx`)
+- Adjust to 3-column: Brand (logo + tagline), Quick Links, Social/Rules column
+- Match reference layout
+
+### 11. Global CSS (`index.css`)
+- Add `@keyframes gradient-shift` for animated gradient backgrounds:
+  ```
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  ```
+- Add `.animate-gradient` utility class with `background-size: 200% 200%` and the animation
+- Add any additional animated gradient keyframes for card backgrounds
+
+---
+
+## Files to Modify
+1. `src/index.css` — animated gradient keyframes + utility classes
+2. `src/components/landing/Navbar.tsx` — pill-shaped floating bar
+3. `src/components/landing/HeroSection.tsx` — bordered content card, animated gradient bg, remove floating elements
+4. `src/components/landing/FeaturedProducts.tsx` — "Daily Multivitamin" labels, animated card gradients
+5. `src/components/landing/WhyChooseUs.tsx` — updated heading/subtitle text
+6. `src/components/landing/CategoriesSection.tsx` — carousel with 2 visible cards, arrows, dots
+7. `src/components/landing/StatsSection.tsx` — staggered/zigzag stat layout
+8. `src/components/landing/DarkStatsBanner.tsx` — animated gradient background
+9. `src/components/landing/FAQSection.tsx` — 2-column layout, dark green accordion items
+10. `src/components/landing/Footer.tsx` — 3-column layout matching reference
 
