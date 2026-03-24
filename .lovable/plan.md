@@ -1,30 +1,23 @@
 
 
-# Replace Spline iframe with React Three Fiber 3D Scene
+# Animated Gradient + Noise Hero with Full-Height Marquee
 
-## What Changes
+## Changes
 
-You already have a fully built `Hero3DScene.tsx` with a morphing blob, orbiting spheres, and floating particles using React Three Fiber. The Spline iframe is currently blank/not loading. The fix is simply to swap the iframe back to using the existing `Hero3DScene` component.
+### `src/components/landing/HeroSection.tsx`
+- Remove `lazy`, `Suspense`, and `Hero3DScene` imports
+- Background layer: animated gradient using brand colors (forest greens, gold, cream) with multiple radial/linear gradients that shift via CSS animation
+- Noise layer: inline SVG `feTurbulence` filter rendered as a semi-transparent overlay div for grain texture
+- Marquee layer (on top, z-10): "OLIVE FOODS" text at `text-[100vh] leading-[100vh]` to fill full hero height, with `pointer-events-none`
+- Layer order: gradient (z-0) → noise (z-[1]) → marquee text (z-10)
 
-## File: `src/components/landing/HeroSection.tsx`
+### `src/index.css`
+- Add `@keyframes gradient-shift` for slow background-position animation (already has gradient-move, but add a new one for background-position based shifting)
 
-- Remove the iframe
-- Lazy-import `Hero3DScene` with `Suspense` fallback
-- Render it as the full-screen background layer (`absolute inset-0`)
-- Keep the section as full-screen with `min-h-screen`
-
-The existing `Hero3DScene.tsx` already has everything needed:
-- **Main blob**: Icosahedron with `MeshDistortMaterial` (morphing effect), mouse-interactive rotation
-- **Orbiting spheres**: 4 glass-like orbs at different orbits
-- **Floating particles**: 200 color-coded dots (gold, green, cream)
-- **Lighting**: Ambient + directional + gold/green point lights
-- **Environment**: Forest preset for reflections
-
-No new packages needed — `@react-three/fiber`, `three`, and `@react-three/drei` are already installed.
-
-## Files
+### Files
 
 | Action | File |
 |--------|------|
 | Modify | `src/components/landing/HeroSection.tsx` |
+| Modify | `src/index.css` (if needed for new keyframes) |
 
