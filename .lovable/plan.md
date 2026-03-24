@@ -1,33 +1,32 @@
 
 
-# Hero Section — Full-Screen with 3D Background
+# Particle System + Scroll Improvements
 
-## What Changes
+## 1. Add Floating Particles to Hero 3D Scene
 
-### 1. `src/components/landing/Hero3DScene.tsx` — New 3D element
-Replace the torus knot with a modern **icosahedron** (geometric sphere) with distort material — gives a fluid, organic blob effect that's more contemporary. Multiple smaller floating spheres orbit around it for depth.
+**File: `src/components/landing/Hero3DScene.tsx`**
 
-- Main shape: `icosahedronGeometry` with `MeshDistortMaterial` (distort 0.4, speed 3) — creates a morphing blob
-- 3-4 smaller glass-like orbs orbiting at different radii using `useFrame`
-- Camera pulled back slightly, FOV wider for immersive feel
-- Canvas fills entire section (`absolute inset-0`)
+Add a `FloatingParticles` component using Three.js `Points` and `BufferGeometry`:
+- ~200 particles spread in a sphere of radius ~10
+- Each particle is a small dot (size 0.03-0.06) with varying opacity
+- Colors: mix of gold (#d4a017), forest-green (#6a9f5b), and cream (#f5f0e8)
+- Animate in `useFrame`: slow rotation of the entire points group + individual subtle drift using sine waves on each particle's position
+- Use `PointsMaterial` with `transparent`, `sizeAttenuation`, and a soft circular texture (or `alphaMap`)
 
-### 2. `src/components/landing/HeroSection.tsx` — Full-screen layout
-- Remove the rounded card container and two-column layout
-- Make section true full-screen (`min-h-screen`) with dark gradient background
-- 3D Canvas as **absolute background layer** filling the entire section
-- Text content overlaid on top (centered or left-aligned) with `relative z-10`
-- Update content:
-  - Badge: "Global Food Import Solutions"
-  - Heading: "FROM FARM TO FORK, EXCELLENCE IN EVERY SHIPMENT"
-  - Subtext: "Curating premium food products from 30+ countries — delivering quality, compliance, and reliability to businesses across Sri Lanka and beyond."
-  - CTA: "Explore Our Products" + "Get a Quote" link
-- Dark overlay gradient between 3D and text for readability
-- Show 3D on all screen sizes (not hidden on mobile)
+This creates a starfield/dust effect around the blob, adding significant visual depth.
 
-### Files
+## 2. Improve Scroll Behavior
+
+**File: `src/index.css`**
+
+Remove `scroll-snap-type: y mandatory` from `.snap-container` — mandatory snapping feels jarring. Replace with `scroll-snap-type: y proximity` so sections gently guide but don't lock. This creates a smoother, more natural scroll feel.
+
+Also reduce `min-height: 100vh` constraint on `.snap-section` to allow more natural content flow — keep it but add `scroll-snap-stop: normal` so users can scroll past multiple sections.
+
+### Files Changed
+
 | Action | File |
 |--------|------|
-| Rewrite | `src/components/landing/HeroSection.tsx` |
-| Rewrite | `src/components/landing/Hero3DScene.tsx` |
+| Modify | `src/components/landing/Hero3DScene.tsx` — add `FloatingParticles` component |
+| Modify | `src/index.css` — change snap to `proximity`, smoother scroll |
 
