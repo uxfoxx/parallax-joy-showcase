@@ -11,9 +11,13 @@ const DarkStatsBanner = () => {
   const { ref, isInView } = useInView();
 
   return (
-    <section ref={ref} className="snap-section-auto bg-forest-deep py-20 relative overflow-hidden">
+    <section ref={ref} className="snap-section-auto relative overflow-hidden py-20">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 animate-gradient-slow" style={{
+        background: `linear-gradient(135deg, hsl(140 45% 12%), hsl(140 35% 16%), hsl(160 30% 14%), hsl(140 40% 10%), hsl(140 45% 12%))`,
+      }} />
       <div className="absolute inset-0 opacity-10" style={{
-        background: "radial-gradient(circle at 20% 50%, hsl(42 80% 55% / 0.15), transparent 50%), radial-gradient(circle at 80% 50%, hsl(140 35% 22% / 0.3), transparent 50%)",
+        background: "radial-gradient(circle at 20% 50%, hsl(42 80% 55% / 0.2), transparent 50%), radial-gradient(circle at 80% 50%, hsl(140 35% 30% / 0.3), transparent 50%)",
       }} />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">

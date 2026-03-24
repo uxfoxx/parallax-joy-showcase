@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
 
 const products = [
-  { name: "Organic Olive Oil", origin: "Mediterranean Region", tag: "Best Seller" },
-  { name: "Premium Basmati Rice", origin: "South Asia", tag: "New Arrival" },
-  { name: "Artisan Dark Chocolate", origin: "West Africa & Europe", tag: "Popular" },
+  { name: "Daily Multivitamin", origin: "Nutritional Supplements", tag: "Best Seller" },
+  { name: "Daily Multivitamin", origin: "Nutritional Supplements", tag: "New Arrival" },
+  { name: "Daily Multivitamin", origin: "Nutritional Supplements", tag: "Popular" },
 ];
 
 const FeaturedProducts = () => {
@@ -31,14 +31,16 @@ const FeaturedProducts = () => {
         <div className="grid md:grid-cols-3 gap-8">
           {products.map((product, i) => (
             <div
-              key={product.name}
-              className={`group relative rounded-2xl overflow-hidden bg-gradient-to-br from-forest-deep to-forest-mid border border-primary-foreground/5 transition-all duration-700 hover:shadow-2xl hover:shadow-forest-deep/30 hover:-translate-y-2 ${
+              key={i}
+              className={`group relative rounded-2xl overflow-hidden border border-primary-foreground/5 transition-all duration-700 hover:shadow-2xl hover:shadow-forest-deep/30 hover:-translate-y-2 ${
                 isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
               style={{ transitionDelay: isInView ? `${i * 150}ms` : "0ms" }}
             >
-              {/* Image area */}
-              <div className="relative h-64 bg-gradient-to-br from-forest-mid to-forest-light/30 overflow-hidden">
+              {/* Animated gradient image area */}
+              <div className="relative h-64 overflow-hidden animate-gradient-slow" style={{
+                background: `linear-gradient(135deg, hsl(140 45% 12%), hsl(140 35% 22%), hsl(160 30% 18%), hsl(42 80% 55% / 0.15), hsl(140 45% 12%))`
+              }}>
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/80 to-transparent z-10" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-32 h-32 rounded-full bg-accent/10 blur-[40px] group-hover:bg-accent/20 transition-all duration-700" />
@@ -49,7 +51,7 @@ const FeaturedProducts = () => {
               </div>
 
               {/* Content */}
-              <div className="p-6 space-y-3">
+              <div className="p-6 space-y-3 bg-forest-deep">
                 <h3 className="font-display text-xl font-semibold text-primary-foreground group-hover:text-accent transition-colors duration-300">
                   {product.name}
                 </h3>

@@ -1,4 +1,4 @@
-import { Facebook, Linkedin } from "lucide-react";
+import { Facebook, Linkedin, Leaf } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -8,8 +8,8 @@ const Footer = () => {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center font-display font-bold text-accent-foreground text-lg">
-                F
+              <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center">
+                <Leaf className="w-5 h-5 text-accent-foreground" />
               </div>
               <span className="font-display text-xl font-bold">FoodImport</span>
             </div>
@@ -22,7 +22,7 @@ const Footer = () => {
           <div>
             <h4 className="font-display text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-3">
-              {["About Us", "Our Products", "Brands", "Contact"].map((link) => (
+              {["About Us", "Brands", "Products", "Contact"].map((link) => (
                 <li key={link}>
                   <a href="#" className="text-primary-foreground/50 hover:text-accent font-body text-sm transition-colors duration-300">
                     {link}
@@ -32,7 +32,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Social */}
+          {/* Rules / Social */}
           <div>
             <h4 className="font-display text-lg font-semibold mb-4">Connect</h4>
             <div className="flex gap-3">

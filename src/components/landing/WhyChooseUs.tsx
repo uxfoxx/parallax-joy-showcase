@@ -30,10 +30,10 @@ const WhyChooseUs = () => {
             Why Choose Us
           </span>
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Built on Trust & Excellence
+            Reliable Food Import Solutions for Your Business
           </h2>
           <p className="text-muted-foreground font-body text-lg">
-            Decades of experience in food imports, delivering quality you can taste in every bite.
+            Go steadily sourcing with a strong global network, strict quality control, and efficient logistics.
           </p>
         </div>
 
