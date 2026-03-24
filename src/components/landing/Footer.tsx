@@ -1,30 +1,41 @@
-import { Facebook, Linkedin, Leaf } from "lucide-react";
+import { Leaf } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="snap-section-auto bg-forest-deep text-primary-foreground">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-        <div className="grid md:grid-cols-3 gap-12">
+    <footer className="snap-section-auto relative overflow-hidden">
+      {/* Animated gradient background */}
+      <div
+        className="absolute inset-0 animate-gradient"
+        style={{
+          background: `
+            radial-gradient(ellipse at 50% 50%, hsl(140 35% 16% / 0.6) 0%, transparent 60%),
+            linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))
+          `,
+        }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-16">
+        <div className="grid md:grid-cols-[1.5fr_1fr_1fr] gap-12 items-start">
           {/* Brand */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center">
-                <Leaf className="w-5 h-5 text-accent-foreground" />
-              </div>
-              <span className="font-display text-xl font-bold">FoodImport</span>
+            <div className="w-10 h-10">
+              <Leaf className="w-8 h-8 text-forest-light" />
             </div>
             <p className="text-primary-foreground/50 font-body text-sm leading-relaxed max-w-xs">
-              Bringing the world's finest foods to your table since 2014. Premium imports, trusted quality.
+              # Your trusted partner in premium food imports, delivering quality and reliability across Sri Lanka.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-display text-lg font-semibold mb-4">Quick Links</h4>
+            <h4 className="font-body text-sm font-semibold text-primary-foreground mb-4">Quick Links</h4>
             <ul className="space-y-3">
-              {["About Us", "Brands", "Products", "Contact"].map((link) => (
+              {["Brands", "Products"].map((link) => (
                 <li key={link}>
-                  <a href="#" className="text-primary-foreground/50 hover:text-accent font-body text-sm transition-colors duration-300">
+                  <a
+                    href="#"
+                    className="text-primary-foreground/50 hover:text-primary-foreground font-body text-sm transition-colors duration-300"
+                  >
                     {link}
                   </a>
                 </li>
@@ -32,26 +43,27 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Rules / Social */}
+          {/* Follow */}
           <div>
-            <h4 className="font-display text-lg font-semibold mb-4">Connect</h4>
-            <div className="flex gap-3">
-              {[Facebook, Linkedin].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="w-10 h-10 rounded-full border border-primary-foreground/15 flex items-center justify-center hover:bg-accent hover:border-accent hover:text-accent-foreground transition-all duration-300 hover:-translate-y-1"
-                >
-                  <Icon className="w-4 h-4" />
-                </a>
+            <h4 className="font-body text-sm font-semibold text-primary-foreground mb-4">Follow</h4>
+            <ul className="space-y-3">
+              {["Facebook", "LinkedIn"].map((link) => (
+                <li key={link}>
+                  <a
+                    href="#"
+                    className="text-primary-foreground/50 hover:text-primary-foreground font-body text-sm transition-colors duration-300 underline underline-offset-2"
+                  >
+                    {link}
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </div>
 
-        <div className="border-t border-primary-foreground/10 mt-12 pt-8 text-center">
+        <div className="mt-12 pt-8 text-center">
           <p className="text-primary-foreground/30 font-body text-sm">
-            © {new Date().getFullYear()} FoodImport. All rights reserved.
+            ©2026 . All rights reserved.
           </p>
         </div>
       </div>
