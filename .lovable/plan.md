@@ -1,42 +1,35 @@
 
 
-# Add Staff and Locations Sections
+# Fix Gradient Animations
 
-## Overview
-Add two new sections between DarkStatsBanner and FAQSection:
-1. **Our Team** — staff members displayed in a grid, white/light background
-2. **Locations We Cover** — map-style or card grid of regions, dark gradient background (matching site style)
+## Problem
+The `animate-gradient` class uses `background-position` shifting (`0% 50%` -> `50% 100%` -> `100% 50%` etc.), but most sections use `radial-gradient` which doesn't visually respond to `background-position` changes. Only sections with `linear-gradient` components show visible animation. The radial gradients stay static despite having the class applied.
 
-## New Files
+## Solution
+Replace the `background-position`-based animation with a subtle **scale and position transform** animation on the gradient overlay divs themselves. This makes radial gradients visually shift and pulse.
 
-### 1. `src/components/landing/TeamSection.tsx`
-- **White/cream background** (`bg-muted/30`) — matches StatsSection's light style
-- Badge: "Our Team"
-- Heading: "Meet the People Behind Our Success"
-- Subtitle text
-- **4-column grid** (2 cols on mobile) of team member cards
-- Each card: circular avatar placeholder (initials on forest-deep bg), name, role, short bio
-- Cards use `rounded-2xl bg-card border border-border` style (same as stat cards)
-- Hover effects: lift + shadow + border accent, consistent with existing cards
-- `useInView` for scroll-triggered fade-in animations with staggered delays
-- 4-6 placeholder team members (CEO, Operations Manager, Quality Assurance Lead, Logistics Coordinator, etc.)
+### 1. `src/index.css` — New animation keyframes
+- Add a new `@keyframes gradient-move` that animates `transform` (slight translate + scale shifts) instead of `background-position`
+- Update `.animate-gradient` to use this new transform-based animation so radial gradients visually move
+- Keep `background-size` at normal (no need for 300%)
 
-### 2. `src/components/landing/LocationsSection.tsx`
-- **Dark gradient background** with `animate-gradient` — use a radial gradient similar to WhyChooseUs (`radial-gradient(ellipse at 50% 100%, #5C7928 0%, #194B22 24%, #08120A 100%)`)
-- Badge: "Our Reach"
-- Heading: "Locations We Cover"
-- Subtitle about global sourcing network
-- **Grid of location cards** (3 cols desktop, 1 mobile) — each card shows:
-  - Region name (e.g., "Middle East", "Southeast Asia", "East Africa")
-  - Country list or brief description
-  - MapPin icon
-- Cards: semi-transparent dark bg with border (`border-primary-foreground/10`), same style as WhyChooseUs feature cards
-- Static card backgrounds (no animation per the rule), section bg animates
-- `useInView` animations
+```
+@keyframes gradient-move {
+  0%   { transform: scale(1) translate(0, 0); }
+  25%  { transform: scale(1.05) translate(1%, -1%); }
+  50%  { transform: scale(1.1) translate(-1%, 1%); }
+  75%  { transform: scale(1.05) translate(1%, 1%); }
+  100% { transform: scale(1) translate(0, 0); }
+}
 
-## Modified File
+.animate-gradient {
+  animation: gradient-move 8s ease infinite;
+}
+```
 
-### 3. `src/pages/Index.tsx`
-- Import both new components
-- Insert `<TeamSection />` and `<LocationsSection />` between `<DarkStatsBanner />` and `<FAQSection />`
+- Remove the old `gradient-shift` keyframe and `.animate-gradient` / `.animate-gradient-slow` rules
+- The gradient overlay divs already have `absolute inset-0` and parent has `overflow-hidden`, so the slight scale-up won't cause overflow issues
+
+### Files Changed
+- `src/index.css` — Replace gradient animation keyframes and utility classes
 
