@@ -3,6 +3,61 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { MeshDistortMaterial, Float, Environment } from "@react-three/drei";
 import * as THREE from "three";
 
+const FloatingParticles = ({ count = 200 }: { count?: number }) => {
+  const pointsRef = useRef<THREE.Points>(null);
+
+  const { positions, colors, sizes } = useMemo(() => {
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
+    const palette = [
+      new THREE.Color("#d4a017"),
+      new THREE.Color("#6a9f5b"),
+      new THREE.Color("#f5f0e8"),
+    ];
+
+    for (let i = 0; i < count; i++) {
+      const r = 4 + Math.random() * 8;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      positions[i * 3 + 2] = r * Math.cos(phi);
+
+      const c = palette[Math.floor(Math.random() * palette.length)];
+      colors[i * 3] = c.r;
+      colors[i * 3 + 1] = c.g;
+      colors[i * 3 + 2] = c.b;
+
+      sizes[i] = 0.03 + Math.random() * 0.04;
+    }
+    return { positions, colors, sizes };
+  }, [count]);
+
+  useFrame(({ clock }) => {
+    if (!pointsRef.current) return;
+    pointsRef.current.rotation.y = clock.getElapsedTime() * 0.02;
+    pointsRef.current.rotation.x = Math.sin(clock.getElapsedTime() * 0.01) * 0.1;
+  });
+
+  return (
+    <points ref={pointsRef}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.05}
+        vertexColors
+        transparent
+        opacity={0.6}
+        sizeAttenuation
+        depthWrite={false}
+      />
+    </points>
+  );
+};
+
 const OrbitingSphere = ({ radius, speed, size, color, offset }: { radius: number; speed: number; size: number; color: string; offset: number }) => {
   const ref = useRef<THREE.Mesh>(null);
 
@@ -72,6 +127,7 @@ const Hero3DScene = () => {
         <pointLight position={[-4, 3, 4]} intensity={0.6} color="#d4a017" />
         <pointLight position={[4, -2, -3]} intensity={0.3} color="#4a7c3f" />
         <MainBlob />
+        <FloatingParticles count={200} />
         <OrbitingSphere radius={4} speed={0.5} size={0.3} color="#d4a017" offset={0} />
         <OrbitingSphere radius={5} speed={0.35} size={0.2} color="#6a9f5b" offset={2} />
         <OrbitingSphere radius={3.5} speed={0.6} size={0.25} color="#c4985a" offset={4} />

@@ -103,17 +103,19 @@
   .snap-container {
     height: 100vh;
     overflow-y: auto;
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
     scroll-behavior: smooth;
   }
 
   .snap-section {
     scroll-snap-align: start;
+    scroll-snap-stop: normal;
     min-height: 100vh;
   }
 
   .snap-section-auto {
     scroll-snap-align: start;
+    scroll-snap-stop: normal;
   }
 }
 
