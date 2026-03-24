@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import type { Product } from "@/data/products";
+import type { Product } from "@/lib/api";
 
 interface ProductCardProps {
   product: Product;
@@ -9,6 +9,9 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, large = false }: ProductCardProps) => {
+  const brandName = product.brands?.name ?? "";
+  const brandSlug = product.brands?.slug ?? "";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -19,7 +22,6 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
     >
       <Link to={`/products/${product.slug}`} className="block group">
         <div className="rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:border-forest-mid/30">
-          {/* Image placeholder */}
           <div
             className={`relative overflow-hidden bg-gradient-to-br from-forest-deep/10 via-forest-mid/5 to-accent/10 ${
               large ? "h-64" : "h-48"
@@ -42,7 +44,6 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
             </div>
           </div>
 
-          {/* Content */}
           <div className="p-5 space-y-2">
             <h3 className="font-display text-lg font-semibold text-foreground group-hover:text-forest-mid transition-colors">
               {product.name}
@@ -52,11 +53,11 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
             </p>
             <div className="flex items-center justify-between pt-2">
               <Link
-                to={`/brands/${product.brandSlug}`}
+                to={`/brands/${brandSlug}`}
                 className="text-xs font-body font-medium text-forest-mid hover:underline"
                 onClick={(e) => e.stopPropagation()}
               >
-                {product.brandName}
+                {brandName}
               </Link>
               <span className="text-xs font-body text-muted-foreground">
                 {product.origin}
