@@ -1,136 +1,82 @@
 
 
-# Admin Panel with Supabase Backend for Products & Brands
+# Aesthetic Overhaul — FreshLine Website
 
-## Overview
-Move all product and brand data from the hardcoded `src/data/products.ts` file to Supabase database tables. Build an admin panel with full CRUD operations. Connect the landing page's Featured Products section to real data. Add "Home" link to the navbar.
+## Issues Identified
 
-## Database Schema
+1. **Placeholder copy everywhere** — CategoriesSection uses "Effortlessly configure your preferred keyboard shortcuts" (SaaS boilerplate), WhyChooseUs has "No in-app analytics. No middle servers" (finance app copy), FAQ intro says "your voice on social media is your brand's heartbeat"
+2. **Categories section uses wrong color scheme** — Dark cards on a light background look jarring; the blue SVG hexagon icon clashes with the green/gold palette
+3. **LogoStrip looks cheap** — Text-only logos in bordered boxes feel placeholder-tier
+4. **StatsSection (light bg) feels visually flat** — The tiny colored circles under each stat serve no purpose and look unfinished
+5. **Hero section has no content** — Just a gradient with ghost marquee text, no headline, subtitle, or CTA
+6. **ProductCard image area is empty** — Just shows first letter of product name in a gradient box; looks like a broken image
+7. **Inner page headers are plain** — Same gradient rectangle across About, Products, Brands; no visual identity
+8. **Footer is sparse** — Missing company name, contact info, and the "FreshLine" brand identity
+9. **Categories carousel breaks on mobile** — Cards are 50% width which overflows on small screens
+10. **Inconsistent section rhythms** — Some sections use `snap-section` (full viewport), others `snap-section-auto`; creates uneven scrolling
+11. **WhyChooseUs feature descriptions don't match titles** — "Quality Assurance" talks about analytics; "Global Sourcing" talks about bank-level security
+12. **Contact Us / Inquire buttons go nowhere**
 
-### Table: `brands`
-| Column | Type | Notes |
-|--------|------|-------|
-| id | uuid (PK) | auto-generated |
-| slug | text (unique) | URL-friendly name |
-| name | text | |
-| description | text | |
-| origin | text | |
-| established | integer | |
-| created_at | timestamptz | default now() |
+## Plan
 
-### Table: `products`
-| Column | Type | Notes |
-|--------|------|-------|
-| id | uuid (PK) | auto-generated |
-| slug | text (unique) | URL-friendly name |
-| name | text | |
-| brand_id | uuid (FK → brands) | |
-| category | text | |
-| description | text | |
-| featured | boolean | default false |
-| tags | text[] | array of strings |
-| origin | text | |
-| sku | text | |
-| created_at | timestamptz | default now() |
+### 1. Hero Section — Add Content Layer
+Add a centered headline ("Premium Food Imports"), a subtitle, and a CTA button floating on top of the gradient+marquee. Proper z-index layering so text sits above marquee but below navbar.
 
-### Table: `categories`
-| Column | Type | Notes |
-|--------|------|-------|
-| id | uuid (PK) | auto-generated |
-| name | text (unique) | |
-| description | text | nullable |
+### 2. Fix All Placeholder Copy
+- **WhyChooseUs**: Rewrite feature descriptions to match food import context
+- **CategoriesSection**: Replace keyboard shortcut text with actual category descriptions
+- **FAQSection**: Fix the intro paragraph about social media
+- **Footer**: Add "FreshLine" name to copyright
 
-### RLS Policies
-- All tables: public SELECT for everyone (public website)
-- INSERT/UPDATE/DELETE: restricted to authenticated admin users
-- Admin role table using `user_roles` pattern from system instructions
+### 3. Categories Section Redesign
+- Switch to light-themed cards on the light background (currently dark cards look out of place)
+- Replace blue hexagon SVG with category-specific icons from Lucide (Wheat, Coffee, Milk, Snowflake)
+- Fix mobile layout: use full-width cards on small screens
+- Remove broken carousel math, use responsive grid instead
 
-### Seed Data
-Insert all existing hardcoded brands, products, and categories via migration.
+### 4. LogoStrip Polish
+- Make logos slightly larger, remove borders, use subtle opacity treatment
+- Keep marquee animation but cleaner styling
 
-## Admin Panel
+### 5. StatsSection Cleanup
+- Remove the meaningless colored circles under each stat
+- Add a subtle accent underline or icon instead
 
-### Route: `/admin`
-Protected route — requires authenticated user with `admin` role.
+### 6. ProductCard Image Enhancement
+- Make the placeholder area more intentional: larger centered icon (Package icon from Lucide) with the product initial, styled as a proper placeholder
+- Add subtle gradient animation on hover
 
-### Layout
-Sidebar navigation (using shadcn Sidebar) with sections:
-- Dashboard (overview counts)
-- Brands (list, create, edit, delete)
-- Products (list, create, edit, delete)
-- Categories (list, create, edit, delete)
+### 7. Inner Page Headers — Add Noise + Depth
+- Add the same noise texture overlay from the hero to inner page dark headers for consistency
+- Subtle animated gradient instead of flat `bg-forest-deep`
 
-### Auth
-- Simple login page at `/admin/login` using Supabase email/password auth
-- After login, check `user_roles` table for admin role
-- Redirect non-admins away
+### 8. Footer Enhancement
+- Add "FreshLine" brand name next to leaf icon
+- Add placeholder contact info (email, phone)
+- Fix copyright to include brand name
 
-### CRUD Pages
-Each entity (brands, products, categories) gets:
-- **List view**: Table with search, edit/delete actions
-- **Create/Edit**: Form dialog or page with all fields
-- **Delete**: Confirmation dialog
+### 9. Navbar "Contact Us" Button
+- Link to a scroll-to-footer or `/about` page contact section instead of being a dead button
 
-## Frontend Data Layer
+### 10. Global Consistency Fixes
+- Ensure all dark sections use the same gradient pattern (radial greens + mouse-follow)
+- Standardize card border-radius, padding, and hover effects across all pages
+- Make `snap-section-auto` sections have consistent padding
 
-### New file: `src/lib/api.ts`
-React Query hooks that fetch from Supabase instead of static data:
-- `useBrands()`, `useBrand(slug)`
-- `useProducts(filters?)`, `useProduct(slug)`, `useFeaturedProducts()`
-- `useCategories()`
-
-### Update public pages
-- `ProductsPage.tsx` — use `useProducts()` hook
-- `BrandsPage.tsx` — use `useBrands()` hook
-- `BrandDetailPage.tsx` — use `useBrand(slug)` + `useProducts({ brandSlug })`
-- `ProductDetailPage.tsx` — use `useProduct(slug)`
-- `FeaturedPage.tsx` — use `useFeaturedProducts()`
-
-### Landing page connections
-- `FeaturedProducts.tsx` — replace hardcoded "Daily Multivitamin" cards with real featured products from Supabase
-- `CategoriesSection.tsx` — pull categories from Supabase
-
-## Navbar Update
-
-Add "Home" as the first link pointing to `/`:
-```
-const links = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Brands", href: "/brands" },
-  { label: "Products", href: "/products" },
-  { label: "Featured", href: "/featured" },
-];
-```
-
-## Files Summary
+## Technical Details
 
 | Action | File |
 |--------|------|
-| Create | Supabase migration: `brands`, `products`, `categories`, `user_roles` tables + RLS + seed data |
-| Create | `src/lib/api.ts` — React Query hooks for Supabase data |
-| Create | `src/pages/admin/AdminLogin.tsx` — login page |
-| Create | `src/pages/admin/AdminLayout.tsx` — sidebar layout |
-| Create | `src/pages/admin/AdminDashboard.tsx` — overview |
-| Create | `src/pages/admin/AdminBrands.tsx` — brands CRUD |
-| Create | `src/pages/admin/AdminProducts.tsx` — products CRUD |
-| Create | `src/pages/admin/AdminCategories.tsx` — categories CRUD |
-| Create | `src/components/admin/AdminSidebar.tsx` — sidebar nav |
-| Modify | `src/App.tsx` — add admin routes |
-| Modify | `src/components/landing/Navbar.tsx` — add Home link |
-| Modify | `src/components/landing/FeaturedProducts.tsx` — use real data |
-| Modify | `src/components/landing/CategoriesSection.tsx` — use real data |
-| Modify | `src/pages/ProductsPage.tsx` — use Supabase hooks |
-| Modify | `src/pages/BrandsPage.tsx` — use Supabase hooks |
-| Modify | `src/pages/BrandDetailPage.tsx` — use Supabase hooks |
-| Modify | `src/pages/ProductDetailPage.tsx` — use Supabase hooks |
-| Modify | `src/pages/FeaturedPage.tsx` — use Supabase hooks |
-| Remove | `src/data/products.ts` — no longer needed (keep as fallback initially) |
-
-## Technical Notes
-- Supabase client setup via Lovable Cloud integration
-- All admin mutations use `supabase.from().insert/update/delete`
-- React Query for caching and refetching
-- Brand-product relationship: products join brands via `brand_id` FK
-- Product form includes brand dropdown populated from brands table
+| Modify | `src/components/landing/HeroSection.tsx` — add content overlay |
+| Modify | `src/components/landing/WhyChooseUs.tsx` — fix copy |
+| Modify | `src/components/landing/CategoriesSection.tsx` — redesign cards, fix icons, fix copy, fix mobile |
+| Modify | `src/components/landing/LogoStrip.tsx` — polish styling |
+| Modify | `src/components/landing/StatsSection.tsx` — remove circles, refine |
+| Modify | `src/components/landing/FAQSection.tsx` — fix intro copy |
+| Modify | `src/components/landing/Footer.tsx` — add brand name, contact info |
+| Modify | `src/components/landing/Navbar.tsx` — wire Contact Us button |
+| Modify | `src/components/ProductCard.tsx` — better placeholder visual |
+| Modify | `src/pages/AboutPage.tsx` — add noise texture to header |
+| Modify | `src/pages/ProductsPage.tsx` — add noise texture to header |
+| Modify | `src/pages/BrandsPage.tsx` — add noise texture to header |
 
