@@ -22,6 +22,8 @@ const Index = () => {
       <CategoriesSection />
       <StatsSection />
       <DarkStatsBanner />
+      <TeamSection />
+      <LocationsSection />
       <FAQSection />
       <Footer />
     </div>
