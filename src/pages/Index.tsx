@@ -13,6 +13,8 @@ import FAQSection from "@/components/landing/FAQSection";
 import Footer from "@/components/landing/Footer";
 
 const Index = () => {
+  useScrollSpeed();
+
   return (
     <div className="snap-container">
       <Navbar />
