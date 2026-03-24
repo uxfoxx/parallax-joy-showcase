@@ -1,24 +1,30 @@
 
 
-# Replace Hero 3D with Spline Embed
+# Replace Spline iframe with React Three Fiber 3D Scene
 
-## Change
+## What Changes
 
-Replace the React Three Fiber `Hero3DScene` background with the Spline interactive iframe embed. Remove the lazy-loaded `Hero3DScene` component and the dark gradient base div. The Spline iframe becomes the full-screen background layer.
+You already have a fully built `Hero3DScene.tsx` with a morphing blob, orbiting spheres, and floating particles using React Three Fiber. The Spline iframe is currently blank/not loading. The fix is simply to swap the iframe back to using the existing `Hero3DScene` component.
 
 ## File: `src/components/landing/HeroSection.tsx`
 
-- Remove `lazy`, `Suspense` imports and `Hero3DScene` reference
-- Replace the 3D background + gradient base with a single `iframe` element pointing to `https://my.spline.design/ticktockinteractivelanding-iGikwv60VbyZBfhah4IvESxV/`
-- iframe: `absolute inset-0`, `w-full h-full`, `border-0`, `pointer-events-auto`
-- Keep the dark overlay gradient for text readability
-- Keep all text content and animations as-is
+- Remove the iframe
+- Lazy-import `Hero3DScene` with `Suspense` fallback
+- Render it as the full-screen background layer (`absolute inset-0`)
+- Keep the section as full-screen with `min-h-screen`
+
+The existing `Hero3DScene.tsx` already has everything needed:
+- **Main blob**: Icosahedron with `MeshDistortMaterial` (morphing effect), mouse-interactive rotation
+- **Orbiting spheres**: 4 glass-like orbs at different orbits
+- **Floating particles**: 200 color-coded dots (gold, green, cream)
+- **Lighting**: Ambient + directional + gold/green point lights
+- **Environment**: Forest preset for reflections
+
+No new packages needed — `@react-three/fiber`, `three`, and `@react-three/drei` are already installed.
 
 ## Files
 
 | Action | File |
 |--------|------|
 | Modify | `src/components/landing/HeroSection.tsx` |
-
-No other files affected. `Hero3DScene.tsx` remains in the codebase but is no longer imported by the hero.
 
