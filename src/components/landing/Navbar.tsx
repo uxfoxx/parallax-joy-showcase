@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const links = [
+  { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Brands", href: "/brands" },
   { label: "Products", href: "/products" },
@@ -79,7 +80,7 @@ const Navbar = () => {
           {/* Center links */}
           <div className="hidden md:flex items-center gap-1 relative">
             {links.map((link) => {
-              const isActive = location.pathname === link.href || (link.href !== "/" && location.pathname.startsWith(link.href));
+              const isActive = link.href === "/" ? location.pathname === "/" : location.pathname === link.href || location.pathname.startsWith(link.href);
               return (
                 <Link
                   key={link.label}
