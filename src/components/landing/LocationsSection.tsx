@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
+import { useMouseGradient } from "@/hooks/useMouseGradient";
 
 const locations = [
   { region: "Middle East", countries: "UAE, Saudi Arabia, Qatar, Oman, Bahrain, Kuwait" },
@@ -11,8 +12,10 @@ const locations = [
 ];
 
 const LocationsSection = () => {
+  const { ref, gradientStyle } = useMouseGradient();
+
   return (
-    <section className="snap-section flex items-center relative overflow-hidden">
+    <section ref={ref as React.RefObject<HTMLElement>} className="snap-section flex items-center relative overflow-hidden">
       {/* Animated gradient background */}
       <div
         className="absolute inset-0 animate-gradient"
@@ -21,11 +24,13 @@ const LocationsSection = () => {
         }}
       />
 
+      {/* Mouse-follow gradient */}
+      <div className="absolute inset-0 pointer-events-none z-[1]" style={gradientStyle} />
+
       {/* Bottom glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-accent/10 blur-[80px] rounded-full" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-28 w-full">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -44,7 +49,6 @@ const LocationsSection = () => {
           </p>
         </motion.div>
 
-        {/* Location cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {locations.map((loc, i) => (
             <motion.div
@@ -62,7 +66,6 @@ const LocationsSection = () => {
                 `,
               }}
             >
-              {/* Icon */}
               <motion.div
                 whileHover={{ scale: 1.15, rotate: -5 }}
                 transition={{ type: "spring", stiffness: 300 }}

@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+
+const links = [
+  { label: "About", href: "/about" },
+  { label: "Brands", href: "/brands" },
+  { label: "Products", href: "/products" },
+];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const container = document.querySelector(".snap-container");
@@ -19,123 +26,132 @@ const Navbar = () => {
     return () => target.removeEventListener("scroll", onScroll);
   }, []);
 
-  const links = [
-    { label: "About", href: "/about" },
-    { label: "Brands", href: "/brands" },
-    { label: "Products", href: "/products" },
-  ];
-
   return (
-    <motion.nav
-      initial={{ y: -30, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-4 left-0 right-0 z-50 flex items-center justify-between px-6 lg:px-10"
-    >
-      {/* Left pill */}
-      <div
-        className={`flex items-center gap-6 rounded-full px-4 py-2.5 transition-all duration-500 ${
-          scrolled
-            ? "bg-forest-deep/95 backdrop-blur-md shadow-lg shadow-forest-deep/30"
-            : "bg-forest-deep/90 backdrop-blur-sm"
-        }`}
+    <>
+      <motion.nav
+        initial={{ y: -40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-5xl"
       >
-        <Link to="/" className="flex items-center group">
-          <motion.div
-            whileHover={{ scale: 1.15, rotate: 5 }}
-            whileTap={{ scale: 0.95 }}
-            className="w-9 h-9 rounded-full bg-forest-mid flex items-center justify-center transition-colors duration-300"
-          >
-            <Leaf className="w-5 h-5 text-forest-light" />
-          </motion.div>
-        </Link>
-
-        <div className="hidden md:flex items-center gap-5">
-          {links.map((link, i) => (
+        <motion.div
+          animate={{
+            paddingTop: scrolled ? 8 : 12,
+            paddingBottom: scrolled ? 8 : 12,
+          }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className={`flex items-center justify-between px-5 rounded-2xl transition-all duration-500 ${
+            scrolled
+              ? "bg-forest-deep/80 backdrop-blur-xl shadow-2xl shadow-forest-deep/40 border border-primary-foreground/10"
+              : "bg-forest-deep/60 backdrop-blur-md border border-primary-foreground/5"
+          }`}
+        >
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-3 group shrink-0">
             <motion.div
-              key={link.label}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + i * 0.08 }}
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-9 h-9 rounded-full bg-forest-mid flex items-center justify-center transition-colors duration-300"
             >
-              <Link
-                to={link.href}
-                className="relative text-primary-foreground/80 hover:text-primary-foreground font-body text-sm font-medium tracking-wide transition-colors duration-300 py-1 group"
-              >
-                {link.label}
-                <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-accent group-hover:w-full transition-all duration-300" />
-              </Link>
+              <Leaf className="w-5 h-5 text-forest-light" />
             </motion.div>
-          ))}
-        </div>
-      </div>
+            <span className="font-display text-primary-foreground font-semibold text-lg hidden sm:block tracking-tight">
+              FreshLine
+            </span>
+          </Link>
 
-      {/* Right pill */}
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-        className={`hidden md:flex items-center gap-2 rounded-full px-2 py-1.5 transition-all duration-500 ${
-          scrolled
-            ? "bg-background/95 backdrop-blur-md shadow-lg border border-border"
-            : "bg-background/90 backdrop-blur-sm border border-border/50"
-        }`}
-      >
-        <span className="text-foreground/70 font-body text-sm font-medium px-4 cursor-pointer hover:text-foreground transition-colors">
-          Inquire
-        </span>
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button className="bg-foreground text-background hover:bg-foreground/90 font-body font-medium rounded-full h-9 px-5 text-sm transition-all duration-300">
-            Contact US
-          </Button>
+          {/* Center links */}
+          <div className="hidden md:flex items-center gap-1 relative">
+            {links.map((link) => {
+              const isActive = location.pathname === link.href;
+              return (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="relative px-5 py-2 text-sm font-body font-medium transition-colors duration-300"
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="nav-pill"
+                      className="absolute inset-0 bg-primary-foreground/10 rounded-xl"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className={`relative z-10 ${isActive ? "text-primary-foreground" : "text-primary-foreground/60 hover:text-primary-foreground/90"}`}>
+                    {link.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Right side */}
+          <div className="hidden md:flex items-center gap-3">
+            <div className="w-px h-5 bg-primary-foreground/10" />
+            <span className="text-primary-foreground/50 font-body text-sm cursor-pointer hover:text-primary-foreground/80 transition-colors">
+              Inquire
+            </span>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl h-9 px-5 text-sm transition-all duration-300 shadow-lg shadow-accent/20">
+                Contact Us
+              </Button>
+            </motion.div>
+          </div>
+
+          {/* Mobile toggle */}
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden w-10 h-10 rounded-xl bg-primary-foreground/10 flex items-center justify-center text-primary-foreground"
+          >
+            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+          </motion.button>
         </motion.div>
-      </motion.div>
+      </motion.nav>
 
-      {/* Mobile toggle */}
-      <motion.button
-        whileTap={{ scale: 0.9 }}
-        onClick={() => setMobileOpen(!mobileOpen)}
-        className="md:hidden w-10 h-10 rounded-full bg-forest-deep flex items-center justify-center text-primary-foreground"
-      >
-        {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-      </motion.button>
-
-      {/* Mobile Menu */}
+      {/* Full-screen mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden absolute top-full mt-2 left-4 right-4 rounded-2xl bg-forest-deep/98 backdrop-blur-lg border border-primary-foreground/10 px-6 py-5 space-y-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 bg-forest-deep/98 backdrop-blur-2xl flex flex-col items-center justify-center gap-8"
           >
             {links.map((link, i) => (
               <motion.div
                 key={link.label}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.05 }}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ delay: i * 0.1, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
               >
                 <Link
                   to={link.href}
-                  className="block text-primary-foreground/80 hover:text-primary-foreground font-body py-2"
+                  className="font-display text-4xl font-bold text-primary-foreground hover:text-accent transition-colors duration-300"
                   onClick={() => setMobileOpen(false)}
                 >
                   {link.label}
                 </Link>
               </motion.div>
             ))}
-            <div className="flex gap-3 pt-2">
-              <span className="text-primary-foreground/80 font-body text-sm py-2">Inquire</span>
-              <Button className="bg-background text-foreground font-body rounded-full px-5 text-sm">
-                Contact US
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ delay: 0.3, duration: 0.4 }}
+              className="flex flex-col items-center gap-4 mt-8"
+            >
+              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl px-10 py-6 text-lg">
+                Contact Us
               </Button>
-            </div>
+              <span className="text-primary-foreground/50 font-body text-sm">Inquire</span>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </>
   );
 };
 

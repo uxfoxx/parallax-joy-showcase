@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { FileText, Rocket, TrendingUp } from "lucide-react";
+import { useMouseGradient } from "@/hooks/useMouseGradient";
 
 const features = [
   {
@@ -20,8 +21,10 @@ const features = [
 ];
 
 const WhyChooseUs = () => {
+  const { ref, gradientStyle } = useMouseGradient();
+
   return (
-    <section id="about" className="snap-section flex items-center relative overflow-hidden">
+    <section ref={ref as React.RefObject<HTMLElement>} id="about" className="snap-section flex items-center relative overflow-hidden">
       {/* Animated dark gradient background */}
       <div
         className="absolute inset-0 animate-gradient"
@@ -29,6 +32,9 @@ const WhyChooseUs = () => {
           background: `radial-gradient(ellipse at 50% 100%, #5C7928 0%, #194B22 24%, #08120A 100%)`,
         }}
       />
+
+      {/* Mouse-follow gradient */}
+      <div className="absolute inset-0 pointer-events-none z-[1]" style={gradientStyle} />
 
       {/* Bottom glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-accent/10 blur-[80px] rounded-full" />
@@ -73,7 +79,6 @@ const WhyChooseUs = () => {
                 `,
               }}
             >
-              {/* Icon */}
               <motion.div
                 whileHover={{ scale: 1.15, rotate: 5 }}
                 transition={{ type: "spring", stiffness: 300 }}

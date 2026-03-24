@@ -1,5 +1,6 @@
 import { useInView } from "@/hooks/useInView";
 import { useCountUp } from "@/hooks/useCountUp";
+import { useMouseGradient } from "@/hooks/useMouseGradient";
 import { motion } from "framer-motion";
 
 const bannerStats = [
@@ -9,10 +10,17 @@ const bannerStats = [
 ];
 
 const DarkStatsBanner = () => {
-  const { ref, isInView } = useInView();
+  const { ref: inViewRef, isInView } = useInView();
+  const { ref: mouseRef, gradientStyle } = useMouseGradient();
 
   return (
-    <section ref={ref} className="snap-section-auto relative overflow-hidden py-24">
+    <section
+      ref={(el) => {
+        (inViewRef as React.MutableRefObject<HTMLElement | null>).current = el;
+        (mouseRef as React.MutableRefObject<HTMLElement | null>).current = el;
+      }}
+      className="snap-section-auto relative overflow-hidden py-24"
+    >
       {/* Animated gradient background */}
       <div
         className="absolute inset-0 animate-gradient"
@@ -24,6 +32,9 @@ const DarkStatsBanner = () => {
           `,
         }}
       />
+
+      {/* Mouse-follow gradient */}
+      <div className="absolute inset-0 pointer-events-none z-[1]" style={gradientStyle} />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid sm:grid-cols-3 divide-x divide-primary-foreground/10">
