@@ -1,5 +1,9 @@
 import { useMouseGradient } from "@/hooks/useMouseGradient";
 import { useScrollSpeed } from "@/hooks/useScrollSpeed";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   const { ref, gradientStyle } = useMouseGradient();
@@ -44,20 +48,70 @@ const HeroSection = () => {
         </svg>
       </div>
 
-      {/* Full-height marquee text overlay — on top */}
-      <div className="absolute inset-0 flex items-center pointer-events-none select-none z-10">
+      {/* Full-height marquee text overlay */}
+      <div className="absolute inset-0 flex items-center pointer-events-none select-none z-[5]">
         <div className="w-full h-full overflow-hidden flex flex-col justify-center">
           <div className="animate-marquee flex whitespace-nowrap items-center h-full">
             {Array.from({ length: 6 }).map((_, i) => (
               <span
                 key={i}
-                className="text-[100vh] leading-[100vh] font-black uppercase tracking-tighter text-foreground/[0.06] mx-8"
+                className="text-[100vh] leading-[100vh] font-black uppercase tracking-tighter text-foreground/[0.04] mx-8"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 OLIVE FOODS
               </span>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Hero Content — on top */}
+      <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+        <div className="text-center max-w-3xl mx-auto px-6 pointer-events-auto">
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground/80 font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase"
+          >
+            Premium Food Imports
+          </motion.span>
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-primary-foreground mb-6 leading-[1.1] tracking-tight"
+          >
+            Quality You Can
+            <br />
+            <span className="text-gradient-gold">Trust</span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.7 }}
+            className="font-body text-lg text-primary-foreground/50 max-w-xl mx-auto mb-10 leading-relaxed"
+          >
+            Sourcing the world's finest food products and delivering them to your doorstep with unmatched reliability.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.9 }}
+            className="flex flex-wrap gap-4 justify-center"
+          >
+            <Link to="/products">
+              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-full px-8 py-6 text-base transition-all duration-300 hover:shadow-xl hover:shadow-accent/25 group">
+                Explore Products
+                <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-2" />
+              </Button>
+            </Link>
+            <Link to="/about">
+              <Button variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 font-body font-semibold rounded-full px-8 py-6 text-base">
+                Learn More
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </div>
     </section>
