@@ -1,32 +1,58 @@
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { MeshDistortMaterial, Float, Environment } from "@react-three/drei";
 import * as THREE from "three";
 
-const FloatingShape = () => {
+const OrbitingSphere = ({ radius, speed, size, color, offset }: { radius: number; speed: number; size: number; color: string; offset: number }) => {
+  const ref = useRef<THREE.Mesh>(null);
+
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    const t = clock.getElapsedTime() * speed + offset;
+    ref.current.position.x = Math.cos(t) * radius;
+    ref.current.position.y = Math.sin(t * 0.7) * radius * 0.4;
+    ref.current.position.z = Math.sin(t) * radius;
+  });
+
+  return (
+    <mesh ref={ref} scale={size}>
+      <icosahedronGeometry args={[1, 3]} />
+      <meshPhysicalMaterial
+        color={color}
+        roughness={0.1}
+        metalness={0.3}
+        transmission={0.6}
+        thickness={1.5}
+        transparent
+        opacity={0.7}
+      />
+    </mesh>
+  );
+};
+
+const MainBlob = () => {
   const meshRef = useRef<THREE.Mesh>(null);
   const { pointer } = useThree();
 
   useFrame((_, delta) => {
     if (!meshRef.current) return;
-    meshRef.current.rotation.x += delta * 0.15;
-    meshRef.current.rotation.y += delta * 0.2;
-    // Subtle mouse follow
-    meshRef.current.rotation.x += (pointer.y * 0.3 - meshRef.current.rotation.x) * 0.02;
-    meshRef.current.rotation.y += (pointer.x * 0.3 - meshRef.current.rotation.y) * 0.02;
+    meshRef.current.rotation.x += delta * 0.1;
+    meshRef.current.rotation.y += delta * 0.15;
+    meshRef.current.rotation.x += (pointer.y * 0.2 - meshRef.current.rotation.x) * 0.01;
+    meshRef.current.rotation.y += (pointer.x * 0.2 - meshRef.current.rotation.y) * 0.01;
   });
 
   return (
-    <Float speed={2} rotationIntensity={0.4} floatIntensity={1.5}>
-      <mesh ref={meshRef} scale={2.2}>
-        <torusKnotGeometry args={[1, 0.35, 200, 32]} />
+    <Float speed={1.5} rotationIntensity={0.3} floatIntensity={1.2}>
+      <mesh ref={meshRef} scale={2.8}>
+        <icosahedronGeometry args={[1, 8]} />
         <MeshDistortMaterial
-          color="#2d5a27"
-          roughness={0.2}
-          metalness={0.8}
-          distort={0.25}
-          speed={2}
-          envMapIntensity={1.5}
+          color="#1a4a2e"
+          roughness={0.15}
+          metalness={0.9}
+          distort={0.4}
+          speed={3}
+          envMapIntensity={2}
         />
       </mesh>
     </Float>
@@ -35,17 +61,21 @@ const FloatingShape = () => {
 
 const Hero3DScene = () => {
   return (
-    <div className="w-full h-full min-h-[400px]">
+    <div className="absolute inset-0 w-full h-full">
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 45 }}
+        camera={{ position: [0, 0, 8], fov: 50 }}
         gl={{ antialias: true, alpha: true }}
         style={{ background: "transparent" }}
       >
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[5, 5, 5]} intensity={1} color="#f5f0e8" />
-        <pointLight position={[-3, 2, 4]} intensity={0.8} color="#d4a017" />
-        <pointLight position={[3, -2, -2]} intensity={0.4} color="#4a7c3f" />
-        <FloatingShape />
+        <ambientLight intensity={0.3} />
+        <directionalLight position={[5, 5, 5]} intensity={0.8} color="#f5f0e8" />
+        <pointLight position={[-4, 3, 4]} intensity={0.6} color="#d4a017" />
+        <pointLight position={[4, -2, -3]} intensity={0.3} color="#4a7c3f" />
+        <MainBlob />
+        <OrbitingSphere radius={4} speed={0.5} size={0.3} color="#d4a017" offset={0} />
+        <OrbitingSphere radius={5} speed={0.35} size={0.2} color="#6a9f5b" offset={2} />
+        <OrbitingSphere radius={3.5} speed={0.6} size={0.25} color="#c4985a" offset={4} />
+        <OrbitingSphere radius={4.5} speed={0.4} size={0.15} color="#2d5a27" offset={5.5} />
         <Environment preset="forest" />
       </Canvas>
     </div>
