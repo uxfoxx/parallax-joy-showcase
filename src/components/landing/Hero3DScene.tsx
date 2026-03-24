@@ -6,10 +6,9 @@ import * as THREE from "three";
 const FloatingParticles = ({ count = 200 }: { count?: number }) => {
   const pointsRef = useRef<THREE.Points>(null);
 
-  const { positions, colors, sizes } = useMemo(() => {
+  const { positions, colors } = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
-    const sizes = new Float32Array(count);
     const palette = [
       new THREE.Color("#d4a017"),
       new THREE.Color("#6a9f5b"),
@@ -28,10 +27,8 @@ const FloatingParticles = ({ count = 200 }: { count?: number }) => {
       colors[i * 3] = c.r;
       colors[i * 3 + 1] = c.g;
       colors[i * 3 + 2] = c.b;
-
-      sizes[i] = 0.03 + Math.random() * 0.04;
     }
-    return { positions, colors, sizes };
+    return { positions, colors };
   }, [count]);
 
   useFrame(({ clock }) => {
@@ -55,6 +52,131 @@ const FloatingParticles = ({ count = 200 }: { count?: number }) => {
         depthWrite={false}
       />
     </points>
+  );
+};
+
+/* ── Y2K Spinning Ring ── */
+const SpinningRing = ({
+  radius,
+  tube,
+  color,
+  speed,
+  position,
+  axis,
+}: {
+  radius: number;
+  tube: number;
+  color: string;
+  speed: number;
+  position: [number, number, number];
+  axis: "x" | "y" | "z";
+}) => {
+  const ref = useRef<THREE.Mesh>(null);
+
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    const t = clock.getElapsedTime() * speed;
+    if (axis === "x") ref.current.rotation.x = t;
+    else if (axis === "y") ref.current.rotation.y = t;
+    else ref.current.rotation.z = t;
+  });
+
+  return (
+    <mesh ref={ref} position={position}>
+      <torusGeometry args={[radius, tube, 16, 64]} />
+      <meshPhysicalMaterial
+        color={color}
+        roughness={0.05}
+        metalness={0.8}
+        transparent
+        opacity={0.25}
+        wireframe
+      />
+    </mesh>
+  );
+};
+
+/* ── Y2K Star Shape ── */
+const Y2KStar = ({
+  position,
+  scale,
+  color,
+  speed,
+}: {
+  position: [number, number, number];
+  scale: number;
+  color: string;
+  speed: number;
+}) => {
+  const ref = useRef<THREE.Group>(null);
+
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    const t = clock.getElapsedTime() * speed;
+    ref.current.rotation.z = t;
+    ref.current.rotation.y = t * 0.5;
+    ref.current.position.y = position[1] + Math.sin(t * 0.8) * 0.3;
+  });
+
+  return (
+    <group ref={ref} position={position} scale={scale}>
+      {/* 4-point star made of two intersecting planes */}
+      <mesh>
+        <boxGeometry args={[0.08, 1.2, 0.08]} />
+        <meshPhysicalMaterial color={color} metalness={0.9} roughness={0.1} transparent opacity={0.5} />
+      </mesh>
+      <mesh rotation={[0, 0, Math.PI / 4]}>
+        <boxGeometry args={[0.08, 1.2, 0.08]} />
+        <meshPhysicalMaterial color={color} metalness={0.9} roughness={0.1} transparent opacity={0.5} />
+      </mesh>
+      <mesh rotation={[0, 0, Math.PI / 2]}>
+        <boxGeometry args={[0.08, 1.2, 0.08]} />
+        <meshPhysicalMaterial color={color} metalness={0.9} roughness={0.1} transparent opacity={0.5} />
+      </mesh>
+      {/* Center sphere */}
+      <mesh>
+        <sphereGeometry args={[0.12, 16, 16]} />
+        <meshPhysicalMaterial color={color} metalness={1} roughness={0} transparent opacity={0.6} />
+      </mesh>
+    </group>
+  );
+};
+
+/* ── Y2K Floating Diamond ── */
+const FloatingDiamond = ({
+  position,
+  scale,
+  color,
+  speed,
+}: {
+  position: [number, number, number];
+  scale: number;
+  color: string;
+  speed: number;
+}) => {
+  const ref = useRef<THREE.Mesh>(null);
+
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    const t = clock.getElapsedTime() * speed;
+    ref.current.rotation.y = t;
+    ref.current.rotation.x = Math.sin(t * 0.5) * 0.3;
+    ref.current.position.y = position[1] + Math.sin(t * 0.6) * 0.5;
+  });
+
+  return (
+    <mesh ref={ref} position={position} scale={scale}>
+      <octahedronGeometry args={[1, 0]} />
+      <meshPhysicalMaterial
+        color={color}
+        roughness={0.05}
+        metalness={0.7}
+        transmission={0.4}
+        thickness={1}
+        transparent
+        opacity={0.35}
+      />
+    </mesh>
   );
 };
 
@@ -126,12 +248,35 @@ const Hero3DScene = () => {
         <directionalLight position={[5, 5, 5]} intensity={0.8} color="#f5f0e8" />
         <pointLight position={[-4, 3, 4]} intensity={0.6} color="#d4a017" />
         <pointLight position={[4, -2, -3]} intensity={0.3} color="#4a7c3f" />
+
+        {/* Main blob */}
         <MainBlob />
+
+        {/* Particles */}
         <FloatingParticles count={200} />
+
+        {/* Orbiting spheres */}
         <OrbitingSphere radius={4} speed={0.5} size={0.3} color="#d4a017" offset={0} />
         <OrbitingSphere radius={5} speed={0.35} size={0.2} color="#6a9f5b" offset={2} />
         <OrbitingSphere radius={3.5} speed={0.6} size={0.25} color="#c4985a" offset={4} />
         <OrbitingSphere radius={4.5} speed={0.4} size={0.15} color="#2d5a27" offset={5.5} />
+
+        {/* Y2K Spinning Rings */}
+        <SpinningRing radius={5} tube={0.03} color="#d4a017" speed={0.3} position={[0, 0, -2]} axis="x" />
+        <SpinningRing radius={6} tube={0.02} color="#6a9f5b" speed={-0.2} position={[0, 0, -3]} axis="y" />
+        <SpinningRing radius={4.5} tube={0.025} color="#c4985a" speed={0.15} position={[0, 0.5, -1]} axis="z" />
+
+        {/* Y2K Stars */}
+        <Y2KStar position={[-5, 3, -2]} scale={0.5} color="#d4a017" speed={0.8} />
+        <Y2KStar position={[5.5, -2, -3]} scale={0.35} color="#f5f0e8" speed={0.6} />
+        <Y2KStar position={[-4, -3.5, -1]} scale={0.4} color="#6a9f5b" speed={1.0} />
+        <Y2KStar position={[4, 3.5, -4]} scale={0.3} color="#c4985a" speed={0.7} />
+
+        {/* Y2K Floating Diamonds */}
+        <FloatingDiamond position={[6, 1, -2]} scale={0.4} color="#d4a017" speed={0.5} />
+        <FloatingDiamond position={[-6, -1.5, -3]} scale={0.3} color="#6a9f5b" speed={0.4} />
+        <FloatingDiamond position={[3, -4, -2]} scale={0.25} color="#f5f0e8" speed={0.6} />
+
         <Environment preset="forest" />
       </Canvas>
     </div>
