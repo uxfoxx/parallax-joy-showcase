@@ -18,15 +18,8 @@ const AboutPage = () => {
   return (
     <PageLayout>
       {/* Hero Banner */}
-      <section className="relative overflow-hidden py-28 lg:py-36">
-        <div className="absolute inset-0" style={{
-          background: `radial-gradient(ellipse at 50% 100%, #5C7928 0%, #194B22 24%, #08120A 100%)`,
-          backgroundSize: '200% 200%',
-          animation: 'gradient-shift 18s ease infinite',
-        }} />
-        <div className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-overlay">
-          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg"><filter id="aboutNoise"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter><rect width="100%" height="100%" filter="url(#aboutNoise)" /></svg>
-        </div>
+      <section className="relative overflow-hidden bg-forest-deep py-28 lg:py-36">
+        <div className="absolute inset-0 bg-gradient-to-br from-forest-deep via-forest-mid/20 to-forest-deep" />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}

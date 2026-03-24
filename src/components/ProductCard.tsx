@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { Package } from "lucide-react";
 import type { Product } from "@/lib/api";
 
 interface ProductCardProps {
@@ -24,14 +23,13 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
       <Link to={`/products/${product.slug}`} className="block group">
         <div className="rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:border-forest-mid/30">
           <div
-            className={`relative overflow-hidden bg-gradient-to-br from-forest-deep/10 via-muted to-accent/10 ${
+            className={`relative overflow-hidden bg-gradient-to-br from-forest-deep/10 via-forest-mid/5 to-accent/10 ${
               large ? "h-64" : "h-48"
-            } flex items-center justify-center`}
+            }`}
           >
-            <div className="flex flex-col items-center gap-2 text-muted-foreground/40 group-hover:text-muted-foreground/60 transition-colors duration-300">
-              <Package className="w-10 h-10" strokeWidth={1.5} />
-              <span className="font-display text-xs uppercase tracking-widest">
-                {product.category}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-display text-2xl text-forest-mid/20 font-bold">
+                {product.name.charAt(0)}
               </span>
             </div>
             {product.featured && (
@@ -39,6 +37,11 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
                 Featured
               </Badge>
             )}
+            <div className="absolute top-3 right-3">
+              <Badge variant="outline" className="bg-background/80 backdrop-blur-sm font-body text-xs text-foreground border-border">
+                {product.category}
+              </Badge>
+            </div>
           </div>
 
           <div className="p-5 space-y-2">

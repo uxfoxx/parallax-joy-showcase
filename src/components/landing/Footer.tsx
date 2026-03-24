@@ -1,10 +1,11 @@
-import { Leaf, Mail, Phone } from "lucide-react";
+import { Leaf } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
     <footer className="snap-section-auto relative overflow-hidden">
+      {/* Animated gradient background */}
       <div
         className="absolute inset-0 animate-gradient"
         style={{
@@ -18,19 +19,16 @@ const Footer = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="grid md:grid-cols-[1.5fr_1fr_1fr_1fr] gap-16 items-start"
+          className="grid md:grid-cols-[1.5fr_1fr_1fr] gap-16 items-start"
         >
           {/* Brand */}
           <div className="space-y-5">
-            <div className="flex items-center gap-3">
-              <motion.div
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                className="w-10 h-10 rounded-full bg-forest-mid flex items-center justify-center"
-              >
-                <Leaf className="w-5 h-5 text-forest-light" />
-              </motion.div>
-              <span className="font-display text-xl font-semibold text-primary-foreground">FreshLine</span>
-            </div>
+            <motion.div
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              className="w-10 h-10"
+            >
+              <Leaf className="w-8 h-8 text-forest-light" />
+            </motion.div>
             <p className="text-primary-foreground/45 font-body text-sm leading-relaxed max-w-xs">
               Your trusted partner in premium food imports, delivering quality and reliability across Sri Lanka.
             </p>
@@ -49,27 +47,12 @@ const Footer = () => {
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300"
+                    className="text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300 hover:translate-x-1 inline-block"
                   >
                     {link.label}
                   </Link>
                 </li>
               ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="font-body text-sm font-semibold text-primary-foreground mb-5 tracking-widest uppercase">Contact</h4>
-            <ul className="space-y-4">
-              <li className="flex items-center gap-2 text-primary-foreground/45 font-body text-sm">
-                <Mail className="w-4 h-4" />
-                info@freshline.lk
-              </li>
-              <li className="flex items-center gap-2 text-primary-foreground/45 font-body text-sm">
-                <Phone className="w-4 h-4" />
-                +94 11 234 5678
-              </li>
             </ul>
           </div>
 
@@ -99,7 +82,7 @@ const Footer = () => {
           className="mt-16 pt-8 border-t border-primary-foreground/10 text-center"
         >
           <p className="text-primary-foreground/25 font-body text-sm tracking-wide">
-            ©2026 FreshLine. All rights reserved.
+            ©2026 . All rights reserved.
           </p>
         </motion.div>
       </div>
