@@ -13,15 +13,19 @@ const DarkStatsBanner = () => {
   return (
     <section ref={ref} className="snap-section-auto relative overflow-hidden py-20">
       {/* Animated gradient background */}
-      <div className="absolute inset-0 animate-gradient-slow" style={{
-        background: `linear-gradient(135deg, hsl(140 45% 12%), hsl(140 35% 16%), hsl(160 30% 14%), hsl(140 40% 10%), hsl(140 45% 12%))`,
-      }} />
-      <div className="absolute inset-0 opacity-10" style={{
-        background: "radial-gradient(circle at 20% 50%, hsl(42 80% 55% / 0.2), transparent 50%), radial-gradient(circle at 80% 50%, hsl(140 35% 30% / 0.3), transparent 50%)",
-      }} />
+      <div
+        className="absolute inset-0 animate-gradient"
+        style={{
+          background: `
+            radial-gradient(ellipse at 20% 50%, hsl(140 35% 16% / 0.5) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 50%, hsl(140 30% 14% / 0.4) 0%, transparent 50%),
+            linear-gradient(90deg, hsl(140 45% 10%), hsl(140 40% 12%), hsl(140 45% 10%))
+          `,
+        }}
+      />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <div className="grid sm:grid-cols-3 gap-12 text-center">
+        <div className="grid sm:grid-cols-3 divide-x divide-primary-foreground/10">
           {bannerStats.map((stat, i) => (
             <BannerStat key={stat.label} stat={stat} isInView={isInView} index={i} />
           ))}
@@ -36,13 +40,13 @@ const BannerStat = ({ stat, isInView, index }: { stat: typeof bannerStats[0]; is
 
   return (
     <div
-      className={`transition-all duration-700 ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+      className={`px-8 transition-all duration-700 ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
       style={{ transitionDelay: isInView ? `${index * 150}ms` : "0ms" }}
     >
-      <div className="font-display text-5xl lg:text-6xl font-bold text-primary-foreground mb-2">
+      <p className="text-forest-light font-body text-sm mb-2 tracking-wide">{stat.label}</p>
+      <div className="font-display text-5xl lg:text-6xl font-bold text-primary-foreground">
         {count}{stat.suffix}
       </div>
-      <p className="text-primary-foreground/50 font-body text-sm uppercase tracking-[0.15em]">{stat.label}</p>
     </div>
   );
 };
