@@ -1,12 +1,24 @@
 import { useState } from "react";
 import { useInView } from "@/hooks/useInView";
-import { ArrowLeft, ArrowRight, Package, Wheat, Coffee, Snowflake } from "lucide-react";
+import { ArrowUpRight, ArrowDownLeft } from "lucide-react";
 
 const categories = [
-  { name: "Processed Foods", desc: "Premium processed food items sourced from trusted global manufacturers with rigorous quality standards.", count: "120+ Products", icon: Package },
-  { name: "Grains & Staples", desc: "Essential grains and staple products from the world's finest agricultural regions.", count: "85+ Products", icon: Wheat },
-  { name: "Beverages", desc: "Curated selection of beverages ranging from artisanal coffees to specialty teas.", count: "60+ Products", icon: Coffee },
-  { name: "Dairy & Frozen", desc: "Temperature-controlled dairy and frozen goods delivered with care and precision.", count: "45+ Products", icon: Snowflake },
+  {
+    name: "Processed Foods",
+    desc: "Effortlessly configure your preferred keyboard shortcuts, enabling seamless integration.",
+  },
+  {
+    name: "Grains & Staples",
+    desc: "Effortlessly configure your preferred keyboard shortcuts, enabling seamless integration.",
+  },
+  {
+    name: "Beverages",
+    desc: "Effortlessly configure your preferred keyboard shortcuts, enabling seamless integration.",
+  },
+  {
+    name: "Dairy & Frozen",
+    desc: "Effortlessly configure your preferred keyboard shortcuts, enabling seamless integration.",
+  },
 ];
 
 const CategoriesSection = () => {
@@ -20,15 +32,18 @@ const CategoriesSection = () => {
   return (
     <section ref={ref} id="brands" className="snap-section flex items-center bg-background">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24 w-full">
-        <div className={`max-w-2xl mb-16 transition-all duration-700 ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-          <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent-foreground font-body text-xs font-semibold uppercase tracking-[0.15em] border border-accent/20 mb-4">
+        {/* Header — centered */}
+        <div
+          className={`text-center max-w-2xl mx-auto mb-14 transition-all duration-700 ${
+            isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-4">
             Categories
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Explore Our Range
           </h2>
-          <p className="text-muted-foreground font-body text-lg">
-            From everyday staples to gourmet specialities, discover our extensive product catalogue.
+          <p className="text-muted-foreground font-body text-base">
+            This customization increases Claypro's flexibility and usefulness, making it a powerful
+            tool for a wide range of professionals.
           </p>
         </div>
 
@@ -41,20 +56,50 @@ const CategoriesSection = () => {
             {categories.map((cat, i) => (
               <div
                 key={cat.name}
-                className={`flex-shrink-0 w-[calc(50%-12px)] rounded-2xl border border-border p-8 transition-all duration-500 hover:border-accent/30 hover:shadow-xl hover:-translate-y-1 group animate-gradient-slow ${
+                className={`flex-shrink-0 w-[calc(50%-12px)] rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-xl hover:-translate-y-1 group ${
                   isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
                 }`}
-                style={{
-                  transitionDelay: isInView ? `${i * 100}ms` : "0ms",
-                  background: `linear-gradient(135deg, hsl(200 40% 94%), hsl(180 30% 96%), hsl(160 20% 95%), hsl(200 40% 94%))`,
-                }}
+                style={{ transitionDelay: isInView ? `${i * 100}ms` : "0ms" }}
               >
-                <div className="w-14 h-14 rounded-xl bg-sky-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <cat.icon className="w-7 h-7 text-sky-600" />
+                <div
+                  className="h-full animate-gradient-slow"
+                  style={{
+                    background: `
+                      radial-gradient(ellipse at 50% 0%, hsl(140 35% 22% / 0.6) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 100%, hsl(140 30% 16% / 0.4) 0%, transparent 50%),
+                      linear-gradient(180deg, hsl(140 40% 14%), hsl(140 45% 11%), hsl(140 40% 13%))
+                    `,
+                  }}
+                >
+                  {/* Icon placeholder */}
+                  <div className="p-8 pb-6">
+                    <div className="w-20 h-20 rounded-xl bg-primary-foreground flex items-center justify-center mb-8 shadow-lg group-hover:scale-105 transition-transform duration-300">
+                      <svg viewBox="0 0 60 60" className="w-12 h-12">
+                        <polygon
+                          points="30,8 42,18 42,32 30,42 18,32 18,18"
+                          fill="none"
+                          stroke="hsl(200, 70%, 55%)"
+                          strokeWidth="1.5"
+                        />
+                        <polygon
+                          points="30,14 38,21 38,29 30,36 22,29 22,21"
+                          fill="hsl(200, 70%, 55%)"
+                          fillOpacity="0.3"
+                        />
+                        <circle cx="36" cy="16" r="1.5" fill="hsl(200, 70%, 55%)" />
+                        <circle cx="36" cy="20" r="1.5" fill="hsl(200, 70%, 55%)" />
+                        <circle cx="36" cy="24" r="1.5" fill="hsl(200, 70%, 55%)" />
+                      </svg>
+                    </div>
+
+                    <h3 className="font-display text-2xl font-semibold text-primary-foreground mb-3">
+                      {cat.name}
+                    </h3>
+                    <p className="text-primary-foreground/50 font-body text-sm leading-relaxed">
+                      {cat.desc}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="font-display text-xl font-semibold text-foreground mb-2">{cat.name}</h3>
-                <p className="text-muted-foreground font-body text-sm leading-relaxed mb-4">{cat.desc}</p>
-                <span className="text-accent-foreground font-body text-xs font-semibold uppercase tracking-wider">{cat.count}</span>
               </div>
             ))}
           </div>
@@ -63,33 +108,35 @@ const CategoriesSection = () => {
         {/* Controls */}
         <div className="flex items-center justify-between mt-8">
           {/* Dots */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             {Array.from({ length: maxIndex + 1 }).map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrentIndex(i)}
-                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                  i === currentIndex ? "bg-accent w-8" : "bg-border hover:bg-muted-foreground/30"
+                className={`rounded-full transition-all duration-300 ${
+                  i === currentIndex
+                    ? "bg-foreground w-6 h-3"
+                    : "bg-muted-foreground/30 w-3 h-3 hover:bg-muted-foreground/50"
                 }`}
               />
             ))}
           </div>
 
-          {/* Arrows */}
+          {/* Arrow buttons */}
           <div className="flex gap-3">
-            <button
-              onClick={prev}
-              disabled={currentIndex === 0}
-              className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-muted hover:border-accent/30 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              <ArrowLeft className="w-4 h-4 text-foreground" />
-            </button>
             <button
               onClick={next}
               disabled={currentIndex === maxIndex}
-              className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-muted hover:border-accent/30 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center hover:bg-foreground/80 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
             >
-              <ArrowRight className="w-4 h-4 text-foreground" />
+              <ArrowUpRight className="w-5 h-5" />
+            </button>
+            <button
+              onClick={prev}
+              disabled={currentIndex === 0}
+              className="w-12 h-12 rounded-full bg-muted border border-border text-foreground flex items-center justify-center hover:bg-muted-foreground/10 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              <ArrowDownLeft className="w-5 h-5" />
             </button>
           </div>
         </div>
