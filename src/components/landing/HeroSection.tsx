@@ -10,6 +10,23 @@ const HeroSection = () => {
           <Hero3DScene />
         </Suspense>
       </div>
+
+      {/* Marquee text overlay */}
+      <div className="absolute inset-0 flex items-center pointer-events-none select-none z-10">
+        <div className="w-full overflow-hidden">
+          <div className="animate-marquee flex whitespace-nowrap">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <span
+                key={i}
+                className="text-[12vw] font-black uppercase tracking-tighter text-foreground/10 mx-8"
+                style={{ fontFamily: "'Inter', sans-serif" }}
+              >
+                OLIVE FOODS
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
   );
 };
