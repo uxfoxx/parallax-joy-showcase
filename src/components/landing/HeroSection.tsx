@@ -1,26 +1,43 @@
+import { useMouseGradient } from "@/hooks/useMouseGradient";
+import { useScrollSpeed } from "@/hooks/useScrollSpeed";
+
 const HeroSection = () => {
+  const { ref, gradientStyle } = useMouseGradient();
+  useScrollSpeed();
+
   return (
-    <section className="snap-section relative min-h-screen overflow-hidden bg-background">
+    <section ref={ref} className="snap-section relative min-h-screen overflow-hidden bg-background">
       {/* Animated gradient background */}
       <div
-        className="absolute inset-0 z-0 animate-gradient-shift"
+        className="absolute inset-0 z-0"
         style={{
           background: `
-            radial-gradient(ellipse 80% 60% at 20% 40%, hsl(var(--forest-deep) / 0.9) 0%, transparent 70%),
-            radial-gradient(ellipse 60% 80% at 80% 30%, hsl(var(--gold) / 0.25) 0%, transparent 60%),
-            radial-gradient(ellipse 70% 50% at 50% 80%, hsl(var(--forest-mid) / 0.7) 0%, transparent 65%),
-            radial-gradient(ellipse 90% 70% at 70% 60%, hsl(var(--cream) / 0.15) 0%, transparent 50%),
-            linear-gradient(135deg, hsl(var(--forest-deep)) 0%, hsl(var(--forest-mid)) 40%, hsl(var(--primary)) 100%)
+            radial-gradient(ellipse 90% 70% at 25% 35%, hsl(140 50% 10% / 0.95) 0%, transparent 65%),
+            radial-gradient(ellipse 50% 60% at 75% 25%, hsl(42 85% 52% / 0.18) 0%, transparent 55%),
+            radial-gradient(ellipse 80% 55% at 50% 85%, hsl(140 40% 18% / 0.8) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 50% at 85% 65%, hsl(42 50% 92% / 0.1) 0%, transparent 45%),
+            radial-gradient(ellipse 40% 40% at 10% 80%, hsl(45 90% 55% / 0.12) 0%, transparent 50%),
+            linear-gradient(150deg, hsl(140 50% 8%) 0%, hsl(140 45% 14%) 35%, hsl(140 40% 10%) 70%, hsl(140 50% 8%) 100%)
           `,
-          backgroundSize: '200% 200%',
+          backgroundSize: '250% 250%',
+          animation: `gradient-shift var(--gradient-duration, 18s) ease infinite`,
+        }}
+      />
+
+      {/* Mouse-following radial glow */}
+      <div
+        className="absolute inset-0 z-[1] pointer-events-none transition-opacity duration-700"
+        style={{
+          ...gradientStyle,
+          opacity: 0.25,
         }}
       />
 
       {/* Noise texture overlay */}
-      <div className="absolute inset-0 z-[1] opacity-[0.12] pointer-events-none">
+      <div className="absolute inset-0 z-[2] opacity-[0.10] pointer-events-none mix-blend-overlay">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <filter id="heroNoise">
-            <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" />
             <feColorMatrix type="saturate" values="0" />
           </filter>
           <rect width="100%" height="100%" filter="url(#heroNoise)" />
