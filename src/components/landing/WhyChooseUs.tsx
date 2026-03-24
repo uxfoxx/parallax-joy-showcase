@@ -28,11 +28,7 @@ const WhyChooseUs = () => {
       <div
         className="absolute inset-0 animate-gradient"
         style={{
-          background: `
-            radial-gradient(ellipse at 50% 0%, hsl(140 40% 18% / 0.7) 0%, transparent 60%),
-            radial-gradient(ellipse at 80% 80%, hsl(140 35% 14% / 0.5) 0%, transparent 50%),
-            linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 10%), hsl(140 45% 8%))
-          `,
+          background: `radial-gradient(ellipse at 50% 100%, #5C7928 0%, #194B22 24%, #08120A 100%)`,
         }}
       />
 
