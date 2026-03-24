@@ -1,3 +1,4 @@
+import { useScrollSpeed } from "@/hooks/useScrollSpeed";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import LogoStrip from "@/components/landing/LogoStrip";
