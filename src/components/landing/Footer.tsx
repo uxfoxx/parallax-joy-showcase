@@ -7,10 +7,7 @@ const Footer = () => {
       <div
         className="absolute inset-0 animate-gradient"
         style={{
-          background: `
-            radial-gradient(ellipse at 50% 50%, hsl(140 35% 16% / 0.6) 0%, transparent 60%),
-            linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))
-          `,
+          background: `radial-gradient(ellipse at 50% 0%, #194B22 0%, #194B22 41%, #08120A 100%)`,
         }}
       />
 
