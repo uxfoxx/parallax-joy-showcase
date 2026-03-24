@@ -32,10 +32,12 @@ const StatsSection = () => {
             </Button>
           </div>
 
-          {/* Right — Stats grid */}
+          {/* Right — Staggered Stats grid */}
           <div className="grid grid-cols-2 gap-6">
             {stats.map((stat, i) => (
-              <StatCard key={stat.label} stat={stat} isInView={isInView} index={i} />
+              <div key={stat.label} className={i % 2 === 1 ? "mt-8" : ""}>
+                <StatCard stat={stat} isInView={isInView} index={i} />
+              </div>
             ))}
           </div>
         </div>
@@ -58,7 +60,6 @@ const StatCard = ({ stat, isInView, index }: { stat: typeof stats[0]; isInView: 
         {count}{stat.suffix}
       </div>
       <p className="text-muted-foreground font-body text-sm mt-2">{stat.label}</p>
-      {/* Mini avatar group */}
       <div className="flex -space-x-2 mt-4">
         {[0, 1, 2].map((j) => (
           <div
