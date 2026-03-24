@@ -1,38 +1,22 @@
-import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
-const Hero3DScene = lazy(() => import("./Hero3DScene"));
-
 const HeroSection = () => {
   return (
     <section className="snap-section relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
-      {/* Dark gradient base */}
-      <div
-        className="absolute inset-0 animate-gradient"
-        style={{
-          background: `
-            radial-gradient(ellipse at 30% 20%, hsl(var(--primary) / 0.3) 0%, transparent 50%),
-            radial-gradient(ellipse at 70% 80%, hsl(var(--accent) / 0.08) 0%, transparent 40%),
-            radial-gradient(ellipse at 50% 50%, hsl(140 45% 8%) 0%, hsl(140 50% 4%) 100%)
-          `,
-        }}
-      />
-
-      {/* 3D Background */}
-      <Suspense
-        fallback={
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-20 h-20 rounded-full border-2 border-primary-foreground/20 border-t-accent animate-spin" />
-          </div>
-        }
-      >
-        <Hero3DScene />
-      </Suspense>
+      {/* Spline 3D Background */}
+      <div className="absolute inset-0 z-0">
+        <iframe
+          src="https://my.spline.design/ticktockinteractivelanding-iGikwv60VbyZBfhah4IvESxV/"
+          className="w-full h-full border-0 pointer-events-auto"
+          title="Interactive 3D Background"
+          loading="lazy"
+        />
+      </div>
 
       {/* Dark overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-background/60" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-background/40" />
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 text-center space-y-8">
