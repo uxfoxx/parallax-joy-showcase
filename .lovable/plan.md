@@ -1,32 +1,24 @@
 
 
-# Particle System + Scroll Improvements
+# Replace Hero 3D with Spline Embed
 
-## 1. Add Floating Particles to Hero 3D Scene
+## Change
 
-**File: `src/components/landing/Hero3DScene.tsx`**
+Replace the React Three Fiber `Hero3DScene` background with the Spline interactive iframe embed. Remove the lazy-loaded `Hero3DScene` component and the dark gradient base div. The Spline iframe becomes the full-screen background layer.
 
-Add a `FloatingParticles` component using Three.js `Points` and `BufferGeometry`:
-- ~200 particles spread in a sphere of radius ~10
-- Each particle is a small dot (size 0.03-0.06) with varying opacity
-- Colors: mix of gold (#d4a017), forest-green (#6a9f5b), and cream (#f5f0e8)
-- Animate in `useFrame`: slow rotation of the entire points group + individual subtle drift using sine waves on each particle's position
-- Use `PointsMaterial` with `transparent`, `sizeAttenuation`, and a soft circular texture (or `alphaMap`)
+## File: `src/components/landing/HeroSection.tsx`
 
-This creates a starfield/dust effect around the blob, adding significant visual depth.
+- Remove `lazy`, `Suspense` imports and `Hero3DScene` reference
+- Replace the 3D background + gradient base with a single `iframe` element pointing to `https://my.spline.design/ticktockinteractivelanding-iGikwv60VbyZBfhah4IvESxV/`
+- iframe: `absolute inset-0`, `w-full h-full`, `border-0`, `pointer-events-auto`
+- Keep the dark overlay gradient for text readability
+- Keep all text content and animations as-is
 
-## 2. Improve Scroll Behavior
-
-**File: `src/index.css`**
-
-Remove `scroll-snap-type: y mandatory` from `.snap-container` — mandatory snapping feels jarring. Replace with `scroll-snap-type: y proximity` so sections gently guide but don't lock. This creates a smoother, more natural scroll feel.
-
-Also reduce `min-height: 100vh` constraint on `.snap-section` to allow more natural content flow — keep it but add `scroll-snap-stop: normal` so users can scroll past multiple sections.
-
-### Files Changed
+## Files
 
 | Action | File |
 |--------|------|
-| Modify | `src/components/landing/Hero3DScene.tsx` — add `FloatingParticles` component |
-| Modify | `src/index.css` — change snap to `proximity`, smoother scroll |
+| Modify | `src/components/landing/HeroSection.tsx` |
+
+No other files affected. `Hero3DScene.tsx` remains in the codebase but is no longer imported by the hero.
 
