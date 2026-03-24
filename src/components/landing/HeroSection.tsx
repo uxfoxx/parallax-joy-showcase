@@ -1,30 +1,19 @@
-import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 const HeroSection = () => {
-  const bgRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (bgRef.current) {
-        const scrollY = window.scrollY || document.documentElement.scrollTop;
-        bgRef.current.style.transform = `translateY(${scrollY * 0.4}px) scale(1.1)`;
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <section className="snap-section relative flex items-center justify-center overflow-hidden bg-background">
-      {/* Subtle parallax layer */}
-      <div ref={bgRef} className="absolute inset-0 scale-110" />
-
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-28 pb-20 w-full flex items-center min-h-[100vh]">
         {/* Dark green rounded card */}
-        <div className="relative max-w-4xl w-full rounded-3xl overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="relative max-w-4xl w-full rounded-3xl overflow-hidden"
+        >
           {/* Animated gradient bg inside card */}
           <div
             className="absolute inset-0 animate-gradient"
@@ -48,47 +37,60 @@ const HeroSection = () => {
           />
 
           {/* Inner content */}
-          <div className="relative z-10 p-10 lg:p-16 space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/10 border border-primary-foreground/15 animate-slide-up-reveal">
-              <span className="text-primary-foreground font-body text-sm font-medium tracking-wide">
+          <div className="relative z-10 p-10 lg:p-20 space-y-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/10 border border-primary-foreground/15"
+            >
+              <span className="text-primary-foreground font-body text-sm font-medium tracking-widest uppercase">
                 Premium Food Imports
               </span>
-            </div>
+            </motion.div>
 
-            <h1
-              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground leading-[1.1] tracking-tight animate-slide-up-reveal"
-              style={{ animationDelay: "0.15s" }}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className="font-display text-4xl sm:text-5xl lg:text-7xl font-bold text-primary-foreground leading-[1.05] tracking-tight"
             >
               BRINGING THE WORLD'S
               <br />
               FINEST FOODS TO YOUR TABLE
-            </h1>
+            </motion.h1>
 
-            <p
-              className="text-primary-foreground/60 font-body text-base max-w-xl leading-relaxed animate-slide-up-reveal"
-              style={{ animationDelay: "0.3s" }}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+              className="text-primary-foreground/55 font-body text-lg max-w-xl leading-relaxed"
             >
               We source and import high-quality food products from trusted global suppliers—ensuring
               freshness, safety, and consistency for businesses across Sri Lanka.
-            </p>
+            </motion.p>
 
-            <div
-              className="flex flex-wrap items-center gap-4 animate-slide-up-reveal"
-              style={{ animationDelay: "0.45s" }}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.75, ease: "easeOut" }}
+              className="flex flex-wrap items-center gap-5 pt-2"
             >
-              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-full px-7 py-5 text-sm transition-all duration-300 hover:shadow-xl hover:shadow-accent/25 hover:-translate-y-1">
-                Contact US
-              </Button>
+              <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}>
+                <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-full px-8 py-6 text-base transition-all duration-300 hover:shadow-xl hover:shadow-accent/25">
+                  Contact US
+                </Button>
+              </motion.div>
               <Button
                 variant="ghost"
-                className="text-primary-foreground hover:text-primary-foreground/80 font-body text-sm group transition-all duration-300 hover:bg-transparent px-0"
+                className="text-primary-foreground hover:text-primary-foreground/80 font-body text-base group transition-all duration-300 hover:bg-transparent px-0"
               >
-                <span className="underline underline-offset-4">Take The Quiz</span>
-                <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                <span className="underline underline-offset-4 decoration-primary-foreground/30">Take The Quiz</span>
+                <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-2" />
               </Button>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

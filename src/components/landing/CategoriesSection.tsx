@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useInView } from "@/hooks/useInView";
+import { motion } from "framer-motion";
 import { ArrowUpRight, ArrowDownLeft } from "lucide-react";
 
 const categories = [
@@ -22,7 +22,6 @@ const categories = [
 ];
 
 const CategoriesSection = () => {
-  const { ref, isInView } = useInView();
   const [currentIndex, setCurrentIndex] = useState(0);
   const maxIndex = categories.length - 2;
 
@@ -30,36 +29,40 @@ const CategoriesSection = () => {
   const next = () => setCurrentIndex((i) => Math.min(maxIndex, i + 1));
 
   return (
-    <section ref={ref} id="brands" className="snap-section flex items-center bg-background">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24 w-full">
-        {/* Header — centered */}
-        <div
-          className={`text-center max-w-2xl mx-auto mb-14 transition-all duration-700 ${
-            isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+    <section id="brands" className="snap-section flex items-center bg-background">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 w-full">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center max-w-2xl mx-auto mb-16"
         >
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-4">
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-5 tracking-tight">
             Categories
           </h2>
-          <p className="text-muted-foreground font-body text-base">
+          <p className="text-muted-foreground font-body text-base leading-relaxed">
             This customization increases Claypro's flexibility and usefulness, making it a powerful
             tool for a wide range of professionals.
           </p>
-        </div>
+        </motion.div>
 
         {/* Carousel */}
         <div className="overflow-hidden">
           <div
-            className="flex gap-6 transition-transform duration-500 ease-out"
-            style={{ transform: `translateX(-${currentIndex * (50 + 1.5)}%)` }}
+            className="flex gap-8 transition-transform duration-500 ease-out"
+            style={{ transform: `translateX(-${currentIndex * (50 + 2)}%)` }}
           >
             {categories.map((cat, i) => (
-              <div
+              <motion.div
                 key={cat.name}
-                className={`flex-shrink-0 w-[calc(50%-12px)] rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-xl hover:-translate-y-1 group ${
-                  isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-                }`}
-                style={{ transitionDelay: isInView ? `${i * 100}ms` : "0ms" }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ y: -6, transition: { duration: 0.3 } }}
+                className="flex-shrink-0 w-[calc(50%-16px)] rounded-2xl overflow-hidden group shine-sweep border border-primary-foreground/5 hover:shadow-xl transition-shadow duration-500"
               >
                 <div
                   className="h-full"
@@ -72,8 +75,12 @@ const CategoriesSection = () => {
                   }}
                 >
                   {/* Icon placeholder */}
-                  <div className="p-8 pb-6">
-                    <div className="w-20 h-20 rounded-xl bg-primary-foreground flex items-center justify-center mb-8 shadow-lg group-hover:scale-105 transition-transform duration-300">
+                  <div className="p-10 pb-8">
+                    <motion.div
+                      whileHover={{ scale: 1.08, rotate: 3 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                      className="w-20 h-20 rounded-xl bg-primary-foreground flex items-center justify-center mb-10 shadow-lg shadow-primary-foreground/10"
+                    >
                       <svg viewBox="0 0 60 60" className="w-12 h-12">
                         <polygon
                           points="30,8 42,18 42,32 30,42 18,32 18,18"
@@ -90,32 +97,32 @@ const CategoriesSection = () => {
                         <circle cx="36" cy="20" r="1.5" fill="hsl(200, 70%, 55%)" />
                         <circle cx="36" cy="24" r="1.5" fill="hsl(200, 70%, 55%)" />
                       </svg>
-                    </div>
+                    </motion.div>
 
-                    <h3 className="font-display text-2xl font-semibold text-primary-foreground mb-3">
+                    <h3 className="font-display text-2xl font-semibold text-primary-foreground mb-4 tracking-tight">
                       {cat.name}
                     </h3>
-                    <p className="text-primary-foreground/50 font-body text-sm leading-relaxed">
+                    <p className="text-primary-foreground/45 font-body text-sm leading-relaxed">
                       {cat.desc}
                     </p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
 
         {/* Controls */}
-        <div className="flex items-center justify-between mt-8">
+        <div className="flex items-center justify-between mt-10">
           {/* Dots */}
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2.5 items-center">
             {Array.from({ length: maxIndex + 1 }).map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrentIndex(i)}
-                className={`rounded-full transition-all duration-300 ${
+                className={`rounded-full transition-all duration-400 ${
                   i === currentIndex
-                    ? "bg-foreground w-6 h-3"
+                    ? "bg-foreground w-7 h-3"
                     : "bg-muted-foreground/30 w-3 h-3 hover:bg-muted-foreground/50"
                 }`}
               />
@@ -124,20 +131,24 @@ const CategoriesSection = () => {
 
           {/* Arrow buttons */}
           <div className="flex gap-3">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={next}
               disabled={currentIndex === maxIndex}
-              className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center hover:bg-foreground/80 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ArrowUpRight className="w-5 h-5" />
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={prev}
               disabled={currentIndex === 0}
-              className="w-12 h-12 rounded-full bg-muted border border-border text-foreground flex items-center justify-center hover:bg-muted-foreground/10 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="w-12 h-12 rounded-full bg-muted border border-border text-foreground flex items-center justify-center transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ArrowDownLeft className="w-5 h-5" />
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
