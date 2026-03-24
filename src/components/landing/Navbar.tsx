@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const links = [
+  { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Brands", href: "/brands" },
   { label: "Products", href: "/products" },
