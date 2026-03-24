@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useInView } from "@/hooks/useInView";
+import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
 
 const faqs = [
@@ -12,13 +12,12 @@ const faqs = [
 ];
 
 const FAQSection = () => {
-  const { ref, isInView } = useInView();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i);
 
   return (
-    <section ref={ref} className="snap-section flex items-center relative overflow-hidden">
+    <section className="snap-section flex items-center relative overflow-hidden">
       {/* Animated dark gradient background */}
       <div
         className="absolute inset-0 animate-gradient"
@@ -31,18 +30,19 @@ const FAQSection = () => {
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-24 w-full">
-        <div className="grid lg:grid-cols-[1fr_1.5fr] gap-16 items-start">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-28 w-full">
+        <div className="grid lg:grid-cols-[1fr_1.5fr] gap-20 items-start">
           {/* Left — Header */}
-          <div
-            className={`transition-all duration-700 ${
-              isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-6">
+            <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
               FAQs
             </span>
-            <h2 className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground mb-5 leading-tight">
+            <h2 className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
               Frequently
               <br />
               Asked Questions
@@ -50,46 +50,53 @@ const FAQSection = () => {
             <p className="text-primary-foreground/40 font-body text-base leading-relaxed max-w-sm">
               In the digital age, your voice on social media is your brand's heartbeat.
             </p>
-          </div>
+          </motion.div>
 
           {/* Right — Custom Accordion */}
-          <div className="space-y-3">
+          <div className="space-y-4">
             {faqs.map((faq, i) => (
-              <div
+              <motion.div
                 key={i}
-                className={`rounded-xl border border-primary-foreground/15 overflow-hidden transition-all duration-500 hover:border-primary-foreground/25 ${
-                  isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                }`}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="rounded-xl border border-primary-foreground/15 overflow-hidden hover:border-primary-foreground/25 transition-all duration-500"
                 style={{
-                  transitionDelay: isInView ? `${i * 80}ms` : "0ms",
                   background: `linear-gradient(135deg, hsl(140 35% 14% / 0.8), hsl(140 40% 12% / 0.6))`,
                 }}
               >
                 <button
                   onClick={() => toggle(i)}
-                  className="w-full flex items-center justify-between px-6 py-5 text-left group"
+                  className="w-full flex items-center justify-between px-7 py-6 text-left group"
                 >
                   <span className="font-body font-medium text-primary-foreground text-base pr-4">
                     {faq.q}
                   </span>
-                  <div className="flex-shrink-0 w-8 h-8 rounded-md border border-primary-foreground/20 flex items-center justify-center group-hover:border-primary-foreground/40 transition-colors">
-                    {openIndex === i ? (
-                      <Minus className="w-4 h-4 text-primary-foreground/60" />
-                    ) : (
-                      <Plus className="w-4 h-4 text-primary-foreground/60" />
-                    )}
-                  </div>
+                  <motion.div
+                    animate={{ rotate: openIndex === i ? 45 : 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex-shrink-0 w-8 h-8 rounded-md border border-primary-foreground/20 flex items-center justify-center group-hover:border-primary-foreground/40 transition-colors"
+                  >
+                    <Plus className="w-4 h-4 text-primary-foreground/60" />
+                  </motion.div>
                 </button>
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openIndex === i ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <p className="px-6 pb-5 font-body text-primary-foreground/50 text-sm leading-relaxed">
-                    {faq.a}
-                  </p>
-                </div>
-              </div>
+                <AnimatePresence>
+                  {openIndex === i && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      className="overflow-hidden"
+                    >
+                      <p className="px-7 pb-6 font-body text-primary-foreground/50 text-sm leading-relaxed">
+                        {faq.a}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             ))}
           </div>
         </div>

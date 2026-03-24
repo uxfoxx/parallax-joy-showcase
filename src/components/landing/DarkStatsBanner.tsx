@@ -1,5 +1,6 @@
 import { useInView } from "@/hooks/useInView";
 import { useCountUp } from "@/hooks/useCountUp";
+import { motion } from "framer-motion";
 
 const bannerStats = [
   { value: 120, suffix: "K+", label: "Products Delivered" },
@@ -11,7 +12,7 @@ const DarkStatsBanner = () => {
   const { ref, isInView } = useInView();
 
   return (
-    <section ref={ref} className="snap-section-auto relative overflow-hidden py-20">
+    <section ref={ref} className="snap-section-auto relative overflow-hidden py-24">
       {/* Animated gradient background */}
       <div
         className="absolute inset-0 animate-gradient"
@@ -39,15 +40,18 @@ const BannerStat = ({ stat, isInView, index }: { stat: typeof bannerStats[0]; is
   const count = useCountUp(stat.value, isInView, 2500);
 
   return (
-    <div
-      className={`px-8 transition-all duration-700 ${isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
-      style={{ transitionDelay: isInView ? `${index * 150}ms` : "0ms" }}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+      className="px-10"
     >
-      <p className="text-forest-light font-body text-sm mb-2 tracking-wide">{stat.label}</p>
+      <p className="text-forest-light font-body text-sm mb-3 tracking-widest uppercase">{stat.label}</p>
       <div className="font-display text-5xl lg:text-6xl font-bold text-primary-foreground">
         {count}{stat.suffix}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

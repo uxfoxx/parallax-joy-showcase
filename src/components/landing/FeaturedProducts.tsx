@@ -1,4 +1,4 @@
-import { useInView } from "@/hooks/useInView";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 const products = [
@@ -8,14 +8,8 @@ const products = [
 ];
 
 const FeaturedProducts = () => {
-  const { ref, isInView } = useInView();
-
   return (
-    <section
-      ref={ref}
-      id="products"
-      className="snap-section flex items-center overflow-hidden relative"
-    >
+    <section id="products" className="snap-section flex items-center overflow-hidden relative">
       {/* Full animated gradient background */}
       <div
         className="absolute inset-0 animate-gradient"
@@ -36,34 +30,37 @@ const FeaturedProducts = () => {
         </svg>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-24 w-full">
-        {/* Header — left-aligned with description on right */}
-        <div
-          className={`flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-6 transition-all duration-700 ${
-            isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-28 w-full">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6"
         >
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground">
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground tracking-tight">
             Featured Products
           </h2>
-          <p className="text-primary-foreground/60 font-body text-base max-w-sm leading-relaxed">
+          <p className="text-primary-foreground/50 font-body text-base max-w-sm leading-relaxed">
             Carefully selected food products sourced from certified international suppliers.
           </p>
-        </div>
+        </motion.div>
 
         {/* Cards */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-8">
           {products.map((product, i) => (
-            <div
+            <motion.div
               key={i}
-              className={`group relative rounded-2xl overflow-hidden border border-primary-foreground/10 transition-all duration-700 hover:shadow-2xl hover:shadow-forest-mid/40 hover:-translate-y-2 hover:border-primary-foreground/20 ${
-                isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-              }`}
-              style={{ transitionDelay: isInView ? `${i * 150}ms` : "0ms" }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="group relative rounded-2xl overflow-hidden border border-primary-foreground/10 hover:border-primary-foreground/20 hover:shadow-2xl hover:shadow-forest-mid/40 transition-all duration-500 shine-sweep"
             >
-              {/* Card inner with animated gradient */}
+              {/* Card inner */}
               <div
-                className=""
                 style={{
                   background: `
                     radial-gradient(ellipse at 50% 0%, hsl(140 30% 22% / 0.6) 0%, transparent 60%),
@@ -72,9 +69,9 @@ const FeaturedProducts = () => {
                   `,
                 }}
               >
-                {/* Top area with tags + title */}
-                <div className="p-5 pb-0">
-                  <div className="flex items-center gap-3 mb-4">
+                {/* Top area */}
+                <div className="p-6 pb-0">
+                  <div className="flex items-center gap-3 mb-5">
                     <span className="px-3 py-1 rounded-full bg-forest-mid/80 text-primary-foreground text-xs font-body font-medium border border-primary-foreground/10">
                       {product.tag}
                     </span>
@@ -87,13 +84,16 @@ const FeaturedProducts = () => {
                   </h3>
                 </div>
 
-                {/* Product image placeholder — gradient jar shape */}
-                <div className="relative h-52 flex items-center justify-center overflow-hidden">
+                {/* Product image placeholder */}
+                <div className="relative h-56 flex items-center justify-center overflow-hidden">
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-40 h-40 rounded-2xl bg-forest-mid/40 blur-[50px] group-hover:bg-forest-light/30 transition-all duration-700" />
                   </div>
-                  {/* Jar silhouette */}
-                  <div className="relative z-10 w-36 h-44 rounded-xl bg-gradient-to-b from-forest-mid/60 to-forest-deep/80 border border-primary-foreground/10 flex flex-col items-center justify-center shadow-xl group-hover:scale-105 transition-transform duration-500">
+                  <motion.div
+                    whileHover={{ scale: 1.08, rotateY: 5 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className="relative z-10 w-36 h-44 rounded-xl bg-gradient-to-b from-forest-mid/60 to-forest-deep/80 border border-primary-foreground/10 flex flex-col items-center justify-center shadow-xl"
+                  >
                     <div className="w-28 h-6 rounded-t-lg bg-forest-deep/90 -mt-3 border border-primary-foreground/10" />
                     <div className="mt-3 text-primary-foreground/40 font-body text-[10px] font-medium tracking-wider uppercase">
                       Seed®
@@ -104,17 +104,19 @@ const FeaturedProducts = () => {
                       <br />
                       DIETARY SUPPLEMENT
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
 
                 {/* Shop Now button */}
-                <div className="p-5 pt-4">
-                  <Button className="w-full bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground font-body rounded-full py-5 transition-all duration-300 border border-primary-foreground/10 hover:border-primary-foreground/20 group-hover:shadow-lg group-hover:shadow-forest-mid/30">
-                    Shop Now
-                  </Button>
+                <div className="p-6 pt-4">
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Button className="w-full bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground font-body rounded-full py-5 transition-all duration-300 border border-primary-foreground/10 hover:border-primary-foreground/20 group-hover:shadow-lg group-hover:shadow-forest-mid/30">
+                      Shop Now
+                    </Button>
+                  </motion.div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
