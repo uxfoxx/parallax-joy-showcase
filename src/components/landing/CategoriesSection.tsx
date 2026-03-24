@@ -62,7 +62,7 @@ const CategoriesSection = () => {
                 style={{ transitionDelay: isInView ? `${i * 100}ms` : "0ms" }}
               >
                 <div
-                  className="h-full animate-gradient-slow"
+                  className="h-full"
                   style={{
                     background: `
                       radial-gradient(ellipse at 50% 0%, hsl(140 35% 22% / 0.6) 0%, transparent 60%),
