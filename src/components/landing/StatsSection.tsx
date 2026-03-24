@@ -3,6 +3,7 @@ import { useCountUp } from "@/hooks/useCountUp";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const stats = [
   { value: 10, suffix: "+", label: "Years of Experience" },
@@ -34,10 +35,12 @@ const StatsSection = () => {
               Over a decade of importing excellence, connecting global suppliers with local businesses. Our track record speaks volumes about our commitment to quality.
             </p>
             <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}>
-              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-full px-8 py-6 text-base transition-all duration-300 hover:shadow-xl hover:shadow-accent/25 group">
-                Get Started
-                <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-2" />
-              </Button>
+              <Link to="/products">
+                <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-full px-8 py-6 text-base transition-all duration-300 hover:shadow-xl hover:shadow-accent/25 group">
+                  Browse Catalog
+                  <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-2" />
+                </Button>
+              </Link>
             </motion.div>
           </motion.div>
 
@@ -71,15 +74,6 @@ const StatCard = ({ stat, isInView, index }: { stat: typeof stats[0]; isInView: 
         {count}{stat.suffix}
       </div>
       <p className="text-muted-foreground font-body text-sm mt-3 tracking-wide">{stat.label}</p>
-      <div className="flex -space-x-2 mt-5">
-        {[0, 1, 2].map((j) => (
-          <div
-            key={j}
-            className="w-7 h-7 rounded-full border-2 border-card"
-            style={{ background: `hsl(${140 + j * 30} 30% ${40 + j * 10}%)` }}
-          />
-        ))}
-      </div>
     </motion.div>
   );
 };

@@ -1,22 +1,22 @@
 import { motion } from "framer-motion";
-import { FileText, Rocket, TrendingUp } from "lucide-react";
+import { ShieldCheck, Globe, Truck } from "lucide-react";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
 
 const features = [
   {
-    icon: FileText,
+    icon: ShieldCheck,
     title: "Quality Assurance",
-    desc: "No in-app analytics. No middle servers. Your prompts are sent directly to budget.",
+    desc: "Every product undergoes rigorous lab testing, certification verification, and compliance checks before reaching your shelves.",
   },
   {
-    icon: Rocket,
+    icon: Globe,
     title: "Global Sourcing",
-    desc: "Bank-level security ensures your and data are safe. We use authentication for your peace.",
+    desc: "Direct partnerships with trusted producers across 30+ countries — from European dairies to Southeast Asian spice farms.",
   },
   {
-    icon: TrendingUp,
+    icon: Truck,
     title: "Efficient Distribution",
-    desc: "Track all your expenses in one place. Easily track transactions and monitor your spending habits.",
+    desc: "End-to-end cold-chain logistics and island-wide delivery ensure your products arrive fresh, on time, every time.",
   },
 ];
 
@@ -40,7 +40,6 @@ const WhyChooseUs = () => {
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-accent/10 blur-[80px] rounded-full" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-28 w-full">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -61,7 +60,6 @@ const WhyChooseUs = () => {
           </p>
         </motion.div>
 
-        {/* Feature cards */}
         <div className="grid md:grid-cols-3 gap-8">
           {features.map((f, i) => (
             <motion.div

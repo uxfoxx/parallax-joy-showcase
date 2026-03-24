@@ -109,9 +109,11 @@ const Navbar = () => {
               Inquire
             </span>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl h-9 px-5 text-sm transition-all duration-300 shadow-lg shadow-accent/20">
-                Contact Us
-              </Button>
+              <Link to="/about">
+                <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl h-9 px-5 text-sm transition-all duration-300 shadow-lg shadow-accent/20">
+                  Contact Us
+                </Button>
+              </Link>
             </motion.div>
           </div>
 

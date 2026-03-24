@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Minus } from "lucide-react";
+import { Plus } from "lucide-react";
 
 const faqs = [
   { q: "What types of food products do you import?", a: "We import a wide range of food products including grains, processed foods, beverages, dairy, frozen goods, spices, oils, and specialty gourmet items from over 25 countries worldwide." },
@@ -18,7 +18,6 @@ const FAQSection = () => {
 
   return (
     <section className="snap-section flex items-center relative overflow-hidden">
-      {/* Animated dark gradient background */}
       <div
         className="absolute inset-0 animate-gradient"
         style={{
@@ -48,11 +47,11 @@ const FAQSection = () => {
               Asked Questions
             </h2>
             <p className="text-primary-foreground/40 font-body text-base leading-relaxed max-w-sm">
-              In the digital age, your voice on social media is your brand's heartbeat.
+              Everything you need to know about our sourcing, logistics, and partnership process.
             </p>
           </motion.div>
 
-          {/* Right — Custom Accordion */}
+          {/* Right — Accordion */}
           <div className="space-y-4">
             {faqs.map((faq, i) => (
               <motion.div
