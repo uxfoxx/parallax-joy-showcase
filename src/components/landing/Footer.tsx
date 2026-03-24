@@ -1,5 +1,6 @@
 import { Leaf } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -37,14 +38,19 @@ const Footer = () => {
           <div>
             <h4 className="font-body text-sm font-semibold text-primary-foreground mb-5 tracking-widest uppercase">Quick Links</h4>
             <ul className="space-y-4">
-              {["Brands", "Products"].map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
+              {[
+                { label: "About", href: "/about" },
+                { label: "Brands", href: "/brands" },
+                { label: "Products", href: "/products" },
+                { label: "Featured", href: "/featured" },
+              ].map((link) => (
+                <li key={link.label}>
+                  <Link
+                    to={link.href}
                     className="text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300 hover:translate-x-1 inline-block"
                   >
-                    {link}
-                  </a>
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
