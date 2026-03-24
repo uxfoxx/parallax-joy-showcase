@@ -3,10 +3,7 @@ import { useScrollSpeed } from "@/hooks/useScrollSpeed";
 
 const HeroSection = () => {
   const { ref, gradientStyle } = useMouseGradient();
-  const speed = useScrollSpeed();
-
-  // Faster animation when scrolling (base 18s → down to 4s)
-  const duration = Math.max(4, 18 - speed * 2);
+  useScrollSpeed();
 
   return (
     <section ref={ref} className="snap-section relative min-h-screen overflow-hidden bg-background">
@@ -23,7 +20,7 @@ const HeroSection = () => {
             linear-gradient(150deg, hsl(140 50% 8%) 0%, hsl(140 45% 14%) 35%, hsl(140 40% 10%) 70%, hsl(140 50% 8%) 100%)
           `,
           backgroundSize: '250% 250%',
-          animation: `gradient-shift ${duration}s ease infinite`,
+          animation: `gradient-shift var(--gradient-duration, 18s) ease infinite`,
         }}
       />
 
