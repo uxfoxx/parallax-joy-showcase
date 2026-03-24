@@ -20,12 +20,7 @@ const FeaturedProducts = () => {
       <div
         className="absolute inset-0 animate-gradient"
         style={{
-          background: `
-            radial-gradient(ellipse at 30% 50%, hsl(140 40% 20% / 0.8) 0%, transparent 60%),
-            radial-gradient(ellipse at 80% 20%, hsl(140 35% 16% / 0.6) 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 80%, hsl(160 30% 14% / 0.5) 0%, transparent 50%),
-            linear-gradient(135deg, hsl(140 45% 10%), hsl(140 40% 14%), hsl(140 35% 12%), hsl(140 45% 10%))
-          `,
+          background: `linear-gradient(135deg, #08120A 38%, #194B22 74%, #08120A 85%)`,
         }}
       />
 
