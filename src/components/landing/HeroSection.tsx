@@ -11,14 +11,14 @@ const HeroSection = () => {
         </Suspense>
       </div>
 
-      {/* Marquee text overlay */}
+      {/* Full-height marquee text overlay */}
       <div className="absolute inset-0 flex items-center pointer-events-none select-none z-10">
-        <div className="w-full overflow-hidden">
-          <div className="animate-marquee flex whitespace-nowrap">
+        <div className="w-full h-full overflow-hidden flex flex-col justify-center">
+          <div className="animate-marquee flex whitespace-nowrap items-center h-full">
             {Array.from({ length: 6 }).map((_, i) => (
               <span
                 key={i}
-                className="text-[12vw] font-black uppercase tracking-tighter text-foreground/10 mx-8"
+                className="text-[40vh] leading-none font-black uppercase tracking-tighter text-foreground/[0.06] mx-8"
                 style={{ fontFamily: "'Inter', sans-serif" }}
               >
                 OLIVE FOODS

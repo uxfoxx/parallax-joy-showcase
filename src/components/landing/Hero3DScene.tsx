@@ -1,7 +1,8 @@
 import { useRef, useMemo } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { MeshDistortMaterial, Float, Environment } from "@react-three/drei";
+import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
+import { Float, Environment } from "@react-three/drei";
 import * as THREE from "three";
+import logoUrl from "@/assets/olive-foods-logo.png";
 
 const FloatingParticles = ({ count = 200 }: { count?: number }) => {
   const pointsRef = useRef<THREE.Points>(null);
@@ -120,7 +121,6 @@ const Y2KStar = ({
 
   return (
     <group ref={ref} position={position} scale={scale}>
-      {/* 4-point star made of two intersecting planes */}
       <mesh>
         <boxGeometry args={[0.08, 1.2, 0.08]} />
         <meshPhysicalMaterial color={color} metalness={0.9} roughness={0.1} transparent opacity={0.5} />
@@ -133,7 +133,6 @@ const Y2KStar = ({
         <boxGeometry args={[0.08, 1.2, 0.08]} />
         <meshPhysicalMaterial color={color} metalness={0.9} roughness={0.1} transparent opacity={0.5} />
       </mesh>
-      {/* Center sphere */}
       <mesh>
         <sphereGeometry args={[0.12, 16, 16]} />
         <meshPhysicalMaterial color={color} metalness={1} roughness={0} transparent opacity={0.6} />
@@ -207,29 +206,32 @@ const OrbitingSphere = ({ radius, speed, size, color, offset }: { radius: number
   );
 };
 
-const MainBlob = () => {
+/* ── Floating Logo ── */
+const FloatingLogo = () => {
   const meshRef = useRef<THREE.Mesh>(null);
   const { pointer } = useThree();
+  const texture = useLoader(THREE.TextureLoader, logoUrl);
 
   useFrame((_, delta) => {
     if (!meshRef.current) return;
-    meshRef.current.rotation.x += delta * 0.1;
-    meshRef.current.rotation.y += delta * 0.15;
-    meshRef.current.rotation.x += (pointer.y * 0.2 - meshRef.current.rotation.x) * 0.01;
-    meshRef.current.rotation.y += (pointer.x * 0.2 - meshRef.current.rotation.y) * 0.01;
+    // Gentle idle rotation
+    meshRef.current.rotation.y += delta * 0.3;
+    // Mouse follow
+    meshRef.current.rotation.x += (pointer.y * 0.15 - meshRef.current.rotation.x) * 0.02;
+    meshRef.current.rotation.z += (-pointer.x * 0.1 - meshRef.current.rotation.z) * 0.02;
   });
 
   return (
-    <Float speed={1.5} rotationIntensity={0.3} floatIntensity={1.2}>
-      <mesh ref={meshRef} scale={2.8}>
-        <icosahedronGeometry args={[1, 8]} />
-        <MeshDistortMaterial
-          color="#1a4a2e"
-          roughness={0.15}
-          metalness={0.9}
-          distort={0.4}
-          speed={3}
-          envMapIntensity={2}
+    <Float speed={1.5} rotationIntensity={0.2} floatIntensity={1.5}>
+      <mesh ref={meshRef} scale={3.2}>
+        <planeGeometry args={[1, 1]} />
+        <meshStandardMaterial
+          map={texture}
+          transparent
+          alphaTest={0.1}
+          side={THREE.DoubleSide}
+          roughness={0.3}
+          metalness={0.1}
         />
       </mesh>
     </Float>
@@ -244,13 +246,13 @@ const Hero3DScene = () => {
         gl={{ antialias: true, alpha: true }}
         style={{ background: "transparent" }}
       >
-        <ambientLight intensity={0.3} />
+        <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} intensity={0.8} color="#f5f0e8" />
         <pointLight position={[-4, 3, 4]} intensity={0.6} color="#d4a017" />
         <pointLight position={[4, -2, -3]} intensity={0.3} color="#4a7c3f" />
 
-        {/* Main blob */}
-        <MainBlob />
+        {/* Floating Logo */}
+        <FloatingLogo />
 
         {/* Particles */}
         <FloatingParticles count={200} />
