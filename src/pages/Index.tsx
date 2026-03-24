@@ -6,6 +6,8 @@ import WhyChooseUs from "@/components/landing/WhyChooseUs";
 import CategoriesSection from "@/components/landing/CategoriesSection";
 import StatsSection from "@/components/landing/StatsSection";
 import DarkStatsBanner from "@/components/landing/DarkStatsBanner";
+import TeamSection from "@/components/landing/TeamSection";
+import LocationsSection from "@/components/landing/LocationsSection";
 import FAQSection from "@/components/landing/FAQSection";
 import Footer from "@/components/landing/Footer";
 
@@ -20,6 +22,8 @@ const Index = () => {
       <CategoriesSection />
       <StatsSection />
       <DarkStatsBanner />
+      <TeamSection />
+      <LocationsSection />
       <FAQSection />
       <Footer />
     </div>
