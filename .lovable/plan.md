@@ -1,38 +1,80 @@
 
 
-# Fix Gradient Animations — More Visible + Scroll-Reactive Speed
+# Navbar Upgrade + 3D Hero + Mouse-Following Gradients
 
-## Problem
-The current `gradient-move` animation only translates 1% and scales 10% over 8 seconds — far too subtle to notice. Also, the user wants the animation to speed up when the user is actively scrolling.
+## 1. Navbar Improvements
 
-## Changes
+**Current**: Two separate pills (left nav + right CTA). Functional but basic.
 
-### 1. `src/index.css` — Bigger, faster gradient animation
-- Increase translate range from 1% to **4-5%** and scale from 1.1 to **1.15**
-- Reduce duration from 8s to **5s**
-- Use CSS custom property `--gradient-duration` so JS can dynamically change speed
+**New design** — single unified glassmorphism bar with active link indicator and scroll-aware morphing:
+- Merge into one centered bar with logo left, links center, CTA right
+- Add an animated pill/blob that slides behind the active link (using `motion.div` `layoutId`)
+- Smoother scroll transition: bar shrinks slightly, gains stronger blur + border on scroll
+- Add a subtle separator line between nav links and CTA area
+- Mobile menu: full-screen overlay with staggered link animations instead of small dropdown
 
-```css
-@keyframes gradient-move {
-  0%   { transform: scale(1) translate(0, 0); }
-  25%  { transform: scale(1.08) translate(4%, -3%); }
-  50%  { transform: scale(1.15) translate(-3%, 4%); }
-  75%  { transform: scale(1.08) translate(3%, 3%); }
-  100% { transform: scale(1) translate(0, 0); }
-}
+### File: `src/components/landing/Navbar.tsx` — rewrite
 
-.animate-gradient {
-  animation: gradient-move var(--gradient-duration, 5s) ease infinite;
-}
-```
+---
 
-### 2. New hook: `src/hooks/useScrollSpeed.ts`
-- Listen to scroll events, calculate scroll velocity
-- Set CSS variable `--gradient-duration` on `document.documentElement` based on velocity:
-  - Idle: `5s` (default)
-  - Scrolling: interpolate down to `1.5s` based on speed
-- Use `requestAnimationFrame` and debounce to reset back to `5s` after scrolling stops (~300ms timeout)
+## 2. Hero Section — Interactive 3D Element
 
-### 3. `src/App.tsx` or `src/pages/Index.tsx`
-- Import and invoke `useScrollSpeed()` once at the top level
+Replace the right side of the hero with an interactive 3D scene using React Three Fiber.
+
+**Layout change**: Split hero into two columns — text content left, 3D canvas right.
+
+**3D scene**: A floating, slowly rotating organic shape (torus knot or sphere with displacement) in forest-green/gold material, with:
+- Mouse-follow rotation (subtle tilt toward cursor)
+- Ambient + point lighting with gold accent light
+- Float animation (gentle up/down bob)
+- Environment reflection for premium feel
+
+### Dependencies to install:
+- `@react-three/fiber@^8.18`
+- `three@^0.160`
+- `@react-three/drei@^9.122.0`
+
+### New file: `src/components/landing/Hero3DScene.tsx`
+- Canvas with `<OrbitControls enableZoom={false}>` for subtle interaction
+- Custom mesh with `MeshDistortMaterial` or `MeshWobbleMaterial` from drei
+- Mouse-tracking via `useFrame` + pointer state
+
+### File: `src/components/landing/HeroSection.tsx` — restructure
+- Two-column layout: content left (max-w-2xl), 3D canvas right
+- Keep the dark green rounded card as the full container
+- 3D canvas fills right column with `pointer-events: auto`
+
+---
+
+## 3. Mouse-Following Gradients
+
+Create a reusable hook and apply to select dark sections (WhyChooseUs, LocationsSection, DarkStatsBanner).
+
+### New file: `src/hooks/useMouseGradient.ts`
+- Track mouse position relative to a container ref
+- Return `{ ref, gradientStyle }` where `gradientStyle` is a CSS radial-gradient string centered on cursor position
+- Smoothly interpolate position using `requestAnimationFrame` for buttery movement
+- Adds a subtle glow spot (e.g., `radial-gradient(circle 400px at X Y, hsl(42 80% 55% / 0.06), transparent)`) that layers on top of existing gradients
+
+### Modified files:
+- `src/components/landing/WhyChooseUs.tsx` — add mouse-follow gradient overlay div
+- `src/components/landing/LocationsSection.tsx` — same
+- `src/components/landing/DarkStatsBanner.tsx` — same
+
+The mouse-follow layer is an additional `absolute inset-0` div with `pointer-events-none` that renders the cursor-tracking radial gradient on top of the existing animated background.
+
+---
+
+## Summary of files
+
+| Action | File |
+|--------|------|
+| Rewrite | `src/components/landing/Navbar.tsx` |
+| Rewrite | `src/components/landing/HeroSection.tsx` |
+| Create | `src/components/landing/Hero3DScene.tsx` |
+| Create | `src/hooks/useMouseGradient.ts` |
+| Modify | `src/components/landing/WhyChooseUs.tsx` |
+| Modify | `src/components/landing/LocationsSection.tsx` |
+| Modify | `src/components/landing/DarkStatsBanner.tsx` |
+| Install | `@react-three/fiber@^8.18`, `three@^0.160`, `@react-three/drei@^9.122.0`, `@types/three` |
 
