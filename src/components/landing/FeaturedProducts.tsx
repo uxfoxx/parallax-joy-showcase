@@ -63,7 +63,7 @@ const FeaturedProducts = () => {
             >
               {/* Card inner with animated gradient */}
               <div
-                className="animate-gradient-slow"
+                className=""
                 style={{
                   background: `
                     radial-gradient(ellipse at 50% 0%, hsl(140 30% 22% / 0.6) 0%, transparent 60%),
