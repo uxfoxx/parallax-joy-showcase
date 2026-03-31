@@ -1,36 +1,82 @@
 
+## Full Plan: Fix Double Vertical Scrollbar, Custom Scrollbar, Cursor Visibility, Floating Navbar/WhatsApp, and Scroll/Cursor Slowness
 
-# Add Product Data from Excel to Database
+### What I found (root causes)
+1. **Navbar/WhatsApp not always floating** on Home is mainly caused by `perspective: "1200px"` on `src/pages/Index.tsx` root wrapper. This can break true viewport-fixed behavior for descendants.
+2. **Cursor feels slow / not visible everywhere** because:
+   - `CustomCursor` is only mounted on `/` (not global).
+   - It initializes off-screen (`-100,-100`) and only appears after movement.
+   - It competes at the same z-layer as WhatsApp.
+3. **Overall scrolling + cursor lag** comes from multiple RAF loops that call React state every frame:
+   - `src/components/landing/ImmersiveBackground.tsx` (`setMouse` in RAF)
+   - `src/hooks/useMouseGradient.ts` (`setPos` in RAF, used by multiple sections)
+4. **Double vertical scrollbar appearance** is from mixed scroll contexts (root document + embedded map iframe behavior) and lack of a strict single-page scroll container policy.
+5. **No custom scrollbar styling** is currently defined globally.
 
-## Overview
-The uploaded Excel file contains ~200 products across 20+ categories with brands like Hungritos, Azizaa, Royal Arm, Donna Chiara, Acroyali, etc. Currently the DB has only 21 dummy products with 6 generic brands. This plan replaces/supplements with real Olive Foods product data.
+---
 
-## Step 1 — Add New Categories
-Insert ~16 new categories to match the Excel structure:
-Frozen French Fries, Rice, Honey, Seasonings & Sauces, Edible Oils, Vinegar, Dry Nuts & Seeds, Toppings, Chocolate & Pastry, Flour, Italian Pasta, Japanese Products, Mexican, Canned Vegetables & Fruits, Herbs & Spices, Meat, Poultry, Frozen Berry, Cheese, Packing Material
+### Implementation steps
 
-## Step 2 — Add New Brands
-Insert ~15 real brands from the Excel:
-Bon Vegato, Hungritos, Azizaa, Royal Arm, Grawings, Mara, Remia, Tabasco, Super Chef, Donna Chiara, Dedicato, Kikkoman, Acroyali, Hersheys, Colatta, American Gourmet, HP, ABC, Figaro, Shams, KD, Blue Diamond, Cadbury, Virgina, Wadi, Swiss Garden, Falcon
+#### 1) Enforce a single global scroll container + custom scrollbar
+- **File:** `src/index.css`
+- Set a consistent page scroller (`html` as scroller, body non-competing).
+- Keep horizontal overflow clipped globally.
+- Add modern custom scrollbar styles:
+  - `::-webkit-scrollbar`, `::-webkit-scrollbar-track`, `::-webkit-scrollbar-thumb`
+  - Firefox: `scrollbar-width`, `scrollbar-color`
+- Add subtle hover state for thumb and rounded track to match brand look.
 
-(Group smaller brands under umbrella brands where logical — aim for ~15 distinct brands)
+#### 2) Restore true fixed floating behavior for navbar + WhatsApp
+- **File:** `src/pages/Index.tsx`
+- Remove `style={{ perspective: "1200px" }}` from the root container.
+- Keep `overflow-x-hidden`, but avoid parent transforms/perspective that affect fixed children.
+- Confirm `Navbar` + `FloatingWhatsApp` remain in top-level route layout flow.
 
-## Step 3 — Insert Products
-Insert all ~180 food products (excluding packing materials) with:
-- Name, category, brand_id, slug (auto-generated), pack_size info in description
-- Relevant Unsplash image URLs per category (e.g., french fries image for frozen fries, rice image for rice products, olive oil image for oils, etc.)
-- SKU from pack size column
-- Origin based on product type (e.g., "India" for Basmati, "Italy" for pasta, "Japan" for Japanese products, "Australia" for meat)
+#### 3) Make custom cursor always visible site-wide and faster
+- **Files:**  
+  - `src/App.tsx` (mount cursor globally once)  
+  - `src/components/landing/CustomCursor.tsx` (visibility + speed)  
+  - `src/index.css` (global native cursor hiding class for fine pointers)
+- Move cursor mount out of Home-only rendering.
+- Initialize dot at viewport center (not off-screen) so it is visible immediately.
+- Increase follow responsiveness (higher lerp values for snappier motion).
+- Raise cursor z-index above all UI layers; place WhatsApp just below cursor.
+- Add robust contrast ring/shadow so dot is visible on both dark and light sections.
 
-## Step 4 — Mark Featured Products
-Set `featured = true` on ~8 representative products across categories (e.g., Basmati Rice, Beef Striploin, Extra Virgin Olive Oil, Saffron, Wild Salmon, Spaghetti)
+#### 4) Remove performance bottlenecks causing scroll/cursor lag
+- **Files:**  
+  - `src/hooks/useMouseGradient.ts`  
+  - `src/components/landing/ImmersiveBackground.tsx`
+- Refactor from **state-per-frame** to **ref + direct style/CSS-variable updates** to avoid rerendering large sections every animation frame.
+- Keep existing visual behavior, but run animation updates outside React render loop.
+- Reduce expensive background animation intensity slightly on low-end scenarios.
 
-## Technical Approach
-- Use the Supabase insert tool for all data operations (INSERT statements)
-- Batch inserts by category to stay organized
-- Use Unsplash URLs for images (category-level images shared across similar products)
-- No schema migrations needed — existing columns support all data
+#### 5) Fix map-driven secondary scrollbar visuals
+- **Files:**  
+  - `src/components/landing/LocationsSection.tsx`  
+  - `src/pages/AboutPage.tsx` (map section there too)
+- Tighten map wrapper overflow handling.
+- Set iframe non-scrolling intent and ensure rounded container clips internals cleanly.
+- Keep map UX intact while preventing “second scrollbar” feel.
 
-## Files
-No code file changes needed — this is purely a data insertion task using the database insert tool.
+---
 
+### Files to modify
+- `src/index.css`
+- `src/pages/Index.tsx`
+- `src/App.tsx`
+- `src/components/landing/CustomCursor.tsx`
+- `src/hooks/useMouseGradient.ts`
+- `src/components/landing/ImmersiveBackground.tsx`
+- `src/components/landing/LocationsSection.tsx`
+- `src/pages/AboutPage.tsx`
+
+---
+
+### Verification checklist after implementation
+1. Only one vertical page scrollbar is visible during full-page scroll.
+2. Custom scrollbar styling appears consistently (Chrome/Safari/Edge + Firefox fallback).
+3. Navbar stays fixed at top on all sections/routes.
+4. WhatsApp button always floats and never scrolls away.
+5. Green cursor dot is visible on dark + light sections and reacts faster than before.
+6. Scroll and cursor movement feel noticeably smoother with less lag/jitter.
