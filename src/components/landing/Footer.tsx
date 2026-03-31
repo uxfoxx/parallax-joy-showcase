@@ -1,6 +1,6 @@
-import { Leaf } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import logoSvg from "@/assets/olive-foods-logo.svg";
 
 const Footer = () => {
   return (
@@ -27,8 +27,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="space-y-5">
             <div className="flex items-center gap-3">
-              <Leaf className="w-7 h-7 text-forest-light" />
-              <span className="font-display text-lg font-semibold text-primary-foreground">Olive Foods</span>
+              <img src={logoSvg} alt="Olive Foods" className="h-10 w-auto object-contain brightness-0 invert" />
             </div>
             <p className="text-primary-foreground/45 font-body text-sm leading-relaxed max-w-xs">
               Your trusted import, bonded warehousing & FMCG distribution partner — delivering quality and reliability across Sri Lanka for over 30 years.
