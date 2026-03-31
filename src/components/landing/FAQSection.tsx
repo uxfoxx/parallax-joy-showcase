@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Plus } from "lucide-react";
 
 const faqs = [
@@ -13,43 +13,10 @@ const faqs = [
 
 const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Parallax bg
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-50px", "50px"]);
-
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden py-28 lg:py-36">
-      {/* Standardized dark gradient */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(ellipse at 20% 30%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 70%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-            linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 14%), hsl(150 40% 10%))
-          `,
-        }}
-      />
-
-      {/* Parallax decorative */}
-      <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
-        <div
-          className="absolute w-[500px] h-[400px] top-1/3 -left-40 rounded-full opacity-[0.05]"
-          style={{ background: "radial-gradient(ellipse, hsl(80 50% 31%), transparent 70%)" }}
-        />
-        <div
-          className="absolute w-[300px] h-[300px] bottom-20 right-10 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }}
-        />
-      </motion.div>
-
+    <section className="relative overflow-hidden py-28 lg:py-36">
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         <div className="grid lg:grid-cols-[1fr_1.5fr] gap-20 items-start">
           {/* Left — Header */}
@@ -59,7 +26,7 @@ const FAQSection = () => {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
+            <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
               FAQs
             </span>
             <h2 className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
@@ -67,38 +34,33 @@ const FAQSection = () => {
               <br />
               Asked Questions
             </h2>
-            <p className="text-primary-foreground/40 font-body text-base leading-relaxed max-w-sm">
+            <p className="text-primary-foreground/35 font-body text-base leading-relaxed max-w-sm">
               Everything you need to know about our food import services, from sourcing to delivery.
             </p>
           </motion.div>
 
-          {/* Right — Custom Accordion */}
+          {/* Right — Accordion with staggered slide-from-right */}
           <div className="space-y-4">
             {faqs.map((faq, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: 60 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="rounded-xl border border-primary-foreground/15 overflow-hidden hover:border-primary-foreground/25 transition-all duration-500"
-                style={{
-                  background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))`,
-                }}
+                transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="rounded-xl overflow-hidden glass hover:shadow-lg hover:shadow-accent/5 transition-all duration-500"
               >
                 <button
                   onClick={() => toggle(i)}
                   className="w-full flex items-center justify-between px-7 py-6 text-left group"
                 >
-                  <span className="font-body font-medium text-primary-foreground text-base pr-4">
-                    {faq.q}
-                  </span>
+                  <span className="font-body font-medium text-primary-foreground text-base pr-4">{faq.q}</span>
                   <motion.div
                     animate={{ rotate: openIndex === i ? 45 : 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex-shrink-0 w-8 h-8 rounded-md border border-primary-foreground/20 flex items-center justify-center group-hover:border-primary-foreground/40 transition-colors"
+                    transition={{ duration: 0.2, type: "spring", stiffness: 300 }}
+                    className="flex-shrink-0 w-8 h-8 rounded-md border border-primary-foreground/15 flex items-center justify-center group-hover:border-accent/40 transition-colors"
                   >
-                    <Plus className="w-4 h-4 text-primary-foreground/60" />
+                    <Plus className="w-4 h-4 text-primary-foreground/50" />
                   </motion.div>
                 </button>
                 <AnimatePresence>
@@ -107,12 +69,10 @@ const FAQSection = () => {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="px-7 pb-6 font-body text-primary-foreground/50 text-sm leading-relaxed">
-                        {faq.a}
-                      </p>
+                      <p className="px-7 pb-6 font-body text-primary-foreground/40 text-sm leading-relaxed">{faq.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>
