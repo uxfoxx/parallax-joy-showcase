@@ -18,6 +18,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import AdminBrands from "./pages/admin/AdminBrands.tsx";
 import AdminProducts from "./pages/admin/AdminProducts.tsx";
 import AdminCategories from "./pages/admin/AdminCategories.tsx";
+import AdminFeatured from "./pages/admin/AdminFeatured.tsx";
+import AdminSubmissions from "./pages/admin/AdminSubmissions.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
 
 const queryClient = new QueryClient();
