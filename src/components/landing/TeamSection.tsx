@@ -1,7 +1,6 @@
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useRef, useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
 import { ShoppingCart, Globe, Warehouse, Truck, ChevronLeft, ChevronRight } from "lucide-react";
 
 const team = [
@@ -44,11 +43,18 @@ const TeamSection = () => {
   const orbY = useTransform(scrollYProgress, [0, 1], ["50px", "-50px"]);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const autoplayPlugin = useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
-  );
+  const [isHovered, setIsHovered] = useState(false);
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoplayPlugin.current]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  // Manual autoplay
+  useEffect(() => {
+    if (!emblaApi || isHovered) return;
+    const interval = setInterval(() => {
+      emblaApi.scrollNext();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [emblaApi, isHovered]);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -103,7 +109,7 @@ const TeamSection = () => {
         </motion.div>
 
         {/* Carousel */}
-        <div className="relative">
+        <div className="relative" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
           {/* Prev / Next */}
           <button
             onClick={scrollPrev}
