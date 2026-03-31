@@ -50,7 +50,7 @@ const Index = () => {
       <div data-navbar-theme="dark">
         <DarkStatsBanner />
       </div>
-      <SectionTransition colorFrom="hsl(150 40% 10% / 0.3)" colorTo="hsl(140 50% 14% / 0.2)" />
+      <SectionTransition />
       <div data-navbar-theme="dark">
         <TeamSection />
       </div>
