@@ -34,7 +34,6 @@ const Index = () => {
       <div data-navbar-theme="dark">
         <FeaturedProducts />
       </div>
-      <SectionTransition />
       <div data-navbar-theme="light">
         <WhyChooseUs />
       </div>
