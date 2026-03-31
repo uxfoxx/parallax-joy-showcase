@@ -22,45 +22,54 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
       transition={{ duration: 0.4 }}
     >
       <Link to={`/products/${product.slug}`} className="block group">
-        <div className="rounded-lg border border-border bg-card overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:border-forest-mid/30">
-          <div
-            className={`relative overflow-hidden bg-gradient-to-br from-forest-deep/10 via-forest-mid/5 to-accent/10 flex items-center justify-center ${
-              large ? "h-64" : "h-48"
-            }`}
-          >
-            {product.image_url ? (
-              <img src={product.image_url} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-            ) : (
-              <Package className="w-10 h-10 text-forest-mid/25" />
-            )}
-            {product.featured && (
-              <Badge className="absolute top-3 left-3 bg-accent text-accent-foreground font-body text-xs">
+        <div
+          className={`relative rounded-lg overflow-hidden ${large ? "aspect-[3/4]" : "aspect-[4/5]"}`}
+        >
+          {/* Full image background */}
+          {product.image_url ? (
+            <img
+              src={product.image_url}
+              alt={product.name}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-forest-deep/20 via-forest-mid/10 to-accent/10 flex items-center justify-center">
+              <Package className="w-12 h-12 text-forest-mid/25" />
+            </div>
+          )}
+
+          {/* Always-visible top badges */}
+          <div className="absolute top-3 left-3 right-3 flex items-start justify-between z-10">
+            {product.featured ? (
+              <Badge className="bg-accent text-accent-foreground font-body text-xs shadow-md">
                 Featured
               </Badge>
-            )}
-            <div className="absolute top-3 right-3">
-              <Badge variant="outline" className="bg-background/80 backdrop-blur-sm font-body text-xs text-foreground border-border">
-                {product.category}
-              </Badge>
-            </div>
+            ) : <span />}
+            <Badge variant="outline" className="bg-background/80 backdrop-blur-sm font-body text-xs text-foreground border-border shadow-sm">
+              {product.category}
+            </Badge>
           </div>
 
-          <div className="p-5 space-y-2">
-            <h3 className="font-display text-lg font-semibold text-foreground group-hover:text-forest-mid transition-colors">
+          {/* Gradient overlay — always subtle, stronger on hover */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+
+          {/* Bottom details — slide up on hover */}
+          <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-2 group-hover:translate-y-0 transition-transform duration-400">
+            <h3 className="font-display text-lg font-semibold text-white mb-1 drop-shadow-md">
               {product.name}
             </h3>
-            <p className="text-sm font-body text-muted-foreground line-clamp-2">
+            <p className="text-white/70 text-sm font-body line-clamp-2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400 delay-75">
               {product.description}
             </p>
-            <div className="flex items-center justify-between pt-2">
+            <div className="flex items-center justify-between">
               <Link
                 to={`/brands/${brandSlug}`}
-                className="text-xs font-body font-medium text-forest-mid hover:underline"
+                className="text-xs font-body font-medium text-white/90 hover:underline"
                 onClick={(e) => e.stopPropagation()}
               >
                 {brandName}
               </Link>
-              <span className="text-xs font-body text-muted-foreground">
+              <span className="text-xs font-body text-white/60">
                 {product.origin}
               </span>
             </div>

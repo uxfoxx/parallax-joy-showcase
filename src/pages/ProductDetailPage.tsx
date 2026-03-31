@@ -41,8 +41,12 @@ const ProductDetailPage = () => {
           </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
-            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="rounded-xl bg-gradient-to-br from-forest-deep/10 via-forest-mid/5 to-accent/10 aspect-square flex items-center justify-center">
-              <span className="font-display text-8xl text-forest-mid/15 font-bold">{product.name.charAt(0)}</span>
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="rounded-xl overflow-hidden aspect-square bg-gradient-to-br from-forest-deep/10 via-forest-mid/5 to-accent/10 flex items-center justify-center">
+              {product.image_url ? (
+                <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
+              ) : (
+                <Package className="w-20 h-20 text-forest-mid/20" />
+              )}
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="space-y-6 flex flex-col justify-center">
