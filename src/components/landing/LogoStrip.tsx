@@ -4,14 +4,14 @@ const logos = ["ADIRA", "ADIRA INC", "Holcim", "MNC", "TELKOMSEL"];
 
 const LogoStrip = () => {
   return (
-    <section className="snap-section-auto bg-background py-20 overflow-hidden">
+    <section className="bg-background py-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center text-muted-foreground font-body text-sm uppercase tracking-[0.25em] mb-12"
+          className="text-center text-muted-foreground font-body text-sm uppercase tracking-[0.25em] mb-10"
         >
           Trusted by Leading Companies
         </motion.p>
@@ -25,9 +25,9 @@ const LogoStrip = () => {
           {[...logos, ...logos, ...logos, ...logos].map((logo, i) => (
             <div
               key={i}
-              className="flex-shrink-0 mx-12 flex items-center justify-center h-16 px-10 rounded-xl border border-border/50 bg-muted/30 hover:bg-muted/60 hover:border-accent/30 transition-all duration-300 group cursor-default"
+              className="flex-shrink-0 mx-10 flex items-center justify-center h-12 px-8"
             >
-              <span className="font-display text-lg font-semibold text-muted-foreground/60 group-hover:text-foreground transition-colors duration-300 whitespace-nowrap">
+              <span className="font-display text-xl font-bold text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors duration-300 whitespace-nowrap">
                 {logo}
               </span>
             </div>

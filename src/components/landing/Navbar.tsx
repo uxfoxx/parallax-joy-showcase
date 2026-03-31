@@ -20,32 +20,19 @@ const Navbar = () => {
   const isLanding = location.pathname === "/";
 
   useEffect(() => {
-    const container = document.querySelector(".snap-container");
-    const target = container || window;
-    const onScroll = () => {
-      const scrollY = container ? (container as HTMLElement).scrollTop : window.scrollY;
-      setScrolled(scrollY > 50);
-    };
-    target.addEventListener("scroll", onScroll, { passive: true });
-    return () => target.removeEventListener("scroll", onScroll);
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // On inner pages (white bg), use dark text; on landing, use light text
-  const textBase = isLanding ? "text-primary-foreground" : (scrolled ? "text-primary-foreground" : "text-foreground");
-  const textMuted = isLanding ? "text-primary-foreground/60" : (scrolled ? "text-primary-foreground/60" : "text-muted-foreground");
-  const barBg = isLanding
-    ? scrolled
-      ? "bg-forest-deep/80 backdrop-blur-xl shadow-2xl shadow-forest-deep/40 border border-primary-foreground/10"
-      : "bg-forest-deep/60 backdrop-blur-md border border-primary-foreground/5"
-    : scrolled
-      ? "bg-forest-deep/80 backdrop-blur-xl shadow-2xl shadow-forest-deep/40 border border-primary-foreground/10"
-      : "bg-background/80 backdrop-blur-xl shadow-lg border border-border";
+  // Determine if we're on a "dark header" context
+  const useLightText = isLanding || scrolled;
 
-  const logoIconBg = isLanding || scrolled ? "bg-forest-mid" : "bg-forest-deep/10";
-  const logoIconColor = isLanding || scrolled ? "text-forest-light" : "text-forest-mid";
-  const activePillBg = isLanding || scrolled ? "bg-primary-foreground/10" : "bg-forest-deep/10";
-  const mobileToggleBg = isLanding || scrolled ? "bg-primary-foreground/10" : "bg-forest-deep/10";
-  const mobileToggleColor = isLanding || scrolled ? "text-primary-foreground" : "text-foreground";
+  const barBg = scrolled
+    ? "bg-forest-deep/90 backdrop-blur-xl shadow-2xl shadow-forest-deep/30 border border-primary-foreground/10"
+    : isLanding
+      ? "bg-forest-deep/50 backdrop-blur-md border border-primary-foreground/5"
+      : "bg-background/90 backdrop-blur-xl shadow-lg border border-border";
 
   return (
     <>
@@ -68,11 +55,11 @@ const Navbar = () => {
             <motion.div
               whileHover={{ scale: 1.1, rotate: 5 }}
               whileTap={{ scale: 0.95 }}
-              className={`w-9 h-9 rounded-full ${logoIconBg} flex items-center justify-center transition-colors duration-300`}
+              className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 ${useLightText ? "bg-forest-mid" : "bg-forest-deep/10"}`}
             >
-              <Leaf className={`w-5 h-5 ${logoIconColor}`} />
+              <Leaf className={`w-5 h-5 ${useLightText ? "text-forest-light" : "text-forest-mid"}`} />
             </motion.div>
-            <span className={`font-display font-semibold text-lg hidden sm:block tracking-tight ${textBase}`}>
+            <span className={`font-display font-semibold text-lg hidden sm:block tracking-tight transition-colors duration-300 ${useLightText ? "text-primary-foreground" : "text-foreground"}`}>
               FreshLine
             </span>
           </Link>
@@ -80,7 +67,7 @@ const Navbar = () => {
           {/* Center links */}
           <div className="hidden md:flex items-center gap-1 relative">
             {links.map((link) => {
-              const isActive = link.href === "/" ? location.pathname === "/" : location.pathname === link.href || location.pathname.startsWith(link.href);
+              const isActive = link.href === "/" ? location.pathname === "/" : location.pathname.startsWith(link.href);
               return (
                 <Link
                   key={link.label}
@@ -90,11 +77,15 @@ const Navbar = () => {
                   {isActive && (
                     <motion.div
                       layoutId="nav-pill"
-                      className={`absolute inset-0 ${activePillBg} rounded-xl`}
+                      className={`absolute inset-0 rounded-xl ${useLightText ? "bg-primary-foreground/10" : "bg-forest-deep/10"}`}
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}
-                  <span className={`relative z-10 ${isActive ? textBase : `${textMuted} hover:${textBase}`}`}>
+                  <span className={`relative z-10 transition-colors duration-300 ${
+                    isActive
+                      ? (useLightText ? "text-primary-foreground" : "text-foreground")
+                      : (useLightText ? "text-primary-foreground/60 hover:text-primary-foreground" : "text-muted-foreground hover:text-foreground")
+                  }`}>
                     {link.label}
                   </span>
                 </Link>
@@ -104,12 +95,8 @@ const Navbar = () => {
 
           {/* Right side */}
           <div className="hidden md:flex items-center gap-3">
-            <div className={`w-px h-5 ${isLanding || scrolled ? "bg-primary-foreground/10" : "bg-border"}`} />
-            <span className={`${textMuted} font-body text-sm cursor-pointer hover:opacity-80 transition-colors`}>
-              Inquire
-            </span>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl h-9 px-5 text-sm transition-all duration-300 shadow-lg shadow-accent/20">
+              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl h-10 px-6 text-sm transition-all duration-300 shadow-lg shadow-accent/20">
                 Contact Us
               </Button>
             </motion.div>
@@ -119,7 +106,7 @@ const Navbar = () => {
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`md:hidden w-10 h-10 rounded-xl ${mobileToggleBg} flex items-center justify-center ${mobileToggleColor}`}
+            className={`md:hidden w-10 h-10 rounded-xl flex items-center justify-center ${useLightText ? "bg-primary-foreground/10 text-primary-foreground" : "bg-forest-deep/10 text-foreground"}`}
           >
             {mobileOpen ? <X size={18} /> : <Menu size={18} />}
           </motion.button>
@@ -158,12 +145,11 @@ const Navbar = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ delay: 0.4, duration: 0.4 }}
-              className="flex flex-col items-center gap-4 mt-8"
+              className="mt-8"
             >
               <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl px-10 py-6 text-lg">
                 Contact Us
               </Button>
-              <span className="text-primary-foreground/50 font-body text-sm">Inquire</span>
             </motion.div>
           </motion.div>
         )}

@@ -4,12 +4,15 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="snap-section-auto relative overflow-hidden">
-      {/* Animated gradient background */}
+    <footer className="relative overflow-hidden">
+      {/* Standardized dark gradient */}
       <div
-        className="absolute inset-0 animate-gradient"
+        className="absolute inset-0"
         style={{
-          background: `radial-gradient(ellipse at 50% 0%, #194B22 0%, #194B22 41%, #08120A 100%)`,
+          background: `
+            radial-gradient(ellipse at 50% 0%, hsl(140 35% 18% / 0.5) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 10%), hsl(140 45% 8%))
+          `,
         }}
       />
 
@@ -23,14 +26,15 @@ const Footer = () => {
         >
           {/* Brand */}
           <div className="space-y-5">
-            <motion.div
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              className="w-10 h-10"
-            >
-              <Leaf className="w-8 h-8 text-forest-light" />
-            </motion.div>
+            <div className="flex items-center gap-3">
+              <Leaf className="w-7 h-7 text-forest-light" />
+              <span className="font-display text-lg font-semibold text-primary-foreground">FreshLine</span>
+            </div>
             <p className="text-primary-foreground/45 font-body text-sm leading-relaxed max-w-xs">
               Your trusted partner in premium food imports, delivering quality and reliability across Sri Lanka.
+            </p>
+            <p className="text-primary-foreground/30 font-body text-xs">
+              info@freshline.lk · +94 11 234 5678
             </p>
           </div>
 
@@ -47,7 +51,7 @@ const Footer = () => {
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300 hover:translate-x-1 inline-block"
+                    className="text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300"
                   >
                     {link.label}
                   </Link>
@@ -82,7 +86,7 @@ const Footer = () => {
           className="mt-16 pt-8 border-t border-primary-foreground/10 text-center"
         >
           <p className="text-primary-foreground/25 font-body text-sm tracking-wide">
-            ©2026 . All rights reserved.
+            ©2026 FreshLine. All rights reserved.
           </p>
         </motion.div>
       </div>

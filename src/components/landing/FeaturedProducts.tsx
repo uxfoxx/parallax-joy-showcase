@@ -8,15 +8,20 @@ const FeaturedProducts = () => {
   const displayProducts = products.slice(0, 3);
 
   return (
-    <section id="products" className="snap-section flex items-center overflow-hidden relative">
-      <div className="absolute inset-0 animate-gradient" style={{ background: `linear-gradient(135deg, #08120A 38%, #194B22 74%, #08120A 85%)` }} />
-      <div className="absolute bottom-0 left-0 right-0 h-40 opacity-20">
-        <svg viewBox="0 0 1200 160" className="w-full h-full" preserveAspectRatio="none">
-          <path d="M-100,160 Q300,-40 600,80 T1300,40" fill="none" stroke="hsl(180, 60%, 50%)" strokeWidth="1.5" />
-        </svg>
-      </div>
+    <section id="products" className="relative overflow-hidden py-28 lg:py-36">
+      {/* Standardized dark gradient */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(ellipse at 30% 20%, hsl(140 35% 18% / 0.5) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 80%, hsl(140 30% 14% / 0.4) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))
+          `,
+        }}
+      />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-28 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6">
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground tracking-tight">Featured Products</h2>
           <p className="text-primary-foreground/50 font-body text-base max-w-sm leading-relaxed">Carefully selected food products sourced from certified international suppliers.</p>
@@ -31,9 +36,9 @@ const FeaturedProducts = () => {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              className="group relative rounded-2xl overflow-hidden border border-primary-foreground/10 hover:border-primary-foreground/20 hover:shadow-2xl hover:shadow-forest-mid/40 transition-all duration-500 shine-sweep"
+              className="group relative rounded-2xl overflow-hidden border border-primary-foreground/10 hover:border-primary-foreground/20 hover:shadow-2xl hover:shadow-forest-mid/40 transition-all duration-500"
             >
-              <div style={{ background: `radial-gradient(ellipse at 50% 0%, hsl(140 30% 22% / 0.6) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, hsl(140 35% 18% / 0.4) 0%, transparent 50%), linear-gradient(180deg, hsl(140 40% 14%), hsl(140 45% 11%), hsl(140 40% 13%))` }}>
+              <div style={{ background: `radial-gradient(ellipse at 50% 0%, hsl(140 30% 22% / 0.6) 0%, transparent 60%), linear-gradient(180deg, hsl(140 40% 14%), hsl(140 45% 11%))` }}>
                 <div className="p-6 pb-0">
                   <div className="flex items-center gap-3 mb-5">
                     <span className="px-3 py-1 rounded-full bg-forest-mid/80 text-primary-foreground text-xs font-body font-medium border border-primary-foreground/10">{product.featured ? "Featured" : "New"}</span>
@@ -53,7 +58,7 @@ const FeaturedProducts = () => {
                 <div className="p-6 pt-4">
                   <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Link to={`/products/${product.slug}`}>
-                      <Button className="w-full bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground font-body rounded-full py-5 transition-all duration-300 border border-primary-foreground/10 hover:border-primary-foreground/20 group-hover:shadow-lg group-hover:shadow-forest-mid/30">View Product</Button>
+                      <Button className="w-full bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground font-body rounded-xl py-5 transition-all duration-300 border border-primary-foreground/10 hover:border-primary-foreground/20">View Product</Button>
                     </Link>
                   </motion.div>
                 </div>

@@ -1,4 +1,3 @@
-import { useScrollSpeed } from "@/hooks/useScrollSpeed";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import LogoStrip from "@/components/landing/LogoStrip";
@@ -13,10 +12,8 @@ import FAQSection from "@/components/landing/FAQSection";
 import Footer from "@/components/landing/Footer";
 
 const Index = () => {
-  useScrollSpeed();
-
   return (
-    <div className="snap-container">
+    <div className="smooth-scroll">
       <Navbar />
       <HeroSection />
       <LogoStrip />

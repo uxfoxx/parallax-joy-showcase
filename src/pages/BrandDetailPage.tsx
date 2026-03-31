@@ -26,8 +26,9 @@ const BrandDetailPage = () => {
 
   return (
     <PageLayout>
-      <section className="relative overflow-hidden bg-forest-deep py-24 lg:py-32">
-        <div className="absolute inset-0 bg-gradient-to-br from-forest-deep via-forest-mid/20 to-forest-deep" />
+      <section className="relative overflow-hidden py-24 lg:py-32">
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))' }} />
+        <div className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-overlay"><svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg"><filter id="noiseBD"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter><rect width="100%" height="100%" filter="url(#noiseBD)" /></svg></div>
         <div className="relative z-10 max-w-5xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 text-sm font-body text-primary-foreground/50 mb-8">
             <Link to="/" className="hover:text-primary-foreground/80 transition-colors">Home</Link><span>/</span>

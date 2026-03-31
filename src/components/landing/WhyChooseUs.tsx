@@ -1,22 +1,22 @@
 import { motion } from "framer-motion";
-import { FileText, Rocket, TrendingUp } from "lucide-react";
+import { ShieldCheck, Globe, Truck } from "lucide-react";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
 
 const features = [
   {
-    icon: FileText,
+    icon: ShieldCheck,
     title: "Quality Assurance",
-    desc: "No in-app analytics. No middle servers. Your prompts are sent directly to budget.",
+    desc: "Every product undergoes rigorous laboratory testing, certification verification, and compliance checks with international food safety standards before reaching you.",
   },
   {
-    icon: Rocket,
+    icon: Globe,
     title: "Global Sourcing",
-    desc: "Bank-level security ensures your and data are safe. We use authentication for your peace.",
+    desc: "Our network spans 25+ countries with long-term partnerships with certified producers, farmers, and artisans — ensuring consistent quality and supply.",
   },
   {
-    icon: TrendingUp,
+    icon: Truck,
     title: "Efficient Distribution",
-    desc: "Track all your expenses in one place. Easily track transactions and monitor your spending habits.",
+    desc: "Temperature-controlled logistics and optimized cold-chain infrastructure ensure your products arrive fresh, on time, and in perfect condition.",
   },
 ];
 
@@ -24,22 +24,23 @@ const WhyChooseUs = () => {
   const { ref, gradientStyle } = useMouseGradient();
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} id="about" className="snap-section flex items-center relative overflow-hidden">
-      {/* Animated dark gradient background */}
+    <section ref={ref as React.RefObject<HTMLElement>} id="about" className="relative overflow-hidden py-28 lg:py-36">
+      {/* Standardized dark gradient */}
       <div
-        className="absolute inset-0 animate-gradient"
+        className="absolute inset-0"
         style={{
-          background: `radial-gradient(ellipse at 50% 100%, #5C7928 0%, #194B22 24%, #08120A 100%)`,
+          background: `
+            radial-gradient(ellipse at 30% 20%, hsl(140 35% 18% / 0.5) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 80%, hsl(140 30% 14% / 0.4) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))
+          `,
         }}
       />
 
       {/* Mouse-follow gradient */}
-      <div className="absolute inset-0 pointer-events-none z-[1]" style={gradientStyle} />
+      <div className="absolute inset-0 pointer-events-none z-[1] opacity-30" style={gradientStyle} />
 
-      {/* Bottom glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-accent/10 blur-[80px] rounded-full" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-28 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -52,9 +53,9 @@ const WhyChooseUs = () => {
             Why Choose Us
           </span>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
-            Reliable Food Import Solutions
+            Reliable Food Import
             <br />
-            for Your Business
+            Solutions for Your Business
           </h2>
           <p className="text-primary-foreground/45 font-body text-lg leading-relaxed">
             We simplify sourcing with a strong global network, strict quality control, and efficient logistics
@@ -71,7 +72,7 @@ const WhyChooseUs = () => {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -6, transition: { duration: 0.3 } }}
-              className="group relative p-10 rounded-2xl border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20 shine-sweep"
+              className="group relative p-10 rounded-2xl border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
               style={{
                 background: `
                   radial-gradient(ellipse at 30% 20%, hsl(140 30% 16% / 0.4) 0%, transparent 60%),

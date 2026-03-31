@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
+import { Package } from "lucide-react";
 import type { Product } from "@/lib/api";
 
 interface ProductCardProps {
@@ -23,15 +24,11 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
       <Link to={`/products/${product.slug}`} className="block group">
         <div className="rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:border-forest-mid/30">
           <div
-            className={`relative overflow-hidden bg-gradient-to-br from-forest-deep/10 via-forest-mid/5 to-accent/10 ${
+            className={`relative overflow-hidden bg-gradient-to-br from-forest-deep/10 via-forest-mid/5 to-accent/10 flex items-center justify-center ${
               large ? "h-64" : "h-48"
             }`}
           >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-display text-2xl text-forest-mid/20 font-bold">
-                {product.name.charAt(0)}
-              </span>
-            </div>
+            <Package className="w-10 h-10 text-forest-mid/25" />
             {product.featured && (
               <Badge className="absolute top-3 left-3 bg-accent text-accent-foreground font-body text-xs">
                 Featured

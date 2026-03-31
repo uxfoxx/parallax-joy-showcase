@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Minus } from "lucide-react";
+import { Plus } from "lucide-react";
 
 const faqs = [
   { q: "What types of food products do you import?", a: "We import a wide range of food products including grains, processed foods, beverages, dairy, frozen goods, spices, oils, and specialty gourmet items from over 25 countries worldwide." },
@@ -17,10 +17,10 @@ const FAQSection = () => {
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i);
 
   return (
-    <section className="snap-section flex items-center relative overflow-hidden">
-      {/* Animated dark gradient background */}
+    <section className="relative overflow-hidden py-28 lg:py-36">
+      {/* Standardized dark gradient */}
       <div
-        className="absolute inset-0 animate-gradient"
+        className="absolute inset-0"
         style={{
           background: `
             radial-gradient(ellipse at 20% 30%, hsl(140 35% 16% / 0.5) 0%, transparent 50%),
@@ -30,7 +30,7 @@ const FAQSection = () => {
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-28 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         <div className="grid lg:grid-cols-[1fr_1.5fr] gap-20 items-start">
           {/* Left — Header */}
           <motion.div
@@ -48,7 +48,7 @@ const FAQSection = () => {
               Asked Questions
             </h2>
             <p className="text-primary-foreground/40 font-body text-base leading-relaxed max-w-sm">
-              In the digital age, your voice on social media is your brand's heartbeat.
+              Everything you need to know about our food import services, from sourcing to delivery.
             </p>
           </motion.div>
 
