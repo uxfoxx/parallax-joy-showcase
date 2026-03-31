@@ -2,19 +2,30 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFeaturedProducts } from "@/lib/api";
+import { useRef } from "react";
 
 const FeaturedProducts = () => {
   const { data: products = [] } = useFeaturedProducts();
   const displayProducts = products.slice(0, 3);
+  const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll();
+  const { scrollYProgress: sectionProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
 
-  // Element is at left side during scroll 25-50%, so grid shifts right
-  const gridShift = useTransform(scrollYProgress, [0.22, 0.37, 0.52], [0, 50, 0]);
-  const firstCardScale = useTransform(scrollYProgress, [0.22, 0.37, 0.52], [1, 0.92, 1]);
-  const firstCardOpacity = useTransform(scrollYProgress, [0.22, 0.37, 0.52], [1, 0.6, 1]);
+  // Amplified: Element is at left side during scroll 25-50%, so grid shifts right
+  const gridShift = useTransform(scrollYProgress, [0.22, 0.37, 0.52], [0, 100, 0]);
+  const gridRotate = useTransform(scrollYProgress, [0.22, 0.37, 0.52], [0, 2, 0]);
+  const firstCardScale = useTransform(scrollYProgress, [0.22, 0.37, 0.52], [1, 0.82, 1]);
+  const firstCardOpacity = useTransform(scrollYProgress, [0.22, 0.37, 0.52], [1, 0.35, 1]);
+
+  // Parallax background
+  const bgY = useTransform(sectionProgress, [0, 1], ["-60px", "60px"]);
+  const orbX = useTransform(sectionProgress, [0, 1], ["-30px", "30px"]);
 
   return (
-    <section id="products" className="relative overflow-hidden py-28 lg:py-36">
+    <section ref={sectionRef} id="products" className="relative overflow-hidden py-28 lg:py-36">
       <div
         className="absolute inset-0"
         style={{
@@ -26,6 +37,21 @@ const FeaturedProducts = () => {
         }}
       />
 
+      {/* Parallax decorative elements */}
+      <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
+        <motion.div
+          className="absolute w-[400px] h-[400px] -top-20 -right-20 rounded-full opacity-[0.08]"
+          style={{
+            background: "radial-gradient(circle, hsl(42 80% 55%), transparent 70%)",
+            x: orbX,
+          }}
+        />
+        <div
+          className="absolute w-[500px] h-[500px] -bottom-40 -left-40 rounded-full opacity-[0.05]"
+          style={{ background: "radial-gradient(circle, hsl(140 50% 30%), transparent 70%)" }}
+        />
+      </motion.div>
+
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6">
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground tracking-tight">Featured Products</h2>
@@ -34,7 +60,7 @@ const FeaturedProducts = () => {
 
         <motion.div
           className="grid md:grid-cols-3 gap-8"
-          style={{ x: gridShift }}
+          style={{ x: gridShift, rotate: gridRotate }}
         >
           {displayProducts.map((product, i) => (
             <motion.div

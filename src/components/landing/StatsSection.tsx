@@ -2,7 +2,7 @@ import { useInView } from "@/hooks/useInView";
 import { useCountUp } from "@/hooks/useCountUp";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, Handshake, Globe, GitBranch } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useCallback, useRef, useState } from "react";
 
@@ -40,7 +40,6 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode; cla
         transformStyle: "preserve-3d",
       }}
     >
-      {/* Animated gradient border */}
       <div
         className="absolute -inset-[1px] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{
@@ -50,7 +49,6 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode; cla
           filter: "blur(1px)",
         }}
       />
-      {/* Inner card */}
       <div className="relative rounded-2xl bg-card border border-border p-7 h-full transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-accent/10">
         {children}
       </div>
@@ -60,10 +58,40 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode; cla
 
 const StatsSection = () => {
   const { ref, isInView } = useInView();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Parallax decorative element
+  const orbY = useTransform(scrollYProgress, [0, 1], ["60px", "-60px"]);
+  const orbX = useTransform(scrollYProgress, [0, 1], ["-20px", "20px"]);
 
   return (
-    <section ref={ref} className="py-28 lg:py-36 bg-muted/30">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+    <section
+      ref={(el) => {
+        (ref as React.MutableRefObject<HTMLElement | null>).current = el;
+        (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
+      }}
+      className="relative py-28 lg:py-36 bg-muted/30 overflow-hidden"
+    >
+      {/* Parallax decorative element */}
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ y: orbY }}>
+        <motion.div
+          className="absolute w-[500px] h-[500px] -top-40 -right-40 rounded-full opacity-[0.06]"
+          style={{
+            background: "radial-gradient(circle, hsl(42 70% 50%), transparent 70%)",
+            x: orbX,
+          }}
+        />
+        <div
+          className="absolute w-[300px] h-[300px] bottom-10 left-10 rounded-full opacity-[0.04]"
+          style={{ background: "radial-gradient(circle, hsl(140 40% 30%), transparent 70%)" }}
+        />
+      </motion.div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Left */}
           <motion.div
@@ -92,7 +120,6 @@ const StatsSection = () => {
 
           {/* Right — Bento Grid */}
           <div className="grid grid-cols-2 gap-4">
-            {/* Featured card spans 2 cols */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -110,7 +137,6 @@ const StatsSection = () => {
                 <div className="font-display text-5xl lg:text-6xl font-bold text-foreground group-hover:text-accent transition-colors duration-300 mb-5">
                   <CountValue target={stats[0].value} isInView={isInView} />{stats[0].suffix}
                 </div>
-                {/* Timeline graphic */}
                 <div className="flex items-center gap-2 mt-2">
                   {[1994, 2004, 2014, 2024].map((year, i) => (
                     <div key={year} className="flex items-center gap-2 flex-1">
@@ -125,7 +151,6 @@ const StatsSection = () => {
               </TiltCard>
             </motion.div>
 
-            {/* 3 smaller cards */}
             {stats.slice(1).map((stat, i) => (
               <motion.div
                 key={stat.label}

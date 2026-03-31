@@ -1,14 +1,24 @@
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 const logos = ["AZIZAA", "Hungritos", "Fletcher", "Granoro", "Daily Dairy", "Snorre Foods", "Wai Wai", "Royal Arm"];
 
 const LogoStrip = () => {
+  const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll();
+  const { scrollYProgress: sectionProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
 
-  // Split gap: logos separate in the middle when element passes (scroll 10-25%)
-  const splitGap = useTransform(scrollYProgress, [0.08, 0.17, 0.27], [0, 120, 0]);
-  const leftShift = useTransform(scrollYProgress, [0.08, 0.17, 0.27], [0, -30, 0]);
-  const rightShift = useTransform(scrollYProgress, [0.08, 0.17, 0.27], [0, 30, 0]);
+  // Amplified split: logos separate in the middle when element passes (scroll 10-25%)
+  const splitGap = useTransform(scrollYProgress, [0.08, 0.17, 0.27], [0, 250, 0]);
+  const leftShift = useTransform(scrollYProgress, [0.08, 0.17, 0.27], [0, -60, 0]);
+  const rightShift = useTransform(scrollYProgress, [0.08, 0.17, 0.27], [0, 60, 0]);
+  const verticalBounce = useTransform(scrollYProgress, [0.08, 0.14, 0.20, 0.27], [0, -8, 8, 0]);
+
+  // Parallax background
+  const bgY = useTransform(sectionProgress, [0, 1], ["-40px", "40px"]);
 
   const allLogos = [...logos, ...logos, ...logos, ...logos];
   const half = Math.floor(allLogos.length / 2);
@@ -16,8 +26,19 @@ const LogoStrip = () => {
   const rightLogos = allLogos.slice(half);
 
   return (
-    <section className="bg-background py-16 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section ref={sectionRef} className="relative bg-background py-16 overflow-hidden">
+      {/* Parallax decorative bg */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{ y: bgY }}
+      >
+        <div
+          className="absolute w-[600px] h-[300px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.07]"
+          style={{ background: "radial-gradient(ellipse, hsl(140 40% 30%), transparent 70%)" }}
+        />
+      </motion.div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -33,7 +54,7 @@ const LogoStrip = () => {
         <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10" />
         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10" />
 
-        <div className="flex items-center justify-center">
+        <motion.div className="flex items-center justify-center" style={{ y: verticalBounce }}>
           {/* Left half */}
           <motion.div
             className="flex animate-marquee"
@@ -70,7 +91,7 @@ const LogoStrip = () => {
               </div>
             ))}
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

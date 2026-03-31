@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Snowflake, Milk, Wheat, Droplets, Sparkles } from "lucide-react";
+import { useRef } from "react";
 
 const categories = [
   {
@@ -30,14 +31,36 @@ const categories = [
 ];
 
 const CategoriesSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll();
+  const { scrollYProgress: sectionProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
 
-  // Fan-out effect: cards spread apart when element passes (~35-45%)
-  const fanGap = useTransform(scrollYProgress, [0.32, 0.40, 0.48], [24, 48, 24]);
+  // Amplified fan-out effect: cards spread apart when element passes (~35-45%)
+  const fanGap = useTransform(scrollYProgress, [0.32, 0.40, 0.48], [16, 72, 16]);
+  const cardRotate1 = useTransform(scrollYProgress, [0.32, 0.40, 0.48], [0, -2, 0]);
+  const cardRotate2 = useTransform(scrollYProgress, [0.32, 0.40, 0.48], [0, 2, 0]);
+
+  // Parallax background
+  const bgY = useTransform(sectionProgress, [0, 1], ["-50px", "50px"]);
 
   return (
-    <section id="brands" className="py-28 lg:py-36 bg-background">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+    <section ref={sectionRef} id="brands" className="relative py-28 lg:py-36 bg-background overflow-hidden">
+      {/* Parallax decorative bg */}
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ y: bgY }}>
+        <div
+          className="absolute w-[700px] h-[500px] top-1/4 left-1/2 -translate-x-1/2 rounded-full opacity-[0.05]"
+          style={{ background: "radial-gradient(ellipse, hsl(42 60% 50%), transparent 70%)" }}
+        />
+        <div
+          className="absolute w-[400px] h-[400px] bottom-0 -left-20 rounded-full opacity-[0.04]"
+          style={{ background: "radial-gradient(circle, hsl(140 50% 25%), transparent 70%)" }}
+        />
+      </motion.div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -57,7 +80,9 @@ const CategoriesSection = () => {
         {/* Grid — 5 cards: 3 top, 2 bottom centered */}
         <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3" style={{ gap: fanGap }}>
           {categories.slice(0, 3).map((cat, i) => (
-            <CategoryCard key={cat.name} cat={cat} i={i} />
+            <motion.div key={cat.name} style={{ rotate: i === 0 ? cardRotate1 : i === 2 ? cardRotate2 : undefined }}>
+              <CategoryCard cat={cat} i={i} />
+            </motion.div>
           ))}
         </motion.div>
         <motion.div
@@ -65,7 +90,9 @@ const CategoriesSection = () => {
           style={{ gap: fanGap }}
         >
           {categories.slice(3).map((cat, i) => (
-            <CategoryCard key={cat.name} cat={cat} i={i + 3} />
+            <motion.div key={cat.name} style={{ rotate: i === 0 ? cardRotate1 : cardRotate2 }}>
+              <CategoryCard cat={cat} i={i + 3} />
+            </motion.div>
           ))}
         </motion.div>
       </div>

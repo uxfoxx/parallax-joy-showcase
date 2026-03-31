@@ -1,18 +1,36 @@
 import { useMouseGradient } from "@/hooks/useMouseGradient";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useRef } from "react";
 
 const HeroSection = () => {
   const { ref, gradientStyle } = useMouseGradient();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Parallax: bg shifts up slower than scroll
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0px", "80px"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0px", "40px"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <section ref={ref} className="relative min-h-screen overflow-hidden bg-background">
-      {/* Animated gradient background */}
-      <div
+    <section
+      ref={(el) => {
+        (ref as React.MutableRefObject<HTMLElement | null>).current = el;
+        (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
+      }}
+      className="relative min-h-screen overflow-hidden bg-background"
+    >
+      {/* Animated gradient background with parallax */}
+      <motion.div
         className="absolute inset-0 z-0"
         style={{
+          y: bgY,
           background: `
             radial-gradient(ellipse 90% 70% at 25% 35%, hsl(140 50% 10% / 0.95) 0%, transparent 65%),
             radial-gradient(ellipse 50% 60% at 75% 25%, hsl(42 85% 52% / 0.18) 0%, transparent 55%),
@@ -60,8 +78,11 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Hero content overlay */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 text-center">
+      {/* Hero content overlay with parallax */}
+      <motion.div
+        className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 text-center"
+        style={{ y: contentY, opacity: contentOpacity }}
+      >
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -95,7 +116,7 @@ const HeroSection = () => {
             </Link>
           </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };

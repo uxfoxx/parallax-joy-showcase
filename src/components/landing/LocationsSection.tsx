@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin } from "lucide-react";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
+import { useRef } from "react";
 
 const locations = [
   { region: "Middle East", countries: "UAE, Saudi Arabia, Qatar, Oman, Bahrain, Kuwait" },
@@ -13,9 +14,24 @@ const locations = [
 
 const LocationsSection = () => {
   const { ref, gradientStyle } = useMouseGradient();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Parallax bg
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-60px", "60px"]);
+  const accentX = useTransform(scrollYProgress, [0, 1], ["20px", "-20px"]);
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} className="relative overflow-hidden py-28 lg:py-36">
+    <section
+      ref={(el) => {
+        (ref as React.MutableRefObject<HTMLElement | null>).current = el;
+        (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
+      }}
+      className="relative overflow-hidden py-28 lg:py-36"
+    >
       {/* Standardized dark gradient */}
       <div
         className="absolute inset-0"
@@ -27,6 +43,21 @@ const LocationsSection = () => {
           `,
         }}
       />
+
+      {/* Parallax floating accent */}
+      <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
+        <motion.div
+          className="absolute w-[400px] h-[400px] top-20 -right-20 rounded-full opacity-[0.06]"
+          style={{
+            background: "radial-gradient(circle, hsl(42 70% 55%), transparent 70%)",
+            x: accentX,
+          }}
+        />
+        <div
+          className="absolute w-[350px] h-[350px] -bottom-20 left-10 rounded-full opacity-[0.04]"
+          style={{ background: "radial-gradient(circle, hsl(140 50% 25%), transparent 70%)" }}
+        />
+      </motion.div>
 
       {/* Mouse-follow gradient */}
       <div className="absolute inset-0 pointer-events-none z-[1] opacity-30" style={gradientStyle} />
