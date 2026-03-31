@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Package } from "lucide-react";
+import { ArrowLeft, Package, MessageCircle } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";

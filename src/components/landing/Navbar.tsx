@@ -172,9 +172,11 @@ const Navbar = () => {
               transition={{ delay: 0.4, duration: 0.4 }}
               className="mt-8"
             >
-              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl px-10 py-6 text-lg">
-                Contact Us
-              </Button>
+              <Link to="/contact" onClick={() => setMobileOpen(false)}>
+                <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl px-10 py-6 text-lg">
+                  Contact Us
+                </Button>
+              </Link>
             </motion.div>
           </motion.div>
         )}
