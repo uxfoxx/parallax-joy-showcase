@@ -1,4 +1,4 @@
-import { LayoutDashboard, Box, Tag, Layers, LogOut, Leaf } from "lucide-react";
+import { LayoutDashboard, Box, Tag, Layers, LogOut, Leaf, Star, MessageSquare } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
