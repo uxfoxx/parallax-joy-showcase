@@ -16,9 +16,8 @@ const links = [
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const location = useLocation();
-
-  const isLanding = location.pathname === "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -26,13 +25,39 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const useLightText = isLanding || scrolled;
+  // IntersectionObserver to detect section theme
+  useEffect(() => {
+    const sections = document.querySelectorAll("[data-navbar-theme]");
+    if (sections.length === 0) return;
 
-  const barBg = scrolled
-    ? "bg-forest-deep/90 backdrop-blur-xl shadow-2xl shadow-forest-deep/30 border border-primary-foreground/10"
-    : isLanding
-      ? "bg-forest-deep/50 backdrop-blur-md border border-primary-foreground/5"
-      : "bg-background/90 backdrop-blur-xl shadow-lg border border-border";
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Find the entry with the largest intersection ratio that is intersecting
+        let best: IntersectionObserverEntry | null = null;
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (!best || entry.intersectionRatio > best.intersectionRatio) {
+              best = entry;
+            }
+          }
+        });
+        if (best) {
+          const t = (best as IntersectionObserverEntry).target.getAttribute("data-navbar-theme");
+          if (t === "light" || t === "dark") setTheme(t);
+        }
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.1, 0.5, 1] }
+    );
+
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, [location.pathname]);
+
+  const isDark = theme === "dark";
+
+  const barBg = isDark
+    ? "bg-forest-deep/80 backdrop-blur-xl border border-primary-foreground/10"
+    : "bg-white/80 backdrop-blur-xl shadow-md border border-border";
 
   return (
     <>
@@ -55,7 +80,7 @@ const Navbar = () => {
               <img
                 src={logoSvg}
                 alt="Olive Foods"
-                className={`h-10 w-auto object-contain transition-all duration-300 ${useLightText ? "brightness-0 invert" : ""}`}
+                className={`h-10 w-auto object-contain transition-all duration-500 ${isDark ? "brightness-0 invert" : ""}`}
               />
             </motion.div>
           </Link>
@@ -67,16 +92,18 @@ const Navbar = () => {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="relative px-5 py-2 text-sm font-body transition-colors duration-300"
+                  className="relative px-5 py-2 text-sm font-body transition-colors duration-500"
                 >
                   <span
-                    className={`relative z-10 transition-all duration-300 ${
+                    className={`relative z-10 transition-all duration-500 ${
                       isActive
-                        ? `font-bold ${useLightText ? "text-primary-foreground" : "text-foreground"}`
-                        : `font-medium ${useLightText ? "text-primary-foreground/60 hover:text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`
+                        ? `font-bold ${isDark ? "text-primary-foreground" : "text-foreground"}`
+                        : `font-medium ${isDark ? "text-primary-foreground/60 hover:text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`
                     }`}
                     style={isActive ? {
-                      textShadow: "0 0 8px hsl(75 38% 45% / 0.6), 0 0 20px hsl(75 38% 45% / 0.3)"
+                      textShadow: isDark
+                        ? "0 0 8px hsl(75 38% 45% / 0.6), 0 0 20px hsl(75 38% 45% / 0.3)"
+                        : "0 0 8px hsl(75 38% 45% / 0.4), 0 0 16px hsl(75 38% 45% / 0.2)"
                     } : undefined}
                   >
                     {link.label}
@@ -88,7 +115,13 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center gap-3">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl h-10 px-6 text-sm transition-all duration-300 shadow-lg shadow-accent/20">
+              <Button
+                className={`font-body font-semibold rounded-xl h-10 px-6 text-sm transition-all duration-500 ${
+                  isDark
+                    ? "bg-primary-foreground text-forest-deep hover:bg-primary-foreground/90 shadow-lg shadow-white/10"
+                    : "bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20"
+                }`}
+              >
                 Contact Us
               </Button>
             </motion.div>
@@ -97,7 +130,7 @@ const Navbar = () => {
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`md:hidden w-10 h-10 rounded-lg flex items-center justify-center ${useLightText ? "bg-primary-foreground/10 text-primary-foreground" : "bg-forest-deep/10 text-foreground"}`}
+            className={`md:hidden w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-500 ${isDark ? "bg-primary-foreground/10 text-primary-foreground" : "bg-forest-deep/10 text-foreground"}`}
           >
             {mobileOpen ? <X size={18} /> : <Menu size={18} />}
           </motion.button>

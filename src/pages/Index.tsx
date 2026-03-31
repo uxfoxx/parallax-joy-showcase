@@ -14,6 +14,7 @@ import Footer from "@/components/landing/Footer";
 import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
 import SectionTransition from "@/components/landing/SectionTransition";
 import CustomCursor from "@/components/landing/CustomCursor";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 const Index = () => {
   return (
@@ -22,28 +23,50 @@ const Index = () => {
       <CustomCursor />
       <ScrollFloatingElement />
       <Navbar />
+      <FloatingWhatsApp />
 
-      {/* Hero pinned — content scrolls over it */}
-      <HeroSection />
+      <div data-navbar-theme="dark">
+        <HeroSection />
+      </div>
       <SectionTransition colorFrom="hsl(150 40% 8% / 0.4)" colorTo="hsl(140 50% 12% / 0.3)" />
-      <LogoStrip />
+      <div data-navbar-theme="light">
+        <LogoStrip />
+      </div>
       <SectionTransition colorFrom="hsl(140 50% 12% / 0.2)" colorTo="hsl(150 40% 10% / 0.4)" flip />
-      <FeaturedProducts />
+      <div data-navbar-theme="dark">
+        <FeaturedProducts />
+      </div>
       <SectionTransition colorFrom="hsl(150 40% 10% / 0.3)" colorTo="hsl(140 50% 14% / 0.3)" />
-      <WhyChooseUs />
+      <div data-navbar-theme="light">
+        <WhyChooseUs />
+      </div>
       <SectionTransition colorFrom="hsl(140 50% 14% / 0.2)" colorTo="hsl(150 40% 8% / 0.3)" flip />
-      <CategoriesSection />
+      <div data-navbar-theme="light">
+        <CategoriesSection />
+      </div>
       <SectionTransition colorFrom="hsl(150 40% 8% / 0.3)" colorTo="hsl(140 50% 12% / 0.4)" />
-      <StatsSection />
+      <div data-navbar-theme="dark">
+        <StatsSection />
+      </div>
       <SectionTransition colorFrom="hsl(140 50% 12% / 0.2)" colorTo="hsl(150 40% 10% / 0.3)" flip />
-      <DarkStatsBanner />
+      <div data-navbar-theme="dark">
+        <DarkStatsBanner />
+      </div>
       <SectionTransition colorFrom="hsl(150 40% 10% / 0.3)" colorTo="hsl(140 50% 14% / 0.2)" />
-      <TeamSection />
+      <div data-navbar-theme="dark">
+        <TeamSection />
+      </div>
       <SectionTransition colorFrom="hsl(140 50% 14% / 0.2)" colorTo="hsl(150 40% 8% / 0.3)" flip />
-      <LocationsSection />
+      <div data-navbar-theme="light">
+        <LocationsSection />
+      </div>
       <SectionTransition colorFrom="hsl(150 40% 8% / 0.3)" colorTo="hsl(140 50% 12% / 0.3)" />
-      <FAQSection />
-      <Footer />
+      <div data-navbar-theme="dark">
+        <FAQSection />
+      </div>
+      <div data-navbar-theme="dark">
+        <Footer />
+      </div>
     </div>
   );
 };

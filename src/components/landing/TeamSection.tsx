@@ -14,6 +14,7 @@ const duplicatedTeam = [...team, ...team];
 
 const TeamSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -26,16 +27,19 @@ const TeamSection = () => {
       <div className="absolute inset-0">
         <motion.div className="absolute inset-0" style={{ y: videoY }}>
           <video
+            ref={videoRef}
             autoPlay
             muted
             loop
             playsInline
+            preload="auto"
+            onCanPlay={() => videoRef.current?.play().catch(() => {})}
             className="w-full h-[120%] object-cover"
-            src="https://videos.pexels.com/video-files/5532765/5532765-sd_640_360_25fps.mp4"
+            src="https://videos.pexels.com/video-files/5532765/5532765-hd_1920_1080_25fps.mp4"
             poster="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&h=1080&fit=crop"
           />
         </motion.div>
-        {/* Dark overlay for readability */}
+        {/* Dark overlay */}
         <div className="absolute inset-0 bg-forest-deep/70" />
         {/* Noise texture */}
         <div className="absolute inset-0 opacity-[0.06] pointer-events-none mix-blend-overlay">
@@ -69,7 +73,7 @@ const TeamSection = () => {
             </p>
           </motion.div>
 
-          {/* Right — sliding photo cards */}
+          {/* Right — sliding photo cards (no text) */}
           <div className="overflow-hidden">
             <div className="flex gap-4 animate-marquee hover:[animation-play-state:paused] w-max">
               {duplicatedTeam.map((member, index) => (
