@@ -25,7 +25,7 @@ const AdminBrands = () => {
   const filtered = brands?.filter((b) => b.name.toLowerCase().includes(search.toLowerCase())) ?? [];
 
   const openCreate = () => { setEditing(null); setForm(emptyBrand); setOpen(true); };
-  const openEdit = (b: Brand) => { setEditing(b); setForm({ name: b.name, slug: b.slug, description: b.description, origin: b.origin, established: b.established ?? undefined }); setOpen(true); };
+  const openEdit = (b: Brand) => { setEditing(b); setForm({ name: b.name, slug: b.slug, description: b.description, origin: b.origin, established: b.established ?? undefined, image_url: b.image_url ?? "" }); setOpen(true); };
 
   const handleSave = async () => {
     try {
