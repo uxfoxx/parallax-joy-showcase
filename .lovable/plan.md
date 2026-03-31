@@ -1,20 +1,35 @@
 
 
-# Unify Grid Layouts to 3-Column Across All Pages
+# Replace Wavy Section Transitions with Thin Animated Gradient Lines
 
-## Problem
-- **Featured section (landing)**: `md:grid-cols-3` with `ProductCard large` — the target style
-- **Brands page**: `sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4` — too many columns
-- **Featured page**: `sm:grid-cols-2 lg:grid-cols-3` — close but missing `large` prop
-- **Products page**: `sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4` — too many columns, no `large` prop
+## What's changing
+Remove all the bulky wavy SVG `SectionTransition` components and replace them with a slim, animated gradient line divider. The line will use the brand palette (forest greens → olive → sage-gold) with a CSS shimmer animation that sweeps left-to-right continuously.
 
 ## Changes
 
+### 1. Replace `SectionTransition.tsx`
+Rewrite the component as a thin `h-[2px]` div with:
+- A wide gradient background (`200% width`) using `#0F241A → #5C7928 → #879D48 → #5C7928 → #0F241A`
+- CSS `@keyframes gradient-sweep` that translates the background position left-to-right over ~3s
+- Slight vertical margin (`my-0`) — no more negative margins or tall SVG blocks
+- Remove all SVG paths, `useScroll`, `useTransform` usage
+
+### 2. Update `Index.tsx`
+- All existing `<SectionTransition ... />` calls stay in place but no longer need `colorFrom`/`colorTo`/`flip` props (they become no-ops or removed)
+
+### 3. Add keyframe to `src/index.css`
+```css
+@keyframes gradient-sweep {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+```
+
+## Files
+
 | File | Change |
 |------|--------|
-| `src/pages/BrandsPage.tsx` | Grid → `md:grid-cols-3 gap-5` (remove `sm:grid-cols-2 xl:grid-cols-4`) |
-| `src/pages/FeaturedPage.tsx` | Grid → `md:grid-cols-3 gap-5`, add `large` prop to `ProductCard` (already has it) |
-| `src/pages/ProductsPage.tsx` | Grid → `md:grid-cols-3 gap-5` (remove `sm:grid-cols-2 xl:grid-cols-4`), add `large` prop to `ProductCard` |
-
-All three pages will match the featured section's exact grid: `grid md:grid-cols-3 gap-5` with `ProductCard large`.
+| `src/components/landing/SectionTransition.tsx` | Rewrite as thin animated gradient line |
+| `src/index.css` | Add `gradient-sweep` keyframe |
+| `src/pages/Index.tsx` | Remove props from `SectionTransition` usages (cleanup) |
 
