@@ -40,20 +40,20 @@ const ProductsPage = () => {
   return (
     <PageLayout>
       <section className="relative overflow-hidden py-28 lg:py-36">
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 19%), hsl(150 40% 10%))' }} />
-        <div className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-overlay"><svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg"><filter id="noiseP"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter><rect width="100%" height="100%" filter="url(#noiseP)" /></svg></div>
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 opacity-[0.06] pointer-events-none mix-blend-overlay"><svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg"><filter id="noiseP"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter><rect width="100%" height="100%" filter="url(#noiseP)" /></svg></div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="font-display text-4xl md:text-6xl font-bold text-primary-foreground mb-6">All Products</motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="font-body text-lg text-primary-foreground/70 max-w-2xl mx-auto">Browse our complete catalog of premium food imports from around the world.</motion.p>
+          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="font-display text-4xl md:text-6xl font-bold text-primary-foreground mb-6">All Products</motion.h1>
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.5 }} className="font-body text-lg text-primary-foreground/70 max-w-2xl mx-auto">Browse our complete catalog of premium food imports from around the world.</motion.p>
         </div>
       </section>
 
-      <section className="py-20 lg:py-28 bg-background">
+      <section className="py-20 lg:py-28 bg-background/90 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex items-center gap-3 mb-8">
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search products, brands, categories..." className="pl-12 h-12 rounded-xl font-body text-base border-border bg-card" />
+              <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search products, brands, categories..." className="pl-12 h-12 rounded-xl font-body text-base border-border bg-card/90" />
               {query && <button onClick={() => setQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"><X className="w-4 h-4" /></button>}
             </div>
             <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className={`h-12 rounded-xl font-body gap-2 border-border ${showFilters ? "bg-forest-deep text-primary-foreground hover:bg-forest-mid" : ""}`}>
@@ -67,7 +67,7 @@ const ProductsPage = () => {
                 <h4 className="font-body text-sm font-medium text-foreground mb-3">Category</h4>
                 <div className="flex flex-wrap gap-2">
                   {categories.map((cat) => (
-                    <button key={cat.id} onClick={() => setSelectedCategory(selectedCategory === cat.name ? null : cat.name)} className={`px-4 py-2 rounded-xl text-sm font-body transition-all duration-200 border ${selectedCategory === cat.name ? "bg-forest-deep text-primary-foreground border-forest-deep" : "bg-card text-foreground border-border hover:border-forest-mid/30"}`}>{cat.name}</button>
+                    <button key={cat.id} onClick={() => setSelectedCategory(selectedCategory === cat.name ? null : cat.name)} className={`px-4 py-2 rounded-xl text-sm font-body transition-all duration-200 border ${selectedCategory === cat.name ? "bg-forest-deep text-primary-foreground border-forest-deep" : "bg-card/90 text-foreground border-border hover:border-forest-mid/30"}`}>{cat.name}</button>
                   ))}
                 </div>
               </div>
@@ -75,7 +75,7 @@ const ProductsPage = () => {
                 <h4 className="font-body text-sm font-medium text-foreground mb-3">Brand</h4>
                 <div className="flex flex-wrap gap-2">
                   {brands.map((b) => (
-                    <button key={b.slug} onClick={() => setSelectedBrand(selectedBrand === b.slug ? null : b.slug)} className={`px-4 py-2 rounded-xl text-sm font-body transition-all duration-200 border ${selectedBrand === b.slug ? "bg-forest-deep text-primary-foreground border-forest-deep" : "bg-card text-foreground border-border hover:border-forest-mid/30"}`}>{b.name}</button>
+                    <button key={b.slug} onClick={() => setSelectedBrand(selectedBrand === b.slug ? null : b.slug)} className={`px-4 py-2 rounded-xl text-sm font-body transition-all duration-200 border ${selectedBrand === b.slug ? "bg-forest-deep text-primary-foreground border-forest-deep" : "bg-card/90 text-foreground border-border hover:border-forest-mid/30"}`}>{b.name}</button>
                   ))}
                 </div>
               </div>

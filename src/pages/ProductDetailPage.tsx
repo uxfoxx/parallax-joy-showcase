@@ -12,7 +12,7 @@ const ProductDetailPage = () => {
   const { data: product, isLoading } = useProduct(slug || "");
   const { data: allProducts = [] } = useProducts();
   const relatedProducts = product
-    ? allProducts.filter((p) => p.brand_id === product.brand_id && p.id !== product.id).slice(0, 4)
+    ? allProducts.filter((p) => p.brand_id === product.brand_id && p.id !== product.id).slice(0, 3)
     : [];
 
   if (isLoading) return <PageLayout><div className="py-40 text-center font-body text-muted-foreground">Loading...</div></PageLayout>;
@@ -40,35 +40,17 @@ const ProductDetailPage = () => {
 
   return (
     <PageLayout>
-      {/* Two-column product layout */}
-      <section className="bg-background">
+      <section className="bg-background/90 backdrop-blur-sm">
         <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] min-h-[calc(100vh-80px)]">
-          {/* Left — Image */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            className="relative bg-muted flex items-center justify-center min-h-[400px] lg:min-h-full"
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="relative bg-muted/50 flex items-center justify-center min-h-[400px] lg:min-h-full">
             {product.image_url ? (
-              <img
-                src={product.image_url}
-                alt={product.name}
-                className="w-full h-full object-cover absolute inset-0"
-              />
+              <img src={product.image_url} alt={product.name} className="w-full h-full object-cover absolute inset-0" />
             ) : (
               <Package className="w-24 h-24 text-muted-foreground/20" />
             )}
           </motion.div>
 
-          {/* Right — Details */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex flex-col justify-center px-8 py-12 lg:px-16 lg:py-20"
-          >
-            {/* Breadcrumb */}
+          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="flex flex-col justify-center px-8 py-12 lg:px-16 lg:py-20">
             <nav className="flex items-center gap-2 text-xs font-body text-muted-foreground mb-8">
               <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
               <span>/</span>
@@ -77,25 +59,10 @@ const ProductDetailPage = () => {
               <span className="text-foreground">{product.category}</span>
             </nav>
 
-            {/* Product name */}
-            <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-4">
-              {product.name}
-            </h1>
+            <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-4">{product.name}</h1>
+            <Link to={`/brands/${brandSlug}`} className="font-body text-sm text-muted-foreground hover:text-forest-mid transition-colors mb-8">by {brandName}</Link>
+            <p className="font-body text-muted-foreground leading-relaxed text-base mb-10">{product.description}</p>
 
-            {/* Brand link */}
-            <Link
-              to={`/brands/${brandSlug}`}
-              className="font-body text-sm text-muted-foreground hover:text-forest-mid transition-colors mb-8"
-            >
-              by {brandName}
-            </Link>
-
-            {/* Description */}
-            <p className="font-body text-muted-foreground leading-relaxed text-base mb-10">
-              {product.description}
-            </p>
-
-            {/* Details table */}
             <div className="space-y-0 mb-10">
               {details.map((d, i) => (
                 <div key={d.label}>
@@ -112,7 +79,6 @@ const ProductDetailPage = () => {
               ))}
             </div>
 
-            {/* Tags */}
             {(product.tags ?? []).length > 0 && (
               <div className="flex flex-wrap gap-2 mb-10">
                 {(product.tags ?? []).map((tag) => (
@@ -121,24 +87,19 @@ const ProductDetailPage = () => {
               </div>
             )}
 
-            {/* Back link */}
-            <Link
-              to="/products"
-              className="inline-flex items-center gap-2 text-sm font-body text-forest-mid hover:underline"
-            >
+            <Link to="/products" className="inline-flex items-center gap-2 text-sm font-body text-forest-mid hover:underline">
               <ArrowLeft className="w-4 h-4" /> Back to all products
             </Link>
           </motion.div>
         </div>
       </section>
 
-      {/* Related products */}
       {relatedProducts.length > 0 && (
-        <section className="py-20 bg-muted/30">
+        <section className="py-20 bg-background/80 backdrop-blur-sm">
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="font-display text-2xl font-bold text-foreground mb-10">More from {brandName}</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {relatedProducts.map((p) => <ProductCard key={p.id} product={p} />)}
+            <div className="grid md:grid-cols-3 gap-5">
+              {relatedProducts.map((p) => <ProductCard key={p.id} product={p} large />)}
             </div>
           </div>
         </section>

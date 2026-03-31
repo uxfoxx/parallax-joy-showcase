@@ -27,8 +27,8 @@ const BrandDetailPage = () => {
   return (
     <PageLayout>
       <section className="relative overflow-hidden py-24 lg:py-32">
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 19%), hsl(150 40% 10%))' }} />
-        <div className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-overlay"><svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg"><filter id="noiseBD"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter><rect width="100%" height="100%" filter="url(#noiseBD)" /></svg></div>
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 opacity-[0.06] pointer-events-none mix-blend-overlay"><svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg"><filter id="noiseBD"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter><rect width="100%" height="100%" filter="url(#noiseBD)" /></svg></div>
         <div className="relative z-10 max-w-5xl mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 text-sm font-body text-primary-foreground/50 mb-8">
             <Link to="/" className="hover:text-primary-foreground/80 transition-colors">Home</Link><span>/</span>
@@ -36,7 +36,7 @@ const BrandDetailPage = () => {
             <span className="text-primary-foreground/80">{brand.name}</span>
           </motion.div>
           <div className="flex items-start gap-6">
-            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="w-20 h-20 rounded-lg bg-forest-mid/30 flex items-center justify-center shrink-0">
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="w-20 h-20 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
               <span className="font-display text-3xl font-bold text-primary-foreground">{brand.name.charAt(0)}</span>
             </motion.div>
             <div>
@@ -51,14 +51,14 @@ const BrandDetailPage = () => {
         </div>
       </section>
 
-      <section className="py-20 lg:py-28 bg-background">
+      <section className="py-20 lg:py-28 bg-background/90 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex items-center justify-between mb-12">
             <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Products by {brand.name}</h2>
             <Link to="/brands" className="flex items-center gap-2 text-sm font-body text-forest-mid hover:underline"><ArrowLeft className="w-4 h-4" /> All Brands</Link>
           </div>
           {brandProducts.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">{brandProducts.map((product) => <ProductCard key={product.id} product={product} />)}</div>
+            <div className="grid md:grid-cols-3 gap-5">{brandProducts.map((product) => <ProductCard key={product.id} product={product} large />)}</div>
           ) : (
             <p className="font-body text-muted-foreground text-center py-16">No products available for this brand yet.</p>
           )}

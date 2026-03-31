@@ -24,11 +24,10 @@ const CustomCursor = () => {
     };
 
     const animate = () => {
-      // Fast lerp for snappy feel
-      dotPos.current.x += (target.current.x - dotPos.current.x) * 0.35;
-      dotPos.current.y += (target.current.y - dotPos.current.y) * 0.35;
-      glowPos.current.x += (target.current.x - glowPos.current.x) * 0.15;
-      glowPos.current.y += (target.current.y - glowPos.current.y) * 0.15;
+      dotPos.current.x += (target.current.x - dotPos.current.x) * 0.5;
+      dotPos.current.y += (target.current.y - dotPos.current.y) * 0.5;
+      glowPos.current.x += (target.current.x - glowPos.current.x) * 0.18;
+      glowPos.current.y += (target.current.y - glowPos.current.y) * 0.18;
 
       const dotScale = hovering.current ? 1.6 : 1;
       const glowScale = hovering.current ? 2.2 : 1;
@@ -60,19 +59,17 @@ const CustomCursor = () => {
 
   return (
     <>
-      {/* Trailing glow */}
       <div
         ref={glowRef}
-        className="fixed top-0 left-0 pointer-events-none will-change-transform"
-        style={{ zIndex: 99997, transition: "none" }}
+        className="fixed top-0 left-0 pointer-events-none"
+        style={{ zIndex: 99997, willChange: "transform" }}
       >
         <div className="w-12 h-12 rounded-full bg-accent/25 blur-xl" />
       </div>
-      {/* Green dot */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 pointer-events-none will-change-transform"
-        style={{ zIndex: 99999, transition: "none" }}
+        className="fixed top-0 left-0 pointer-events-none"
+        style={{ zIndex: 99999, willChange: "transform" }}
       >
         <div
           className="w-5 h-5 rounded-full"
