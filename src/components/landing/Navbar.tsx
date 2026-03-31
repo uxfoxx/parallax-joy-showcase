@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import logoSvg from "@/assets/olive-foods-logo.svg";
 
 const links = [
@@ -18,6 +18,17 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const location = useLocation();
+  const vibrateControls = useAnimationControls();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      vibrateControls.start({
+        x: [0, -1, 1, -0.5, 0.5, 0],
+        transition: { duration: 0.4, ease: "easeInOut" },
+      });
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [vibrateControls]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -67,6 +78,10 @@ const Navbar = () => {
         transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         className="fixed top-4 left-0 right-0 z-50 mx-auto w-[calc(100%-2rem)] max-w-5xl"
       >
+        <motion.div
+          animate={vibrateControls}
+          className="w-full"
+        >
         <motion.div
           animate={{
             paddingTop: scrolled ? 8 : 12,
@@ -120,7 +135,7 @@ const Navbar = () => {
                   className={`font-body font-semibold rounded-xl h-10 px-6 text-sm transition-all duration-500 ${
                     isDark
                       ? "bg-primary-foreground text-forest-deep hover:bg-primary-foreground/90 shadow-lg shadow-white/10"
-                      : "bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20"
+                      : "bg-accent text-white hover:bg-accent/90 shadow-lg shadow-accent/20"
                   }`}
                 >
                   Contact Us
@@ -136,6 +151,7 @@ const Navbar = () => {
           >
             {mobileOpen ? <X size={18} /> : <Menu size={18} />}
           </motion.button>
+        </motion.div>
         </motion.div>
       </motion.nav>
 
@@ -173,7 +189,7 @@ const Navbar = () => {
               className="mt-8"
             >
               <Link to="/contact" onClick={() => setMobileOpen(false)}>
-                <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl px-10 py-6 text-lg">
+                <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl px-10 py-6 text-lg">
                   Contact Us
                 </Button>
               </Link>

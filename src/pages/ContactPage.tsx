@@ -181,7 +181,7 @@ const ContactPage = () => {
                   {errors.message && <p className="text-destructive text-xs font-body">{errors.message}</p>}
                 </div>
 
-                <Button type="submit" disabled={loading} className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl px-8 h-12 text-base gap-2">
+                <Button type="submit" disabled={loading} className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl px-8 h-12 text-base gap-2">
                   <Send className="w-4 h-4" />
                   {loading ? "Sending..." : "Send Message"}
                 </Button>

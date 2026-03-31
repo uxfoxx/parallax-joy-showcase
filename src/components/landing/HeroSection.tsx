@@ -81,7 +81,7 @@ const HeroSection = () => {
             className="flex flex-wrap gap-4 justify-center pt-4"
           >
             <Link to="/products">
-              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl h-12 px-8 text-base transition-all duration-300 shadow-lg shadow-accent/20 group">
+              <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl h-12 px-8 text-base transition-all duration-300 shadow-lg shadow-accent/20 group">
                 Explore Products
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
