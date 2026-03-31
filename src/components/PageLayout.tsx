@@ -1,6 +1,8 @@
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
+import ScrollFloatingElement from "@/components/landing/ScrollFloatingElement";
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -8,10 +10,12 @@ interface PageLayoutProps {
 
 const PageLayout = ({ children }: PageLayoutProps) => {
   return (
-    <div className="min-h-screen bg-background smooth-scroll">
+    <div className="min-h-screen smooth-scroll overflow-x-hidden">
+      <ImmersiveBackground />
+      <ScrollFloatingElement />
       <Navbar />
       <FloatingWhatsApp />
-      <main className="pt-24">{children}</main>
+      <main className="relative z-10 pt-24">{children}</main>
       <Footer />
     </div>
   );
