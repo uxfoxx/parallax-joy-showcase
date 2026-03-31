@@ -90,7 +90,7 @@ const ProductDetailPage = () => {
             <div className="flex flex-wrap items-center gap-4">
               <Link
                 to={`/contact?subject=Product+Inquiry&product=${encodeURIComponent(product.name)}`}
-                className="inline-flex items-center gap-2 rounded-xl bg-primary text-primary-foreground px-6 h-11 text-sm font-body font-semibold hover:bg-primary/90 transition-colors"
+                className="inline-flex items-center gap-2 rounded-lg bg-forest-deep text-primary-foreground px-6 h-11 text-sm font-body font-semibold hover:bg-forest-mid transition-colors"
               >
                 <MessageCircle className="w-4 h-4" /> Inquire About This Product
               </Link>

@@ -77,7 +77,7 @@ const AdminLogin = () => {
               placeholder="••••••••"
             />
           </div>
-          <Button type="submit" disabled={loading} className="w-full bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl">
+          <Button type="submit" disabled={loading} className="w-full bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-lg">
             {loading ? "..." : isSignUp ? "Sign Up" : "Sign In"}
           </Button>
         </form>

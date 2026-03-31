@@ -329,8 +329,8 @@ const AboutPage = () => {
             <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">Ready to Partner With Us?</motion.h2>
             <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="font-body text-primary-foreground/45 text-lg leading-relaxed">Let's discuss how Olive Foods can support your business with reliable import and distribution solutions.</motion.p>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-wrap gap-4 justify-center">
-              <Link to="/contact"><Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl px-8 h-12 text-base">Contact Us</Button></Link>
-              <Link to="/products"><Button variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 font-body rounded-xl px-8 h-12 text-base">Explore Products</Button></Link>
+              <Link to="/contact"><Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-lg px-8 h-12 text-base backdrop-blur-sm border border-white/15">Contact Us</Button></Link>
+              <Link to="/products"><Button variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 font-body rounded-lg px-8 h-12 text-base backdrop-blur-sm">Explore Products</Button></Link>
             </motion.div>
           </div>
         </section>
