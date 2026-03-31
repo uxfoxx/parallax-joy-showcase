@@ -82,8 +82,14 @@ const Navbar = () => {
           animate={{
             paddingTop: scrolled ? 8 : 12,
             paddingBottom: scrolled ? 8 : 12,
+            x: 0,
           }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          {...{ onAnimationComplete: undefined }}
+          ref={undefined}
+          style={{}}
+          {...((() => { vibrateControls; return {}; })())}
+
           className={`flex items-center justify-between px-5 rounded-xl transition-all duration-500 ${barBg}`}
         >
           <Link to="/" className="flex items-center shrink-0">
