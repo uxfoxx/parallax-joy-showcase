@@ -121,7 +121,7 @@ const ScrollFloatingElement = () => {
           <ellipse
             cx="76" cy="106"
             rx="2.5" ry="3.5"
-            fill="hsl(42 70% 75% / 0.4)"
+            fill="hsl(75 40% 60% / 0.4)"
           />
           {/* Leaf veins */}
           <line x1="145" y1="35" x2="165" y2="33" stroke="hsl(140 25% 32% / 0.3)" strokeWidth="0.5" />
