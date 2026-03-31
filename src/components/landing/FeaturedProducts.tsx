@@ -82,13 +82,22 @@ const FeaturedProducts = () => {
                   <h3 className="font-display text-2xl font-semibold text-primary-foreground mb-6">{product.name}</h3>
                 </div>
                 <div className="relative h-56 flex items-center justify-center overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center"><div className="w-40 h-40 rounded-2xl bg-forest-mid/40 blur-[50px] group-hover:bg-forest-light/30 transition-all duration-700" /></div>
-                  <motion.div whileHover={{ scale: 1.08, rotateY: 5 }} transition={{ type: "spring", stiffness: 300, damping: 20 }} className="relative z-10 w-36 h-44 rounded-xl bg-gradient-to-b from-forest-mid/60 to-forest-deep/80 border border-primary-foreground/10 flex flex-col items-center justify-center shadow-xl">
-                    <div className="w-28 h-6 rounded-t-lg bg-forest-deep/90 -mt-3 border border-primary-foreground/10" />
-                    <div className="mt-3 text-primary-foreground/40 font-body text-[10px] font-medium tracking-wider uppercase">{product.brands?.name ?? ""}</div>
-                    <div className="w-3 h-3 rounded-full bg-primary-foreground/20 mt-4" />
-                    <div className="mt-auto mb-3 px-3 py-1 bg-forest-deep/60 rounded text-[8px] text-primary-foreground/50 font-body text-center leading-tight">{product.sku}<br />{product.category}</div>
-                  </motion.div>
+                  {product.image_url ? (
+                    <motion.img
+                      src={product.image_url}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                      whileHover={{ scale: 1.08 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    />
+                  ) : (
+                    <>
+                      <div className="absolute inset-0 flex items-center justify-center"><div className="w-40 h-40 rounded-2xl bg-forest-mid/40 blur-[50px] group-hover:bg-forest-light/30 transition-all duration-700" /></div>
+                      <div className="relative z-10 w-36 h-44 rounded-xl bg-gradient-to-b from-forest-mid/60 to-forest-deep/80 border border-primary-foreground/10 flex flex-col items-center justify-center shadow-xl">
+                        <div className="mt-3 text-primary-foreground/40 font-body text-[10px] font-medium tracking-wider uppercase">{product.brands?.name ?? ""}</div>
+                      </div>
+                    </>
+                  )}
                 </div>
                 <div className="p-6 pt-4">
                   <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>

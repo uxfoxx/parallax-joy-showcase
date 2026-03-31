@@ -28,7 +28,11 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
               large ? "h-64" : "h-48"
             }`}
           >
-            <Package className="w-10 h-10 text-forest-mid/25" />
+            {product.image_url ? (
+              <img src={product.image_url} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            ) : (
+              <Package className="w-10 h-10 text-forest-mid/25" />
+            )}
             {product.featured && (
               <Badge className="absolute top-3 left-3 bg-accent text-accent-foreground font-body text-xs">
                 Featured
