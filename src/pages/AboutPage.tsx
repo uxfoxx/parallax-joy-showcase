@@ -238,36 +238,30 @@ const AboutPage = () => {
 
       <SectionTransition />
 
-      {/* Who We Serve */}
-      <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden py-28 lg:py-36">
-          <div className="absolute inset-0" style={{
-            background: `
-              radial-gradient(ellipse at 60% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 50%),
-              radial-gradient(ellipse at 30% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-              linear-gradient(180deg, hsl(140 50% 14%), hsl(150 40% 10%), hsl(150 40% 6%))
-            `,
-          }} />
+      {/* Who We Serve — Light */}
+      <div data-navbar-theme="light">
+        <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
+          <div className="absolute w-[400px] h-[400px] -bottom-20 -left-20 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="text-center max-w-3xl mx-auto mb-20">
-              <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
+              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
                 Our Clients
               </span>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight tracking-tight">
                 Who We Serve
               </h2>
-              <p className="text-primary-foreground/45 font-body text-lg leading-relaxed">
+              <p className="text-muted-foreground font-body text-lg leading-relaxed">
                 We partner with businesses across Sri Lanka's food and hospitality ecosystem
               </p>
             </motion.div>
 
             <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 sm:grid-cols-3 gap-5">
               {clientSegments.map((s) => (
-                <motion.div key={s.label} variants={item} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="flex flex-col items-center gap-4 p-6 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20" style={{ background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))` }}>
-                  <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-xl bg-primary-foreground flex items-center justify-center shadow-lg shadow-primary-foreground/10">
-                    <s.icon className="w-6 h-6 text-forest-deep" />
+                <motion.div key={s.label} variants={item} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="flex flex-col items-center gap-4 p-6 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
+                  <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
+                    <s.icon className="w-6 h-6 text-accent" />
                   </motion.div>
-                  <span className="font-body text-sm font-medium text-primary-foreground text-center">{s.label}</span>
+                  <span className="font-body text-sm font-medium text-foreground text-center">{s.label}</span>
                 </motion.div>
               ))}
             </motion.div>

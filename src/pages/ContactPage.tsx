@@ -79,7 +79,7 @@ const ContactPage = () => {
     }
   };
 
-  const inputClasses = "flex h-11 w-full rounded-lg border border-primary-foreground/10 bg-primary-foreground/5 px-4 py-2 text-sm text-primary-foreground placeholder:text-primary-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/20 focus-visible:border-primary-foreground/20 transition-colors font-body";
+  const lightInputClasses = "flex h-11 w-full rounded-lg border border-border bg-background px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:border-accent/30 transition-colors font-body";
 
   return (
     <div className="smooth-scroll overflow-x-hidden">
