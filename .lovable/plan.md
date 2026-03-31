@@ -1,67 +1,68 @@
 
 
-# Section Layout Reactions to Floating Scroll Element
+# More Dramatic Section Reactions + Parallax Backgrounds
 
-## Concept
+## Changes
 
-Instead of the olive branch simply floating over sections, each section **responds to its presence** — content splits apart, shifts, or rearranges to "make room" for the element as it passes through. This creates a feeling that the floating element is physically interacting with the page.
+### 1. Amplify Section Reactions (`useScrollSectionReaction.ts`)
+- Increase `peakShift` default from 40 to 80
+- Increase gap from 60 to 140
+- More dramatic fade: nearFade from 0.7 to 0.4, farFade now animates to 0.85
+- ScaleNear from 0.95 to 0.88
+- Add `scaleUp` value (1 → 1.08 → 1) for elements that grow as element approaches
 
-## How It Works
+### 2. Amplify Individual Section Reactions
 
-Each section uses `useScroll` + `useTransform` to detect when the floating element is in its scroll range, then animates its own layout properties (padding, gap, translate, scale) accordingly. The floating element's scroll ranges (from `ScrollFloatingElement.tsx`) serve as the reference for when each section should react.
+**LogoStrip** — split gap from 120 to 250, shifts from ±30 to ±60, add vertical bounce (translateY pulse)
 
-## Section Reactions
+**FeaturedProducts** — grid shift from 50 to 100, first card scale from 0.92 to 0.82, opacity from 0.6 to 0.35, add subtle rotation on the grid (2deg tilt)
 
-### 1. LogoStrip (scroll 10–25% — element slides right)
-- The logo row **splits in the middle** — left logos shift left, right logos shift right, creating a gap where the olive branch passes through
-- Uses `useTransform` on `scrollYProgress` [0.1–0.2] to animate a `gap` or `translateX` on two halves
+**WhyChooseUs** — grid shift from -45 to -90, header shift from -20 to -50, last card scale/opacity more extreme, add skew transform on header
 
-### 2. FeaturedProducts (scroll 25–50% — element goes left)
-- The 3-column grid **shifts right** as a group, leaving space on the left for the element
-- The left-most card slightly scales down and fades while the other two cards shift right
-- Smooth `translateX` and `opacity` transforms on the grid
+**CategoriesSection** — fan gap from 24→48 to 16→72, add slight rotation on individual cards during fan-out
 
-### 3. WhyChooseUs (scroll 50–75% — element goes right)
-- The 4-column grid content **shifts left**, mirroring the FeaturedProducts behavior
-- The rightmost card fades/scales slightly while others compress left
-- Header text shifts left with a subtle parallax offset
+### 3. Add Parallax Backgrounds to All Sections
 
-### 4. CategoriesSection (scroll ~35–45%)
-- Cards **fan out** slightly — top row cards spread apart with increased gap
-- Creates a breathing effect as the element passes overhead
+Each section gets a **parallax background layer** using `useScroll` + `useTransform` to shift a decorative background element at a different rate than content, creating depth.
 
-## Implementation
+**Implementation per section:**
+- Wrap existing background `div` content with a `motion.div` that has `y` bound to scroll progress
+- Each section's background shifts by ~50-80px over its visible scroll range (slower than content = parallax)
+- Add subtle decorative shapes (large blurred circles/ellipses in brand colors) that move at parallax speed
 
-### New hook: `useScrollSectionReaction.ts`
-A reusable hook that takes a scroll range `[start, end]` and returns motion values for common reactions (shift, gap, scale, opacity). Each section imports this and applies the values.
+**Sections getting parallax:**
+- **HeroSection** — existing gradient bg shifts upward slowly as you scroll past
+- **FeaturedProducts** — dark gradient bg with parallax offset + floating blurred gold circle
+- **WhyChooseUs** — dark gradient bg parallax + floating green orb
+- **CategoriesSection** — light bg with parallax-shifted subtle radial gradient accent
+- **StatsSection** — light muted bg with parallax decorative element
+- **DarkStatsBanner** — parallax on the pulsing SVG line + bg gradient
+- **TeamSection** — parallax decorative blurred circle
+- **LocationsSection** — dark bg parallax + floating accent
+- **FAQSection** — dark bg parallax
 
-```typescript
-function useScrollSectionReaction(scrollRange: [number, number]) {
-  const { scrollYProgress } = useScroll();
-  const shift = useTransform(scrollYProgress, 
-    [scrollRange[0], midpoint, scrollRange[1]], 
-    [0, peakShift, 0]
-  );
-  // ... returns { shift, gap, fadeLeft, fadeRight }
-}
+**Parallax technique** (consistent across all):
+```tsx
+const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+const bgY = useTransform(scrollYProgress, [0, 1], ["-50px", "50px"]);
+// Applied to a motion.div wrapping decorative bg elements
 ```
 
-### Modified sections
-Each section wraps its content grid in a `<motion.div>` that uses the hook's output values.
+This uses element-scoped scroll tracking (not global) so each section's parallax is independent and correctly timed.
 
 ## Files
 
-| Action | File | Changes |
-|--------|------|---------|
-| Create | `src/hooks/useScrollSectionReaction.ts` | Reusable hook returning scroll-linked motion values |
-| Modify | `src/components/landing/LogoStrip.tsx` | Split logos into two halves that separate |
-| Modify | `src/components/landing/FeaturedProducts.tsx` | Grid shifts right during element pass-through |
-| Modify | `src/components/landing/WhyChooseUs.tsx` | Grid shifts left during element pass-through |
-| Modify | `src/components/landing/CategoriesSection.tsx` | Cards fan out with increased gap |
-
-## Technical Notes
-- All transforms use Framer Motion `useTransform` for GPU-accelerated, frame-synced animation
-- Reactions are subtle (20–40px shifts, 0.95 scale) so content stays readable
-- Hidden on mobile (same as the floating element itself)
-- Each reaction peaks at the midpoint of the element's presence in that section, then smoothly returns to normal
+| Action | File |
+|--------|------|
+| Modify | `src/hooks/useScrollSectionReaction.ts` — amplified values |
+| Modify | `src/components/landing/LogoStrip.tsx` — bigger splits + parallax |
+| Modify | `src/components/landing/FeaturedProducts.tsx` — bigger shifts + parallax bg |
+| Modify | `src/components/landing/WhyChooseUs.tsx` — bigger shifts + parallax bg |
+| Modify | `src/components/landing/CategoriesSection.tsx` — bigger fan + parallax bg |
+| Modify | `src/components/landing/HeroSection.tsx` — parallax on gradient bg |
+| Modify | `src/components/landing/StatsSection.tsx` — parallax decorative element |
+| Modify | `src/components/landing/DarkStatsBanner.tsx` — parallax bg |
+| Modify | `src/components/landing/TeamSection.tsx` — parallax decorative element |
+| Modify | `src/components/landing/LocationsSection.tsx` — parallax bg |
+| Modify | `src/components/landing/FAQSection.tsx` — parallax bg |
 
