@@ -11,7 +11,7 @@ const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isSignUp] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,13 +77,10 @@ const AdminLogin = () => {
               placeholder="••••••••"
             />
           </div>
-          <Button type="submit" disabled={loading} className="w-full bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl">
+          <Button type="submit" disabled={loading} className="w-full bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-lg">
             {loading ? "..." : isSignUp ? "Sign Up" : "Sign In"}
           </Button>
         </form>
-        <button onClick={() => setIsSignUp(!isSignUp)} className="block mx-auto text-sm font-body text-primary-foreground/40 hover:text-primary-foreground/60">
-          {isSignUp ? "Already have an account? Sign in" : "Need an account? Sign up"}
-        </button>
       </div>
     </div>
   );

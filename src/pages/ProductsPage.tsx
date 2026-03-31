@@ -53,10 +53,10 @@ const ProductsPage = () => {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex items-center gap-3 mb-8">
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search products, brands, categories..." className="pl-12 h-12 rounded-xl font-body text-base border-border bg-card/90" />
+              <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search products, brands, categories..." className="pl-12 h-12 rounded-lg font-body text-base border-border bg-card/90" />
               {query && <button onClick={() => setQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"><X className="w-4 h-4" /></button>}
             </div>
-            <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className={`h-12 rounded-xl font-body gap-2 border-border ${showFilters ? "bg-forest-deep text-primary-foreground hover:bg-forest-mid" : ""}`}>
+            <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className={`h-12 rounded-lg font-body gap-2 border-border ${showFilters ? "bg-forest-deep text-primary-foreground hover:bg-forest-mid" : ""}`}>
               <SlidersHorizontal className="w-4 h-4" /> Filters
             </Button>
           </motion.div>

@@ -1,18 +1,30 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Package, MessageCircle } from "lucide-react";
+import { ArrowLeft, Package, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { useProduct, useProducts } from "@/lib/api";
+import { useProduct, useProducts, useProductImages } from "@/lib/api";
 
 const ProductDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: product, isLoading } = useProduct(slug || "");
   const { data: allProducts = [] } = useProducts();
+  const { data: extraImages = [] } = useProductImages(product?.id || "");
+  const [activeImage, setActiveImage] = useState(0);
+
   const relatedProducts = product
     ? allProducts.filter((p) => p.brand_id === product.brand_id && p.id !== product.id).slice(0, 3)
+    : [];
+
+  // Combine main image + extra images
+  const allImages = product
+    ? [
+        ...(product.image_url ? [product.image_url] : []),
+        ...extraImages.map((img) => img.image_url),
+      ]
     : [];
 
   if (isLoading) return <PageLayout><div className="py-40 text-center font-body text-muted-foreground">Loading...</div></PageLayout>;
@@ -42,9 +54,36 @@ const ProductDetailPage = () => {
     <PageLayout>
       <section className="bg-background/90 backdrop-blur-sm">
         <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] min-h-[calc(100vh-80px)]">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="relative bg-muted/50 flex items-center justify-center min-h-[400px] lg:min-h-full">
-            {product.image_url ? (
-              <img src={product.image_url} alt={product.name} className="w-full h-full object-cover absolute inset-0" />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="relative bg-muted/50 flex flex-col items-center justify-center min-h-[400px] lg:min-h-full">
+            {allImages.length > 0 ? (
+              <>
+                <img src={allImages[activeImage]} alt={product.name} className="w-full h-full object-cover absolute inset-0" />
+                {allImages.length > 1 && (
+                  <>
+                    <button
+                      onClick={() => setActiveImage((prev) => (prev - 1 + allImages.length) % allImages.length)}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/60 transition-colors"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => setActiveImage((prev) => (prev + 1) % allImages.length)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/60 transition-colors"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+                      {allImages.map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setActiveImage(i)}
+                          className={`w-2.5 h-2.5 rounded-full transition-all ${i === activeImage ? "bg-white scale-125" : "bg-white/50 hover:bg-white/70"}`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </>
             ) : (
               <Package className="w-24 h-24 text-muted-foreground/20" />
             )}
@@ -90,7 +129,7 @@ const ProductDetailPage = () => {
             <div className="flex flex-wrap items-center gap-4">
               <Link
                 to={`/contact?subject=Product+Inquiry&product=${encodeURIComponent(product.name)}`}
-                className="inline-flex items-center gap-2 rounded-xl bg-primary text-primary-foreground px-6 h-11 text-sm font-body font-semibold hover:bg-primary/90 transition-colors"
+                className="inline-flex items-center gap-2 rounded-lg bg-forest-deep text-primary-foreground px-6 h-11 text-sm font-body font-semibold hover:bg-forest-mid transition-colors"
               >
                 <MessageCircle className="w-4 h-4" /> Inquire About This Product
               </Link>

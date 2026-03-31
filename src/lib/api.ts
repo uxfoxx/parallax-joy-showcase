@@ -5,6 +5,13 @@ import type { Tables, TablesInsert, TablesUpdate } from "@/integrations/supabase
 export type Brand = Tables<"brands">;
 export type Product = Tables<"products"> & { brands?: Brand };
 export type Category = Tables<"categories">;
+export type ProductImage = {
+  id: string;
+  product_id: string;
+  image_url: string;
+  sort_order: number;
+  created_at: string;
+};
 
 // ─── Brands ───
 export const useBrands = () =>
@@ -133,6 +140,50 @@ export const useDeleteProduct = () => {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["products"] }),
+  });
+};
+
+// ─── Product Images ───
+export const useProductImages = (productId: string) =>
+  useQuery({
+    queryKey: ["product_images", productId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("product_images" as any)
+        .select("*")
+        .eq("product_id", productId)
+        .order("sort_order");
+      if (error) throw error;
+      return (data as unknown) as ProductImage[];
+    },
+    enabled: !!productId,
+  });
+
+export const useAddProductImage = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (image: { product_id: string; image_url: string; sort_order?: number }) => {
+      const { data, error } = await supabase
+        .from("product_images" as any)
+        .insert(image)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (_data, vars) => qc.invalidateQueries({ queryKey: ["product_images", vars.product_id] }),
+  });
+};
+
+export const useDeleteProductImage = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, product_id }: { id: string; product_id: string }) => {
+      const { error } = await supabase.from("product_images" as any).delete().eq("id", id);
+      if (error) throw error;
+      return product_id;
+    },
+    onSuccess: (_data, vars) => qc.invalidateQueries({ queryKey: ["product_images", vars.product_id] }),
   });
 };
 
