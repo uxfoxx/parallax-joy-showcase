@@ -132,7 +132,8 @@ const AboutPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-20 lg:py-28 bg-forest-deep">
+      <section className="py-20 lg:py-28 relative overflow-hidden">
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))' }} />
         <div className="max-w-3xl mx-auto px-6 text-center space-y-8">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
