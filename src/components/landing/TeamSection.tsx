@@ -43,11 +43,18 @@ const TeamSection = () => {
   const orbY = useTransform(scrollYProgress, [0, 1], ["50px", "-50px"]);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const autoplayPlugin = useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
-  );
+  const [isHovered, setIsHovered] = useState(false);
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoplayPlugin.current]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  // Manual autoplay
+  useEffect(() => {
+    if (!emblaApi || isHovered) return;
+    const interval = setInterval(() => {
+      emblaApi.scrollNext();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [emblaApi, isHovered]);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
