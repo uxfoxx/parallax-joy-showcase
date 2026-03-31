@@ -83,26 +83,18 @@ const AboutPage = () => {
 
       <SectionTransition />
 
-      {/* Who We Are */}
-      <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden py-28 lg:py-36">
-          <div className="absolute inset-0" style={{
-            background: `
-              radial-gradient(ellipse at 70% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 50%),
-              radial-gradient(ellipse at 30% 80%, hsl(150 40% 14% / 0.3) 0%, transparent 50%),
-              linear-gradient(180deg, hsl(150 40% 8%), hsl(140 50% 14%), hsl(150 40% 10%))
-            `,
-          }} />
-          <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
-            <motion.div className="absolute w-[400px] h-[400px] -top-20 -left-20 rounded-full opacity-[0.05]" style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)", y: orbY }} />
-          </motion.div>
+      {/* Who We Are — Light */}
+      <div data-navbar-theme="light">
+        <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
+          <div className="absolute w-[400px] h-[400px] -top-20 -left-20 rounded-full opacity-[0.08]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
+          <div className="absolute w-[300px] h-[300px] bottom-10 right-10 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
           <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="space-y-8">
-              <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 tracking-widest uppercase">
+              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 tracking-widest uppercase">
                 Our Story
               </span>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">Who We Are</h2>
-              <div className="space-y-5 font-body text-primary-foreground/45 leading-relaxed text-lg">
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight tracking-tight">Who We Are</h2>
+              <div className="space-y-5 font-body text-muted-foreground leading-relaxed text-lg">
                 <p>Olive Foods (Pvt) Ltd is a trusted import, bonded warehousing, and FMCG distribution company based in Sri Lanka. With over three decades of industry experience, we have built strong relationships with global suppliers and established ourselves as a reliable partner for businesses across the island.</p>
                 <p>We specialize in importing and distributing a wide range of food products — from frozen goods and dairy to grocery staples, edible oils, and specialty imports — sourced from leading producers in Australia, Italy, the Netherlands, Thailand, Singapore, UAE, India, and China.</p>
                 <p>Our integrated model covers every step of the supply chain: from international sourcing and customs clearance through our bonded warehouse facilities, to cold-chain logistics and island-wide distribution across HoReCa, Modern Trade, and General Trade channels.</p>
@@ -170,43 +162,34 @@ const AboutPage = () => {
 
       <SectionTransition />
 
-      {/* Mission & Vision */}
-      <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden py-28 lg:py-36">
-          <div className="absolute inset-0" style={{
-            background: `
-              radial-gradient(ellipse at 20% 30%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 70%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-              linear-gradient(180deg, hsl(140 50% 14%), hsl(150 40% 10%), hsl(150 40% 6%))
-            `,
-          }} />
-          <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
-            <div className="absolute w-[400px] h-[400px] top-1/3 -right-40 rounded-full opacity-[0.05]" style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
-          </motion.div>
+      {/* Mission & Vision — Light */}
+      <div data-navbar-theme="light">
+        <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
+          <div className="absolute w-[350px] h-[350px] top-1/4 -right-20 rounded-full opacity-[0.07]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="text-center max-w-3xl mx-auto mb-20">
-              <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
+              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
                 Our Purpose
               </span>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight tracking-tight">
                 Mission & Vision
               </h2>
             </motion.div>
 
             <div className="grid md:grid-cols-2 gap-5">
-              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="p-8 rounded-lg border border-primary-foreground/15 hover:border-primary-foreground/25 transition-all duration-500" style={{ background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))` }}>
-                <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-primary-foreground flex items-center justify-center mb-6 shadow-lg shadow-primary-foreground/10">
-                  <Target className="w-6 h-6 text-forest-deep" />
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="p-8 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
+                <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-6">
+                  <Target className="w-6 h-6 text-accent" />
                 </motion.div>
-                <h3 className="font-display text-2xl font-bold text-primary-foreground mb-4 tracking-tight">Our Mission</h3>
-                <p className="font-body text-primary-foreground/45 leading-relaxed">To deliver superior products and seamless distribution solutions through strong global sourcing, advanced logistics infrastructure and customer-focused service, empowering our partners to grow sustainably.</p>
+                <h3 className="font-display text-2xl font-bold text-foreground mb-4 tracking-tight">Our Mission</h3>
+                <p className="font-body text-muted-foreground leading-relaxed">To deliver superior products and seamless distribution solutions through strong global sourcing, advanced logistics infrastructure and customer-focused service, empowering our partners to grow sustainably.</p>
               </motion.div>
-              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="p-8 rounded-lg border border-primary-foreground/15 hover:border-primary-foreground/25 transition-all duration-500" style={{ background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))` }}>
-                <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-primary-foreground flex items-center justify-center mb-6 shadow-lg shadow-primary-foreground/10">
-                  <Eye className="w-6 h-6 text-forest-deep" />
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="p-8 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
+                <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-6">
+                  <Eye className="w-6 h-6 text-accent" />
                 </motion.div>
-                <h3 className="font-display text-2xl font-bold text-primary-foreground mb-4 tracking-tight">Our Vision</h3>
-                <p className="font-body text-primary-foreground/45 leading-relaxed">To be Sri Lanka's most trusted and progressive FMCG distribution partner, connecting world-class brands with businesses and households through reliability, innovation and operational excellence.</p>
+                <h3 className="font-display text-2xl font-bold text-foreground mb-4 tracking-tight">Our Vision</h3>
+                <p className="font-body text-muted-foreground leading-relaxed">To be Sri Lanka's most trusted and progressive FMCG distribution partner, connecting world-class brands with businesses and households through reliability, innovation and operational excellence.</p>
               </motion.div>
             </div>
           </div>
@@ -255,36 +238,30 @@ const AboutPage = () => {
 
       <SectionTransition />
 
-      {/* Who We Serve */}
-      <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden py-28 lg:py-36">
-          <div className="absolute inset-0" style={{
-            background: `
-              radial-gradient(ellipse at 60% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 50%),
-              radial-gradient(ellipse at 30% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-              linear-gradient(180deg, hsl(140 50% 14%), hsl(150 40% 10%), hsl(150 40% 6%))
-            `,
-          }} />
+      {/* Who We Serve — Light */}
+      <div data-navbar-theme="light">
+        <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
+          <div className="absolute w-[400px] h-[400px] -bottom-20 -left-20 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="text-center max-w-3xl mx-auto mb-20">
-              <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
+              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
                 Our Clients
               </span>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight tracking-tight">
                 Who We Serve
               </h2>
-              <p className="text-primary-foreground/45 font-body text-lg leading-relaxed">
+              <p className="text-muted-foreground font-body text-lg leading-relaxed">
                 We partner with businesses across Sri Lanka's food and hospitality ecosystem
               </p>
             </motion.div>
 
             <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 sm:grid-cols-3 gap-5">
               {clientSegments.map((s) => (
-                <motion.div key={s.label} variants={item} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="flex flex-col items-center gap-4 p-6 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20" style={{ background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))` }}>
-                  <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-xl bg-primary-foreground flex items-center justify-center shadow-lg shadow-primary-foreground/10">
-                    <s.icon className="w-6 h-6 text-forest-deep" />
+                <motion.div key={s.label} variants={item} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="flex flex-col items-center gap-4 p-6 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
+                  <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
+                    <s.icon className="w-6 h-6 text-accent" />
                   </motion.div>
-                  <span className="font-body text-sm font-medium text-primary-foreground text-center">{s.label}</span>
+                  <span className="font-body text-sm font-medium text-foreground text-center">{s.label}</span>
                 </motion.div>
               ))}
             </motion.div>
