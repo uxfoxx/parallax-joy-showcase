@@ -18,6 +18,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import AdminBrands from "./pages/admin/AdminBrands.tsx";
 import AdminProducts from "./pages/admin/AdminProducts.tsx";
 import AdminCategories from "./pages/admin/AdminCategories.tsx";
+import ContactPage from "./pages/ContactPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/brands" element={<BrandsPage />} />
           <Route path="/brands/:slug" element={<BrandDetailPage />} />
           <Route path="/products" element={<ProductsPage />} />

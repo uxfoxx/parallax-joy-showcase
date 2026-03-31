@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, MapPin, Calendar } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, MessageCircle } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
 import { useBrand, useProducts } from "@/lib/api";
@@ -45,6 +45,14 @@ const BrandDetailPage = () => {
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="flex items-center gap-6 mt-6 text-sm font-body text-primary-foreground/50">
                 <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4" /> {brand.origin}</span>
                 {brand.established && <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> Est. {brand.established}</span>}
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="mt-6">
+                <Link
+                  to={`/contact?subject=Brand+Inquiry&brand=${encodeURIComponent(brand.name)}`}
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary-foreground text-forest-deep px-6 h-11 text-sm font-body font-semibold hover:bg-primary-foreground/90 transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" /> Inquire About This Brand
+                </Link>
               </motion.div>
             </div>
           </div>

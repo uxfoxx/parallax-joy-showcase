@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Package } from "lucide-react";
+import { ArrowLeft, Package, MessageCircle } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
@@ -87,9 +87,17 @@ const ProductDetailPage = () => {
               </div>
             )}
 
-            <Link to="/products" className="inline-flex items-center gap-2 text-sm font-body text-forest-mid hover:underline">
-              <ArrowLeft className="w-4 h-4" /> Back to all products
-            </Link>
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                to={`/contact?subject=Product+Inquiry&product=${encodeURIComponent(product.name)}`}
+                className="inline-flex items-center gap-2 rounded-xl bg-primary text-primary-foreground px-6 h-11 text-sm font-body font-semibold hover:bg-primary/90 transition-colors"
+              >
+                <MessageCircle className="w-4 h-4" /> Inquire About This Product
+              </Link>
+              <Link to="/products" className="inline-flex items-center gap-2 text-sm font-body text-forest-mid hover:underline">
+                <ArrowLeft className="w-4 h-4" /> Back to all products
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
