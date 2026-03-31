@@ -15,10 +15,7 @@ const duplicatedTeam = [...team, ...team];
 const TeamSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress } = useScroll();
   const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
   return (

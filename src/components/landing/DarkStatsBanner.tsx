@@ -16,10 +16,7 @@ const DarkStatsBanner = () => {
   const { ref: inViewRef, isInView } = useInView();
   const { ref: mouseRef, gradientStyle } = useMouseGradient();
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress } = useScroll();
 
   // Parallax on bg and SVG line
   const bgY = useTransform(scrollYProgress, [0, 1], ["-40px", "40px"]);

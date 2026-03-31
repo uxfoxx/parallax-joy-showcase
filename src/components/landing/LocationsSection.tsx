@@ -4,10 +4,7 @@ import { useRef } from "react";
 
 const LocationsSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress } = useScroll();
   const bgY = useTransform(scrollYProgress, [0, 1], ["-60px", "60px"]);
 
   return (

@@ -9,10 +9,7 @@ const FeaturedProducts = () => {
   const displayProducts = products.slice(0, 3);
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll();
-  const { scrollYProgress: sectionProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress: sectionProgress } = useScroll();
 
   // Amplified: Element is at left side during scroll 25-50%, so grid shifts right
   const gridShift = useTransform(scrollYProgress, [0.22, 0.37, 0.52], [0, 100, 0]);

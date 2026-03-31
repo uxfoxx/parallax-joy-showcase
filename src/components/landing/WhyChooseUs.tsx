@@ -30,10 +30,7 @@ const WhyChooseUs = () => {
   const { ref, gradientStyle } = useMouseGradient();
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll();
-  const { scrollYProgress: sectionProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress: sectionProgress } = useScroll();
 
   // Amplified: Element is at right side during scroll 50-75%, so grid shifts left
   const gridShift = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -90, 0]);

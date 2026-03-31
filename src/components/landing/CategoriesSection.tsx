@@ -33,10 +33,7 @@ const categories = [
 const CategoriesSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll();
-  const { scrollYProgress: sectionProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress: sectionProgress } = useScroll();
 
   // Amplified fan-out effect: cards spread apart when element passes (~35-45%)
   const fanGap = useTransform(scrollYProgress, [0.32, 0.40, 0.48], [16, 72, 16]);

@@ -14,10 +14,7 @@ const faqs = [
 const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress } = useScroll();
 
   // Parallax bg
   const bgY = useTransform(scrollYProgress, [0, 1], ["-50px", "50px"]);
