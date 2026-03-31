@@ -133,10 +133,10 @@ const Navbar = () => {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link to="/contact">
                 <Button
-                  className={`font-body font-semibold rounded-xl h-10 px-6 text-sm transition-all duration-500 ${
+                  className={`font-body font-semibold rounded-lg h-10 px-6 text-sm transition-all duration-500 backdrop-blur-sm border border-white/15 ${
                     isDark
-                      ? "bg-primary-foreground text-forest-deep hover:bg-primary-foreground/90 shadow-lg shadow-white/10"
-                      : "bg-forest-deep text-primary-foreground hover:bg-forest-mid shadow-lg shadow-forest-deep/20"
+                      ? "bg-primary-foreground/90 text-forest-deep hover:bg-primary-foreground/80 shadow-lg shadow-white/10"
+                      : "bg-forest-deep/90 text-primary-foreground hover:bg-forest-mid/90 shadow-lg shadow-forest-deep/20"
                   }`}
                 >
                   Contact Us
