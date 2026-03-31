@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { toast } from "sonner";
 
-const emptyForm = { name: "", slug: "", brand_id: "", category: "", description: "", featured: false, tags: "" as string, origin: "", sku: "" };
+const emptyForm = { name: "", slug: "", brand_id: "", category: "", description: "", featured: false, tags: "" as string, origin: "", sku: "", image_url: "" };
 
 const AdminProducts = () => {
   const { data: products, isLoading } = useProducts();
