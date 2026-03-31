@@ -1,27 +1,44 @@
 
 
-# Fix Card Visibility on Light Backgrounds
+# Context-Aware Card Styling: Dark vs Light Backgrounds
 
 ## Problem
-Product and brand cards use `border-border/30` (very faint) and `shadow-md` which barely registers on white/light backgrounds. The no-image placeholder gradient is also too subtle.
+The recent visibility fix applied stronger borders and shadows (`border-border`, `shadow-lg hover:shadow-2xl`) to all cards uniformly. On dark backgrounds (like the landing page Featured section), cards looked fine before — the stronger styling is only needed on light/white backgrounds.
 
 ## Solution
-Increase card border opacity and shadow depth on both ProductCard and BrandsPage brand cards, plus darken the no-image placeholder. Keep light section backgrounds unchanged.
+Add a `variant` prop to `ProductCard` (`"dark" | "light"`, default `"light"`) that controls border and shadow intensity. Apply the same logic inline for brand cards on `BrandsPage`.
 
-### Changes
+### Card styles by variant
 
-**`src/components/ProductCard.tsx`** (line 26):
-- Border: `border-border/30` → `border-border`
-- Shadow: `shadow-md hover:shadow-xl` → `shadow-lg hover:shadow-2xl`
-- No-image placeholder (line 36): increase gradient opacity `from-forest-deep/30 via-forest-mid/20 to-accent/15` and icon opacity `text-forest-mid/40`
+| Variant | Border | Shadow |
+|---------|--------|--------|
+| `dark` | `border-white/10` | `shadow-md hover:shadow-xl` |
+| `light` (default) | `border-border` | `shadow-lg hover:shadow-2xl` |
 
-**`src/pages/BrandsPage.tsx`** (line 37):
-- Border: `border-border/30` → `border-border`
-- Shadow: `shadow-md hover:shadow-xl` → `shadow-lg hover:shadow-2xl`
-- No-image placeholder (line 41): increase gradient opacity to match ProductCard
+### File changes
+
+**`src/components/ProductCard.tsx`**
+- Add `variant?: "dark" | "light"` prop (default `"light"`)
+- Conditionally apply border/shadow classes based on variant
+
+**`src/components/landing/FeaturedProducts.tsx`**
+- Pass `variant="dark"` to `ProductCard`
+
+**`src/pages/ProductsPage.tsx`**
+- No change needed (light bg, default variant is correct)
+
+**`src/pages/FeaturedPage.tsx`**
+- No change needed (light bg, default variant is correct)
+
+**`src/pages/BrandsPage.tsx`**
+- No change needed (light bg, current styling is correct)
+
+**`src/pages/BrandDetailPage.tsx`**
+- Check bg color; if dark, pass `variant="dark"` to ProductCard
 
 | File | Change |
 |------|--------|
-| `src/components/ProductCard.tsx` | Stronger border + shadow + darker placeholder |
-| `src/pages/BrandsPage.tsx` | Stronger border + shadow + darker placeholder |
+| `src/components/ProductCard.tsx` | Add `variant` prop, conditional card classes |
+| `src/components/landing/FeaturedProducts.tsx` | Pass `variant="dark"` |
+| `src/pages/BrandDetailPage.tsx` | Pass `variant="dark"` if on dark bg |
 
