@@ -28,7 +28,7 @@ const BrandsPage = () => {
           {isLoading ? (
             <p className="text-center font-body text-muted-foreground py-20">Loading brands...</p>
           ) : (
-            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid md:grid-cols-3 gap-5">
               {brands.map((brand) => {
                 const prodCount = products.filter((p) => p.brand_id === brand.id).length;
                 return (
