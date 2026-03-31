@@ -26,7 +26,7 @@ const FeaturedPage = () => {
           {isLoading ? (
             <p className="text-center font-body text-muted-foreground py-20">Loading featured products...</p>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid md:grid-cols-3 gap-5">
               {featured.map((product) => <ProductCard key={product.id} product={product} large />)}
             </div>
           )}
