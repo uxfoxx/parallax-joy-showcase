@@ -1,47 +1,36 @@
 
 
-# Verification + Fix: Product Images, Remaining Issues
+# Add Product Data from Excel to Database
 
-## Current Status
+## Overview
+The uploaded Excel file contains ~200 products across 20+ categories with brands like Hungritos, Azizaa, Royal Arm, Donna Chiara, Acroyali, etc. Currently the DB has only 21 dummy products with 6 generic brands. This plan replaces/supplements with real Olive Foods product data.
 
-**Working correctly:**
-- Navbar: Fixed, section-aware color switching with IntersectionObserver — working
-- WhatsApp button: Fixed at `bottom-6 right-6 z-[9999]`, correct number (+94 11 207 1717) — working
-- FAQ gradient: Dark at bottom — implemented
-- Horizontal scrollbar: `overflow-x-hidden` on root + html/body — implemented
-- Custom cursor: Ref-based animation with contrast outline — implemented
-- Hero: No longer sticky — implemented
+## Step 1 — Add New Categories
+Insert ~16 new categories to match the Excel structure:
+Frozen French Fries, Rice, Honey, Seasonings & Sauces, Edible Oils, Vinegar, Dry Nuts & Seeds, Toppings, Chocolate & Pastry, Flour, Italian Pasta, Japanese Products, Mexican, Canned Vegetables & Fruits, Herbs & Spices, Meat, Poultry, Frozen Berry, Cheese, Packing Material
 
-**Not yet done:**
-1. **Product images missing** — The `products` table has no `image_url` column. ProductCard shows a Package icon placeholder. FeaturedProducts shows abstract gradient boxes instead of real product photos.
-2. **No product images in database** — Need to add an `image_url` column and populate with sample food images (Unsplash URLs for each product type).
-3. **Brands have no images** — The `brands` table also lacks an `image_url` or `logo_url` column.
+## Step 2 — Add New Brands
+Insert ~15 real brands from the Excel:
+Bon Vegato, Hungritos, Azizaa, Royal Arm, Grawings, Mara, Remia, Tabasco, Super Chef, Donna Chiara, Dedicato, Kikkoman, Acroyali, Hersheys, Colatta, American Gourmet, HP, ABC, Figaro, Shams, KD, Blue Diamond, Cadbury, Virgina, Wadi, Swiss Garden, Falcon
 
-## Plan
+(Group smaller brands under umbrella brands where logical — aim for ~15 distinct brands)
 
-### 1. Add `image_url` column to products and brands tables
-- Migration: `ALTER TABLE products ADD COLUMN image_url text;`
-- Migration: `ALTER TABLE brands ADD COLUMN image_url text;`
-- Update all 21 products with relevant Unsplash food images (rice, salmon, cheese, spices, etc.)
-- Update all 6 brands with brand-style images
+## Step 3 — Insert Products
+Insert all ~180 food products (excluding packing materials) with:
+- Name, category, brand_id, slug (auto-generated), pack_size info in description
+- Relevant Unsplash image URLs per category (e.g., french fries image for frozen fries, rice image for rice products, olive oil image for oils, etc.)
+- SKU from pack size column
+- Origin based on product type (e.g., "India" for Basmati, "Italy" for pasta, "Japan" for Japanese products, "Australia" for meat)
 
-### 2. Update ProductCard to show images
-- Replace the `Package` icon placeholder with an `<img>` tag using `product.image_url`
-- Fallback to the current gradient + icon if no image
+## Step 4 — Mark Featured Products
+Set `featured = true` on ~8 representative products across categories (e.g., Basmati Rice, Beef Striploin, Extra Virgin Olive Oil, Saffron, Wild Salmon, Spaghetti)
 
-### 3. Update FeaturedProducts cards to show product images
-- Replace the abstract gradient box mock-up with actual product images
-- Keep the hover animation and card styling
-
-### 4. Update BrandsPage / BrandDetailPage cards
-- Show brand images where available
+## Technical Approach
+- Use the Supabase insert tool for all data operations (INSERT statements)
+- Batch inserts by category to stay organized
+- Use Unsplash URLs for images (category-level images shared across similar products)
+- No schema migrations needed — existing columns support all data
 
 ## Files
-
-| Action | File |
-|--------|------|
-| Migration | Add `image_url` to `products` and `brands` tables + seed with Unsplash URLs |
-| Modify | `src/components/ProductCard.tsx` — show product image |
-| Modify | `src/components/landing/FeaturedProducts.tsx` — show product image in featured cards |
-| Modify | `src/pages/BrandsPage.tsx` — show brand images |
+No code file changes needed — this is purely a data insertion task using the database insert tool.
 
