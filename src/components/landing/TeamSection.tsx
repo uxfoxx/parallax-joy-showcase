@@ -78,7 +78,7 @@ const TeamSection = () => {
       <motion.div className="absolute inset-0 pointer-events-none" style={{ y: orbY }}>
         <div
           className="absolute w-[450px] h-[450px] -bottom-32 -right-32 rounded-full opacity-[0.05]"
-          style={{ background: "radial-gradient(circle, hsl(140 50% 30%), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
         />
         <div
           className="absolute w-[300px] h-[300px] top-10 -left-20 rounded-full opacity-[0.04]"
