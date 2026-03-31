@@ -127,6 +127,7 @@ const AdminProducts = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="font-body w-14">Image</TableHead>
               <TableHead className="font-body">Name</TableHead>
               <TableHead className="font-body">Brand</TableHead>
               <TableHead className="font-body">Category</TableHead>
