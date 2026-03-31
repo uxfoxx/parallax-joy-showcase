@@ -1,32 +1,27 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowUp } from "lucide-react";
 import logoSvg from "@/assets/olive-foods-logo.svg";
 
 const Footer = () => {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   return (
     <footer className="relative overflow-hidden">
-      {/* Subtle gradient overlay */}
+      {/* Standardized dark gradient */}
       <div
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse at 50% 0%, hsl(140 50% 19% / 0.3) 0%, transparent 50%),
-            linear-gradient(180deg, transparent, hsl(150 40% 8% / 0.6))
+            radial-gradient(ellipse at 50% 0%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 14%), hsl(150 40% 10%))
           `,
         }}
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20">
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.6 }}
           className="grid md:grid-cols-[1.5fr_1fr_1fr] gap-16 items-start"
         >
           {/* Brand */}
@@ -34,10 +29,10 @@ const Footer = () => {
             <div className="flex items-center gap-3">
               <img src={logoSvg} alt="Olive Foods" className="h-10 w-auto object-contain brightness-0 invert" />
             </div>
-            <p className="text-primary-foreground/35 font-body text-sm leading-relaxed max-w-xs">
+            <p className="text-primary-foreground/45 font-body text-sm leading-relaxed max-w-xs">
               Your trusted import, bonded warehousing & FMCG distribution partner — delivering quality and reliability across Sri Lanka for over 30 years.
             </p>
-            <p className="text-primary-foreground/25 font-body text-xs">
+            <p className="text-primary-foreground/30 font-body text-xs">
               info@olivefoods.lk · +94 11 207 1717
             </p>
           </div>
@@ -55,7 +50,7 @@ const Footer = () => {
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/35 hover:text-primary-foreground font-body text-sm transition-colors duration-300"
+                    className="text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300"
                   >
                     {link.label}
                   </Link>
@@ -72,7 +67,7 @@ const Footer = () => {
                 <li key={link}>
                   <a
                     href="#"
-                    className="text-primary-foreground/35 hover:text-primary-foreground font-body text-sm transition-colors duration-300 underline underline-offset-4 decoration-primary-foreground/15 hover:decoration-primary-foreground/50"
+                    className="text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300 underline underline-offset-4 decoration-primary-foreground/20 hover:decoration-primary-foreground/60"
                   >
                     {link}
                   </a>
@@ -87,19 +82,11 @@ const Footer = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="mt-16 pt-8 border-t border-primary-foreground/8 flex items-center justify-between"
+          className="mt-16 pt-8 border-t border-primary-foreground/10 text-center"
         >
-          <p className="text-primary-foreground/20 font-body text-sm tracking-wide">
+          <p className="text-primary-foreground/25 font-body text-sm tracking-wide">
             ©2026 Olive Foods (Pvt) Ltd. All rights reserved.
           </p>
-          <motion.button
-            onClick={scrollToTop}
-            whileHover={{ scale: 1.1, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            className="w-10 h-10 rounded-xl glass flex items-center justify-center text-primary-foreground/50 hover:text-accent transition-colors duration-300"
-          >
-            <ArrowUp className="w-4 h-4" />
-          </motion.button>
         </motion.div>
       </div>
     </footer>

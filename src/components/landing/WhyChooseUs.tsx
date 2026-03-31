@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Package, Warehouse, Thermometer, Truck } from "lucide-react";
+import { useMouseGradient } from "@/hooks/useMouseGradient";
 import { useRef } from "react";
 
 const features = [
@@ -26,9 +27,15 @@ const features = [
 ];
 
 const WhyChooseUs = () => {
+  const { ref, gradientStyle } = useMouseGradient();
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll();
+  const { scrollYProgress: sectionProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
 
+  // Amplified: Element is at right side during scroll 50-75%, so grid shifts left
   const gridShift = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -90, 0]);
   const gridSkew = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -1.5, 0]);
   const headerShift = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -50, 0]);
@@ -36,8 +43,47 @@ const WhyChooseUs = () => {
   const lastCardScale = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [1, 0.82, 1]);
   const lastCardOpacity = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [1, 0.35, 1]);
 
+  // Parallax background
+  const bgY = useTransform(sectionProgress, [0, 1], ["-70px", "70px"]);
+  const orbY = useTransform(sectionProgress, [0, 1], ["40px", "-40px"]);
+
   return (
-    <section ref={sectionRef} id="about" className="relative overflow-hidden py-28 lg:py-36">
+    <section
+      ref={(el) => {
+        (ref as React.MutableRefObject<HTMLElement | null>).current = el;
+        (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
+      }}
+      id="about"
+      className="relative overflow-hidden py-28 lg:py-36"
+    >
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 19%), hsl(150 40% 10%))
+          `,
+        }}
+      />
+
+      {/* Parallax decorative elements */}
+      <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
+        <motion.div
+          className="absolute w-[500px] h-[500px] -top-32 -left-32 rounded-full opacity-[0.06]"
+          style={{
+            background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)",
+            y: orbY,
+          }}
+        />
+        <div
+          className="absolute w-[350px] h-[350px] bottom-0 right-10 rounded-full opacity-[0.04]"
+          style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }}
+        />
+      </motion.div>
+
+      <div className="absolute inset-0 pointer-events-none z-[1] opacity-30" style={gradientStyle} />
+
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         {/* Header */}
         <motion.div
@@ -48,7 +94,7 @@ const WhyChooseUs = () => {
           className="text-center max-w-3xl mx-auto mb-20"
           style={{ x: headerShift, skewX: headerSkew }}
         >
-          <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
+          <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
             Why Choose Us
           </span>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
@@ -56,35 +102,41 @@ const WhyChooseUs = () => {
             <br />
             Distribution Partner
           </h2>
-          <p className="text-primary-foreground/40 font-body text-lg leading-relaxed">
+          <p className="text-primary-foreground/45 font-body text-lg leading-relaxed">
             Three decades of experience in import, warehousing, and distribution — built on strong global supplier relationships
           </p>
         </motion.div>
 
-        {/* Feature cards with alternating entry */}
+        {/* Feature cards */}
         <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8" style={{ x: gridShift, skewX: gridSkew }}>
           {features.map((f, i) => (
             <motion.div
               key={f.title}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -60 : 60, rotateZ: i % 2 === 0 ? -3 : 3 }}
-              whileInView={{ opacity: 1, x: 0, rotateZ: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -10, scale: 1.03, transition: { duration: 0.3 } }}
-              className="group relative p-10 rounded-2xl glass hover:shadow-xl hover:shadow-accent/15 transition-all duration-500"
-              style={i === 3 ? { scale: lastCardScale, opacity: lastCardOpacity } : undefined}
+              transition={{ duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -6, transition: { duration: 0.3 } }}
+              className="group relative p-10 rounded-2xl border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
+              style={{
+                background: `
+                  radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%),
+                  linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))
+                `,
+                ...(i === 3 ? { scale: lastCardScale, opacity: lastCardOpacity } : {}),
+              }}
             >
               <motion.div
                 whileHover={{ scale: 1.15, rotate: 5 }}
                 transition={{ type: "spring", stiffness: 300 }}
-                className="w-14 h-14 rounded-xl bg-accent/15 flex items-center justify-center mb-7 shadow-lg shadow-accent/10 group-hover:bg-accent/25 group-hover:shadow-[0_0_20px_hsl(75_38%_45%_/_0.2)] transition-all duration-500"
+                className="w-14 h-14 rounded-xl bg-primary-foreground flex items-center justify-center mb-7 shadow-lg shadow-primary-foreground/10"
               >
-                <f.icon className="w-6 h-6 text-accent" />
+                <f.icon className="w-6 h-6 text-forest-deep" />
               </motion.div>
               <h3 className="font-display text-xl font-semibold text-primary-foreground mb-4 tracking-tight">
                 {f.title}
               </h3>
-              <p className="text-primary-foreground/40 font-body leading-relaxed text-sm">
+              <p className="text-primary-foreground/45 font-body leading-relaxed text-sm">
                 {f.desc}
               </p>
             </motion.div>

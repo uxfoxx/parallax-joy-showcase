@@ -2,7 +2,7 @@ import { useInView } from "@/hooks/useInView";
 import { useCountUp } from "@/hooks/useCountUp";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, Handshake, Globe, GitBranch } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useCallback, useRef, useState } from "react";
 
@@ -44,12 +44,12 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode; cla
         className="absolute -inset-[1px] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{
           background: isHovered
-            ? "conic-gradient(from 180deg, hsl(75 38% 45% / 0.4), hsl(140 50% 19% / 0.4), hsl(75 40% 60% / 0.4), hsl(75 38% 45% / 0.4))"
+            ? "conic-gradient(from 180deg, hsl(var(--accent)), hsl(var(--forest-mid)), hsl(var(--gold-light)), hsl(var(--accent)))"
             : "transparent",
           filter: "blur(1px)",
         }}
       />
-      <div className="relative rounded-2xl glass p-7 h-full transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-accent/10">
+      <div className="relative rounded-2xl bg-card border border-border p-7 h-full transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-accent/10">
         {children}
       </div>
     </div>
@@ -58,14 +58,39 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode; cla
 
 const StatsSection = () => {
   const { ref, isInView } = useInView();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Parallax decorative element
+  const orbY = useTransform(scrollYProgress, [0, 1], ["60px", "-60px"]);
+  const orbX = useTransform(scrollYProgress, [0, 1], ["-20px", "20px"]);
 
   return (
     <section
       ref={(el) => {
         (ref as React.MutableRefObject<HTMLElement | null>).current = el;
+        (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
       }}
-      className="relative py-28 lg:py-36 overflow-hidden"
+      className="relative py-28 lg:py-36 bg-muted/30 overflow-hidden"
     >
+      {/* Parallax decorative element */}
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ y: orbY }}>
+        <motion.div
+          className="absolute w-[500px] h-[500px] -top-40 -right-40 rounded-full opacity-[0.06]"
+          style={{
+            background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
+            x: orbX,
+          }}
+        />
+        <div
+          className="absolute w-[300px] h-[300px] bottom-10 left-10 rounded-full opacity-[0.04]"
+          style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
+        />
+      </motion.div>
+
       <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Left */}
@@ -76,11 +101,11 @@ const StatsSection = () => {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="space-y-8"
           >
-            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight tracking-tight">
               Three Decades of{" "}
               <span className="text-gradient-gold">Excellence</span>
             </h2>
-            <p className="text-primary-foreground/40 font-body text-lg leading-relaxed max-w-lg">
+            <p className="text-muted-foreground font-body text-lg leading-relaxed max-w-lg">
               Over 30 years of importing excellence, connecting global suppliers with Sri Lankan businesses. Sourcing from Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China.
             </p>
             <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}>
@@ -104,22 +129,22 @@ const StatsSection = () => {
             >
               <TiltCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-accent/15 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
                     <Calendar className="w-5 h-5 text-accent" />
                   </div>
-                  <p className="text-primary-foreground/50 font-body text-sm tracking-wide">{stats[0].label}</p>
+                  <p className="text-muted-foreground font-body text-sm tracking-wide">{stats[0].label}</p>
                 </div>
-                <div className="font-display text-5xl lg:text-6xl font-bold text-primary-foreground group-hover:text-accent transition-colors duration-300 mb-5">
+                <div className="font-display text-5xl lg:text-6xl font-bold text-foreground group-hover:text-accent transition-colors duration-300 mb-5">
                   <CountValue target={stats[0].value} isInView={isInView} />{stats[0].suffix}
                 </div>
                 <div className="flex items-center gap-2 mt-2">
                   {[1994, 2004, 2014, 2024].map((year, i) => (
                     <div key={year} className="flex items-center gap-2 flex-1">
                       <div className="flex flex-col items-center">
-                        <div className="w-3 h-3 rounded-full bg-accent/50 group-hover:bg-accent transition-colors duration-300" />
-                        <span className="text-[10px] text-primary-foreground/40 font-body mt-1.5">{year}</span>
+                        <div className="w-3 h-3 rounded-full bg-accent/70 group-hover:bg-accent transition-colors duration-300" />
+                        <span className="text-[10px] text-muted-foreground font-body mt-1.5">{year}</span>
                       </div>
-                      {i < 3 && <div className="flex-1 h-[1px] bg-primary-foreground/10 group-hover:bg-accent/30 transition-colors duration-500" />}
+                      {i < 3 && <div className="flex-1 h-[1px] bg-border group-hover:bg-accent/30 transition-colors duration-500" />}
                     </div>
                   ))}
                 </div>
@@ -135,13 +160,13 @@ const StatsSection = () => {
                 transition={{ duration: 0.5, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
               >
                 <TiltCard>
-                  <div className="w-9 h-9 rounded-lg bg-accent/15 flex items-center justify-center mb-4">
+                  <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
                     <stat.icon className="w-4 h-4 text-accent" />
                   </div>
-                  <div className="font-display text-4xl lg:text-5xl font-bold text-primary-foreground group-hover:text-accent transition-colors duration-300">
+                  <div className="font-display text-4xl lg:text-5xl font-bold text-foreground group-hover:text-accent transition-colors duration-300">
                     <CountValue target={stat.value} isInView={isInView} />{stat.suffix}
                   </div>
-                  <p className="text-primary-foreground/40 font-body text-sm mt-3 tracking-wide">{stat.label}</p>
+                  <p className="text-muted-foreground font-body text-sm mt-3 tracking-wide">{stat.label}</p>
                 </TiltCard>
               </motion.div>
             ))}

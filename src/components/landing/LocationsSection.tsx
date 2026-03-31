@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin } from "lucide-react";
+import { useMouseGradient } from "@/hooks/useMouseGradient";
 import { useRef } from "react";
 
 const locations = [
@@ -12,8 +13,55 @@ const locations = [
 ];
 
 const LocationsSection = () => {
+  const { ref, gradientStyle } = useMouseGradient();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Parallax bg
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-60px", "60px"]);
+  const accentX = useTransform(scrollYProgress, [0, 1], ["20px", "-20px"]);
+
   return (
-    <section className="relative overflow-hidden py-28 lg:py-36">
+    <section
+      ref={(el) => {
+        (ref as React.MutableRefObject<HTMLElement | null>).current = el;
+        (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
+      }}
+      className="relative overflow-hidden py-28 lg:py-36"
+    >
+      {/* Standardized dark gradient */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 19%), hsl(150 40% 10%))
+          `,
+        }}
+      />
+
+      {/* Parallax floating accent */}
+      <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
+        <motion.div
+          className="absolute w-[400px] h-[400px] top-20 -right-20 rounded-full opacity-[0.06]"
+          style={{
+            background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
+            x: accentX,
+          }}
+        />
+        <div
+          className="absolute w-[350px] h-[350px] -bottom-20 left-10 rounded-full opacity-[0.04]"
+          style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
+        />
+      </motion.div>
+
+      {/* Mouse-follow gradient */}
+      <div className="absolute inset-0 pointer-events-none z-[1] opacity-30" style={gradientStyle} />
+
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -22,45 +70,47 @@ const LocationsSection = () => {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto mb-20"
         >
-          <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
+          <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
             Our Reach
           </span>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
             Locations We Cover
           </h2>
-          <p className="text-primary-foreground/40 font-body text-lg leading-relaxed">
+          <p className="text-primary-foreground/45 font-body text-lg leading-relaxed">
             Our global sourcing network spans six continents, connecting you with the finest food products worldwide
           </p>
         </motion.div>
 
-        {/* Connecting dotted line */}
-        <div className="hidden lg:block absolute top-1/2 left-1/2 -translate-x-1/2 w-[80%] h-[1px] border-t border-dashed border-accent/15 z-0" />
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {locations.map((loc, i) => (
             <motion.div
               key={loc.region}
-              initial={{ opacity: 0, y: 60, scale: 0.9 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{
-                duration: 0.6,
-                delay: i * 0.1,
-                ease: [0.22, 1, 0.36, 1],
-                y: { type: "spring", stiffness: 200, damping: 15 },
+              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -6, transition: { duration: 0.25 } }}
+              className="group relative p-10 rounded-2xl border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
+              style={{
+                background: `
+                  radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%),
+                  linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))
+                `,
               }}
-              whileHover={{ y: -10, scale: 1.03, transition: { duration: 0.25 } }}
-              className="group relative p-10 rounded-2xl glass hover:shadow-xl hover:shadow-accent/15 transition-all duration-500"
             >
               <motion.div
                 whileHover={{ scale: 1.15, rotate: -5 }}
                 transition={{ type: "spring", stiffness: 300 }}
-                className="w-14 h-14 rounded-xl bg-accent/15 flex items-center justify-center mb-7 shadow-lg shadow-accent/10 group-hover:bg-accent/25 group-hover:shadow-[0_0_20px_hsl(75_38%_45%_/_0.2)] transition-all duration-500"
+                className="w-14 h-14 rounded-xl bg-primary-foreground flex items-center justify-center mb-7 shadow-lg shadow-primary-foreground/10"
               >
-                <MapPin className="w-6 h-6 text-accent" />
+                <MapPin className="w-6 h-6 text-forest-deep" />
               </motion.div>
-              <h3 className="font-display text-xl font-semibold text-primary-foreground mb-4 tracking-tight">{loc.region}</h3>
-              <p className="text-primary-foreground/40 font-body leading-relaxed text-sm">{loc.countries}</p>
+              <h3 className="font-display text-xl font-semibold text-primary-foreground mb-4 tracking-tight">
+                {loc.region}
+              </h3>
+              <p className="text-primary-foreground/45 font-body leading-relaxed text-sm">
+                {loc.countries}
+              </p>
             </motion.div>
           ))}
         </div>

@@ -87,19 +87,11 @@
 @layer base {
   * {
     @apply border-border;
-    cursor: none;
-  }
-
-  @media (max-width: 768px) {
-    * {
-      cursor: auto;
-    }
   }
 
   body {
     @apply bg-background text-foreground;
     font-family: 'DM Sans', sans-serif;
-    overscroll-behavior: none;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -193,14 +185,6 @@
     50% { box-shadow: 0 0 20px 5px hsl(75 38% 45% / 0.15); }
   }
 
-  @keyframes particle-float {
-    0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.3; }
-    25% { transform: translateY(-30px) translateX(15px) scale(1.2); opacity: 0.6; }
-    50% { transform: translateY(-60px) translateX(-10px) scale(0.8); opacity: 0.4; }
-    75% { transform: translateY(-30px) translateX(20px) scale(1.1); opacity: 0.5; }
-    100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.3; }
-  }
-
   .animate-float { animation: float 6s ease-in-out infinite; }
   .animate-float-delayed { animation: float-delayed 5s ease-in-out infinite 1s; }
   .animate-slide-up-reveal { animation: slide-up-reveal 0.8s ease-out forwards; }
@@ -226,20 +210,5 @@
 
   .animate-gradient {
     animation: gradient-move var(--gradient-duration, 5s) ease infinite;
-  }
-
-  .immersive-particle {
-    position: absolute;
-    border-radius: 50%;
-    background: hsl(75 38% 45% / 0.4);
-    animation: particle-float 10s ease-in-out infinite;
-    pointer-events: none;
-  }
-
-  /* Glassmorphism utility */
-  .glass {
-    background: hsl(150 40% 10% / 0.4);
-    backdrop-filter: blur(20px);
-    border: 1px solid hsl(60 20% 95% / 0.08);
   }
 }
