@@ -23,7 +23,7 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
     >
       <Link to={`/products/${product.slug}`} className="block group">
         <div
-          className={`relative rounded-lg overflow-hidden ${large ? "aspect-[3/4]" : "aspect-[4/5]"} shadow-md hover:shadow-xl transition-shadow duration-500 border border-border/30`}
+          className={`relative rounded-lg overflow-hidden ${large ? "aspect-[3/4]" : "aspect-[4/5]"} shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-border`}
         >
           {/* Full image background */}
           {product.image_url ? (
@@ -33,8 +33,8 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-forest-deep/20 via-forest-mid/10 to-accent/10 flex items-center justify-center">
-              <Package className="w-12 h-12 text-forest-mid/25" />
+            <div className="absolute inset-0 bg-gradient-to-br from-forest-deep/30 via-forest-mid/20 to-accent/15 flex items-center justify-center">
+              <Package className="w-12 h-12 text-forest-mid/40" />
             </div>
           )}
 
