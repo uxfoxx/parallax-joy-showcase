@@ -82,7 +82,7 @@ const TeamSection = () => {
         />
         <div
           className="absolute w-[300px] h-[300px] top-10 -left-20 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(42 60% 50%), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }}
         />
       </motion.div>
 

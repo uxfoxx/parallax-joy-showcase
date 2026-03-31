@@ -120,8 +120,8 @@ const WhyChooseUs = () => {
               className="group relative p-10 rounded-2xl border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
               style={{
                 background: `
-                  radial-gradient(ellipse at 30% 20%, hsl(140 30% 16% / 0.4) 0%, transparent 60%),
-                  linear-gradient(180deg, hsl(140 40% 12%), hsl(140 45% 10%))
+                  radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%),
+                  linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))
                 `,
                 ...(i === 3 ? { scale: lastCardScale, opacity: lastCardOpacity } : {}),
               }}

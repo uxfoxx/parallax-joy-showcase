@@ -56,7 +56,7 @@ const CategoriesSection = () => {
         />
         <div
           className="absolute w-[400px] h-[400px] bottom-0 -left-20 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(140 50% 25%), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
         />
       </motion.div>
 

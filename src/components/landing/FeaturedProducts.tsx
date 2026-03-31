@@ -73,7 +73,7 @@ const FeaturedProducts = () => {
               className="group relative rounded-2xl overflow-hidden border border-primary-foreground/10 hover:border-primary-foreground/20 hover:shadow-2xl hover:shadow-forest-mid/40 transition-all duration-500"
               style={i === 0 ? { scale: firstCardScale, opacity: firstCardOpacity } : undefined}
             >
-              <div style={{ background: `radial-gradient(ellipse at 50% 0%, hsl(140 30% 22% / 0.6) 0%, transparent 60%), linear-gradient(180deg, hsl(140 40% 14%), hsl(140 45% 11%))` }}>
+              <div style={{ background: `radial-gradient(ellipse at 50% 0%, hsl(140 50% 19% / 0.6) 0%, transparent 60%), linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))` }}>
                 <div className="p-6 pb-0">
                   <div className="flex items-center gap-3 mb-5">
                     <span className="px-3 py-1 rounded-full bg-forest-mid/80 text-primary-foreground text-xs font-body font-medium border border-primary-foreground/10">{product.featured ? "Featured" : "New"}</span>

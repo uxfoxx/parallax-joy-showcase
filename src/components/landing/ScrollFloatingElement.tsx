@@ -124,9 +124,9 @@ const ScrollFloatingElement = () => {
             fill="hsl(75 40% 60% / 0.4)"
           />
           {/* Leaf veins */}
-          <line x1="145" y1="35" x2="165" y2="33" stroke="hsl(140 25% 32% / 0.3)" strokeWidth="0.5" />
-          <line x1="120" y1="67" x2="140" y2="62" stroke="hsl(140 25% 32% / 0.3)" strokeWidth="0.5" />
-          <line x1="85" y1="87" x2="105" y2="82" stroke="hsl(140 25% 32% / 0.3)" strokeWidth="0.5" />
+          <line x1="145" y1="35" x2="165" y2="33" stroke="hsl(80 50% 31% / 0.3)" strokeWidth="0.5" />
+          <line x1="120" y1="67" x2="140" y2="62" stroke="hsl(80 50% 31% / 0.3)" strokeWidth="0.5" />
+          <line x1="85" y1="87" x2="105" y2="82" stroke="hsl(80 50% 31% / 0.3)" strokeWidth="0.5" />
         </svg>
       </div>
     </motion.div>

@@ -53,7 +53,7 @@ const DarkStatsBanner = () => {
         preserveAspectRatio="none"
         style={{ x: lineX }}
       >
-        <line x1="0" y1="50%" x2="100%" y2="50%" stroke="hsl(42 80% 55%)" strokeWidth="0.5">
+        <line x1="0" y1="50%" x2="100%" y2="50%" stroke="hsl(75 38% 45%)" strokeWidth="0.5">
           <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite" />
         </line>
       </motion.svg>

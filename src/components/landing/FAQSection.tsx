@@ -83,7 +83,7 @@ const FAQSection = () => {
                 transition={{ duration: 0.4, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 className="rounded-xl border border-primary-foreground/15 overflow-hidden hover:border-primary-foreground/25 transition-all duration-500"
                 style={{
-                  background: `linear-gradient(135deg, hsl(140 35% 14% / 0.8), hsl(140 40% 12% / 0.6))`,
+                  background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))`,
                 }}
               >
                 <button

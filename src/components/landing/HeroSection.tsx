@@ -32,12 +32,12 @@ const HeroSection = () => {
         style={{
           y: bgY,
           background: `
-            radial-gradient(ellipse 90% 70% at 25% 35%, hsl(140 50% 10% / 0.95) 0%, transparent 65%),
-            radial-gradient(ellipse 50% 60% at 75% 25%, hsl(42 85% 52% / 0.18) 0%, transparent 55%),
-            radial-gradient(ellipse 80% 55% at 50% 85%, hsl(140 40% 18% / 0.8) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 50% at 85% 65%, hsl(42 50% 92% / 0.1) 0%, transparent 45%),
-            radial-gradient(ellipse 40% 40% at 10% 80%, hsl(45 90% 55% / 0.12) 0%, transparent 50%),
-            linear-gradient(150deg, hsl(140 50% 8%) 0%, hsl(140 45% 14%) 35%, hsl(140 40% 10%) 70%, hsl(140 50% 8%) 100%)
+            radial-gradient(ellipse 90% 70% at 25% 35%, hsl(150 40% 10% / 0.95) 0%, transparent 65%),
+            radial-gradient(ellipse 50% 60% at 75% 25%, hsl(75 38% 45% / 0.18) 0%, transparent 55%),
+            radial-gradient(ellipse 80% 55% at 50% 85%, hsl(140 50% 19% / 0.8) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 50% at 85% 65%, hsl(75 40% 60% / 0.1) 0%, transparent 45%),
+            radial-gradient(ellipse 40% 40% at 10% 80%, hsl(80 50% 31% / 0.12) 0%, transparent 50%),
+            linear-gradient(150deg, hsl(150 40% 10%) 0%, hsl(140 50% 19%) 35%, hsl(150 40% 10%) 70%, hsl(150 40% 10%) 100%)
           `,
           backgroundSize: '250% 250%',
           animation: 'gradient-shift 18s ease infinite',
