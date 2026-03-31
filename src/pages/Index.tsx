@@ -46,7 +46,7 @@ const Index = () => {
       <div data-navbar-theme="light">
         <StatsSection />
       </div>
-      <SectionTransition colorFrom="hsl(140 50% 12% / 0.2)" colorTo="hsl(150 40% 10% / 0.3)" flip />
+      <SectionTransition />
       <div data-navbar-theme="dark">
         <DarkStatsBanner />
       </div>
