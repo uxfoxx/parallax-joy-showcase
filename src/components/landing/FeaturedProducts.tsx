@@ -42,7 +42,7 @@ const FeaturedProducts = () => {
         <motion.div
           className="absolute w-[400px] h-[400px] -top-20 -right-20 rounded-full opacity-[0.08]"
           style={{
-            background: "radial-gradient(circle, hsl(42 80% 55%), transparent 70%)",
+            background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
             x: orbX,
           }}
         />
