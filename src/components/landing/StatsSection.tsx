@@ -1,16 +1,62 @@
 import { useInView } from "@/hooks/useInView";
 import { useCountUp } from "@/hooks/useCountUp";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Calendar, Handshake, Globe, GitBranch } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useCallback, useRef, useState } from "react";
 
 const stats = [
-  { value: 30, suffix: "+", label: "Years of Experience" },
-  { value: 8, suffix: "+", label: "Brand Partners" },
-  { value: 8, suffix: "+", label: "Countries Sourced" },
-  { value: 3, suffix: "", label: "Distribution Channels" },
+  { value: 30, suffix: "+", label: "Years of Experience", icon: Calendar, featured: true },
+  { value: 8, suffix: "+", label: "Brand Partners", icon: Handshake, featured: false },
+  { value: 8, suffix: "+", label: "Countries Sourced", icon: Globe, featured: false },
+  { value: 3, suffix: "", label: "Distribution Channels", icon: GitBranch, featured: false },
 ];
+
+const TiltCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = ((e.clientY - rect.top) / rect.height - 0.5) * -12;
+    const y = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
+    setTilt({ x, y });
+  }, []);
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setTilt({ x: 0, y: 0 }); setIsHovered(false); }}
+      className={`relative group ${className}`}
+      style={{
+        transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+        transition: "transform 0.15s ease-out",
+        transformStyle: "preserve-3d",
+      }}
+    >
+      {/* Animated gradient border */}
+      <div
+        className="absolute -inset-[1px] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: isHovered
+            ? "conic-gradient(from 180deg, hsl(var(--accent)), hsl(var(--forest-mid)), hsl(var(--gold-light)), hsl(var(--accent)))"
+            : "transparent",
+          filter: "blur(1px)",
+        }}
+      />
+      {/* Inner card */}
+      <div className="relative rounded-2xl bg-card border border-border p-7 h-full transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-accent/10">
+        {children}
+      </div>
+    </div>
+  );
+};
 
 const StatsSection = () => {
   const { ref, isInView } = useInView();
@@ -44,12 +90,60 @@ const StatsSection = () => {
             </motion.div>
           </motion.div>
 
-          {/* Right — Staggered Stats grid */}
-          <div className="grid grid-cols-2 gap-7">
-            {stats.map((stat, i) => (
-              <div key={stat.label} className={i % 2 === 1 ? "mt-10" : ""}>
-                <StatCard stat={stat} isInView={isInView} index={i} />
-              </div>
+          {/* Right — Bento Grid */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* Featured card spans 2 cols */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="col-span-2"
+            >
+              <TiltCard>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                    <Calendar className="w-5 h-5 text-accent" />
+                  </div>
+                  <p className="text-muted-foreground font-body text-sm tracking-wide">{stats[0].label}</p>
+                </div>
+                <div className="font-display text-5xl lg:text-6xl font-bold text-foreground group-hover:text-accent transition-colors duration-300 mb-5">
+                  <CountValue target={stats[0].value} isInView={isInView} />{stats[0].suffix}
+                </div>
+                {/* Timeline graphic */}
+                <div className="flex items-center gap-2 mt-2">
+                  {[1994, 2004, 2014, 2024].map((year, i) => (
+                    <div key={year} className="flex items-center gap-2 flex-1">
+                      <div className="flex flex-col items-center">
+                        <div className="w-3 h-3 rounded-full bg-accent/70 group-hover:bg-accent transition-colors duration-300" />
+                        <span className="text-[10px] text-muted-foreground font-body mt-1.5">{year}</span>
+                      </div>
+                      {i < 3 && <div className="flex-1 h-[1px] bg-border group-hover:bg-accent/30 transition-colors duration-500" />}
+                    </div>
+                  ))}
+                </div>
+              </TiltCard>
+            </motion.div>
+
+            {/* 3 smaller cards */}
+            {stats.slice(1).map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <TiltCard>
+                  <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
+                    <stat.icon className="w-4 h-4 text-accent" />
+                  </div>
+                  <div className="font-display text-4xl lg:text-5xl font-bold text-foreground group-hover:text-accent transition-colors duration-300">
+                    <CountValue target={stat.value} isInView={isInView} />{stat.suffix}
+                  </div>
+                  <p className="text-muted-foreground font-body text-sm mt-3 tracking-wide">{stat.label}</p>
+                </TiltCard>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -58,24 +152,9 @@ const StatsSection = () => {
   );
 };
 
-const StatCard = ({ stat, isInView, index }: { stat: typeof stats[0]; isInView: boolean; index: number }) => {
-  const count = useCountUp(stat.value, isInView, 2000);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -6, transition: { duration: 0.25 } }}
-      className="p-7 rounded-2xl bg-card border border-border hover:border-accent/30 transition-all duration-500 hover:shadow-lg group glow-border"
-    >
-      <div className="font-display text-4xl lg:text-5xl font-bold text-foreground group-hover:text-accent transition-colors duration-300">
-        {count}{stat.suffix}
-      </div>
-      <p className="text-muted-foreground font-body text-sm mt-3 tracking-wide">{stat.label}</p>
-    </motion.div>
-  );
+const CountValue = ({ target, isInView }: { target: number; isInView: boolean }) => {
+  const count = useCountUp(target, isInView, 2000);
+  return <>{count}</>;
 };
 
 export default StatsSection;
