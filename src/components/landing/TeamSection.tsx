@@ -109,7 +109,7 @@ const TeamSection = () => {
         </motion.div>
 
         {/* Carousel */}
-        <div className="relative">
+        <div className="relative" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
           {/* Prev / Next */}
           <button
             onClick={scrollPrev}
