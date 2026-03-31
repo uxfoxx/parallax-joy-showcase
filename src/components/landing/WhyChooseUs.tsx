@@ -78,7 +78,7 @@ const WhyChooseUs = () => {
         />
         <div
           className="absolute w-[350px] h-[350px] bottom-0 right-10 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(42 70% 50%), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }}
         />
       </motion.div>
 
