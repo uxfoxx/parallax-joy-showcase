@@ -1,42 +1,30 @@
 
 
-# Fix Cursor Visibility, Modern White Location Section, DarkStatsBanner Sticky Issue
+# Fix Green Dot Cursor — Always Visible + Smoother Motion
 
-## 1. Custom Cursor — Always Visible
+## Problem
+The green accent dot that follows the cursor works but: (1) can blend into backgrounds making it hard to see, and (2) the animation could be smoother — the lerp at `0.08` with `setState` on every frame causes micro-jitter since React re-renders each frame.
 
-**Problem**: The cursor dot and glow use `hidden md:block`, making them invisible below `md` breakpoint. Also, the accent color dot may blend into light backgrounds.
+## Changes to `src/components/landing/CustomCursor.tsx`
 
-**Fix** in `CustomCursor.tsx`:
-- Remove `hidden md:block` — show on all screen sizes (the `pointer: coarse` check already handles touch devices)
-- Add a subtle dark outline/shadow to the dot so it's visible on both light and dark backgrounds
-- Keep the `pointer: coarse` early return for mobile/touch
+### Always Visible Green Dot
+- Increase dot size from `w-2 h-2` (8px) to `w-3 h-3` (12px) so it's more prominent
+- Add a bright green glow/shadow: `0 0 6px hsl(75 38% 45% / 0.8), 0 0 12px hsl(75 38% 45% / 0.4)` so it stands out on both dark and light backgrounds
+- Add a thin white ring outline (`0 0 0 1.5px white`) for contrast on dark sections
+- Keep the `bg-accent` color
 
-## 2. Location Section — White Background, Modern Style
+### Smoother Motion
+- Stop using React `setState` on every animation frame — this causes unnecessary re-renders
+- Instead, use `useRef` for DOM elements and update `transform` directly via `ref.current.style.transform` inside the rAF loop
+- This bypasses React's render cycle entirely, giving buttery-smooth 60fps movement
+- Increase lerp factor slightly to `0.12` for the dot (snappier follow) and keep the glow trailing behind at `0.06` (creates a nice separation effect)
+- Remove the Framer Motion `<motion.div>` for the glow — use the same direct DOM approach for consistency
 
-**File**: `LocationsSection.tsx`
+### Hover State
+- On hover over interactive elements: dot scales to `1.5x` and glow scales to `2x` — applied via direct style manipulation, not React state for the transform
 
-- Replace the dark gradient background with a clean white/light `bg-background` 
-- Change all text from `text-primary-foreground` to `text-foreground` (dark on white)
-- Icon containers: `bg-accent/10` with `text-accent` icons
-- Map border: `border-border` instead of `border-primary-foreground/10`
-- Badge: light style with `bg-accent/10 text-accent border-accent/20`
-- Add subtle decorative blurred orbs at low opacity for visual interest
-- Keep the parallax and scroll animations
-
-## 3. DarkStatsBanner — Stop Following on Scroll
-
-**Problem**: The `DarkStatsBanner` is wrapped in a `sticky top-0` container inside a parent `div.relative`. Because the parent extends all the way to the footer, the banner stays pinned for too long.
-
-**Fix** in `Index.tsx`:
-- Remove the nested sticky wrapper around `DarkStatsBanner`
-- Make it a normal flow element — just render `<DarkStatsBanner />` inline like other sections
-- This stops it from following the user down the page
-
-## Files
-
+## File
 | Action | File |
 |--------|------|
-| Modify | `src/components/landing/CustomCursor.tsx` — remove `hidden md:block`, add outline for visibility |
-| Modify | `src/components/landing/LocationsSection.tsx` — white bg, dark text, modern light style |
-| Modify | `src/pages/Index.tsx` — remove sticky wrapper around DarkStatsBanner |
+| Modify | `src/components/landing/CustomCursor.tsx` — ref-based animation, larger dot with glow |
 
