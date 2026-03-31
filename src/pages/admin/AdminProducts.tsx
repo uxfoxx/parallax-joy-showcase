@@ -48,6 +48,7 @@ const AdminProducts = () => {
         tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
         origin: form.origin,
         sku: form.sku,
+        image_url: form.image_url || null,
       };
       if (editing) {
         await updateProduct.mutateAsync({ id: editing.id, ...payload });
