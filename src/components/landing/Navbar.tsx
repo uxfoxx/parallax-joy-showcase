@@ -79,17 +79,15 @@ const Navbar = () => {
         className="fixed top-4 left-0 right-0 z-50 mx-auto w-[calc(100%-2rem)] max-w-5xl"
       >
         <motion.div
+          animate={vibrateControls}
+          className="w-full"
+        >
+        <motion.div
           animate={{
             paddingTop: scrolled ? 8 : 12,
             paddingBottom: scrolled ? 8 : 12,
-            x: 0,
           }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          {...{ onAnimationComplete: undefined }}
-          ref={undefined}
-          style={{}}
-          {...((() => { vibrateControls; return {}; })())}
-
           className={`flex items-center justify-between px-5 rounded-xl transition-all duration-500 ${barBg}`}
         >
           <Link to="/" className="flex items-center shrink-0">
