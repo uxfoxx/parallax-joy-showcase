@@ -234,7 +234,7 @@ const AboutPage = () => {
               <motion.div
                 key={s.label}
                 variants={item}
-                className="flex flex-col items-center gap-4 p-8 rounded-2xl border border-border hover:border-forest-mid/20 hover:shadow-lg transition-all duration-300"
+                className="flex flex-col items-center gap-4 p-6 rounded-lg border border-border hover:border-forest-mid/20 hover:shadow-lg transition-all duration-300"
               >
                 <div className="w-12 h-12 rounded-xl bg-forest-deep/10 flex items-center justify-center">
                   <s.icon className="w-6 h-6 text-forest-mid" />
