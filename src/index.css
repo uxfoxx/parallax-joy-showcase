@@ -100,22 +100,8 @@
 }
 
 @layer components {
-  .snap-container {
-    height: 100vh;
-    overflow-y: auto;
-    scroll-snap-type: y proximity;
+  .smooth-scroll {
     scroll-behavior: smooth;
-  }
-
-  .snap-section {
-    scroll-snap-align: start;
-    scroll-snap-stop: normal;
-    min-height: 100vh;
-  }
-
-  .snap-section-auto {
-    scroll-snap-align: start;
-    scroll-snap-stop: normal;
   }
 }
 
@@ -127,7 +113,6 @@
     background-clip: text;
   }
 
-  /* Glow border effect for cards on hover */
   .glow-border {
     position: relative;
   }
@@ -146,7 +131,6 @@
     opacity: 1;
   }
 
-  /* Shine sweep effect */
   .shine-sweep {
     position: relative;
     overflow: hidden;

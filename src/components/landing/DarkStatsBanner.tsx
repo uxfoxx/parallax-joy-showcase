@@ -19,22 +19,22 @@ const DarkStatsBanner = () => {
         (inViewRef as React.MutableRefObject<HTMLElement | null>).current = el;
         (mouseRef as React.MutableRefObject<HTMLElement | null>).current = el;
       }}
-      className="snap-section-auto relative overflow-hidden py-24"
+      className="relative overflow-hidden py-24"
     >
-      {/* Animated gradient background */}
+      {/* Standardized dark gradient */}
       <div
-        className="absolute inset-0 animate-gradient"
+        className="absolute inset-0"
         style={{
           background: `
             radial-gradient(ellipse at 20% 50%, hsl(140 35% 16% / 0.5) 0%, transparent 50%),
             radial-gradient(ellipse at 80% 50%, hsl(140 30% 14% / 0.4) 0%, transparent 50%),
-            linear-gradient(90deg, hsl(140 45% 10%), hsl(140 40% 12%), hsl(140 45% 10%))
+            linear-gradient(90deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))
           `,
         }}
       />
 
       {/* Mouse-follow gradient */}
-      <div className="absolute inset-0 pointer-events-none z-[1]" style={gradientStyle} />
+      <div className="absolute inset-0 pointer-events-none z-[1] opacity-30" style={gradientStyle} />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid sm:grid-cols-3 divide-x divide-primary-foreground/10">

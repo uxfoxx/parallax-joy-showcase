@@ -15,22 +15,23 @@ const LocationsSection = () => {
   const { ref, gradientStyle } = useMouseGradient();
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} className="snap-section flex items-center relative overflow-hidden">
-      {/* Animated gradient background */}
+    <section ref={ref as React.RefObject<HTMLElement>} className="relative overflow-hidden py-28 lg:py-36">
+      {/* Standardized dark gradient */}
       <div
-        className="absolute inset-0 animate-gradient"
+        className="absolute inset-0"
         style={{
-          background: `radial-gradient(ellipse at 50% 100%, #5C7928 0%, #194B22 24%, #08120A 100%)`,
+          background: `
+            radial-gradient(ellipse at 30% 20%, hsl(140 35% 18% / 0.5) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 80%, hsl(140 30% 14% / 0.4) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))
+          `,
         }}
       />
 
       {/* Mouse-follow gradient */}
-      <div className="absolute inset-0 pointer-events-none z-[1]" style={gradientStyle} />
+      <div className="absolute inset-0 pointer-events-none z-[1] opacity-30" style={gradientStyle} />
 
-      {/* Bottom glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-accent/10 blur-[80px] rounded-full" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-28 w-full">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -58,7 +59,7 @@ const LocationsSection = () => {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -6, transition: { duration: 0.25 } }}
-              className="group relative p-10 rounded-2xl border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20 shine-sweep"
+              className="group relative p-10 rounded-2xl border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
               style={{
                 background: `
                   radial-gradient(ellipse at 30% 20%, hsl(140 30% 16% / 0.4) 0%, transparent 60%),
