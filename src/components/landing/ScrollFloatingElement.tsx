@@ -52,8 +52,8 @@ const ScrollFloatingElement = () => {
         >
           {/* Main stem */}
           <path
-            d="M40 160 C60 140, 80 100, 120 60 C140 40, 160 30, 170 25"
-            stroke="hsl(140 35% 22%)"
+             d="M40 160 C60 140, 80 100, 120 60 C140 40, 160 30, 170 25"
+             stroke="hsl(140 50% 19%)"
             strokeWidth="3"
             strokeLinecap="round"
             fill="none"
