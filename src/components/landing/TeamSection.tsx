@@ -1,7 +1,6 @@
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useRef, useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
 import { ShoppingCart, Globe, Warehouse, Truck, ChevronLeft, ChevronRight } from "lucide-react";
 
 const team = [
