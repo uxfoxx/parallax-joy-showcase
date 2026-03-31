@@ -1,6 +1,6 @@
-import { Leaf } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import logoSvg from "@/assets/olive-foods-logo.svg";
 
 const Footer = () => {
   return (
