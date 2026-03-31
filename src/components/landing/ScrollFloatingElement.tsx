@@ -92,7 +92,7 @@ const ScrollFloatingElement = () => {
             cx="70" cy="120"
             rx="13" ry="7"
             transform="rotate(30 70 120)"
-            fill="hsl(140 25% 32% / 0.5)"
+            fill="hsl(80 50% 31% / 0.5)"
           />
           {/* Leaf 5 - small branch */}
           <ellipse
