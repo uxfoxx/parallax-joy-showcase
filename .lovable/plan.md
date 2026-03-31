@@ -1,45 +1,67 @@
 
 
-# Improve Product Cards, Use in Featured Section, Fix Stats Section Background
+# Redesign Product & Brand Pages — Clean Editorial Style
 
-## 1. Product Card UI Upgrade
+## Reference Style
+The uploaded image shows a clean, editorial e-commerce layout: white/cream background, no hero banners, products displayed on clean white/neutral backgrounds with centered product images (not full-bleed), product name below in uppercase, minimal borders (thin lines), and a grid with mixed sizing. The overall feel is minimalist, editorial, and gallery-like.
+
+## Changes
+
+### 1. New Product Card — Clean Editorial Style
 **File**: `src/components/ProductCard.tsx`
+- Remove the current dark overlay/full-image approach
+- New design: white/cream card with thin `border-border` line, no rounded corners (or very subtle `rounded-sm`)
+- Product image centered on a neutral `bg-[#f5f2ed]` background with `object-contain` (not cover) and generous padding — so the product "floats" on a clean background
+- Below image: product name in uppercase `tracking-wide text-xs font-body`, brand name smaller underneath
+- On hover: subtle scale on image only (1.03), no card movement
+- Remove badges overlay, shine effects, gradient overlays — keep it minimal
 
-Current card is functional but basic. Improvements:
-- Add a subtle inner shadow and border for depth
-- Smoother gradient overlay (three-stop gradient)
-- Always show product name at bottom (not just on hover) with a clean text shadow
-- On hover: reveal description + brand/origin with a slide-up panel effect
-- Add a subtle shine/highlight effect on hover (pseudo-element or gradient overlay)
-- Slightly larger bottom padding for breathing room
-- Add `shadow-lg` on hover for lift effect
+### 2. Products Page — Editorial Grid Layout
+**File**: `src/pages/ProductsPage.tsx`
+- Remove the dark green hero banner entirely
+- Replace with a clean white header section: large left-aligned title ("ALL PRODUCTS" uppercase), description paragraph below, then inline filter controls (sort dropdown + filter by category/brand)
+- Grid: `grid-cols-2 lg:grid-cols-4` with thin border dividers between cells (use border on cards or negative margins with shared borders)
+- Search bar becomes a minimal inline text input, not a chunky rounded pill
+- Category/brand filters shown as simple text buttons or a dropdown, not pill badges
 
-## 2. Featured Section — Use ProductCard Component
-**File**: `src/components/landing/FeaturedProducts.tsx`
+### 3. Featured Page — Same Editorial Style
+**File**: `src/pages/FeaturedPage.tsx`
+- Remove dark hero banner
+- Clean white header with "FEATURED PRODUCTS" uppercase title, left-aligned
+- Same editorial grid as products page
+- Use `ProductCard` component directly
 
-Currently the featured section builds its own custom cards (lines 62-108) with dark green gradient backgrounds, badges, and "View Product" buttons — completely different from ProductCard. Replace with the shared `ProductCard` component:
-- Import `ProductCard` from `@/components/ProductCard`
-- Replace the custom card markup with `<ProductCard product={product} large />`
-- Remove the scroll-linked `gridShift`, `gridRotate`, `firstCardScale`, `firstCardOpacity` transforms (they cause jank and distort the cards)
-- Keep the section background, heading, and "View All" button as-is
+### 4. Brands Page — Gallery Grid
+**File**: `src/pages/BrandsPage.tsx`
+- Remove dark hero banner
+- White page with "OUR BRANDS" uppercase title, left-aligned
+- Brand cards: large image area on neutral background (`object-contain`), brand name uppercase below, origin + product count as subtle metadata
+- Clean thin borders, minimal hover effects
+- Grid: `grid-cols-2 lg:grid-cols-3`
 
-## 3. Stats Section — Full White Background
-**File**: `src/components/landing/StatsSection.tsx`
+### 5. Brand Detail Page — Clean Header
+**File**: `src/pages/BrandDetailPage.tsx`
+- Remove dark hero/noise banner
+- White background with brand logo/image, brand name as large uppercase heading, description, origin/established as inline metadata
+- Products section below uses same `ProductCard` grid
 
-The section currently has `bg-muted/30` (line 74) which gives it a grayish tint, plus green decorative orbs. Fix:
-- Change `bg-muted/30` to `bg-white`
-- Remove the parallax green orbs entirely (lines 77-89)
-- Keep the TiltCard borders and content styling — they already use `bg-card` which works on white
-- The section will read as fully white with clean stat cards
-
-Also update `src/pages/Index.tsx` to set `data-navbar-theme="light"` on the StatsSection wrapper (it's currently `"dark"`).
+### 6. Product Detail Page — Editorial Layout
+**File**: `src/pages/ProductDetailPage.tsx`
+- Remove any remaining dark elements
+- Two-column layout: left = large product image on neutral cream background (`object-contain`), right = product info
+- Clean breadcrumbs at top
+- Product name uppercase, category as subtle label, brand as text link
+- Details (origin, SKU, tags) as clean list with thin separators
+- Related products section uses `ProductCard` grid
 
 ## Files
 
 | File | Change |
 |------|--------|
-| `src/components/ProductCard.tsx` | Better shadows, always-visible name, smoother hover, shine effect |
-| `src/components/landing/FeaturedProducts.tsx` | Use `ProductCard` component, remove scroll distortion transforms |
-| `src/components/landing/StatsSection.tsx` | `bg-white`, remove green orbs |
-| `src/pages/Index.tsx` | StatsSection wrapper → `data-navbar-theme="light"` |
+| `src/components/ProductCard.tsx` | Editorial card: white bg, centered image, name below, minimal |
+| `src/pages/ProductsPage.tsx` | Remove dark hero, editorial white layout, inline filters |
+| `src/pages/FeaturedPage.tsx` | Remove dark hero, clean white header, editorial grid |
+| `src/pages/BrandsPage.tsx` | Remove dark hero, gallery grid with brand images |
+| `src/pages/BrandDetailPage.tsx` | White header, clean layout |
+| `src/pages/ProductDetailPage.tsx` | Clean two-column editorial layout |
 
