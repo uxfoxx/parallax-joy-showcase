@@ -1,73 +1,56 @@
 
 
-# Complete Admin Panel — Full CRUD with All Fields
+# Redesign About & Contact Pages to Match Landing Page Style
 
-## Current State
-The admin panel already has Dashboard, Brands, Products, and Categories pages with basic CRUD. However several gaps exist:
+## Analysis of Landing Page Patterns
 
-1. **Missing `image_url` field** in both Product and Brand create/edit forms — the database supports it but the admin UI doesn't expose it
-2. **No Contact Submissions page** — submissions go to the DB but admins can't view/delete them
-3. **No dedicated Featured management** — featured toggle exists in product form but no filtered view
-4. **Dashboard is minimal** — no recent activity or quick actions
+The landing page uses these consistent design patterns across sections:
+
+1. **Dark sections** (Featured, WhyChooseUs, FAQ, DarkStats, Team): Multi-layered gradient backgrounds with radial glows + linear gradient base, parallax decorative orbs, mouse-follow gradients, `primary-foreground` (cream/white) text, pill badges with `bg-primary-foreground/10 border-primary-foreground/15`, cards with `border-primary-foreground/10` and green gradient fills
+2. **Light sections** (Categories, Stats, Locations): `bg-background` or white, subtle accent orbs, `text-foreground` headings, `text-muted-foreground` body, cards with `border-border bg-card`
+3. **Section structure**: `py-28 lg:py-36`, `max-w-7xl mx-auto px-6 lg:px-8`, pill badge → large heading → subtitle → content grid
+4. **Transitions**: `SectionTransition` (thin gradient line) between sections
+5. **Cards**: `rounded-lg`, icon in colored container, hover lift (`whileHover={{ y: -6 }}`), `hover:border-forest-mid/30 hover:shadow-lg`
+6. **Typography**: pill badges with `tracking-widest uppercase`, headings `text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight`
+7. **No PageLayout wrapper** — landing page composes its own `ImmersiveBackground`, `ScrollFloatingElement`, `Navbar`, `FloatingWhatsApp`, `Footer` directly
+
+## Problem
+
+Both About and Contact pages use `PageLayout` which gives a basic wrapper. Their sections use generic `bg-background/90 backdrop-blur-sm` containers, standard `text-foreground` styling, and lack the immersive gradient backgrounds, parallax orbs, mouse-follow effects, pill badges, and section transitions that make the landing page feel premium.
 
 ## Changes
 
-### 1. Add `image_url` to Product Form
-**File**: `src/pages/admin/AdminProducts.tsx`
-- Add `image_url` text input field to the create/edit dialog
-- Include it in `emptyForm` and `openEdit` mapping
-- Include in save payload
-- Show thumbnail preview in the table row when image_url exists
+### 1. About Page — `src/pages/AboutPage.tsx`
 
-### 2. Add `image_url` to Brand Form
-**File**: `src/pages/admin/AdminBrands.tsx`
-- Add `image_url` text input field to the create/edit dialog
-- Include in form state and save payload
-- Show thumbnail in table
+Remove `PageLayout` wrapper. Compose like the landing page with direct `ImmersiveBackground`, `ScrollFloatingElement`, `Navbar`, `FloatingWhatsApp`, `Footer` imports. Rebuild each section:
 
-### 3. Create Contact Submissions Admin Page
-**File**: `src/pages/admin/AdminSubmissions.tsx` (new)
-- Table listing all contact submissions (name, email, subject, date)
-- Expandable row or dialog to view full message
-- Delete individual submissions with confirmation
-- Search/filter by name or subject
-- Add API hook `useContactSubmissions` and `useDeleteSubmission` to `src/lib/api.ts`
+- **Hero**: Full dark gradient background (like HeroSection) with radial glows, large `text-primary-foreground` heading, subtitle in `text-primary-foreground/50`. No `bg-black/40` overlay — use proper gradient layers instead.
+- **Who We Are**: Dark section with multi-layer gradient (like WhyChooseUs), parallax orbs, pill badge "Our Story", heading in `text-primary-foreground`, body in `text-primary-foreground/45`
+- **Core Business Activities**: Dark section with gradient bg, cards styled like WhyChooseUs feature cards (green gradient fill, `border-primary-foreground/10`, icon in `bg-primary-foreground` container, text in `text-primary-foreground`)
+- **Mission & Vision**: Dark gradient section, two-column layout with cards matching FAQ item style (green gradient fill, border `primary-foreground/15`)
+- **Competitive Advantage**: Dark section, 4-column grid with cards matching WhyChooseUs style
+- **Who We Serve**: Dark section, 3-column grid with matching card style
+- **Location**: Light section (like LocationsSection on landing) — white bg, accent orbs, map with glassmorphism overlay card
+- **CTA**: Dark gradient with radial glows, buttons matching hero style (`bg-accent` primary, outline secondary)
+- Add `SectionTransition` between each section
+- Add `data-navbar-theme` wrappers for navbar color switching
 
-### 4. Create Featured Products Admin Page
-**File**: `src/pages/admin/AdminFeatured.tsx` (new)
-- Filtered view showing only `featured: true` products
-- Quick toggle to unfeatured a product
-- Link to edit the full product
-- Uses existing `useFeaturedProducts` hook
+### 2. Contact Page — `src/pages/ContactPage.tsx`
 
-### 5. Enhance Dashboard
-**File**: `src/pages/admin/AdminDashboard.tsx`
-- Add contact submissions count stat card
-- Add "Recent Submissions" list (last 5)
-- Add quick-action buttons linking to each admin section
+Remove `PageLayout` wrapper. Compose directly like landing page.
 
-### 6. Update Sidebar & Routes
-**File**: `src/components/admin/AdminSidebar.tsx`
-- Add "Featured" and "Submissions" nav items with icons (Star, MessageSquare)
-
-**File**: `src/App.tsx`
-- Add routes: `/admin/featured`, `/admin/submissions`
-
-### 7. Add API Hooks
-**File**: `src/lib/api.ts`
-- `useContactSubmissions()` — fetch all submissions ordered by created_at desc
-- `useDeleteSubmission(id)` — delete a submission
+- **Hero**: Dark gradient background with radial glows (matching FeaturedProducts bg style), pill badge "Contact Us", large heading in `text-primary-foreground`, subtitle in `text-primary-foreground/50`
+- **Form section**: Dark gradient background (like FAQ section), form card styled with green gradient fill (`linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))`), `border-primary-foreground/15`, inputs with dark-themed styling (`bg-primary-foreground/5 border-primary-foreground/10 text-primary-foreground`), labels in `text-primary-foreground/60`
+- **Contact details panel**: Cards matching FAQ accordion style (green gradient, `border-primary-foreground/15`), icons in `bg-primary-foreground` containers, text in `text-primary-foreground`
+- **Business hours card**: Same green gradient card style
+- **Map section**: Light section (like LocationsSection) with glassmorphism overlay
+- Add `SectionTransition` dividers, `data-navbar-theme` wrappers
+- Button: `bg-accent text-accent-foreground` (matching landing CTA buttons)
 
 ## Files
 
 | File | Change |
 |------|--------|
-| `src/pages/admin/AdminProducts.tsx` | Add `image_url` field + thumbnail in table |
-| `src/pages/admin/AdminBrands.tsx` | Add `image_url` field + thumbnail in table |
-| `src/pages/admin/AdminSubmissions.tsx` | New — view/delete contact submissions |
-| `src/pages/admin/AdminFeatured.tsx` | New — filtered featured products view |
-| `src/pages/admin/AdminDashboard.tsx` | Add submissions stat + recent list + quick actions |
-| `src/components/admin/AdminSidebar.tsx` | Add Featured + Submissions nav items |
-| `src/App.tsx` | Add two new admin routes |
-| `src/lib/api.ts` | Add submission hooks |
+| `src/pages/AboutPage.tsx` | Full rewrite — remove PageLayout, add immersive dark sections with gradient bgs, parallax orbs, pill badges, landing-style cards, SectionTransitions |
+| `src/pages/ContactPage.tsx` | Full rewrite — remove PageLayout, dark gradient sections, green gradient form/detail cards, dark-themed inputs, map with glassmorphism |
 
