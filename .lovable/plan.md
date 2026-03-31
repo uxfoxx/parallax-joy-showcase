@@ -1,40 +1,48 @@
 
 
-# Redesign Stats & Banner Sections
+# Scroll-Driven Floating Element Animation
 
-## Problem
-The "Three Decades of Excellence" section is a basic 2-column grid with plain bordered cards — visually flat. The DarkStatsBanner repeats the same stats (30+ years, 8+ partners, 3 channels) making the page feel redundant.
+## Concept
 
-## Plan
+A **floating 3D element** (an olive/leaf icon or the Olive Foods logo) that stays fixed on screen and **transforms as you scroll** through sections — changing position, scale, rotation, and opacity to create a cinematic scroll-linked experience.
 
-### 1. StatsSection — Interactive Bento-Style Layout with Mouse Tilt
+The element will travel from the Hero section down through LogoStrip, FeaturedProducts, and WhyChooseUs, animating smoothly based on scroll progress.
 
-Replace the current plain stat cards with an interactive bento grid where each card has:
-- **3D tilt on mouse hover** using a lightweight `onMouseMove` handler that calculates rotateX/rotateY based on cursor position within the card (no library needed, just `transform: perspective(800px) rotateX() rotateY()`)
-- **Animated gradient border** that shifts on hover (CSS `background: conic-gradient` behind a slightly inset inner card)
-- **Staggered entrance** via Framer Motion
-- Layout: Large featured card (spans 2 cols) for "30+ Years" with a horizontal timeline graphic (simple CSS dots + line), then 3 smaller cards below for other stats
+## How It Works
 
-Stats stay the same: 30+ years, 8+ brand partners, 8+ countries, 3 distribution channels.
+Using **Framer Motion's `useScroll` + `useTransform`** (already installed, no new packages):
 
-Left side keeps the heading + paragraph + CTA but with refined spacing.
+1. A single `<motion.div>` is rendered in `Index.tsx` as a **fixed-position overlay** (z-index between content and navbar)
+2. `useScroll()` tracks the page scroll progress
+3. `useTransform()` maps scroll ranges to CSS properties: `y`, `x`, `scale`, `rotate`, `opacity`
+4. As the user scrolls through each section, the element smoothly transitions between predefined keyframe states
 
-### 2. DarkStatsBanner — Change to Operational Stats
+## Animation Keyframes (by scroll progress)
 
-Replace the repeated stats with **different, operational metrics** that showcase scale:
-- **500+** — Products Distributed
-- **1,000+** — Active Retail Partners  
-- **24/7** — Cold-Chain Monitoring
-- **Island-Wide** — Delivery Coverage
+| Scroll % | Position | Scale | Rotation | Opacity | Context |
+|-----------|----------|-------|----------|---------|---------|
+| 0–10% | Center of hero | 1.0 | 0° | 0.15 | Subtle behind hero text |
+| 10–25% | Slides right | 0.6 | 15° | 0.25 | Passes through LogoStrip |
+| 25–50% | Left side | 0.8 | -10° | 0.2 | Alongside FeaturedProducts |
+| 50–75% | Right side | 1.2 | 20° | 0.15 | Behind WhyChooseUs |
+| 75–100% | Center, shrinks | 0.3 | 45° | 0 | Fades out for lower sections |
 
-Keep the dark gradient background + mouse-follow glow. Add a subtle horizontal scrolling line animation behind the numbers (thin animated SVG line that pulses).
+## The Floating Element
 
-Each stat gets a micro-icon (Lucide) above the number for visual anchoring.
+An **olive branch SVG** — a simple, elegant inline SVG with 2-3 leaves and an olive. Rendered in the brand's gold/green colors with a subtle blur/glow. This ties to the "Olive Foods" brand without being heavy.
 
 ## Files
 
-| Action | File |
-|--------|------|
-| Modify | `src/components/landing/StatsSection.tsx` — bento grid with 3D tilt cards |
-| Modify | `src/components/landing/DarkStatsBanner.tsx` — new operational stats + icons |
+| Action | File | Changes |
+|--------|------|---------|
+| Create | `src/components/landing/ScrollFloatingElement.tsx` | The floating element component with `useScroll`/`useTransform` logic and inline olive branch SVG |
+| Modify | `src/pages/Index.tsx` | Import and render `ScrollFloatingElement` as a sibling to all sections |
+
+## Technical Details
+
+- Uses `framer-motion`'s `useScroll({ offset: ["start start", "end end"] })` on the page container
+- `useTransform` maps `scrollYProgress` (0→1) to arrays of values for x, y, scale, rotate, opacity
+- The element is `position: fixed` with `pointer-events-none` so it never blocks interaction
+- Hidden on mobile (`hidden md:block`) to avoid performance issues on smaller devices
+- Pure CSS/Framer Motion — no GSAP or ScrollTrigger needed
 
