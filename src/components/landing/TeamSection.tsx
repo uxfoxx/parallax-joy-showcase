@@ -1,5 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 
 const team = [
   { name: "Sales & Marketing", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=500&fit=crop&crop=face" },
@@ -13,27 +12,21 @@ const team = [
 const duplicatedTeam = [...team, ...team];
 
 const TeamSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll();
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-30px", "30px"]);
-
   return (
-    <section ref={sectionRef} className="relative min-h-[80vh] overflow-hidden flex items-center" style={{ background: "hsl(0 0% 100%)" }}>
-      {/* Subtle decorative orbs on white */}
-      <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
-        <div
-          className="absolute w-[600px] h-[400px] top-1/4 left-1/2 -translate-x-1/2 rounded-full opacity-[0.06]"
-          style={{ background: "radial-gradient(ellipse, hsl(75 38% 45%), transparent 70%)" }}
-        />
-        <div
-          className="absolute w-[350px] h-[350px] bottom-0 -left-20 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
-        />
-        <div
-          className="absolute w-[300px] h-[300px] top-10 -right-10 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(140 50% 19%), transparent 70%)" }}
-        />
-      </motion.div>
+    <section className="relative min-h-[80vh] overflow-hidden flex items-center">
+      {/* Video background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+        >
+          <source src="https://cdn.pixabay.com/video/2020/07/30/45645-445039937_large.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/50" />
+      </div>
 
       <div className="relative z-10 w-full py-20 lg:py-28">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-12 lg:gap-0 items-center max-w-[1600px] mx-auto px-6 lg:px-12">
@@ -45,15 +38,15 @@ const TeamSection = () => {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="lg:pr-12"
           >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent font-body text-xs font-medium border border-accent/20 mb-6 tracking-[0.2em] uppercase">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-white font-body text-xs font-medium border border-white/20 mb-6 tracking-[0.2em] uppercase">
               Our Team
             </span>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6 leading-[1.1] tracking-tight">
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
               Three Decades
               <br />
-              of <span className="text-forest-mid">Excellence</span>
+              of <span className="text-olive-mid">Excellence</span>
             </h2>
-            <p className="text-muted-foreground font-body text-base lg:text-lg leading-relaxed max-w-md">
+            <p className="text-white/70 font-body text-base lg:text-lg leading-relaxed max-w-md">
               Dedicated departments working together to deliver seamless solutions.
             </p>
           </motion.div>
@@ -71,7 +64,7 @@ const TeamSection = () => {
                     alt={member.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                     <span className="text-white font-body text-xs font-medium">{member.name}</span>
                   </div>
