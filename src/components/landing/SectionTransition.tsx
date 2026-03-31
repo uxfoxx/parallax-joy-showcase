@@ -13,10 +13,7 @@ const SectionTransition = ({
   flip = false 
 }: SectionTransitionProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress } = useScroll();
 
   const morphY = useTransform(scrollYProgress, [0, 1], [20, -20]);
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 0.8, 0.3]);

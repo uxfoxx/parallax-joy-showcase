@@ -6,10 +6,7 @@ const logos = ["AZIZAA", "Hungritos", "Fletcher", "Granoro", "Daily Dairy", "Sno
 const LogoStrip = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll();
-  const { scrollYProgress: sectionProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress: sectionProgress } = useScroll();
 
   const splitGap = useTransform(scrollYProgress, [0.08, 0.17, 0.27], [0, 250, 0]);
   const leftShift = useTransform(scrollYProgress, [0.08, 0.17, 0.27], [0, -60, 0]);

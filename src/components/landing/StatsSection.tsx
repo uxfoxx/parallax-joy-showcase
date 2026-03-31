@@ -59,10 +59,7 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode; cla
 const StatsSection = () => {
   const { ref, isInView } = useInView();
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress } = useScroll();
 
   // Parallax decorative element
   const orbY = useTransform(scrollYProgress, [0, 1], ["60px", "-60px"]);
