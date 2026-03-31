@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
+import heroLogo from "@/assets/olive-foods-hero-logo.svg";
 
 const HeroSection = () => {
   const { ref, gradientStyle } = useMouseGradient();
