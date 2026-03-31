@@ -81,9 +81,6 @@ const AdminLogin = () => {
             {loading ? "..." : isSignUp ? "Sign Up" : "Sign In"}
           </Button>
         </form>
-        <button onClick={() => setIsSignUp(!isSignUp)} className="block mx-auto text-sm font-body text-primary-foreground/40 hover:text-primary-foreground/60">
-          {isSignUp ? "Already have an account? Sign in" : "Need an account? Sign up"}
-        </button>
       </div>
     </div>
   );
