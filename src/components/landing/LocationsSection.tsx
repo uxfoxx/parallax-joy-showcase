@@ -11,7 +11,7 @@ const LocationsSection = () => {
   const bgY = useTransform(scrollYProgress, [0, 1], ["-60px", "60px"]);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden py-28 lg:py-36 bg-background">
+    <section ref={sectionRef} className="relative overflow-hidden py-28 lg:py-36" style={{ background: "hsl(0 0% 100%)" }}>
       {/* Subtle decorative orbs */}
       <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
         <div
