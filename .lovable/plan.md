@@ -1,30 +1,53 @@
 
 
-# Fix Green Dot Cursor — Always Visible + Smoother Motion
+# Current Status Analysis + Incomplete Tasks
 
-## Problem
-The green accent dot that follows the cursor works but: (1) can blend into backgrounds making it hard to see, and (2) the animation could be smoother — the lerp at `0.08` with `setState` on every frame causes micro-jitter since React re-renders each frame.
+## What's Working Well
+- Dark immersive theme with brand color palette applied
+- Sticky hero that content scrolls over
+- Custom cursor with ref-based animation (green dot + trailing glow)
+- Team section with dark bg + photo marquee cards
+- Locations section with white bg + Google Map
+- DarkStatsBanner no longer sticky (fixed)
+- Sora + Inter fonts applied
+- All major landing sections rendering without errors
 
-## Changes to `src/components/landing/CustomCursor.tsx`
+## Incomplete Tasks to Fix
 
-### Always Visible Green Dot
-- Increase dot size from `w-2 h-2` (8px) to `w-3 h-3` (12px) so it's more prominent
-- Add a bright green glow/shadow: `0 0 6px hsl(75 38% 45% / 0.8), 0 0 12px hsl(75 38% 45% / 0.4)` so it stands out on both dark and light backgrounds
-- Add a thin white ring outline (`0 0 0 1.5px white`) for contrast on dark sections
-- Keep the `bg-accent` color
+### 1. Sharper Borders — Missed Files
+The `rounded-2xl` → `rounded-lg` pass was incomplete. These still have `rounded-2xl` or `rounded-3xl`:
+- **`CategoriesSection.tsx`** line 110: `rounded-2xl` on category cards
+- **`ProductCard.tsx`** line 25: `rounded-2xl` on product cards
+- **`BrandsPage.tsx`** lines 36-37: `rounded-2xl` on brand cards and icon containers
+- **`BrandDetailPage.tsx`** line 39: `rounded-2xl` on brand icon
+- **`ProductDetailPage.tsx`** line 44: `rounded-3xl` on product image container
+- **`AdminDashboard.tsx`** line 5: `rounded-2xl` on stat cards
+- **`FeaturedProducts.tsx`** line 85: `rounded-2xl` on blur element (minor, decorative)
 
-### Smoother Motion
-- Stop using React `setState` on every animation frame — this causes unnecessary re-renders
-- Instead, use `useRef` for DOM elements and update `transform` directly via `ref.current.style.transform` inside the rAF loop
-- This bypasses React's render cycle entirely, giving buttery-smooth 60fps movement
-- Increase lerp factor slightly to `0.12` for the dot (snappier follow) and keep the glow trailing behind at `0.06` (creates a nice separation effect)
-- Remove the Framer Motion `<motion.div>` for the glow — use the same direct DOM approach for consistency
+### 2. Tighter Card Spacing — Missed Files
+- **`CategoriesSection.tsx`** line 110: still `p-8` (should be `p-6`)
+- **`FeaturedPage.tsx`** line 29: `gap-8` (should be `gap-5`)
 
-### Hover State
-- On hover over interactive elements: dot scales to `1.5x` and glow scales to `2x` — applied via direct style manipulation, not React state for the transform
+### 3. No Other Functional Issues
+- No console errors or runtime errors
+- All routes functional, admin auth works
+- Cursor is properly ref-based with white ring + green glow for visibility
 
-## File
-| Action | File |
-|--------|------|
-| Modify | `src/components/landing/CustomCursor.tsx` — ref-based animation, larger dot with glow |
+---
+
+## Plan: Complete All Remaining Fixes
+
+### File Changes
+
+| File | Change |
+|------|--------|
+| `src/components/landing/CategoriesSection.tsx` | `rounded-2xl` → `rounded-lg`, `p-8` → `p-6` |
+| `src/components/ProductCard.tsx` | `rounded-2xl` → `rounded-lg` |
+| `src/pages/BrandsPage.tsx` | Both `rounded-2xl` → `rounded-lg` |
+| `src/pages/BrandDetailPage.tsx` | `rounded-2xl` → `rounded-lg` |
+| `src/pages/ProductDetailPage.tsx` | `rounded-3xl` → `rounded-xl` |
+| `src/pages/admin/AdminDashboard.tsx` | `rounded-2xl` → `rounded-lg` |
+| `src/pages/FeaturedPage.tsx` | `gap-8` → `gap-5` |
+
+All changes are simple find-and-replace within these 7 files. No structural or logic changes needed.
 
