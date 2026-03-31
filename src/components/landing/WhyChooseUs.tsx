@@ -108,7 +108,7 @@ const WhyChooseUs = () => {
         </motion.div>
 
         {/* Feature cards */}
-        <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8" style={{ x: gridShift, skewX: gridSkew }}>
+        <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5" style={{ x: gridShift, skewX: gridSkew }}>
           {features.map((f, i) => (
             <motion.div
               key={f.title}
