@@ -137,9 +137,9 @@ const AdminProducts = () => {
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableRow><TableCell colSpan={5} className="text-center font-body text-muted-foreground py-10">Loading...</TableCell></TableRow>
+              <TableRow><TableCell colSpan={6} className="text-center font-body text-muted-foreground py-10">Loading...</TableCell></TableRow>
             ) : filtered.length === 0 ? (
-              <TableRow><TableCell colSpan={5} className="text-center font-body text-muted-foreground py-10">No products found</TableCell></TableRow>
+              <TableRow><TableCell colSpan={6} className="text-center font-body text-muted-foreground py-10">No products found</TableCell></TableRow>
             ) : (
               filtered.map((p) => (
                 <TableRow key={p.id}>

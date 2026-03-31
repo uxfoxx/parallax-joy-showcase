@@ -182,6 +182,30 @@ export const useDeleteCategory = () => {
   });
 };
 
+// ─── Contact Submissions ───
+export type ContactSubmission = Tables<"contact_submissions">;
+
+export const useContactSubmissions = () =>
+  useQuery({
+    queryKey: ["contact_submissions"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("contact_submissions").select("*").order("created_at", { ascending: false });
+      if (error) throw error;
+      return data as ContactSubmission[];
+    },
+  });
+
+export const useDeleteSubmission = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("contact_submissions").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["contact_submissions"] }),
+  });
+};
+
 // ─── Auth helpers ───
 export const useIsAdmin = () =>
   useQuery({

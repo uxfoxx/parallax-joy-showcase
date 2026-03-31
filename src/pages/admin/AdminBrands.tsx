@@ -102,6 +102,7 @@ const AdminBrands = () => {
             ) : (
               filtered.map((b) => (
                 <TableRow key={b.id}>
+                  <TableCell>{b.image_url ? <img src={b.image_url} alt={b.name} className="h-10 w-10 rounded-md object-cover" /> : <div className="h-10 w-10 rounded-md bg-muted" />}</TableCell>
                   <TableCell className="font-body font-medium">{b.name}</TableCell>
                   <TableCell className="font-body text-muted-foreground">{b.origin}</TableCell>
                   <TableCell className="font-body text-muted-foreground">{b.established ?? "—"}</TableCell>
