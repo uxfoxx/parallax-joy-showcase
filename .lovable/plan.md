@@ -1,52 +1,60 @@
 
 
-# Immersive Scroll Experience + Modern Font Update
+# Team Section Redesign — Video Background + Sliding Cards + Font Update
 
-## Summary
+## Changes
 
-Two changes in one pass: (1) implement the approved immersive scroll design with seamless morphing, interactive backgrounds, and enhanced animations; (2) swap fonts from Playfair Display + DM Sans to a cleaner, modern pairing.
+### 1. Font Update
+Current fonts (Space Grotesk + Inter) are already modern. Swap to **Sora** (headings) + **Inter** (body) for an even cleaner, more geometric feel that matches the dark theme better.
 
-## Font Change
+- `src/index.css` — update Google Fonts import URL
+- `tailwind.config.ts` — change `fontFamily.display` to `["Sora", "sans-serif"]`
 
-**Current**: Playfair Display (serif headings) + DM Sans (body)
-**New**: **Inter** (body/UI) + **Space Grotesk** (headings) — geometric, clean, techy, pairs perfectly with dark gradient themes. Both are Google Fonts, free.
+### 2. Team Section — Complete Rewrite
 
-### Files for font change:
-- `src/index.css` — update Google Fonts import, update `body` and heading font-family rules
-- `tailwind.config.ts` — update `fontFamily.display` to `Space Grotesk` and `fontFamily.body` to `Inter`
-- `index.html` — optionally add preconnect hints for faster font loading
+**Layout**: Full-width section with a looping background video (stock food/warehouse footage via a free MP4 URL or a dark ambient video). A dark overlay sits on top for readability. The sliding team cards float over the video.
 
-## Immersive Scroll Changes (from approved plan)
+**Cards**: Minimal, no description text below. Each card is a tall frosted-glass rectangle with:
+- Large centered Lucide icon
+- Department name at bottom
+- Subtle glassmorphism (`backdrop-blur`, semi-transparent bg)
+- No bio text, no role subtitle, no description area below the carousel
 
-### New Components
-| File | Purpose |
-|------|---------|
-| `ImmersiveBackground.tsx` | Fixed layer: animated gradient orbs, mouse-following glow, floating CSS particles, noise overlay |
-| `SectionTransition.tsx` | SVG wave divider that morphs colors between sections |
-| `CustomCursor.tsx` | Accent dot cursor + trailing glow (desktop only) |
+**Sliding mechanism**: Infinite auto-sliding horizontal strip using CSS `@keyframes marquee` (already defined in tailwind config). Cards slide continuously left-to-right. On hover, the strip pauses. No active/inactive state, no center-focus — just a smooth continuous scroll of all cards repeating.
 
-### Modified Components
-| File | Change |
-|------|--------|
-| `Index.tsx` | Add ImmersiveBackground + CustomCursor, wrap in perspective container, insert SectionTransitions between sections |
-| `index.css` | Custom cursor styles, particle keyframes, perspective utilities |
-| `HeroSection.tsx` | Transparent bg, mouse-parallax on content |
-| `LogoStrip.tsx` | Speed-reactive marquee, glow trails, transparent bg |
-| `FeaturedProducts.tsx` | 3D flip card entry, enhanced hover, transparent bg |
-| `WhyChooseUs.tsx` | Alternating entry animations, icon glow, transparent bg |
-| `CategoriesSection.tsx` | Arc layout animation, transparent bg |
-| `StatsSection.tsx` | Slot machine number roll, floating cards, transparent bg |
-| `DarkStatsBanner.tsx` | Horizontal wipe reveal, transparent bg |
-| `TeamSection.tsx` | Blurred backdrop behind active item |
-| `LocationsSection.tsx` | Pin-drop bounce, connecting lines, transparent bg |
-| `FAQSection.tsx` | Slide-from-right stagger, spring accordion, transparent bg |
-| `Footer.tsx` | Cinematic reveal, scroll-to-top button, transparent bg |
+**Overlay text**: A large heading ("Our Team") positioned on the left side of the section, vertically centered, while cards slide on the right — creating an asymmetric modern layout.
 
-### Technical Notes
-- All section backgrounds become transparent to let ImmersiveBackground show through
-- ImmersiveBackground gradient orbs shift with `scrollYProgress`
-- Mouse glow uses a single page-level `mousemove` listener
-- Custom cursor hidden on mobile; particles reduced on mobile
-- No new packages — Framer Motion handles all animations
-- Font swap is a simple find-and-replace across 3 files
+**Structure**:
+```text
+┌──────────────────────────────────────────────┐
+│  [VIDEO BACKGROUND - full width, looping]    │
+│  [DARK OVERLAY 60% opacity]                  │
+│                                              │
+│   OUR TEAM          [card][card][card]→→→    │
+│   Three Decades     [sliding continuously]   │
+│   of Excellence                              │
+│                                              │
+└──────────────────────────────────────────────┘
+```
+
+**Video**: Use a subtle dark ambient/abstract video. Since we can't host video files easily, use a CSS animated gradient background that simulates video motion (multiple layered gradients with different animation speeds), or embed a free stock video URL.
+
+**Alternative to video**: Animated dark gradient mesh background using CSS keyframes — 3-4 large color blobs slowly morphing/drifting. This is more reliable than external video URLs and still creates that "living background" feel.
+
+### Implementation Details
+
+- Remove all: `activeIndex`, `isHovered`, `getDistance`, `getItemStyle`, `AnimatePresence` bio section, dots navigation
+- Add: CSS marquee animation for continuous card sliding (duplicate the card array for seamless loop)
+- Add: Animated gradient mesh background with `@keyframes` for blob movement
+- Cards: `backdrop-blur-md bg-white/5 border border-white/10` glassmorphism style
+- Section height: `min-h-[80vh]` for impact
+- Asymmetric grid: `grid-cols-1 lg:grid-cols-[1fr_2fr]` — text left, cards right
+
+## Files
+
+| Action | File |
+|--------|------|
+| Modify | `src/components/landing/TeamSection.tsx` — full rewrite |
+| Modify | `src/index.css` — update font import to include Sora |
+| Modify | `tailwind.config.ts` — change display font to Sora |
 
