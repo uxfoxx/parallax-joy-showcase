@@ -23,7 +23,7 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
     >
       <Link to={`/products/${product.slug}`} className="block group">
         <div
-          className={`relative rounded-lg overflow-hidden ${large ? "aspect-[3/4]" : "aspect-[4/5]"} shadow-md hover:shadow-xl transition-shadow duration-500 border border-border/30`}
+          className={`relative rounded-lg overflow-hidden ${large ? "aspect-[3/4]" : "aspect-[4/5]"} shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-border`}
         >
           {/* Full image background */}
           {product.image_url ? (
