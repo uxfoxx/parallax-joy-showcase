@@ -67,7 +67,10 @@ const CustomCursor = () => {
       >
         <div
           className="w-2 h-2 rounded-full bg-accent transition-transform duration-150"
-          style={{ transform: isHovering ? "scale(2)" : "scale(1)" }}
+          style={{
+            transform: isHovering ? "scale(2)" : "scale(1)",
+            boxShadow: "0 0 0 1px hsl(0 0% 0% / 0.3), 0 0 4px hsl(0 0% 0% / 0.2)",
+          }}
         />
       </div>
     </>
