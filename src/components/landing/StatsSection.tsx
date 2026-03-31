@@ -81,7 +81,7 @@ const StatsSection = () => {
         <motion.div
           className="absolute w-[500px] h-[500px] -top-40 -right-40 rounded-full opacity-[0.06]"
           style={{
-            background: "radial-gradient(circle, hsl(42 70% 50%), transparent 70%)",
+            background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
             x: orbX,
           }}
         />
