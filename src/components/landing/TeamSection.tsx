@@ -11,7 +11,6 @@ const team = [
   { icon: Headphones, name: "Customer Service", color: "hsl(140 50% 19%)" },
 ];
 
-// Duplicate for seamless loop
 const duplicatedTeam = [...team, ...team];
 
 const TeamSection = () => {
@@ -23,26 +22,23 @@ const TeamSection = () => {
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
   return (
-    <section ref={sectionRef} className="relative min-h-[80vh] overflow-hidden flex items-center">
-      {/* Animated gradient mesh background (simulates video) */}
+    <section ref={sectionRef} className="relative min-h-[80vh] overflow-hidden flex items-center bg-background">
+      {/* Subtle animated orbs on white */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[hsl(150_40%_6%)]" />
         <motion.div className="absolute inset-0" style={{ y: bgY }}>
           <div
-            className="absolute w-[800px] h-[800px] -top-40 -left-40 rounded-full animate-orb opacity-30"
-            style={{ background: "radial-gradient(circle, hsl(140 50% 19% / 0.6), transparent 70%)" }}
+            className="absolute w-[800px] h-[800px] -top-40 -left-40 rounded-full animate-orb opacity-[0.07]"
+            style={{ background: "radial-gradient(circle, hsl(140 50% 19% / 0.5), transparent 70%)" }}
           />
           <div
-            className="absolute w-[600px] h-[600px] top-1/2 right-0 rounded-full animate-orb opacity-20"
-            style={{ background: "radial-gradient(circle, hsl(80 50% 31% / 0.5), transparent 70%)", animationDelay: "-7s", animationDuration: "25s" }}
+            className="absolute w-[600px] h-[600px] top-1/2 right-0 rounded-full animate-orb opacity-[0.05]"
+            style={{ background: "radial-gradient(circle, hsl(80 50% 31% / 0.4), transparent 70%)", animationDelay: "-7s", animationDuration: "25s" }}
           />
           <div
-            className="absolute w-[500px] h-[500px] -bottom-20 left-1/3 rounded-full animate-orb opacity-15"
+            className="absolute w-[500px] h-[500px] -bottom-20 left-1/3 rounded-full animate-orb opacity-[0.06]"
             style={{ background: "radial-gradient(circle, hsl(75 38% 45% / 0.4), transparent 70%)", animationDelay: "-14s", animationDuration: "30s" }}
           />
         </motion.div>
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/40" />
       </div>
 
       <div className="relative z-10 w-full py-20 lg:py-28">
@@ -58,27 +54,25 @@ const TeamSection = () => {
             <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent font-body text-xs font-medium border border-accent/20 mb-6 tracking-[0.2em] uppercase">
               Our Team
             </span>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6 leading-[1.1] tracking-tight">
               Three Decades
               <br />
               of <span className="text-gradient-gold">Excellence</span>
             </h2>
-            <p className="text-white/50 font-body text-base lg:text-lg leading-relaxed max-w-md">
+            <p className="text-muted-foreground font-body text-base lg:text-lg leading-relaxed max-w-md">
               Dedicated departments working together to deliver seamless solutions.
             </p>
           </motion.div>
 
           {/* Right — sliding cards */}
           <div className="overflow-hidden">
-            <div
-              className="flex gap-5 animate-marquee hover:[animation-play-state:paused] w-max"
-            >
+            <div className="flex gap-5 animate-marquee hover:[animation-play-state:paused] w-max">
               {duplicatedTeam.map((member, index) => {
                 const Icon = member.icon;
                 return (
                   <div
                     key={`${member.name}-${index}`}
-                    className="flex-shrink-0 w-40 h-56 sm:w-48 sm:h-64 md:w-56 md:h-72 rounded-2xl overflow-hidden backdrop-blur-md bg-white/[0.05] border border-white/[0.08] transition-all duration-500 hover:bg-white/[0.1] hover:border-white/[0.15] hover:scale-105 hover:-translate-y-2 group cursor-pointer"
+                    className="flex-shrink-0 w-40 h-56 sm:w-48 sm:h-64 md:w-56 md:h-72 rounded-2xl overflow-hidden backdrop-blur-md bg-white/80 border border-border shadow-lg transition-all duration-500 hover:bg-white hover:shadow-xl hover:scale-105 hover:-translate-y-2 group cursor-pointer"
                   >
                     <div className="flex flex-col items-center justify-center h-full p-6 relative">
                       {/* Gradient accent top */}
@@ -88,11 +82,11 @@ const TeamSection = () => {
                       />
                       <div
                         className="w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-500 group-hover:scale-110"
-                        style={{ background: `linear-gradient(135deg, ${member.color}33, ${member.color}11)` }}
+                        style={{ background: `linear-gradient(135deg, ${member.color}22, ${member.color}0D)` }}
                       >
-                        <Icon className="w-8 h-8 md:w-10 md:h-10 text-white/70 group-hover:text-white transition-colors duration-300" />
+                        <Icon className="w-8 h-8 md:w-10 md:h-10 text-forest-mid group-hover:text-forest-deep transition-colors duration-300" />
                       </div>
-                      <p className="text-white/80 font-display text-sm md:text-base font-semibold text-center leading-tight group-hover:text-white transition-colors">
+                      <p className="text-foreground font-display text-sm md:text-base font-semibold text-center leading-tight">
                         {member.name}
                       </p>
                     </div>
