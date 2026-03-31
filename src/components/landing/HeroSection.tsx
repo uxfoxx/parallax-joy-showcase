@@ -65,19 +65,19 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl mx-auto space-y-4"
+          className="max-w-4xl mx-auto space-y-2"
         >
           <img
             src={heroLogo}
             alt="Olive Foods"
-            className="max-w-xs sm:max-w-sm lg:max-w-lg w-full h-auto brightness-0 invert mx-auto"
+            className="max-w-sm sm:max-w-md lg:max-w-2xl w-full h-auto mx-auto"
           />
           
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="flex flex-wrap gap-4 justify-center pt-4"
+            className="flex flex-wrap gap-4 justify-center"
           >
             <Link to="/products">
               <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl h-12 px-8 text-base transition-all duration-300 shadow-lg shadow-accent/20 group">
