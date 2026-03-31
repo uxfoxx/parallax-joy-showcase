@@ -41,7 +41,7 @@ const ProductDetailPage = () => {
           </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
-            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="rounded-3xl bg-gradient-to-br from-forest-deep/10 via-forest-mid/5 to-accent/10 aspect-square flex items-center justify-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="rounded-xl bg-gradient-to-br from-forest-deep/10 via-forest-mid/5 to-accent/10 aspect-square flex items-center justify-center">
               <span className="font-display text-8xl text-forest-mid/15 font-bold">{product.name.charAt(0)}</span>
             </motion.div>
 

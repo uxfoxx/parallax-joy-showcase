@@ -22,7 +22,7 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
       transition={{ duration: 0.4 }}
     >
       <Link to={`/products/${product.slug}`} className="block group">
-        <div className="rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:border-forest-mid/30">
+        <div className="rounded-lg border border-border bg-card overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:border-forest-mid/30">
           <div
             className={`relative overflow-hidden bg-gradient-to-br from-forest-deep/10 via-forest-mid/5 to-accent/10 flex items-center justify-center ${
               large ? "h-64" : "h-48"

@@ -107,7 +107,7 @@ const CategoryCard = ({ cat, i }: { cat: typeof categories[0]; i: number }) => (
     viewport={{ once: true }}
     transition={{ duration: 0.5, delay: i * 0.1 }}
     whileHover={{ y: -6, transition: { duration: 0.3 } }}
-    className="group p-8 rounded-2xl border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-500"
+    className="group p-6 rounded-lg border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-500"
   >
     <motion.div
       whileHover={{ scale: 1.1, rotate: 5 }}

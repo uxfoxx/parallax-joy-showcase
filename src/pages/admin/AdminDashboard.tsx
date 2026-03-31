@@ -2,7 +2,7 @@ import { useBrands, useProducts, useCategories } from "@/lib/api";
 import { Box, Tag, Layers, Star } from "lucide-react";
 
 const StatCard = ({ icon: Icon, label, value }: { icon: any; label: string; value: number | undefined }) => (
-  <div className="rounded-2xl border border-border bg-card p-6 space-y-2">
+  <div className="rounded-lg border border-border bg-card p-6 space-y-2">
     <div className="flex items-center gap-3">
       <div className="w-10 h-10 rounded-xl bg-forest-deep/10 flex items-center justify-center">
         <Icon className="w-5 h-5 text-forest-mid" />

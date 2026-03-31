@@ -36,7 +36,7 @@ const BrandDetailPage = () => {
             <span className="text-primary-foreground/80">{brand.name}</span>
           </motion.div>
           <div className="flex items-start gap-6">
-            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="w-20 h-20 rounded-2xl bg-forest-mid/30 flex items-center justify-center shrink-0">
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} className="w-20 h-20 rounded-lg bg-forest-mid/30 flex items-center justify-center shrink-0">
               <span className="font-display text-3xl font-bold text-primary-foreground">{brand.name.charAt(0)}</span>
             </motion.div>
             <div>

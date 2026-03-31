@@ -33,8 +33,8 @@ const BrandsPage = () => {
                 return (
                   <motion.div key={brand.id} variants={item}>
                     <Link to={`/brands/${brand.slug}`} className="block group">
-                      <div className="rounded-2xl border border-border bg-card p-8 space-y-5 transition-all duration-300 hover:shadow-xl hover:border-forest-mid/30 h-full">
-                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-forest-deep/10 to-accent/10 flex items-center justify-center">
+                       <div className="rounded-lg border border-border bg-card p-6 space-y-4 transition-all duration-300 hover:shadow-xl hover:border-forest-mid/30 h-full">
+                        <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-forest-deep/10 to-accent/10 flex items-center justify-center">
                           <span className="font-display text-2xl font-bold text-forest-mid">{brand.name.charAt(0)}</span>
                         </div>
                         <div className="space-y-2">
