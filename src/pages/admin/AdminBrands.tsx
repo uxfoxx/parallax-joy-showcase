@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { toast } from "sonner";
 
-const emptyBrand = { name: "", slug: "", description: "", origin: "", established: undefined as number | undefined };
+const emptyBrand = { name: "", slug: "", description: "", origin: "", established: undefined as number | undefined, image_url: "" };
 
 const AdminBrands = () => {
   const { data: brands, isLoading } = useBrands();
