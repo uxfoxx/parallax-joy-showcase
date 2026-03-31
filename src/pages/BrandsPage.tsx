@@ -34,9 +34,15 @@ const BrandsPage = () => {
                   <motion.div key={brand.id} variants={item}>
                     <Link to={`/brands/${brand.slug}`} className="block group">
                        <div className="rounded-lg border border-border bg-card p-6 space-y-4 transition-all duration-300 hover:shadow-xl hover:border-forest-mid/30 h-full">
-                        <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-forest-deep/10 to-accent/10 flex items-center justify-center">
-                          <span className="font-display text-2xl font-bold text-forest-mid">{brand.name.charAt(0)}</span>
-                        </div>
+                        {brand.image_url ? (
+                          <div className="w-full h-40 rounded-lg overflow-hidden">
+                            <img src={brand.image_url} alt={brand.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                          </div>
+                        ) : (
+                          <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-forest-deep/10 to-accent/10 flex items-center justify-center">
+                            <span className="font-display text-2xl font-bold text-forest-mid">{brand.name.charAt(0)}</span>
+                          </div>
+                        )}
                         <div className="space-y-2">
                           <h3 className="font-display text-xl font-semibold text-foreground group-hover:text-forest-mid transition-colors">{brand.name}</h3>
                           <p className="font-body text-sm text-muted-foreground line-clamp-2">{brand.description}</p>
