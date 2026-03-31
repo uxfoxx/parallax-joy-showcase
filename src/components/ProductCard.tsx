@@ -7,6 +7,7 @@ import type { Product } from "@/lib/api";
 interface ProductCardProps {
   product: Product;
   large?: boolean;
+  variant?: "dark" | "light";
 }
 
 const ProductCard = ({ product, large = false }: ProductCardProps) => {
