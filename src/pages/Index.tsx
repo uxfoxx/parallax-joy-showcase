@@ -1,6 +1,7 @@
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import LogoStrip from "@/components/landing/LogoStrip";
+import ScrollFloatingElement from "@/components/landing/ScrollFloatingElement";
 import FeaturedProducts from "@/components/landing/FeaturedProducts";
 import WhyChooseUs from "@/components/landing/WhyChooseUs";
 import CategoriesSection from "@/components/landing/CategoriesSection";
@@ -14,6 +15,7 @@ import Footer from "@/components/landing/Footer";
 const Index = () => {
   return (
     <div className="smooth-scroll">
+      <ScrollFloatingElement />
       <Navbar />
       <HeroSection />
       <LogoStrip />
