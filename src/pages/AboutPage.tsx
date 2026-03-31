@@ -122,7 +122,7 @@ const AboutPage = () => {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid sm:grid-cols-2 gap-8 mt-8 max-w-2xl mx-auto lg:max-w-none lg:px-[16.666%]"
+            className="grid sm:grid-cols-2 gap-5 mt-5 max-w-2xl mx-auto lg:max-w-none lg:px-[16.666%]"
           >
             {businessActivities.slice(3).map((a) => (
               <motion.div
