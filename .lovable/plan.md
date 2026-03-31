@@ -1,53 +1,28 @@
 
 
-# Current Status Analysis + Incomplete Tasks
+# Fix: Team Video Background, Hero Sticky Issue, Cursor Visibility
 
-## What's Working Well
-- Dark immersive theme with brand color palette applied
-- Sticky hero that content scrolls over
-- Custom cursor with ref-based animation (green dot + trailing glow)
-- Team section with dark bg + photo marquee cards
-- Locations section with white bg + Google Map
-- DarkStatsBanner no longer sticky (fixed)
-- Sora + Inter fonts applied
-- All major landing sections rendering without errors
+## Three Issues
 
-## Incomplete Tasks to Fix
+### 1. Team Section — Video Background
+**Problem**: "Three Decades of Excellence" section uses animated CSS gradient orbs instead of a video.
+**Fix** in `TeamSection.tsx`: Replace the dark gradient orbs background (lines 26-49) with a full-width `<video>` element using a royalty-free factory/warehouse video (e.g. from Pexels/Pixabay CDN). Add a dark overlay on top for text readability. Keep the parallax effect on the video via `motion.div` with `style={{ y: bgY }}`.
 
-### 1. Sharper Borders — Missed Files
-The `rounded-2xl` → `rounded-lg` pass was incomplete. These still have `rounded-2xl` or `rounded-3xl`:
-- **`CategoriesSection.tsx`** line 110: `rounded-2xl` on category cards
-- **`ProductCard.tsx`** line 25: `rounded-2xl` on product cards
-- **`BrandsPage.tsx`** lines 36-37: `rounded-2xl` on brand cards and icon containers
-- **`BrandDetailPage.tsx`** line 39: `rounded-2xl` on brand icon
-- **`ProductDetailPage.tsx`** line 44: `rounded-3xl` on product image container
-- **`AdminDashboard.tsx`** line 5: `rounded-2xl` on stat cards
-- **`FeaturedProducts.tsx`** line 85: `rounded-2xl` on blur element (minor, decorative)
+### 2. Hero Section — Still Follows When Scrolling
+**Problem**: The hero is wrapped in `sticky top-0 z-0` in `Index.tsx` (line 28), so it stays pinned behind all content. The user wants it to scroll away normally, not follow.
+**Fix** in `Index.tsx`: Remove the sticky wrapper. Change the structure so HeroSection is just a normal block element, and the rest of the content follows naturally below it. Remove the `z-0`/`z-[1]` layering.
 
-### 2. Tighter Card Spacing — Missed Files
-- **`CategoriesSection.tsx`** line 110: still `p-8` (should be `p-6`)
-- **`FeaturedPage.tsx`** line 29: `gap-8` (should be `gap-5`)
+### 3. Custom Cursor Green Dot — Not Visible
+**Problem**: The CSS rule `.immersive-cursor * { cursor: none !important; }` hides the native cursor, but the green dot itself starts at position `(-100, -100)` — off-screen until the user moves the mouse. Also the dot may be too small or blend into backgrounds.
+**Fixes**:
+- **`CustomCursor.tsx`**: Increase lerp speed from `0.12` to `0.25` for snappier following. Increase dot size to `w-4 h-4`. Add a stronger `boxShadow` with both white and dark outlines so it's visible on ALL backgrounds: `0 0 0 2px white, 0 0 0 3.5px rgba(0,0,0,0.3), 0 0 8px hsl(75 38% 45% / 0.9)`. Increase glow lerp from `0.06` to `0.12`.
+- **`src/index.css`**: Keep `cursor: none` rule — this is correct (hides native cursor so only the green dot shows). The issue is the dot itself not being visible enough, which the above fixes address.
 
-### 3. No Other Functional Issues
-- No console errors or runtime errors
-- All routes functional, admin auth works
-- Cursor is properly ref-based with white ring + green glow for visibility
+## Files
 
----
-
-## Plan: Complete All Remaining Fixes
-
-### File Changes
-
-| File | Change |
-|------|--------|
-| `src/components/landing/CategoriesSection.tsx` | `rounded-2xl` → `rounded-lg`, `p-8` → `p-6` |
-| `src/components/ProductCard.tsx` | `rounded-2xl` → `rounded-lg` |
-| `src/pages/BrandsPage.tsx` | Both `rounded-2xl` → `rounded-lg` |
-| `src/pages/BrandDetailPage.tsx` | `rounded-2xl` → `rounded-lg` |
-| `src/pages/ProductDetailPage.tsx` | `rounded-3xl` → `rounded-xl` |
-| `src/pages/admin/AdminDashboard.tsx` | `rounded-2xl` → `rounded-lg` |
-| `src/pages/FeaturedPage.tsx` | `gap-8` → `gap-5` |
-
-All changes are simple find-and-replace within these 7 files. No structural or logic changes needed.
+| Action | File |
+|--------|------|
+| Modify | `src/components/landing/TeamSection.tsx` — replace gradient orbs with `<video>` background |
+| Modify | `src/pages/Index.tsx` — remove sticky hero wrapper, make hero scroll normally |
+| Modify | `src/components/landing/CustomCursor.tsx` — bigger dot, stronger contrast outline, faster lerp |
 
