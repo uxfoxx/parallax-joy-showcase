@@ -52,17 +52,17 @@ const Navbar = () => {
           className={`flex items-center justify-between px-5 rounded-2xl transition-all duration-500 ${barBg}`}
         >
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group shrink-0">
+          <Link to="/" className="flex items-center shrink-0">
             <motion.div
-              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 ${useLightText ? "bg-forest-mid" : "bg-forest-deep/10"}`}
             >
-              <Leaf className={`w-5 h-5 ${useLightText ? "text-forest-light" : "text-forest-mid"}`} />
+              <img
+                src={logoSvg}
+                alt="Olive Foods"
+                className={`h-10 w-auto object-contain transition-all duration-300 ${useLightText ? "brightness-0 invert" : ""}`}
+              />
             </motion.div>
-            <span className={`font-display font-semibold text-lg hidden sm:block tracking-tight transition-colors duration-300 ${useLightText ? "text-primary-foreground" : "text-foreground"}`}>
-              Olive Foods
-            </span>
           </Link>
 
           {/* Center links */}
