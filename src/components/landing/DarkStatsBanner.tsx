@@ -4,9 +4,9 @@ import { useMouseGradient } from "@/hooks/useMouseGradient";
 import { motion } from "framer-motion";
 
 const bannerStats = [
-  { value: 120, suffix: "K+", label: "Products Delivered" },
-  { value: 150, suffix: "+", label: "Active Partnerships" },
-  { value: 32, suffix: "K+", label: "Orders Fulfilled" },
+  { value: 30, suffix: "+", label: "Years in Business" },
+  { value: 8, suffix: "+", label: "Global Brand Partners" },
+  { value: 3, suffix: "", label: "Distribution Channels" },
 ];
 
 const DarkStatsBanner = () => {

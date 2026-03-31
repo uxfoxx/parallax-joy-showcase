@@ -1,15 +1,15 @@
 import { motion } from "framer-motion";
 
 const team = [
-  { initials: "AK", name: "Ahmed Khan", role: "CEO & Founder", bio: "Over 15 years of experience in global food trade and supply chain management." },
-  { initials: "SM", name: "Sarah Mitchell", role: "Operations Manager", bio: "Streamlines logistics and ensures seamless delivery across all partner networks." },
-  { initials: "RJ", name: "Raj Patel", role: "Quality Assurance Lead", bio: "Oversees rigorous testing and certification for every product we import." },
-  { initials: "LN", name: "Lina Nguyen", role: "Logistics Coordinator", bio: "Manages international shipping routes and customs clearance processes." },
+  { initials: "SM", name: "Sales & Marketing", role: "Commercial Team", bio: "Driving brand growth across HoReCa, Modern Trade, and General Trade channels island-wide." },
+  { initials: "PR", name: "Procurement", role: "Sourcing Team", bio: "Managing global supplier relationships across 8+ countries to secure the best products at competitive prices." },
+  { initials: "WH", name: "Warehousing", role: "Operations Team", bio: "Running customs-approved bonded warehouse facilities with cold-chain storage at -18°C." },
+  { initials: "LG", name: "Logistics", role: "Distribution Team", bio: "Ensuring reliable, on-time delivery through our island-wide distribution network." },
 ];
 
 const TeamSection = () => {
   return (
-    <section className="snap-section flex items-center bg-muted/30">
+    <section className="bg-muted/30">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 w-full">
         {/* Header */}
         <motion.div
@@ -23,12 +23,12 @@ const TeamSection = () => {
             Our Team
           </span>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight tracking-tight">
-            Meet the People Behind
+            Three Decades of
             <br />
-            <span className="text-gradient-gold">Our Success</span>
+            <span className="text-gradient-gold">Industry Experience</span>
           </h2>
           <p className="text-muted-foreground font-body text-lg leading-relaxed">
-            A passionate team dedicated to delivering quality food products from around the world
+            Dedicated departments working together to deliver seamless import-to-distribution solutions
           </p>
         </motion.div>
 

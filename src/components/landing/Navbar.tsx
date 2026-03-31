@@ -60,7 +60,7 @@ const Navbar = () => {
               <Leaf className={`w-5 h-5 ${useLightText ? "text-forest-light" : "text-forest-mid"}`} />
             </motion.div>
             <span className={`font-display font-semibold text-lg hidden sm:block tracking-tight transition-colors duration-300 ${useLightText ? "text-primary-foreground" : "text-foreground"}`}>
-              FreshLine
+              Olive Foods
             </span>
           </Link>
 

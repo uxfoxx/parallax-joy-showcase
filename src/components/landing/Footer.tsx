@@ -28,13 +28,13 @@ const Footer = () => {
           <div className="space-y-5">
             <div className="flex items-center gap-3">
               <Leaf className="w-7 h-7 text-forest-light" />
-              <span className="font-display text-lg font-semibold text-primary-foreground">FreshLine</span>
+              <span className="font-display text-lg font-semibold text-primary-foreground">Olive Foods</span>
             </div>
             <p className="text-primary-foreground/45 font-body text-sm leading-relaxed max-w-xs">
-              Your trusted partner in premium food imports, delivering quality and reliability across Sri Lanka.
+              Your trusted import, bonded warehousing & FMCG distribution partner — delivering quality and reliability across Sri Lanka for over 30 years.
             </p>
             <p className="text-primary-foreground/30 font-body text-xs">
-              info@freshline.lk · +94 11 234 5678
+              info@olivefoods.lk · +94 11 207 1717
             </p>
           </div>
 
@@ -86,7 +86,7 @@ const Footer = () => {
           className="mt-16 pt-8 border-t border-primary-foreground/10 text-center"
         >
           <p className="text-primary-foreground/25 font-body text-sm tracking-wide">
-            ©2026 FreshLine. All rights reserved.
+            ©2026 Olive Foods (Pvt) Ltd. All rights reserved.
           </p>
         </motion.div>
       </div>

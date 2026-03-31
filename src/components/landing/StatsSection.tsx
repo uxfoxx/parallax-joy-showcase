@@ -6,10 +6,10 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const stats = [
-  { value: 10, suffix: "+", label: "Years of Experience" },
-  { value: 200, suffix: "+", label: "Happy Clients" },
-  { value: 500, suffix: "+", label: "Products Available" },
-  { value: 25, suffix: "+", label: "Countries Sourced" },
+  { value: 30, suffix: "+", label: "Years of Experience" },
+  { value: 8, suffix: "+", label: "Brand Partners" },
+  { value: 8, suffix: "+", label: "Countries Sourced" },
+  { value: 3, suffix: "", label: "Distribution Channels" },
 ];
 
 const StatsSection = () => {
@@ -28,16 +28,16 @@ const StatsSection = () => {
             className="space-y-8"
           >
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight tracking-tight">
-              Numbers That Speak for{" "}
-              <span className="text-gradient-gold">Themselves</span>
+              Three Decades of{" "}
+              <span className="text-gradient-gold">Excellence</span>
             </h2>
             <p className="text-muted-foreground font-body text-lg leading-relaxed max-w-lg">
-              Over a decade of importing excellence, connecting global suppliers with local businesses. Our track record speaks volumes about our commitment to quality.
+              Over 30 years of importing excellence, connecting global suppliers with Sri Lankan businesses. Sourcing from Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China.
             </p>
             <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}>
               <Link to="/products">
                 <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl px-8 h-12 text-base transition-all duration-300 hover:shadow-xl hover:shadow-accent/25 group">
-                  Get Started
+                  View Products
                   <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-2" />
                 </Button>
               </Link>

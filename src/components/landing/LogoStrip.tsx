@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-const logos = ["ADIRA", "ADIRA INC", "Holcim", "MNC", "TELKOMSEL"];
+const logos = ["AZIZAA", "Hungritos", "Fletcher", "Granoro", "Daily Dairy", "Snorre Foods", "Wai Wai", "Royal Arm"];
 
 const LogoStrip = () => {
   return (
@@ -13,7 +13,7 @@ const LogoStrip = () => {
           transition={{ duration: 0.5 }}
           className="text-center text-muted-foreground font-body text-sm uppercase tracking-[0.25em] mb-10"
         >
-          Trusted by Leading Companies
+          Our Brand Partners
         </motion.p>
       </div>
 
