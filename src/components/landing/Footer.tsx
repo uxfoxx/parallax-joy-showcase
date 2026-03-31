@@ -10,8 +10,8 @@ const Footer = () => {
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse at 50% 0%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
-            linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 14%), hsl(150 40% 10%))
+            radial-gradient(ellipse at 50% 100%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 10%), hsl(150 40% 14%))
           `,
         }}
       />
