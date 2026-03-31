@@ -18,7 +18,7 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 const Index = () => {
   return (
-    <div className="smooth-scroll immersive-cursor" style={{ perspective: "1200px" }}>
+    <div className="smooth-scroll immersive-cursor overflow-x-hidden" style={{ perspective: "1200px" }}>
       <ImmersiveBackground />
       <CustomCursor />
       <ScrollFloatingElement />
