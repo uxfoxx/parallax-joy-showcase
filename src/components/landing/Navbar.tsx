@@ -115,15 +115,17 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center gap-3">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                className={`font-body font-semibold rounded-xl h-10 px-6 text-sm transition-all duration-500 ${
-                  isDark
-                    ? "bg-primary-foreground text-forest-deep hover:bg-primary-foreground/90 shadow-lg shadow-white/10"
-                    : "bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20"
-                }`}
-              >
-                Contact Us
-              </Button>
+              <Link to="/contact">
+                <Button
+                  className={`font-body font-semibold rounded-xl h-10 px-6 text-sm transition-all duration-500 ${
+                    isDark
+                      ? "bg-primary-foreground text-forest-deep hover:bg-primary-foreground/90 shadow-lg shadow-white/10"
+                      : "bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20"
+                  }`}
+                >
+                  Contact Us
+                </Button>
+              </Link>
             </motion.div>
           </div>
 
