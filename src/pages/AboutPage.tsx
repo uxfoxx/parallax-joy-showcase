@@ -1,14 +1,31 @@
 import { motion } from "framer-motion";
-import { Leaf, Globe, Shield, Heart } from "lucide-react";
+import { Globe, Shield, Zap, Users, Package, Warehouse, Thermometer, Truck, ShoppingBag, Hotel, UtensilsCrossed, Factory } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
-const values = [
-  { icon: Leaf, title: "Sustainability", description: "We prioritize eco-friendly sourcing and packaging across our entire supply chain." },
-  { icon: Globe, title: "Global Reach", description: "Partnerships with trusted producers in 30+ countries for diverse, premium selections." },
-  { icon: Shield, title: "Quality Assurance", description: "Rigorous testing and compliance with international food safety standards." },
-  { icon: Heart, title: "Community", description: "Supporting local farmers and fair-trade practices in every market we serve." },
+const advantages = [
+  { icon: Package, title: "Integrated Model", description: "End-to-end import-to-distribution — sourcing, customs, warehousing, and delivery under one roof." },
+  { icon: Zap, title: "Faster Lead Times", description: "Streamlined processes and bonded warehousing mean shorter turnaround from port to shelf." },
+  { icon: Globe, title: "Strong Supplier Relationships", description: "Long-term partnerships with producers across Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China." },
+  { icon: Shield, title: "Consistent Quality Control", description: "Rigorous testing and compliance with international food safety standards at every stage." },
+];
+
+const businessActivities = [
+  { icon: Package, title: "Import & Brand Representation", desc: "Exclusive brand agency and import operations for leading international FMCG brands." },
+  { icon: Warehouse, title: "Bonded Warehousing", desc: "Customs-approved bonded warehouse facilities enabling duty optimization and secure storage." },
+  { icon: Thermometer, title: "Cold-Chain Logistics", desc: "Temperature-controlled storage and transport at -18°C for frozen and chilled product lines." },
+  { icon: Truck, title: "HoReCa Distribution", desc: "Direct supply to hotels, restaurants, and catering companies across Sri Lanka." },
+  { icon: ShoppingBag, title: "Modern Trade & General Trade", desc: "Distribution to supermarket chains, retail outlets, and general trade networks island-wide." },
+];
+
+const clientSegments = [
+  { icon: Hotel, label: "Hotels & Resorts" },
+  { icon: UtensilsCrossed, label: "Restaurants & Cafes" },
+  { icon: Users, label: "Catering Companies" },
+  { icon: ShoppingBag, label: "Supermarket Chains" },
+  { icon: Truck, label: "Retail Distributors" },
+  { icon: Factory, label: "Food Manufacturers" },
 ];
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
@@ -36,7 +53,7 @@ const AboutPage = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="font-body text-lg text-primary-foreground/70 max-w-2xl mx-auto"
           >
-            From humble beginnings to becoming Sri Lanka's most trusted food import partner — driven by passion, quality, and integrity.
+            Olive Foods (Pvt) Ltd — Sri Lanka's trusted import, bonded warehousing & FMCG distribution partner for over three decades.
           </motion.p>
         </div>
       </section>
@@ -51,25 +68,81 @@ const AboutPage = () => {
             className="space-y-6"
           >
             <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">
-              Building Bridges Between Farms and Tables
+              Who We Are
             </h2>
             <div className="space-y-4 font-body text-muted-foreground leading-relaxed text-lg">
               <p>
-                Founded with a vision to bring the world's finest food products to Sri Lanka, FreshLine has grown into a trusted name in premium food imports. We work directly with producers, farmers, and artisans across 30+ countries to source ingredients that meet the highest standards of quality and safety.
+                Olive Foods (Pvt) Ltd is a trusted import, bonded warehousing, and FMCG distribution company based in Sri Lanka. With over three decades of industry experience, we have built strong relationships with global suppliers and established ourselves as a reliable partner for businesses across the island.
               </p>
               <p>
-                Our team of food specialists, logistics experts, and quality assurance professionals ensures that every product — from hand-harvested saffron threads to sustainably caught Pacific salmon — arrives fresh, certified, and ready for your business.
+                We specialize in importing and distributing a wide range of food products — from frozen goods and dairy to grocery staples, edible oils, and specialty imports — sourced from leading producers in Australia, Italy, the Netherlands, Thailand, Singapore, UAE, India, and China.
               </p>
               <p>
-                We believe that exceptional food starts with exceptional sourcing. That's why we invest in long-term relationships with our partners, visit farms and facilities personally, and maintain full traceability across our supply chain.
+                Our integrated model covers every step of the supply chain: from international sourcing and customs clearance through our bonded warehouse facilities, to cold-chain logistics and island-wide distribution across HoReCa, Modern Trade, and General Trade channels.
               </p>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Mission & Vision */}
+      {/* Core Business Activities */}
       <section className="py-20 lg:py-28 bg-muted/30">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-display text-3xl md:text-4xl font-bold text-foreground text-center mb-16"
+          >
+            Core Business Activities
+          </motion.h2>
+          <motion.div
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {businessActivities.slice(0, 3).map((a) => (
+              <motion.div
+                key={a.title}
+                variants={item}
+                className="p-8 rounded-2xl border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-300"
+              >
+                <div className="w-14 h-14 rounded-xl bg-forest-deep/10 flex items-center justify-center mb-6">
+                  <a.icon className="w-6 h-6 text-forest-mid" />
+                </div>
+                <h4 className="font-display text-lg font-semibold text-foreground mb-3">{a.title}</h4>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed">{a.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+          <motion.div
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="grid sm:grid-cols-2 gap-8 mt-8 max-w-2xl mx-auto lg:max-w-none lg:px-[16.666%]"
+          >
+            {businessActivities.slice(3).map((a) => (
+              <motion.div
+                key={a.title}
+                variants={item}
+                className="p-8 rounded-2xl border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-300"
+              >
+                <div className="w-14 h-14 rounded-xl bg-forest-deep/10 flex items-center justify-center mb-6">
+                  <a.icon className="w-6 h-6 text-forest-mid" />
+                </div>
+                <h4 className="font-display text-lg font-semibold text-foreground mb-3">{a.title}</h4>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed">{a.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Mission & Vision */}
+      <section className="py-20 lg:py-28 bg-background">
         <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -79,7 +152,7 @@ const AboutPage = () => {
           >
             <h3 className="font-display text-2xl font-bold text-foreground">Our Mission</h3>
             <p className="font-body text-muted-foreground leading-relaxed">
-              To curate and deliver the world's best food products with unwavering commitment to quality, compliance, and reliability — empowering businesses across Sri Lanka to offer excellence to their customers.
+              To deliver superior products and seamless distribution solutions through strong global sourcing, advanced logistics infrastructure and customer-focused service, empowering our partners to grow sustainably.
             </p>
           </motion.div>
           <motion.div
@@ -90,14 +163,14 @@ const AboutPage = () => {
           >
             <h3 className="font-display text-2xl font-bold text-foreground">Our Vision</h3>
             <p className="font-body text-muted-foreground leading-relaxed">
-              To be the most respected food import company in South Asia — known for transforming global sourcing into local access, and setting new benchmarks for quality and sustainability in the industry.
+              To be Sri Lanka's most trusted and progressive FMCG distribution partner, connecting world-class brands with businesses and households through reliability, innovation and operational excellence.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Values */}
-      <section className="py-20 lg:py-28 bg-background">
+      {/* Competitive Advantage */}
+      <section className="py-20 lg:py-28 bg-muted/30">
         <div className="max-w-5xl mx-auto px-6">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -105,7 +178,7 @@ const AboutPage = () => {
             viewport={{ once: true }}
             className="font-display text-3xl md:text-4xl font-bold text-foreground text-center mb-16"
           >
-            What We Stand For
+            Our Competitive Advantage
           </motion.h2>
           <motion.div
             variants={container}
@@ -114,7 +187,7 @@ const AboutPage = () => {
             viewport={{ once: true }}
             className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8"
           >
-            {values.map((v) => (
+            {advantages.map((v) => (
               <motion.div
                 key={v.title}
                 variants={item}
@@ -131,10 +204,52 @@ const AboutPage = () => {
         </div>
       </section>
 
+      {/* Client Segments */}
+      <section className="py-20 lg:py-28 bg-background">
+        <div className="max-w-5xl mx-auto px-6">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-display text-3xl md:text-4xl font-bold text-foreground text-center mb-6"
+          >
+            Who We Serve
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-body text-muted-foreground text-center mb-16 max-w-2xl mx-auto"
+          >
+            We partner with businesses across Sri Lanka's food and hospitality ecosystem
+          </motion.p>
+          <motion.div
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="grid grid-cols-2 sm:grid-cols-3 gap-6"
+          >
+            {clientSegments.map((s) => (
+              <motion.div
+                key={s.label}
+                variants={item}
+                className="flex flex-col items-center gap-4 p-8 rounded-2xl border border-border hover:border-forest-mid/20 hover:shadow-lg transition-all duration-300"
+              >
+                <div className="w-12 h-12 rounded-xl bg-forest-deep/10 flex items-center justify-center">
+                  <s.icon className="w-6 h-6 text-forest-mid" />
+                </div>
+                <span className="font-body text-sm font-medium text-foreground text-center">{s.label}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-20 lg:py-28 relative overflow-hidden">
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))' }} />
-        <div className="max-w-3xl mx-auto px-6 text-center space-y-8">
+        <div className="max-w-3xl mx-auto px-6 text-center space-y-8 relative z-10">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -150,7 +265,7 @@ const AboutPage = () => {
             transition={{ delay: 0.1 }}
             className="font-body text-primary-foreground/60 text-lg"
           >
-            Let's discuss how we can bring world-class food products to your business.
+            Let's discuss how Olive Foods can support your business with reliable import and distribution solutions.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
