@@ -70,7 +70,7 @@ const HeroSection = () => {
           <img
             src={heroLogo}
             alt="Olive Foods"
-            className="max-w-xs sm:max-w-sm lg:max-w-lg w-full h-auto brightness-0 invert mx-auto"
+            className="max-w-sm sm:max-w-md lg:max-w-2xl w-full h-auto mx-auto"
           />
           
           <motion.div
