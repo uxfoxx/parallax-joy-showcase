@@ -2,11 +2,13 @@ import { useInView } from "@/hooks/useInView";
 import { useCountUp } from "@/hooks/useCountUp";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
 import { motion } from "framer-motion";
+import { Package, Users, Thermometer, MapPin } from "lucide-react";
 
 const bannerStats = [
-  { value: 30, suffix: "+", label: "Years in Business" },
-  { value: 8, suffix: "+", label: "Global Brand Partners" },
-  { value: 3, suffix: "", label: "Distribution Channels" },
+  { value: 500, suffix: "+", label: "Products Distributed", icon: Package },
+  { value: 1000, suffix: "+", label: "Active Retail Partners", icon: Users },
+  { value: 24, suffix: "/7", label: "Cold-Chain Monitoring", icon: Thermometer },
+  { value: 0, suffix: "", label: "Island-Wide Delivery", icon: MapPin, isText: true, displayText: "Island-Wide" },
 ];
 
 const DarkStatsBanner = () => {
@@ -21,7 +23,7 @@ const DarkStatsBanner = () => {
       }}
       className="relative overflow-hidden py-24"
     >
-      {/* Standardized dark gradient */}
+      {/* Dark gradient bg */}
       <div
         className="absolute inset-0"
         style={{
@@ -33,11 +35,18 @@ const DarkStatsBanner = () => {
         }}
       />
 
-      {/* Mouse-follow gradient */}
-      <div className="absolute inset-0 pointer-events-none z-[1] opacity-30" style={gradientStyle} />
+      {/* Pulsing SVG line */}
+      <svg className="absolute inset-0 w-full h-full z-[1] opacity-20" preserveAspectRatio="none">
+        <line x1="0" y1="50%" x2="100%" y2="50%" stroke="hsl(42 80% 55%)" strokeWidth="0.5">
+          <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite" />
+        </line>
+      </svg>
+
+      {/* Mouse-follow glow */}
+      <div className="absolute inset-0 pointer-events-none z-[2] opacity-30" style={gradientStyle} />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <div className="grid sm:grid-cols-3 divide-x divide-primary-foreground/10">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-4 sm:divide-x sm:divide-primary-foreground/10">
           {bannerStats.map((stat, i) => (
             <BannerStat key={stat.label} stat={stat} isInView={isInView} index={i} />
           ))}
@@ -47,21 +56,27 @@ const DarkStatsBanner = () => {
   );
 };
 
-const BannerStat = ({ stat, isInView, index }: { stat: typeof bannerStats[0]; isInView: boolean; index: number }) => {
+type StatType = typeof bannerStats[0];
+
+const BannerStat = ({ stat, isInView, index }: { stat: StatType; isInView: boolean; index: number }) => {
   const count = useCountUp(stat.value, isInView, 2500);
+  const Icon = stat.icon;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
-      className="px-10"
+      transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+      className="px-6 sm:px-10 text-center sm:text-left"
     >
-      <p className="text-forest-light font-body text-sm mb-3 tracking-widest uppercase">{stat.label}</p>
-      <div className="font-display text-5xl lg:text-6xl font-bold text-primary-foreground">
-        {count}{stat.suffix}
+      <div className="w-10 h-10 rounded-xl bg-primary-foreground/5 flex items-center justify-center mb-3 mx-auto sm:mx-0">
+        <Icon className="w-5 h-5 text-accent" />
       </div>
+      <div className="font-display text-4xl lg:text-5xl font-bold text-primary-foreground">
+        {stat.isText ? stat.displayText : <>{count}{stat.suffix}</>}
+      </div>
+      <p className="text-forest-light font-body text-sm mt-2 tracking-widest uppercase">{stat.label}</p>
     </motion.div>
   );
 };
