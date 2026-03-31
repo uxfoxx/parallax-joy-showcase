@@ -228,7 +228,7 @@ const AboutPage = () => {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid grid-cols-2 sm:grid-cols-3 gap-6"
+            className="grid grid-cols-2 sm:grid-cols-3 gap-5"
           >
             {clientSegments.map((s) => (
               <motion.div
