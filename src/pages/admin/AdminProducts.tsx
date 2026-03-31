@@ -143,6 +143,7 @@ const AdminProducts = () => {
             ) : (
               filtered.map((p) => (
                 <TableRow key={p.id}>
+                  <TableCell>{p.image_url ? <img src={p.image_url} alt={p.name} className="h-10 w-10 rounded-md object-cover" /> : <div className="h-10 w-10 rounded-md bg-muted" />}</TableCell>
                   <TableCell className="font-body font-medium">{p.name}</TableCell>
                   <TableCell className="font-body text-muted-foreground">{p.brands?.name ?? "—"}</TableCell>
                   <TableCell><Badge variant="outline" className="font-body text-xs">{p.category}</Badge></TableCell>
