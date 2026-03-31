@@ -42,7 +42,7 @@ const FAQSection = () => {
       <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
         <div
           className="absolute w-[500px] h-[400px] top-1/3 -left-40 rounded-full opacity-[0.05]"
-          style={{ background: "radial-gradient(ellipse, hsl(140 50% 25%), transparent 70%)" }}
+          style={{ background: "radial-gradient(ellipse, hsl(80 50% 31%), transparent 70%)" }}
         />
         <div
           className="absolute w-[300px] h-[300px] bottom-20 right-10 rounded-full opacity-[0.04]"
