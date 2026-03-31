@@ -191,9 +191,9 @@ const AboutPage = () => {
               <motion.div
                 key={v.title}
                 variants={item}
-                className="text-center space-y-4 p-6 rounded-2xl border border-border hover:border-forest-mid/20 hover:shadow-lg transition-all duration-300"
+                className="text-center space-y-4 p-5 rounded-lg border border-border hover:border-forest-mid/20 hover:shadow-lg transition-all duration-300"
               >
-                <div className="w-14 h-14 rounded-2xl bg-forest-deep/5 flex items-center justify-center mx-auto">
+                <div className="w-12 h-12 rounded-lg bg-forest-deep/5 flex items-center justify-center mx-auto">
                   <v.icon className="w-7 h-7 text-forest-mid" />
                 </div>
                 <h4 className="font-display text-lg font-semibold text-foreground">{v.title}</h4>
