@@ -28,8 +28,7 @@ const TeamSection = () => {
           className="absolute inset-0 w-full h-full object-cover"
           onError={(e) => { (e.target as HTMLVideoElement).style.display = 'none'; }}
         >
-          <source src="https://videos.pexels.com/video-files/3191572/3191572-uhd_2560_1440_25fps.mp4" type="video/mp4" />
-          <source src="https://videos.pexels.com/video-files/854816/854816-hd_1920_1080_25fps.mp4" type="video/mp4" />
+          <source src="/videos/team-bg.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/50" />
       </div>
