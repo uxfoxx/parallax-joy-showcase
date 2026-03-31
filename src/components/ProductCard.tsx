@@ -33,8 +33,8 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-forest-deep/20 via-forest-mid/10 to-accent/10 flex items-center justify-center">
-              <Package className="w-12 h-12 text-forest-mid/25" />
+            <div className="absolute inset-0 bg-gradient-to-br from-forest-deep/30 via-forest-mid/20 to-accent/15 flex items-center justify-center">
+              <Package className="w-12 h-12 text-forest-mid/40" />
             </div>
           )}
 
