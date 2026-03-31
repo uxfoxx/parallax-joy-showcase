@@ -87,6 +87,7 @@ const AdminBrands = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="font-body w-14">Image</TableHead>
               <TableHead className="font-body">Name</TableHead>
               <TableHead className="font-body">Origin</TableHead>
               <TableHead className="font-body">Est.</TableHead>
