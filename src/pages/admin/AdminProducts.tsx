@@ -147,7 +147,7 @@ const AdminProducts = () => {
                   <TableCell className="font-body font-medium">{p.name}</TableCell>
                   <TableCell className="font-body text-muted-foreground">{p.brands?.name ?? "—"}</TableCell>
                   <TableCell><Badge variant="outline" className="font-body text-xs">{p.category}</Badge></TableCell>
-                  <TableCell>{p.featured ? <Badge className="bg-accent text-accent-foreground font-body text-xs">Yes</Badge> : <span className="font-body text-muted-foreground text-xs">No</span>}</TableCell>
+                  <TableCell>{p.featured ? <Badge className="bg-accent text-white font-body text-xs">Yes</Badge> : <span className="font-body text-muted-foreground text-xs">No</span>}</TableCell>
                   <TableCell>
                     <div className="flex gap-1">
                       <Button variant="ghost" size="icon" onClick={() => openEdit(p)}><Pencil className="w-4 h-4" /></Button>
