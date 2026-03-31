@@ -117,7 +117,7 @@ const WhyChooseUs = () => {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -6, transition: { duration: 0.3 } }}
-              className="group relative p-10 rounded-2xl border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
+              className="group relative p-6 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
               style={{
                 background: `
                   radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%),
