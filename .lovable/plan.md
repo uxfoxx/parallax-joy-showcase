@@ -1,44 +1,44 @@
 
 
-# Team Section — Curved Carousel with Center-Focus Effect
+# Redesign Team Section — Clean Horizontal Carousel
 
-## Concept
-Replace the current single-slide card carousel with a **multi-visible-item curved carousel** inspired by the reference image. All items visible at once in a row, center item is larger/elevated, sides are smaller and slightly rotated — creating a "curved gallery" feel. Auto-slides continuously, no card/border styling.
+## Problem
+The current implementation uses absolute positioning with manual `x` offsets (`wrappedDiff * 180`) causing overlapping, messy layout. The 3D rotateY and z-index sorting creates visual clutter rather than elegance.
 
-## Layout
+## New Design
+A clean **horizontal strip carousel** similar to the reference image — all items visible in a row, center item smoothly scales up with a highlight, sides stay smaller. No 3D rotation, no absolute positioning chaos.
+
+### Layout
 ```text
-  ┌─────┐   ┌───────────┐   ┌─────┐
-  │ sm  │   │   LARGE   │   │ sm  │
-  │     │   │  (active)  │   │     │
-  └─────┘   └───────────┘   └─────┘
-   rotated    scale 1.15     rotated
-   opacity     full opacity   opacity
+ [small] [small] [  ACTIVE  ] [small] [small]
+                    ↑ bigger
+                    ↑ lifted
+                    ↑ glow border
 ```
 
-Each team item shows: large icon circle + department name overlaid. No card borders, no glassmorphism — clean image-card style with icon as the visual. The active (center) item scales up, side items scale down + slight Y rotation for depth.
+### Implementation
+- Use a single `flex` row with `overflow-hidden` on the container
+- All 6 items rendered normally in flow, centered via `justify-center`
+- Active item: `scale(1.1)`, full opacity, accent border glow, slight `translateY(-8px)` lift
+- Adjacent items (distance 1): `scale(0.9)`, opacity 0.7
+- Far items (distance 2+): `scale(0.8)`, opacity 0.4
+- No `rotateY`, no absolute positioning, no z-index sorting
+- Smooth Framer Motion `animate` transitions on scale/opacity/y
+- Click any item to select it
+- Auto-play with 4s interval, pause on hover
+- Below: AnimatePresence bio text (keep existing)
+- Below: animated progress dots (keep existing)
+- Cards are taller portrait rectangles with gradient bg, centered icon, name at bottom
 
-## Data
-Keep the same 4 team entries. Add 2 more to make the carousel fuller (e.g., Quality Control, Customer Service) — or duplicate for loop effect.
+### Key Fixes
+- Remove `absolute md:relative` — all items are `relative` in normal flow
+- Remove `x: wrappedDiff * 180` manual offset
+- Remove `rotateY` and `perspective`
+- Remove `sortedIndices` z-index sorting hack
+- Use simple `gap` between items and let flexbox handle layout
 
-## Implementation
-
-### No Embla — Pure CSS/Framer Motion approach
-- Render all items in a flex row, each with `transition-all duration-500`
-- Track `activeIndex` with auto-increment timer (4s interval, pause on hover)
-- Each item's transform computed based on distance from activeIndex:
-  - Distance 0 (center): `scale(1.15)`, full opacity, `z-10`
-  - Distance 1: `scale(0.85)`, opacity 0.6, slight `rotateY(±8deg)`
-  - Distance 2+: `scale(0.7)`, opacity 0.3
-- Click on any item to make it active
-- Below the carousel: department name + role + bio text that animates on change (AnimatePresence)
-
-### Auto-slide
-- `setInterval` every 4 seconds, cycles through items
-- Pause on hover
-
-## Files
-
+## File
 | Action | File |
 |--------|------|
-| Modify | `src/components/landing/TeamSection.tsx` — full rewrite to curved carousel |
+| Modify | `src/components/landing/TeamSection.tsx` |
 
