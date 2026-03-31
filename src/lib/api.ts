@@ -154,7 +154,7 @@ export const useProductImages = (productId: string) =>
         .eq("product_id", productId)
         .order("sort_order");
       if (error) throw error;
-      return data as ProductImage[];
+      return (data as unknown) as ProductImage[];
     },
     enabled: !!productId,
   });

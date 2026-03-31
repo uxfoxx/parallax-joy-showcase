@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useProducts, useBrands, useCategories, useCreateProduct, useUpdateProduct, useDeleteProduct, type Product } from "@/lib/api";
+import { useProducts, useBrands, useCategories, useCreateProduct, useUpdateProduct, useDeleteProduct, useProductImages, useAddProductImage, useDeleteProductImage, type Product } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,10 +10,64 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, ImagePlus, X } from "lucide-react";
 import { toast } from "sonner";
 
 const emptyForm = { name: "", slug: "", brand_id: "", category: "", description: "", featured: false, tags: "" as string, origin: "", sku: "", image_url: "" };
+
+const ProductImagesManager = ({ productId }: { productId: string }) => {
+  const { data: images = [] } = useProductImages(productId);
+  const addImage = useAddProductImage();
+  const deleteImage = useDeleteProductImage();
+  const [newUrl, setNewUrl] = useState("");
+
+  const handleAdd = async () => {
+    if (!newUrl.trim()) return;
+    try {
+      await addImage.mutateAsync({ product_id: productId, image_url: newUrl.trim(), sort_order: images.length });
+      setNewUrl("");
+      toast.success("Image added");
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  const handleDelete = async (imageId: string) => {
+    try {
+      await deleteImage.mutateAsync({ id: imageId, product_id: productId });
+      toast.success("Image removed");
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <Label className="font-body">Additional Images</Label>
+      <div className="flex gap-2">
+        <Input value={newUrl} onChange={(e) => setNewUrl(e.target.value)} placeholder="https://..." className="font-body flex-1" />
+        <Button type="button" size="sm" onClick={handleAdd} className="gap-1 shrink-0">
+          <ImagePlus className="w-4 h-4" /> Add
+        </Button>
+      </div>
+      {images.length > 0 && (
+        <div className="grid grid-cols-4 gap-2">
+          {images.map((img) => (
+            <div key={img.id} className="relative group">
+              <img src={img.image_url} alt="" className="h-16 w-full object-cover rounded-md border border-border" />
+              <button
+                onClick={() => handleDelete(img.id)}
+                className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const AdminProducts = () => {
   const { data: products, isLoading } = useProducts();
@@ -104,9 +158,13 @@ const AdminProducts = () => {
                 <div><Label className="font-body">Origin</Label><Input value={form.origin} onChange={(e) => setForm({ ...form, origin: e.target.value })} className="font-body" /></div>
                 <div><Label className="font-body">SKU</Label><Input value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })} className="font-body" /></div>
               </div>
-              <div><Label className="font-body">Image URL</Label><Input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} className="font-body" placeholder="https://..." />
+              <div><Label className="font-body">Main Image URL</Label><Input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} className="font-body" placeholder="https://..." />
                 {form.image_url && <img src={form.image_url} alt="Preview" className="mt-2 h-20 w-20 object-cover rounded-lg border border-border" />}
               </div>
+              
+              {/* Multi-image manager only shown when editing */}
+              {editing && <ProductImagesManager productId={editing.id} />}
+
               <div><Label className="font-body">Tags (comma separated)</Label><Input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} className="font-body" placeholder="organic, premium" /></div>
               <div className="flex items-center gap-3">
                 <Switch checked={form.featured} onCheckedChange={(v) => setForm({ ...form, featured: v })} />
@@ -123,7 +181,7 @@ const AdminProducts = () => {
         <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search products..." className="pl-10 font-body" />
       </div>
 
-      <div className="rounded-xl border border-border bg-card">
+      <div className="rounded-lg border border-border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
