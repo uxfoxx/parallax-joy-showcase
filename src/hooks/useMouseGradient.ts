@@ -1,8 +1,7 @@
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
 
 export const useMouseGradient = () => {
   const ref = useRef<HTMLElement>(null);
-  const [pos, setPos] = useState({ x: 50, y: 50 });
   const raf = useRef<number>(0);
   const target = useRef({ x: 50, y: 50 });
   const current = useRef({ x: 50, y: 50 });
@@ -10,7 +9,13 @@ export const useMouseGradient = () => {
   const animate = useCallback(() => {
     current.current.x += (target.current.x - current.current.x) * 0.08;
     current.current.y += (target.current.y - current.current.y) * 0.08;
-    setPos({ x: current.current.x, y: current.current.y });
+
+    const el = ref.current;
+    if (el) {
+      el.style.setProperty("--mouse-x", `${current.current.x}%`);
+      el.style.setProperty("--mouse-y", `${current.current.y}%`);
+    }
+
     raf.current = requestAnimationFrame(animate);
   }, []);
 
@@ -36,7 +41,7 @@ export const useMouseGradient = () => {
   }, [animate]);
 
   const gradientStyle: React.CSSProperties = {
-    background: `radial-gradient(circle 500px at ${pos.x}% ${pos.y}%, hsl(42 80% 55% / 0.07), transparent)`,
+    background: `radial-gradient(circle 500px at var(--mouse-x, 50%) var(--mouse-y, 50%), hsl(42 80% 55% / 0.07), transparent)`,
   };
 
   return { ref, gradientStyle };
