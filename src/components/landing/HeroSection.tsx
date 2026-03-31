@@ -68,17 +68,29 @@ const HeroSection = () => {
           className="max-w-4xl mx-auto space-y-2"
         >
           <div className="relative mx-auto max-w-sm sm:max-w-md lg:max-w-2xl">
-            {/* Pulsing radial glow behind logo */}
-            <div
-              className="absolute -inset-16 rounded-full opacity-60 blur-3xl animate-pulse"
+            {/* Animated breathing glow behind logo */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{
+                opacity: [0, 0.5, 0.7, 0.5],
+                scale: [0.5, 1, 1.05, 0.95, 1],
+              }}
+              transition={{
+                opacity: { duration: 3, delay: 0.5, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" },
+                scale: { duration: 4, delay: 0.5, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" },
+              }}
+              className="absolute -inset-16 rounded-full blur-3xl"
               style={{
                 background: 'radial-gradient(ellipse at center, hsl(100 40% 30% / 0.4) 0%, hsl(140 50% 20% / 0.2) 40%, transparent 70%)',
-                animationDuration: '3s',
               }}
             />
-            <img
+            {/* Animated logo entrance */}
+            <motion.img
               src={heroLogo}
               alt="Olive Foods"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1, delay: 0.2, type: "spring", stiffness: 80, damping: 20 }}
               className="relative w-full h-auto"
               style={{
                 filter: 'drop-shadow(0 0 30px hsl(100 40% 30% / 0.5)) drop-shadow(0 0 60px hsl(140 50% 20% / 0.3)) drop-shadow(0 0 100px hsl(100 40% 30% / 0.15))',
@@ -93,13 +105,13 @@ const HeroSection = () => {
             className="flex flex-wrap gap-4 justify-center"
           >
             <Link to="/products">
-              <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl h-12 px-8 text-base transition-all duration-300 shadow-lg shadow-accent/20 group">
+              <Button className="bg-accent/90 text-white hover:bg-accent/80 font-body font-semibold rounded-lg h-12 px-8 text-base transition-all duration-300 shadow-lg shadow-accent/20 group backdrop-blur-sm border border-white/15">
                 Explore Products
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
             </Link>
             <Link to="/about">
-              <Button variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 font-body font-semibold rounded-xl h-12 px-8 text-base transition-all duration-300">
+              <Button variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 font-body font-semibold rounded-lg h-12 px-8 text-base transition-all duration-300 backdrop-blur-sm">
                 Our Story
               </Button>
             </Link>
