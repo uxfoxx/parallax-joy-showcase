@@ -162,43 +162,34 @@ const AboutPage = () => {
 
       <SectionTransition />
 
-      {/* Mission & Vision */}
-      <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden py-28 lg:py-36">
-          <div className="absolute inset-0" style={{
-            background: `
-              radial-gradient(ellipse at 20% 30%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 70%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-              linear-gradient(180deg, hsl(140 50% 14%), hsl(150 40% 10%), hsl(150 40% 6%))
-            `,
-          }} />
-          <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
-            <div className="absolute w-[400px] h-[400px] top-1/3 -right-40 rounded-full opacity-[0.05]" style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
-          </motion.div>
+      {/* Mission & Vision — Light */}
+      <div data-navbar-theme="light">
+        <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
+          <div className="absolute w-[350px] h-[350px] top-1/4 -right-20 rounded-full opacity-[0.07]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="text-center max-w-3xl mx-auto mb-20">
-              <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
+              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
                 Our Purpose
               </span>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight tracking-tight">
                 Mission & Vision
               </h2>
             </motion.div>
 
             <div className="grid md:grid-cols-2 gap-5">
-              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="p-8 rounded-lg border border-primary-foreground/15 hover:border-primary-foreground/25 transition-all duration-500" style={{ background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))` }}>
-                <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-primary-foreground flex items-center justify-center mb-6 shadow-lg shadow-primary-foreground/10">
-                  <Target className="w-6 h-6 text-forest-deep" />
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="p-8 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
+                <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-6">
+                  <Target className="w-6 h-6 text-accent" />
                 </motion.div>
-                <h3 className="font-display text-2xl font-bold text-primary-foreground mb-4 tracking-tight">Our Mission</h3>
-                <p className="font-body text-primary-foreground/45 leading-relaxed">To deliver superior products and seamless distribution solutions through strong global sourcing, advanced logistics infrastructure and customer-focused service, empowering our partners to grow sustainably.</p>
+                <h3 className="font-display text-2xl font-bold text-foreground mb-4 tracking-tight">Our Mission</h3>
+                <p className="font-body text-muted-foreground leading-relaxed">To deliver superior products and seamless distribution solutions through strong global sourcing, advanced logistics infrastructure and customer-focused service, empowering our partners to grow sustainably.</p>
               </motion.div>
-              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="p-8 rounded-lg border border-primary-foreground/15 hover:border-primary-foreground/25 transition-all duration-500" style={{ background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))` }}>
-                <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-primary-foreground flex items-center justify-center mb-6 shadow-lg shadow-primary-foreground/10">
-                  <Eye className="w-6 h-6 text-forest-deep" />
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="p-8 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
+                <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-6">
+                  <Eye className="w-6 h-6 text-accent" />
                 </motion.div>
-                <h3 className="font-display text-2xl font-bold text-primary-foreground mb-4 tracking-tight">Our Vision</h3>
-                <p className="font-body text-primary-foreground/45 leading-relaxed">To be Sri Lanka's most trusted and progressive FMCG distribution partner, connecting world-class brands with businesses and households through reliability, innovation and operational excellence.</p>
+                <h3 className="font-display text-2xl font-bold text-foreground mb-4 tracking-tight">Our Vision</h3>
+                <p className="font-body text-muted-foreground leading-relaxed">To be Sri Lanka's most trusted and progressive FMCG distribution partner, connecting world-class brands with businesses and households through reliability, innovation and operational excellence.</p>
               </motion.div>
             </div>
           </div>
