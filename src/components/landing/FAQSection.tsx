@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Plus } from "lucide-react";
 
 const faqs = [
@@ -13,11 +13,19 @@ const faqs = [
 
 const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Parallax bg
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-50px", "50px"]);
 
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i);
 
   return (
-    <section className="relative overflow-hidden py-28 lg:py-36">
+    <section ref={sectionRef} className="relative overflow-hidden py-28 lg:py-36">
       {/* Standardized dark gradient */}
       <div
         className="absolute inset-0"
@@ -29,6 +37,18 @@ const FAQSection = () => {
           `,
         }}
       />
+
+      {/* Parallax decorative */}
+      <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
+        <div
+          className="absolute w-[500px] h-[400px] top-1/3 -left-40 rounded-full opacity-[0.05]"
+          style={{ background: "radial-gradient(ellipse, hsl(140 50% 25%), transparent 70%)" }}
+        />
+        <div
+          className="absolute w-[300px] h-[300px] bottom-20 right-10 rounded-full opacity-[0.04]"
+          style={{ background: "radial-gradient(circle, hsl(42 60% 50%), transparent 70%)" }}
+        />
+      </motion.div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         <div className="grid lg:grid-cols-[1fr_1.5fr] gap-20 items-start">

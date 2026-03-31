@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Package, Warehouse, Thermometer, Truck } from "lucide-react";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
+import { useRef } from "react";
 
 const features = [
   {
@@ -27,16 +28,34 @@ const features = [
 
 const WhyChooseUs = () => {
   const { ref, gradientStyle } = useMouseGradient();
+  const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll();
+  const { scrollYProgress: sectionProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
 
-  // Element is at right side during scroll 50-75%, so grid shifts left
-  const gridShift = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -45, 0]);
-  const headerShift = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -20, 0]);
-  const lastCardScale = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [1, 0.92, 1]);
-  const lastCardOpacity = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [1, 0.6, 1]);
+  // Amplified: Element is at right side during scroll 50-75%, so grid shifts left
+  const gridShift = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -90, 0]);
+  const gridSkew = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -1.5, 0]);
+  const headerShift = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -50, 0]);
+  const headerSkew = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -2, 0]);
+  const lastCardScale = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [1, 0.82, 1]);
+  const lastCardOpacity = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [1, 0.35, 1]);
+
+  // Parallax background
+  const bgY = useTransform(sectionProgress, [0, 1], ["-70px", "70px"]);
+  const orbY = useTransform(sectionProgress, [0, 1], ["40px", "-40px"]);
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} id="about" className="relative overflow-hidden py-28 lg:py-36">
+    <section
+      ref={(el) => {
+        (ref as React.MutableRefObject<HTMLElement | null>).current = el;
+        (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
+      }}
+      id="about"
+      className="relative overflow-hidden py-28 lg:py-36"
+    >
       <div
         className="absolute inset-0"
         style={{
@@ -48,6 +67,21 @@ const WhyChooseUs = () => {
         }}
       />
 
+      {/* Parallax decorative elements */}
+      <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
+        <motion.div
+          className="absolute w-[500px] h-[500px] -top-32 -left-32 rounded-full opacity-[0.06]"
+          style={{
+            background: "radial-gradient(circle, hsl(140 60% 25%), transparent 70%)",
+            y: orbY,
+          }}
+        />
+        <div
+          className="absolute w-[350px] h-[350px] bottom-0 right-10 rounded-full opacity-[0.04]"
+          style={{ background: "radial-gradient(circle, hsl(42 70% 50%), transparent 70%)" }}
+        />
+      </motion.div>
+
       <div className="absolute inset-0 pointer-events-none z-[1] opacity-30" style={gradientStyle} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
@@ -58,7 +92,7 @@ const WhyChooseUs = () => {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto mb-20"
-          style={{ x: headerShift }}
+          style={{ x: headerShift, skewX: headerSkew }}
         >
           <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
             Why Choose Us
@@ -74,7 +108,7 @@ const WhyChooseUs = () => {
         </motion.div>
 
         {/* Feature cards */}
-        <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8" style={{ x: gridShift }}>
+        <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8" style={{ x: gridShift, skewX: gridSkew }}>
           {features.map((f, i) => (
             <motion.div
               key={f.title}

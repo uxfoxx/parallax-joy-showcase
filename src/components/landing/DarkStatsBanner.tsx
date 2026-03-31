@@ -1,8 +1,9 @@
 import { useInView } from "@/hooks/useInView";
 import { useCountUp } from "@/hooks/useCountUp";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Package, Users, Thermometer, MapPin } from "lucide-react";
+import { useRef } from "react";
 
 const bannerStats = [
   { value: 500, suffix: "+", label: "Products Distributed", icon: Package },
@@ -14,19 +15,30 @@ const bannerStats = [
 const DarkStatsBanner = () => {
   const { ref: inViewRef, isInView } = useInView();
   const { ref: mouseRef, gradientStyle } = useMouseGradient();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Parallax on bg and SVG line
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-40px", "40px"]);
+  const lineX = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
 
   return (
     <section
       ref={(el) => {
         (inViewRef as React.MutableRefObject<HTMLElement | null>).current = el;
         (mouseRef as React.MutableRefObject<HTMLElement | null>).current = el;
+        (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
       }}
       className="relative overflow-hidden py-24"
     >
-      {/* Dark gradient bg */}
-      <div
+      {/* Dark gradient bg with parallax */}
+      <motion.div
         className="absolute inset-0"
         style={{
+          y: bgY,
           background: `
             radial-gradient(ellipse at 20% 50%, hsl(140 35% 16% / 0.5) 0%, transparent 50%),
             radial-gradient(ellipse at 80% 50%, hsl(140 30% 14% / 0.4) 0%, transparent 50%),
@@ -35,12 +47,16 @@ const DarkStatsBanner = () => {
         }}
       />
 
-      {/* Pulsing SVG line */}
-      <svg className="absolute inset-0 w-full h-full z-[1] opacity-20" preserveAspectRatio="none">
+      {/* Pulsing SVG line with parallax */}
+      <motion.svg
+        className="absolute inset-0 w-full h-full z-[1] opacity-20"
+        preserveAspectRatio="none"
+        style={{ x: lineX }}
+      >
         <line x1="0" y1="50%" x2="100%" y2="50%" stroke="hsl(42 80% 55%)" strokeWidth="0.5">
           <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite" />
         </line>
-      </svg>
+      </motion.svg>
 
       {/* Mouse-follow glow */}
       <div className="absolute inset-0 pointer-events-none z-[2] opacity-30" style={gradientStyle} />

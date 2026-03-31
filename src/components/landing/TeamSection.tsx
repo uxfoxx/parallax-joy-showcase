@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 const team = [
   { initials: "SM", name: "Sales & Marketing", role: "Commercial Team", bio: "Driving brand growth across HoReCa, Modern Trade, and General Trade channels island-wide." },
@@ -8,9 +9,30 @@ const team = [
 ];
 
 const TeamSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Parallax decorative element
+  const orbY = useTransform(scrollYProgress, [0, 1], ["50px", "-50px"]);
+
   return (
-    <section className="bg-muted/30">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 w-full">
+    <section ref={sectionRef} className="relative bg-muted/30 overflow-hidden">
+      {/* Parallax decorative circle */}
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ y: orbY }}>
+        <div
+          className="absolute w-[450px] h-[450px] -bottom-32 -right-32 rounded-full opacity-[0.05]"
+          style={{ background: "radial-gradient(circle, hsl(140 50% 30%), transparent 70%)" }}
+        />
+        <div
+          className="absolute w-[300px] h-[300px] top-10 -left-20 rounded-full opacity-[0.04]"
+          style={{ background: "radial-gradient(circle, hsl(42 60% 50%), transparent 70%)" }}
+        />
+      </motion.div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 w-full relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -44,7 +66,6 @@ const TeamSection = () => {
               whileHover={{ y: -8, transition: { duration: 0.25 } }}
               className="group p-8 rounded-2xl bg-card border border-border hover:border-accent/30 transition-all duration-500 hover:shadow-lg text-center glow-border"
             >
-              {/* Avatar */}
               <motion.div
                 whileHover={{ scale: 1.12 }}
                 transition={{ type: "spring", stiffness: 300 }}
