@@ -1,45 +1,30 @@
 
 
-# Improve Product Cards, Use in Featured Section, Fix Stats Section Background
+# WhyChooseUs Gradient Flip + Team Section Video Background
 
-## 1. Product Card UI Upgrade
-**File**: `src/components/ProductCard.tsx`
+## 1. WhyChooseUs — Dark gradient on top
+**File**: `src/components/landing/WhyChooseUs.tsx` (line 62)
 
-Current card is functional but basic. Improvements:
-- Add a subtle inner shadow and border for depth
-- Smoother gradient overlay (three-stop gradient)
-- Always show product name at bottom (not just on hover) with a clean text shadow
-- On hover: reveal description + brand/origin with a slide-up panel effect
-- Add a subtle shine/highlight effect on hover (pseudo-element or gradient overlay)
-- Slightly larger bottom padding for breathing room
-- Add `shadow-lg` on hover for lift effect
+Change the linear gradient from `hsl(150 40% 10%), hsl(140 50% 19%), hsl(150 40% 10%)` to dark-top:
+```
+linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 14%), hsl(150 40% 10%))
+```
 
-## 2. Featured Section — Use ProductCard Component
-**File**: `src/components/landing/FeaturedProducts.tsx`
+## 2. Team Section — Factory video background
+**File**: `src/components/landing/TeamSection.tsx`
 
-Currently the featured section builds its own custom cards (lines 62-108) with dark green gradient backgrounds, badges, and "View Product" buttons — completely different from ProductCard. Replace with the shared `ProductCard` component:
-- Import `ProductCard` from `@/components/ProductCard`
-- Replace the custom card markup with `<ProductCard product={product} large />`
-- Remove the scroll-linked `gridShift`, `gridRotate`, `firstCardScale`, `firstCardOpacity` transforms (they cause jank and distort the cards)
-- Keep the section background, heading, and "View All" button as-is
-
-## 3. Stats Section — Full White Background
-**File**: `src/components/landing/StatsSection.tsx`
-
-The section currently has `bg-muted/30` (line 74) which gives it a grayish tint, plus green decorative orbs. Fix:
-- Change `bg-muted/30` to `bg-white`
-- Remove the parallax green orbs entirely (lines 77-89)
-- Keep the TiltCard borders and content styling — they already use `bg-card` which works on white
-- The section will read as fully white with clean stat cards
-
-Also update `src/pages/Index.tsx` to set `data-navbar-theme="light"` on the StatsSection wrapper (it's currently `"dark"`).
+- Remove white background and decorative orbs (lines 21-36)
+- Add a full-bleed `<video>` element with `autoPlay muted loop playsInline` using a royalty-free factory/warehouse video from Pixabay (MP4)
+- Add dark overlay (`bg-black/50`) for text readability
+- Switch text from dark to white: `text-foreground` → `text-white`, `text-muted-foreground` → `text-white/70`
+- Update badge: `bg-accent/10 text-accent border-accent/20` → `bg-white/10 text-white border-white/20`
+- Update accent span from `text-forest-mid` to `text-olive-mid` for better contrast on dark
+- Update `data-navbar-theme` wrapper in `Index.tsx` from `"dark"` to `"light"` (or ensure it says `"dark"` since it's now a dark section)
 
 ## Files
 
 | File | Change |
 |------|--------|
-| `src/components/ProductCard.tsx` | Better shadows, always-visible name, smoother hover, shine effect |
-| `src/components/landing/FeaturedProducts.tsx` | Use `ProductCard` component, remove scroll distortion transforms |
-| `src/components/landing/StatsSection.tsx` | `bg-white`, remove green orbs |
-| `src/pages/Index.tsx` | StatsSection wrapper → `data-navbar-theme="light"` |
+| `src/components/landing/WhyChooseUs.tsx` | Flip gradient — dark on top |
+| `src/components/landing/TeamSection.tsx` | Video background + dark overlay + white text |
 
