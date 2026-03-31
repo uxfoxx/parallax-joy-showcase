@@ -41,21 +41,14 @@ const Index = () => {
           <StatsSection />
           <SectionTransition colorFrom="hsl(140 50% 12% / 0.2)" colorTo="hsl(150 40% 10% / 0.3)" flip />
 
-          {/* DarkStatsBanner pinned */}
-          <div className="relative">
-            <div className="sticky top-0 z-0">
-              <DarkStatsBanner />
-            </div>
-            <div className="relative z-[1]">
-              <SectionTransition colorFrom="hsl(150 40% 10% / 0.3)" colorTo="hsl(140 50% 14% / 0.2)" />
-              <TeamSection />
-              <SectionTransition colorFrom="hsl(140 50% 14% / 0.2)" colorTo="hsl(150 40% 8% / 0.3)" flip />
-              <LocationsSection />
-              <SectionTransition colorFrom="hsl(150 40% 8% / 0.3)" colorTo="hsl(140 50% 12% / 0.3)" />
-              <FAQSection />
-              <Footer />
-            </div>
-          </div>
+          <DarkStatsBanner />
+          <SectionTransition colorFrom="hsl(150 40% 10% / 0.3)" colorTo="hsl(140 50% 14% / 0.2)" />
+          <TeamSection />
+          <SectionTransition colorFrom="hsl(140 50% 14% / 0.2)" colorTo="hsl(150 40% 8% / 0.3)" flip />
+          <LocationsSection />
+          <SectionTransition colorFrom="hsl(150 40% 8% / 0.3)" colorTo="hsl(140 50% 12% / 0.3)" />
+          <FAQSection />
+          <Footer />
         </div>
       </div>
     </div>

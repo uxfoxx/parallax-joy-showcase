@@ -11,23 +11,16 @@ const LocationsSection = () => {
   const bgY = useTransform(scrollYProgress, [0, 1], ["-60px", "60px"]);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden py-28 lg:py-36">
-      {/* Dark gradient bg */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
-            radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-            linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 19%), hsl(150 40% 10%))
-          `,
-        }}
-      />
-
+    <section ref={sectionRef} className="relative overflow-hidden py-28 lg:py-36 bg-background">
+      {/* Subtle decorative orbs */}
       <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
         <div
-          className="absolute w-[400px] h-[400px] top-20 -right-20 rounded-full opacity-[0.06]"
-          style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }}
+          className="absolute w-[500px] h-[500px] -top-40 -left-40 rounded-full opacity-[0.07]"
+          style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }}
+        />
+        <div
+          className="absolute w-[400px] h-[400px] bottom-0 right-0 rounded-full opacity-[0.05]"
+          style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }}
         />
       </motion.div>
 
@@ -39,10 +32,10 @@ const LocationsSection = () => {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
+          <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
             Our Location
           </span>
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight tracking-tight">
             Where to Find Us
           </h2>
         </motion.div>
@@ -57,42 +50,42 @@ const LocationsSection = () => {
             className="space-y-6"
           >
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-lg bg-primary-foreground/10 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
                 <MapPin className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <h4 className="font-display text-lg font-semibold text-primary-foreground mb-1">Address</h4>
-                <p className="text-primary-foreground/50 font-body text-sm leading-relaxed">
+                <h4 className="font-display text-lg font-semibold text-foreground mb-1">Address</h4>
+                <p className="text-muted-foreground font-body text-sm leading-relaxed">
                   Olive Foods (Pvt) Ltd<br />
                   Colombo, Sri Lanka
                 </p>
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-lg bg-primary-foreground/10 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
                 <Phone className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <h4 className="font-display text-lg font-semibold text-primary-foreground mb-1">Phone</h4>
-                <p className="text-primary-foreground/50 font-body text-sm">+94 11 234 5678</p>
+                <h4 className="font-display text-lg font-semibold text-foreground mb-1">Phone</h4>
+                <p className="text-muted-foreground font-body text-sm">+94 11 234 5678</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-lg bg-primary-foreground/10 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
                 <Mail className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <h4 className="font-display text-lg font-semibold text-primary-foreground mb-1">Email</h4>
-                <p className="text-primary-foreground/50 font-body text-sm">info@olivefoods.lk</p>
+                <h4 className="font-display text-lg font-semibold text-foreground mb-1">Email</h4>
+                <p className="text-muted-foreground font-body text-sm">info@olivefoods.lk</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-lg bg-primary-foreground/10 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
                 <Clock className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <h4 className="font-display text-lg font-semibold text-primary-foreground mb-1">Hours</h4>
-                <p className="text-primary-foreground/50 font-body text-sm">Mon – Fri: 8:30 AM – 5:30 PM</p>
+                <h4 className="font-display text-lg font-semibold text-foreground mb-1">Hours</h4>
+                <p className="text-muted-foreground font-body text-sm">Mon – Fri: 8:30 AM – 5:30 PM</p>
               </div>
             </div>
           </motion.div>
@@ -103,7 +96,7 @@ const LocationsSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-lg overflow-hidden border border-primary-foreground/10 shadow-2xl"
+            className="rounded-lg overflow-hidden border border-border shadow-lg"
           >
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.58585953498!2d79.7861!3d6.9271!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"

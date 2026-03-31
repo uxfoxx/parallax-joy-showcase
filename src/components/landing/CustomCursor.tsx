@@ -48,7 +48,7 @@ const CustomCursor = () => {
     <>
       {/* Trailing glow */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9998] hidden md:block"
+        className="fixed top-0 left-0 pointer-events-none z-[9998]"
         animate={{
           x: pos.x - 28,
           y: pos.y - 28,
@@ -60,14 +60,17 @@ const CustomCursor = () => {
       </motion.div>
       {/* Dot cursor */}
       <div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block"
+        className="fixed top-0 left-0 pointer-events-none z-[9999]"
         style={{
           transform: `translate(${pos.x - 4}px, ${pos.y - 4}px)`,
         }}
       >
         <div
           className="w-2 h-2 rounded-full bg-accent transition-transform duration-150"
-          style={{ transform: isHovering ? "scale(2)" : "scale(1)" }}
+          style={{
+            transform: isHovering ? "scale(2)" : "scale(1)",
+            boxShadow: "0 0 0 1px hsl(0 0% 0% / 0.3), 0 0 4px hsl(0 0% 0% / 0.2)",
+          }}
         />
       </div>
     </>
