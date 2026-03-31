@@ -66,29 +66,19 @@ const TeamSection = () => {
     return () => clearInterval(interval);
   }, [isHovered]);
 
-  const getItemStyle = (index: number) => {
-    const diff = index - activeIndex;
-    // Handle wrapping for circular distance
+  const getDistance = (index: number) => {
     const len = team.length;
-    const wrappedDiff = ((diff + Math.floor(len / 2) + len) % len) - Math.floor(len / 2);
-    const absDist = Math.abs(wrappedDiff);
-
-    if (absDist === 0) {
-      return { scale: 1.15, opacity: 1, rotateY: 0, z: 10, brightness: 1 };
-    } else if (absDist === 1) {
-      return { scale: 0.85, opacity: 0.7, rotateY: wrappedDiff > 0 ? -8 : 8, z: 5, brightness: 0.7 };
-    } else if (absDist === 2) {
-      return { scale: 0.7, opacity: 0.4, rotateY: wrappedDiff > 0 ? -14 : 14, z: 1, brightness: 0.5 };
-    }
-    return { scale: 0.6, opacity: 0.2, rotateY: wrappedDiff > 0 ? -18 : 18, z: 0, brightness: 0.4 };
+    const diff = ((index - activeIndex + Math.floor(len / 2) + len) % len) - Math.floor(len / 2);
+    return Math.abs(diff);
   };
 
-  // Sort items by distance from active so center renders on top
-  const sortedIndices = [...Array(team.length).keys()].sort((a, b) => {
-    const distA = Math.abs(((a - activeIndex + Math.floor(team.length / 2) + team.length) % team.length) - Math.floor(team.length / 2));
-    const distB = Math.abs(((b - activeIndex + Math.floor(team.length / 2) + team.length) % team.length) - Math.floor(team.length / 2));
-    return distB - distA; // furthest first so closest renders on top
-  });
+  const getItemStyle = (index: number) => {
+    const dist = getDistance(index);
+    if (dist === 0) return { scale: 1.1, opacity: 1, y: -8 };
+    if (dist === 1) return { scale: 0.9, opacity: 0.7, y: 0 };
+    if (dist === 2) return { scale: 0.8, opacity: 0.45, y: 0 };
+    return { scale: 0.75, opacity: 0.3, y: 0 };
+  };
 
   const activeMember = team[activeIndex];
 
@@ -128,43 +118,34 @@ const TeamSection = () => {
           </p>
         </motion.div>
 
-        {/* Curved Carousel */}
+        {/* Horizontal Carousel */}
         <div
-          className="relative flex items-center justify-center gap-4 md:gap-6 lg:gap-8 py-8"
-          style={{ perspective: "1200px" }}
+          className="flex items-center justify-center gap-3 md:gap-5 overflow-hidden py-8"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {sortedIndices.map((index) => {
-            const member = team[index];
+          {team.map((member, index) => {
             const Icon = member.icon;
             const style = getItemStyle(index);
             const isActive = index === activeIndex;
-
-            // Position: compute x offset based on wrapped difference
-            const len = team.length;
-            const wrappedDiff = ((index - activeIndex + Math.floor(len / 2) + len) % len) - Math.floor(len / 2);
 
             return (
               <motion.div
                 key={member.name}
                 onClick={() => setActiveIndex(index)}
-                className="cursor-pointer absolute md:relative"
+                className="cursor-pointer flex-shrink-0"
                 animate={{
                   scale: style.scale,
                   opacity: style.opacity,
-                  rotateY: style.rotateY,
-                  x: wrappedDiff * 180,
+                  y: style.y,
                 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                style={{
-                  zIndex: style.z,
-                  transformStyle: "preserve-3d",
-                }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               >
                 <div
-                  className={`relative w-36 h-44 md:w-48 md:h-56 lg:w-56 lg:h-64 rounded-2xl overflow-hidden transition-shadow duration-500 ${
-                    isActive ? "shadow-2xl shadow-accent/20" : "shadow-lg"
+                  className={`relative w-28 h-36 sm:w-36 sm:h-44 md:w-44 md:h-56 lg:w-52 lg:h-64 rounded-2xl overflow-hidden transition-shadow duration-500 ${
+                    isActive
+                      ? "shadow-[0_0_30px_rgba(135,157,72,0.3)] ring-2 ring-accent/40"
+                      : "shadow-lg"
                   }`}
                   style={{
                     background: `linear-gradient(160deg, ${member.color}, hsl(150 40% 10%))`,
@@ -175,15 +156,15 @@ const TeamSection = () => {
                     <Icon
                       className={`transition-all duration-500 ${
                         isActive
-                          ? "w-16 h-16 md:w-20 md:h-20 text-primary-foreground/90"
-                          : "w-12 h-12 md:w-14 md:h-14 text-primary-foreground/50"
+                          ? "w-14 h-14 md:w-18 md:h-18 lg:w-20 lg:h-20 text-primary-foreground/90"
+                          : "w-10 h-10 md:w-12 md:h-12 text-primary-foreground/40"
                       }`}
                     />
                   </div>
 
                   {/* Bottom overlay with name */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                    <p className="text-primary-foreground font-display text-sm md:text-base font-bold leading-tight">
+                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/60 to-transparent">
+                    <p className="text-primary-foreground font-display text-xs sm:text-sm md:text-base font-bold leading-tight">
                       {member.name}
                     </p>
                   </div>
@@ -191,7 +172,7 @@ const TeamSection = () => {
                   {/* Active glow ring */}
                   {isActive && (
                     <motion.div
-                      className="absolute inset-0 rounded-2xl border-2 border-accent/40"
+                      className="absolute inset-0 rounded-2xl border-2 border-accent/30"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.3 }}
