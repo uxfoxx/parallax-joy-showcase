@@ -8,13 +8,10 @@ import { useRef } from "react";
 const HeroSection = () => {
   const { ref, gradientStyle } = useMouseGradient();
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
+  const { scrollYProgress } = useScroll();
 
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0px", "60px"]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const contentY = useTransform(scrollYProgress, [0, 0.15], ["0px", "60px"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
 
   return (
     <section
