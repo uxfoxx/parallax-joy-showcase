@@ -1,65 +1,45 @@
 
 
-# Fix Incomplete Tasks: Team Section, Location Section, Product Cards, Page Connections
+# Improve Product Cards, Use in Featured Section, Fix Stats Section Background
 
-## Issues Found
-
-1. **Team Section ("Three Decades of Excellence")** — User asked for white background, but it still has dark video background with overlay. Video URL may also not load (Pexels video).
-2. **Location Section** — Still basic layout, not modernized as requested. Needs a more polished, modern white-section design.
-3. **Product Cards** — Show image in fixed-height container with text below. User wants full-image cards with details overlaid on hover.
-4. **Featured section landing page not connected to Featured page** — Landing FeaturedProducts has no "View All" link to `/featured`. Similarly Categories section doesn't link to `/products?category=X`.
-5. **ProductDetailPage** — Shows a placeholder letter instead of the product image (line 44-45).
-6. **Team video not playing** — Pexels video URL may be blocked/invalid. Need a reliable video source or fallback.
-
-## Plan
-
-### 1. Team Section — White Background (as requested)
-**File**: `src/components/landing/TeamSection.tsx`
-- Remove the video background entirely
-- Change to white background with subtle accent orbs (matching LocationsSection style)
-- Change all text colors from `primary-foreground` to `foreground` (dark text on white)
-- Keep the marquee photo cards and heading
-- Update the "Our Team" badge to light theme styling
-
-### 2. Location Section — Modern Redesign
-**File**: `src/components/landing/LocationsSection.tsx`
-- Full-width map as hero background with overlay card for contact details
-- Or: Side-by-side with larger map, glassmorphism contact card
-- Add subtle iconography, better spacing, modern card with rounded corners and shadow
-- Keep white background
-
-### 3. Product Cards — Full Image with Hover Overlay
+## 1. Product Card UI Upgrade
 **File**: `src/components/ProductCard.tsx`
-- Make the card fully image-based: image fills entire card (aspect-ratio 3/4)
-- Product name, brand, category shown as overlay on hover with gradient from bottom
-- Remove the separate text section below image
-- Keep Featured badge and category badge always visible
 
-### 4. Connect Featured Section to Featured Page
+Current card is functional but basic. Improvements:
+- Add a subtle inner shadow and border for depth
+- Smoother gradient overlay (three-stop gradient)
+- Always show product name at bottom (not just on hover) with a clean text shadow
+- On hover: reveal description + brand/origin with a slide-up panel effect
+- Add a subtle shine/highlight effect on hover (pseudo-element or gradient overlay)
+- Slightly larger bottom padding for breathing room
+- Add `shadow-lg` on hover for lift effect
+
+## 2. Featured Section — Use ProductCard Component
 **File**: `src/components/landing/FeaturedProducts.tsx`
-- Add "View All Featured" button/link at bottom pointing to `/featured`
 
-### 5. Connect Categories Section to Products Page
-**File**: `src/components/landing/CategoriesSection.tsx`
-- Make each category card clickable, linking to `/products` (with category filter in URL or state)
+Currently the featured section builds its own custom cards (lines 62-108) with dark green gradient backgrounds, badges, and "View Product" buttons — completely different from ProductCard. Replace with the shared `ProductCard` component:
+- Import `ProductCard` from `@/components/ProductCard`
+- Replace the custom card markup with `<ProductCard product={product} large />`
+- Remove the scroll-linked `gridShift`, `gridRotate`, `firstCardScale`, `firstCardOpacity` transforms (they cause jank and distort the cards)
+- Keep the section background, heading, and "View All" button as-is
 
-### 6. Fix ProductDetailPage — Show Product Image
-**File**: `src/pages/ProductDetailPage.tsx`
-- Replace the placeholder letter (line 44-45) with actual `product.image_url` when available
-- Keep letter fallback if no image
+## 3. Stats Section — Full White Background
+**File**: `src/components/landing/StatsSection.tsx`
 
-### 7. FeaturedProducts Landing Cards — Show "View All"
-**File**: `src/components/landing/FeaturedProducts.tsx`
-- Add a "View All Featured Products →" link below the grid
+The section currently has `bg-muted/30` (line 74) which gives it a grayish tint, plus green decorative orbs. Fix:
+- Change `bg-muted/30` to `bg-white`
+- Remove the parallax green orbs entirely (lines 77-89)
+- Keep the TiltCard borders and content styling — they already use `bg-card` which works on white
+- The section will read as fully white with clean stat cards
 
-## Files to Modify
+Also update `src/pages/Index.tsx` to set `data-navbar-theme="light"` on the StatsSection wrapper (it's currently `"dark"`).
+
+## Files
 
 | File | Change |
 |------|--------|
-| `src/components/landing/TeamSection.tsx` | White bg, remove video, dark text |
-| `src/components/landing/LocationsSection.tsx` | Modern white layout redesign |
-| `src/components/ProductCard.tsx` | Full-image card with hover overlay |
-| `src/components/landing/FeaturedProducts.tsx` | Add "View All" link to `/featured` |
-| `src/components/landing/CategoriesSection.tsx` | Make cards link to `/products` filtered |
-| `src/pages/ProductDetailPage.tsx` | Show product image instead of letter |
+| `src/components/ProductCard.tsx` | Better shadows, always-visible name, smoother hover, shine effect |
+| `src/components/landing/FeaturedProducts.tsx` | Use `ProductCard` component, remove scroll distortion transforms |
+| `src/components/landing/StatsSection.tsx` | `bg-white`, remove green orbs |
+| `src/pages/Index.tsx` | StatsSection wrapper → `data-navbar-theme="light"` |
 
