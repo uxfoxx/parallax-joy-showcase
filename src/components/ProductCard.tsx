@@ -10,7 +10,7 @@ interface ProductCardProps {
   variant?: "dark" | "light";
 }
 
-const ProductCard = ({ product, large = false }: ProductCardProps) => {
+const ProductCard = ({ product, large = false, variant = "light" }: ProductCardProps) => {
   const brandName = product.brands?.name ?? "";
   const brandSlug = product.brands?.slug ?? "";
 
