@@ -24,7 +24,7 @@ const ProductCard = ({ product, large = false, variant = "light" }: ProductCardP
     >
       <Link to={`/products/${product.slug}`} className="block group">
         <div
-          className={`relative rounded-lg overflow-hidden ${large ? "aspect-[3/4]" : "aspect-[4/5]"} shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-border`}
+          className={`relative rounded-lg overflow-hidden ${large ? "aspect-[3/4]" : "aspect-[4/5]"} transition-shadow duration-500 border ${variant === "dark" ? "border-white/10 shadow-md hover:shadow-xl" : "border-border shadow-lg hover:shadow-2xl"}`}
         >
           {/* Full image background */}
           {product.image_url ? (
