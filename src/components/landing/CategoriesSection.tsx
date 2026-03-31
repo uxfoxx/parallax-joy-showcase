@@ -1,80 +1,38 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Snowflake, Milk, Wheat, Droplets, Sparkles } from "lucide-react";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 
 const categories = [
-  {
-    name: "Frozen",
-    desc: "French fries, meats, seafood, fruits, and vegetables — stored and transported at -18°C for guaranteed freshness.",
-    icon: Snowflake,
-  },
-  {
-    name: "Dairy",
-    desc: "Cheese, butter, cream, and specialty dairy products from leading international producers.",
-    icon: Milk,
-  },
-  {
-    name: "Grocery & Staples",
-    desc: "Rice, pasta, canned goods, condiments, sauces, and everyday essentials from trusted global brands.",
-    icon: Wheat,
-  },
-  {
-    name: "Edible Oils",
-    desc: "Premium vegetable oils, olive oils, and specialty cooking oils for commercial and retail use.",
-    icon: Droplets,
-  },
-  {
-    name: "Specialty Imports",
-    desc: "Seasonal and premium international foods, gourmet ingredients, and exclusive brand offerings.",
-    icon: Sparkles,
-  },
+  { name: "Frozen", desc: "French fries, meats, seafood, fruits, and vegetables — stored and transported at -18°C for guaranteed freshness.", icon: Snowflake },
+  { name: "Dairy", desc: "Cheese, butter, cream, and specialty dairy products from leading international producers.", icon: Milk },
+  { name: "Grocery & Staples", desc: "Rice, pasta, canned goods, condiments, sauces, and everyday essentials from trusted global brands.", icon: Wheat },
+  { name: "Edible Oils", desc: "Premium vegetable oils, olive oils, and specialty cooking oils for commercial and retail use.", icon: Droplets },
+  { name: "Specialty Imports", desc: "Seasonal and premium international foods, gourmet ingredients, and exclusive brand offerings.", icon: Sparkles },
 ];
 
 const CategoriesSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll();
-  const { scrollYProgress: sectionProgress } = useScroll();
 
-  // Amplified fan-out effect: cards spread apart when element passes (~35-45%)
   const fanGap = useTransform(scrollYProgress, [0.32, 0.40, 0.48], [16, 72, 16]);
   const cardRotate1 = useTransform(scrollYProgress, [0.32, 0.40, 0.48], [0, -2, 0]);
   const cardRotate2 = useTransform(scrollYProgress, [0.32, 0.40, 0.48], [0, 2, 0]);
-
-  // Parallax background
-  const bgY = useTransform(sectionProgress, [0, 1], ["-50px", "50px"]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-50px", "50px"]);
 
   return (
     <section ref={sectionRef} id="brands" className="relative py-28 lg:py-36 bg-background overflow-hidden">
-      {/* Parallax decorative bg */}
       <motion.div className="absolute inset-0 pointer-events-none" style={{ y: bgY }}>
-        <div
-          className="absolute w-[700px] h-[500px] top-1/4 left-1/2 -translate-x-1/2 rounded-full opacity-[0.05]"
-          style={{ background: "radial-gradient(ellipse, hsl(75 38% 45%), transparent 70%)" }}
-        />
-        <div
-          className="absolute w-[400px] h-[400px] bottom-0 -left-20 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
-        />
+        <div className="absolute w-[700px] h-[500px] top-1/4 left-1/2 -translate-x-1/2 rounded-full opacity-[0.05]" style={{ background: "radial-gradient(ellipse, hsl(75 38% 45%), transparent 70%)" }} />
+        <div className="absolute w-[400px] h-[400px] bottom-0 -left-20 rounded-full opacity-[0.04]" style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center max-w-2xl mx-auto mb-16"
-        >
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-5 tracking-tight">
-            Product Categories
-          </h2>
-          <p className="text-muted-foreground font-body text-base leading-relaxed">
-            We import and distribute across all major food categories, ensuring variety and quality for every business need.
-          </p>
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="text-center max-w-2xl mx-auto mb-16">
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-5 tracking-tight">Product Categories</h2>
+          <p className="text-muted-foreground font-body text-base leading-relaxed">We import and distribute across all major food categories, ensuring variety and quality for every business need.</p>
         </motion.div>
 
-        {/* Grid — 5 cards: 3 top, 2 bottom centered */}
         <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3" style={{ gap: fanGap }}>
           {categories.slice(0, 3).map((cat, i) => (
             <motion.div key={cat.name} style={{ rotate: i === 0 ? cardRotate1 : i === 2 ? cardRotate2 : undefined }}>
@@ -82,10 +40,7 @@ const CategoriesSection = () => {
             </motion.div>
           ))}
         </motion.div>
-        <motion.div
-          className="grid sm:grid-cols-2 mt-6 max-w-2xl mx-auto lg:max-w-none lg:grid-cols-2 lg:px-[16.666%]"
-          style={{ gap: fanGap }}
-        >
+        <motion.div className="grid sm:grid-cols-2 mt-6 max-w-2xl mx-auto lg:max-w-none lg:grid-cols-2 lg:px-[16.666%]" style={{ gap: fanGap }}>
           {categories.slice(3).map((cat, i) => (
             <motion.div key={cat.name} style={{ rotate: i === 0 ? cardRotate1 : cardRotate2 }}>
               <CategoryCard cat={cat} i={i + 3} />
@@ -98,29 +53,22 @@ const CategoriesSection = () => {
 };
 
 const CategoryCard = ({ cat, i }: { cat: typeof categories[0]; i: number }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.5, delay: i * 0.1 }}
-    whileHover={{ y: -6, transition: { duration: 0.3 } }}
-    className="group p-6 rounded-lg border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-500"
-  >
+  <Link to={`/products?category=${encodeURIComponent(cat.name)}`}>
     <motion.div
-      whileHover={{ scale: 1.1, rotate: 5 }}
-      transition={{ type: "spring", stiffness: 300 }}
-      className="w-14 h-14 rounded-xl bg-forest-deep/10 flex items-center justify-center mb-6"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: i * 0.1 }}
+      whileHover={{ y: -6, transition: { duration: 0.3 } }}
+      className="group p-6 rounded-lg border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-500 cursor-pointer"
     >
-      <cat.icon className="w-6 h-6 text-forest-mid" />
+      <motion.div whileHover={{ scale: 1.1, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-14 h-14 rounded-xl bg-forest-deep/10 flex items-center justify-center mb-6">
+        <cat.icon className="w-6 h-6 text-forest-mid" />
+      </motion.div>
+      <h3 className="font-display text-xl font-semibold text-foreground mb-3 tracking-tight">{cat.name}</h3>
+      <p className="text-muted-foreground font-body text-sm leading-relaxed">{cat.desc}</p>
     </motion.div>
-
-    <h3 className="font-display text-xl font-semibold text-foreground mb-3 tracking-tight">
-      {cat.name}
-    </h3>
-    <p className="text-muted-foreground font-body text-sm leading-relaxed">
-      {cat.desc}
-    </p>
-  </motion.div>
+  </Link>
 );
 
 export default CategoriesSection;

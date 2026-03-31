@@ -2,6 +2,13 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useRef } from "react";
 
+const contactItems = [
+  { icon: MapPin, title: "Address", value: "Olive Foods (Pvt) Ltd\nColombo, Sri Lanka" },
+  { icon: Phone, title: "Phone", value: "+94 11 207 1717" },
+  { icon: Mail, title: "Email", value: "info@olivefoods.lk" },
+  { icon: Clock, title: "Hours", value: "Mon – Fri: 8:30 AM – 5:30 PM" },
+];
+
 const LocationsSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll();
@@ -9,14 +16,9 @@ const LocationsSection = () => {
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden py-28 lg:py-36" style={{ background: "hsl(0 0% 100%)" }}>
-      {/* Subtle decorative orbs */}
       <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
         <div
           className="absolute w-[500px] h-[500px] -top-40 -left-40 rounded-full opacity-[0.07]"
-          style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }}
-        />
-        <div
-          className="absolute w-[400px] h-[400px] bottom-0 right-0 rounded-full opacity-[0.05]"
           style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }}
         />
       </motion.div>
@@ -37,76 +39,51 @@ const LocationsSection = () => {
           </h2>
         </motion.div>
 
-        <div className="grid lg:grid-cols-[1fr_1.5fr] gap-10 items-start">
-          {/* Left — Address */}
+        {/* Map with floating glassmorphism card */}
+        <div className="relative">
+          {/* Full-width map */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="space-y-6"
-          >
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <MapPin className="w-5 h-5 text-accent" />
-              </div>
-              <div>
-                <h4 className="font-display text-lg font-semibold text-foreground mb-1">Address</h4>
-                <p className="text-muted-foreground font-body text-sm leading-relaxed">
-                  Olive Foods (Pvt) Ltd<br />
-                  Colombo, Sri Lanka
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <Phone className="w-5 h-5 text-accent" />
-              </div>
-              <div>
-                <h4 className="font-display text-lg font-semibold text-foreground mb-1">Phone</h4>
-                <p className="text-muted-foreground font-body text-sm">+94 11 234 5678</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <Mail className="w-5 h-5 text-accent" />
-              </div>
-              <div>
-                <h4 className="font-display text-lg font-semibold text-foreground mb-1">Email</h4>
-                <p className="text-muted-foreground font-body text-sm">info@olivefoods.lk</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <Clock className="w-5 h-5 text-accent" />
-              </div>
-              <div>
-                <h4 className="font-display text-lg font-semibold text-foreground mb-1">Hours</h4>
-                <p className="text-muted-foreground font-body text-sm">Mon – Fri: 8:30 AM – 5:30 PM</p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right — Google Map */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-lg overflow-hidden border border-border shadow-lg"
+            className="rounded-2xl overflow-hidden shadow-2xl border border-border"
           >
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.58585953498!2d79.7861!3d6.9271!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
               width="100%"
-              height="400"
-              style={{ border: 0, overflow: "hidden" }}
+              height="500"
+              style={{ border: 0, display: "block", overflow: "hidden" }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Olive Foods Location"
-              className="w-full h-[400px] block"
               scrolling="no"
             />
+          </motion.div>
+
+          {/* Glassmorphism overlay card */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute bottom-8 left-8 right-8 lg:right-auto lg:w-[420px] bg-background/90 backdrop-blur-xl rounded-2xl border border-border shadow-2xl p-8"
+          >
+            <h3 className="font-display text-2xl font-bold text-foreground mb-6">Get in Touch</h3>
+            <div className="space-y-5">
+              {contactItems.map((item) => (
+                <div key={item.title} className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0">
+                    <item.icon className="w-5 h-5 text-accent" />
+                  </div>
+                  <div>
+                    <h4 className="font-display text-sm font-semibold text-foreground mb-0.5">{item.title}</h4>
+                    <p className="text-muted-foreground font-body text-sm whitespace-pre-line">{item.value}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </div>
