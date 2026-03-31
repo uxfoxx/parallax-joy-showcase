@@ -48,7 +48,7 @@ const CustomCursor = () => {
     <>
       {/* Trailing glow */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9998] hidden md:block"
+        className="fixed top-0 left-0 pointer-events-none z-[9998]"
         animate={{
           x: pos.x - 28,
           y: pos.y - 28,
