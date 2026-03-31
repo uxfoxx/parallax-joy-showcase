@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -91,11 +91,11 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Space Grotesk', sans-serif;
   }
 }
 
@@ -185,6 +185,20 @@
     50% { box-shadow: 0 0 20px 5px hsl(75 38% 45% / 0.15); }
   }
 
+  @keyframes particle-float {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
+  }
+
+  @keyframes orb-drift {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(5%, -8%) scale(1.05); }
+    66% { transform: translate(-3%, 5%) scale(0.95); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+
   .animate-float { animation: float 6s ease-in-out infinite; }
   .animate-float-delayed { animation: float-delayed 5s ease-in-out infinite 1s; }
   .animate-slide-up-reveal { animation: slide-up-reveal 0.8s ease-out forwards; }
@@ -193,6 +207,8 @@
   .animate-marquee { animation: marquee 30s linear infinite; }
   .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
   .animate-gradient-shift { animation: gradient-shift 12s ease infinite; }
+  .animate-particle { animation: particle-float linear infinite; }
+  .animate-orb { animation: orb-drift 20s ease-in-out infinite; }
 
   @keyframes gradient-shift {
     0% { background-position: 0% 50%; }
@@ -210,5 +226,12 @@
 
   .animate-gradient {
     animation: gradient-move var(--gradient-duration, 5s) ease infinite;
+  }
+
+  /* Custom cursor */
+  @media (pointer: fine) {
+    .immersive-cursor * {
+      cursor: none !important;
+    }
   }
 }
