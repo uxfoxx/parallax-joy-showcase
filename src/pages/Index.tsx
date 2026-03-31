@@ -30,7 +30,7 @@ const Index = () => {
       <div data-navbar-theme="light">
         <LogoStrip />
       </div>
-      <SectionTransition colorFrom="hsl(140 50% 12% / 0.2)" colorTo="hsl(150 40% 10% / 0.4)" flip />
+      <SectionTransition />
       <div data-navbar-theme="dark">
         <FeaturedProducts />
       </div>
