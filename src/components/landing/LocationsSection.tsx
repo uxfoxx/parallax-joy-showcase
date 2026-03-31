@@ -49,7 +49,7 @@ const LocationsSection = () => {
         <motion.div
           className="absolute w-[400px] h-[400px] top-20 -right-20 rounded-full opacity-[0.06]"
           style={{
-            background: "radial-gradient(circle, hsl(42 70% 55%), transparent 70%)",
+            background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
             x: accentX,
           }}
         />
