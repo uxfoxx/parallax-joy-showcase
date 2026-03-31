@@ -79,6 +79,7 @@ const Navbar = () => {
         className="fixed top-4 left-0 right-0 z-50 mx-auto w-[calc(100%-2rem)] max-w-5xl"
       >
         <motion.div
+          initial={{ x: 0 }}
           animate={vibrateControls}
           className="w-full"
         >
@@ -88,7 +89,7 @@ const Navbar = () => {
             paddingBottom: scrolled ? 8 : 12,
           }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className={`flex items-center justify-between px-5 rounded-xl transition-all duration-500 ${barBg}`}
+          className={`flex items-center justify-between px-5 rounded-lg transition-all duration-500 ${barBg}`}
         >
           <Link to="/" className="flex items-center shrink-0">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -132,10 +133,10 @@ const Navbar = () => {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link to="/contact">
                 <Button
-                  className={`font-body font-semibold rounded-xl h-10 px-6 text-sm transition-all duration-500 ${
+                  className={`font-body font-semibold rounded-lg h-10 px-6 text-sm transition-all duration-500 backdrop-blur-sm border border-white/15 ${
                     isDark
-                      ? "bg-primary-foreground text-forest-deep hover:bg-primary-foreground/90 shadow-lg shadow-white/10"
-                      : "bg-forest-deep text-primary-foreground hover:bg-forest-mid shadow-lg shadow-forest-deep/20"
+                      ? "bg-primary-foreground/90 text-forest-deep hover:bg-primary-foreground/80 shadow-lg shadow-white/10"
+                      : "bg-forest-deep/90 text-primary-foreground hover:bg-forest-mid/90 shadow-lg shadow-forest-deep/20"
                   }`}
                 >
                   Contact Us
@@ -189,7 +190,7 @@ const Navbar = () => {
               className="mt-8"
             >
               <Link to="/contact" onClick={() => setMobileOpen(false)}>
-                <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl px-10 py-6 text-lg">
+                <Button className="bg-accent/90 text-white hover:bg-accent/80 font-body font-semibold rounded-lg px-10 py-6 text-lg backdrop-blur-sm border border-white/15">
                   Contact Us
                 </Button>
               </Link>

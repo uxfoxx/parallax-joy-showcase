@@ -83,7 +83,7 @@ const StatsSection = () => {
             </p>
             <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}>
               <Link to="/products">
-                <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl px-8 h-12 text-base transition-all duration-300 hover:shadow-xl hover:shadow-accent/25 group">
+                <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-lg px-8 h-12 text-base transition-all duration-300 hover:shadow-xl hover:shadow-accent/25 group">
                   View Products
                   <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-2" />
                 </Button>
