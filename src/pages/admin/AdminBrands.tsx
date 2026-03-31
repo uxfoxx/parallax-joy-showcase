@@ -30,10 +30,10 @@ const AdminBrands = () => {
   const handleSave = async () => {
     try {
       if (editing) {
-        await updateBrand.mutateAsync({ id: editing.id, ...form });
+        await updateBrand.mutateAsync({ id: editing.id, ...form, image_url: form.image_url || null });
         toast.success("Brand updated");
       } else {
-        await createBrand.mutateAsync({ ...form, slug: form.slug || form.name.toLowerCase().replace(/\s+/g, "-") });
+        await createBrand.mutateAsync({ ...form, slug: form.slug || form.name.toLowerCase().replace(/\s+/g, "-"), image_url: form.image_url || null });
         toast.success("Brand created");
       }
       setOpen(false);
