@@ -61,7 +61,7 @@ const ScrollFloatingElement = () => {
           {/* Branch */}
           <path
             d="M90 110 C100 95, 115 85, 130 80"
-            stroke="hsl(140 35% 22%)"
+            stroke="hsl(140 50% 19%)"
             strokeWidth="2"
             strokeLinecap="round"
             fill="none"
