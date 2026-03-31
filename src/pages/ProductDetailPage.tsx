@@ -1,9 +1,10 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Tag, MapPin, Package } from "lucide-react";
+import { ArrowLeft, Package } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { useProduct, useProducts } from "@/lib/api";
 
 const ProductDetailPage = () => {
@@ -11,7 +12,7 @@ const ProductDetailPage = () => {
   const { data: product, isLoading } = useProduct(slug || "");
   const { data: allProducts = [] } = useProducts();
   const relatedProducts = product
-    ? allProducts.filter((p) => p.brand_id === product.brand_id && p.id !== product.id).slice(0, 3)
+    ? allProducts.filter((p) => p.brand_id === product.brand_id && p.id !== product.id).slice(0, 4)
     : [];
 
   if (isLoading) return <PageLayout><div className="py-40 text-center font-body text-muted-foreground">Loading...</div></PageLayout>;
@@ -30,51 +31,115 @@ const ProductDetailPage = () => {
   const brandName = product.brands?.name ?? "";
   const brandSlug = product.brands?.slug ?? "";
 
+  const details = [
+    { label: "Category", value: product.category },
+    { label: "Origin", value: product.origin },
+    { label: "SKU", value: product.sku },
+    { label: "Brand", value: brandName, link: `/brands/${brandSlug}` },
+  ];
+
   return (
     <PageLayout>
-      <section className="py-12 bg-background">
-        <div className="max-w-6xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 text-sm font-body text-muted-foreground mb-10">
-            <Link to="/" className="hover:text-foreground transition-colors">Home</Link><span>/</span>
-            <Link to="/products" className="hover:text-foreground transition-colors">Products</Link><span>/</span>
-            <span className="text-foreground">{product.name}</span>
+      {/* Two-column product layout */}
+      <section className="bg-background">
+        <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] min-h-[calc(100vh-80px)]">
+          {/* Left — Image */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="relative bg-muted flex items-center justify-center min-h-[400px] lg:min-h-full"
+          >
+            {product.image_url ? (
+              <img
+                src={product.image_url}
+                alt={product.name}
+                className="w-full h-full object-cover absolute inset-0"
+              />
+            ) : (
+              <Package className="w-24 h-24 text-muted-foreground/20" />
+            )}
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
-            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="rounded-xl overflow-hidden aspect-square bg-gradient-to-br from-forest-deep/10 via-forest-mid/5 to-accent/10 flex items-center justify-center">
-              {product.image_url ? (
-                <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
-              ) : (
-                <Package className="w-20 h-20 text-forest-mid/20" />
-              )}
-            </motion.div>
+          {/* Right — Details */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="flex flex-col justify-center px-8 py-12 lg:px-16 lg:py-20"
+          >
+            {/* Breadcrumb */}
+            <nav className="flex items-center gap-2 text-xs font-body text-muted-foreground mb-8">
+              <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+              <span>/</span>
+              <Link to="/products" className="hover:text-foreground transition-colors">Products</Link>
+              <span>/</span>
+              <span className="text-foreground">{product.category}</span>
+            </nav>
 
-            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="space-y-6 flex flex-col justify-center">
-              <div className="space-y-3">
-                <Badge variant="outline" className="font-body text-xs border-border text-foreground">{product.category}</Badge>
-                <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">{product.name}</h1>
-                <Link to={`/brands/${brandSlug}`} className="inline-block font-body text-forest-mid font-medium hover:underline">by {brandName}</Link>
-              </div>
-              <p className="font-body text-muted-foreground leading-relaxed text-lg">{product.description}</p>
-              <div className="space-y-3 pt-4 border-t border-border">
-                <div className="flex items-center gap-3 text-sm font-body"><MapPin className="w-4 h-4 text-muted-foreground" /><span className="text-muted-foreground">Origin:</span><span className="text-foreground font-medium">{product.origin}</span></div>
-                <div className="flex items-center gap-3 text-sm font-body"><Package className="w-4 h-4 text-muted-foreground" /><span className="text-muted-foreground">SKU:</span><span className="text-foreground font-medium">{product.sku}</span></div>
-                <div className="flex items-center gap-3 text-sm font-body">
-                  <Tag className="w-4 h-4 text-muted-foreground" /><span className="text-muted-foreground">Tags:</span>
-                  <div className="flex flex-wrap gap-1.5">{(product.tags ?? []).map((tag) => <Badge key={tag} variant="secondary" className="font-body text-xs">{tag}</Badge>)}</div>
+            {/* Product name */}
+            <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-4">
+              {product.name}
+            </h1>
+
+            {/* Brand link */}
+            <Link
+              to={`/brands/${brandSlug}`}
+              className="font-body text-sm text-muted-foreground hover:text-forest-mid transition-colors mb-8"
+            >
+              by {brandName}
+            </Link>
+
+            {/* Description */}
+            <p className="font-body text-muted-foreground leading-relaxed text-base mb-10">
+              {product.description}
+            </p>
+
+            {/* Details table */}
+            <div className="space-y-0 mb-10">
+              {details.map((d, i) => (
+                <div key={d.label}>
+                  <div className="flex items-center justify-between py-3">
+                    <span className="font-body text-xs uppercase tracking-widest text-muted-foreground">{d.label}</span>
+                    {d.link ? (
+                      <Link to={d.link} className="font-body text-sm text-foreground hover:text-forest-mid transition-colors">{d.value}</Link>
+                    ) : (
+                      <span className="font-body text-sm text-foreground">{d.value}</span>
+                    )}
+                  </div>
+                  {i < details.length - 1 && <Separator />}
                 </div>
+              ))}
+            </div>
+
+            {/* Tags */}
+            {(product.tags ?? []).length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-10">
+                {(product.tags ?? []).map((tag) => (
+                  <Badge key={tag} variant="secondary" className="font-body text-xs">{tag}</Badge>
+                ))}
               </div>
-              <div className="pt-4"><Link to="/products" className="inline-flex items-center gap-2 text-sm font-body text-forest-mid hover:underline"><ArrowLeft className="w-4 h-4" /> Back to all products</Link></div>
-            </motion.div>
-          </div>
+            )}
+
+            {/* Back link */}
+            <Link
+              to="/products"
+              className="inline-flex items-center gap-2 text-sm font-body text-forest-mid hover:underline"
+            >
+              <ArrowLeft className="w-4 h-4" /> Back to all products
+            </Link>
+          </motion.div>
         </div>
       </section>
 
+      {/* Related products */}
       {relatedProducts.length > 0 && (
         <section className="py-20 bg-muted/30">
           <div className="max-w-6xl mx-auto px-6">
             <h2 className="font-display text-2xl font-bold text-foreground mb-10">More from {brandName}</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">{relatedProducts.map((p) => <ProductCard key={p.id} product={p} />)}</div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {relatedProducts.map((p) => <ProductCard key={p.id} product={p} />)}
+            </div>
           </div>
         </section>
       )}

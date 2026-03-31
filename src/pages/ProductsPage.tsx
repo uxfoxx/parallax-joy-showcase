@@ -98,7 +98,7 @@ const ProductsPage = () => {
           {isLoading ? (
             <p className="text-center font-body text-muted-foreground py-20">Loading products...</p>
           ) : filtered.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {filtered.map((product) => <ProductCard key={product.id} product={product} />)}
             </div>
           ) : (
