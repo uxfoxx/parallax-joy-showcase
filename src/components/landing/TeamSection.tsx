@@ -15,15 +15,21 @@ const TeamSection = () => {
   return (
     <section className="relative min-h-[80vh] overflow-hidden flex items-center">
       {/* Video background */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div
+        className="absolute inset-0 overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&q=80')" }}
+      >
         <video
           autoPlay
           muted
           loop
           playsInline
-          className="w-full h-full object-cover"
+          poster="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&q=80"
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={(e) => { (e.target as HTMLVideoElement).style.display = 'none'; }}
         >
-          <source src="https://cdn.pixabay.com/video/2020/07/30/45645-445039937_large.mp4" type="video/mp4" />
+          <source src="https://videos.pexels.com/video-files/3191572/3191572-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+          <source src="https://videos.pexels.com/video-files/854816/854816-hd_1920_1080_25fps.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/50" />
       </div>
