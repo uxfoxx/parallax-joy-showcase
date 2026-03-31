@@ -1,48 +1,67 @@
 
 
-# Scroll-Driven Floating Element Animation
+# Section Layout Reactions to Floating Scroll Element
 
 ## Concept
 
-A **floating 3D element** (an olive/leaf icon or the Olive Foods logo) that stays fixed on screen and **transforms as you scroll** through sections — changing position, scale, rotation, and opacity to create a cinematic scroll-linked experience.
-
-The element will travel from the Hero section down through LogoStrip, FeaturedProducts, and WhyChooseUs, animating smoothly based on scroll progress.
+Instead of the olive branch simply floating over sections, each section **responds to its presence** — content splits apart, shifts, or rearranges to "make room" for the element as it passes through. This creates a feeling that the floating element is physically interacting with the page.
 
 ## How It Works
 
-Using **Framer Motion's `useScroll` + `useTransform`** (already installed, no new packages):
+Each section uses `useScroll` + `useTransform` to detect when the floating element is in its scroll range, then animates its own layout properties (padding, gap, translate, scale) accordingly. The floating element's scroll ranges (from `ScrollFloatingElement.tsx`) serve as the reference for when each section should react.
 
-1. A single `<motion.div>` is rendered in `Index.tsx` as a **fixed-position overlay** (z-index between content and navbar)
-2. `useScroll()` tracks the page scroll progress
-3. `useTransform()` maps scroll ranges to CSS properties: `y`, `x`, `scale`, `rotate`, `opacity`
-4. As the user scrolls through each section, the element smoothly transitions between predefined keyframe states
+## Section Reactions
 
-## Animation Keyframes (by scroll progress)
+### 1. LogoStrip (scroll 10–25% — element slides right)
+- The logo row **splits in the middle** — left logos shift left, right logos shift right, creating a gap where the olive branch passes through
+- Uses `useTransform` on `scrollYProgress` [0.1–0.2] to animate a `gap` or `translateX` on two halves
 
-| Scroll % | Position | Scale | Rotation | Opacity | Context |
-|-----------|----------|-------|----------|---------|---------|
-| 0–10% | Center of hero | 1.0 | 0° | 0.15 | Subtle behind hero text |
-| 10–25% | Slides right | 0.6 | 15° | 0.25 | Passes through LogoStrip |
-| 25–50% | Left side | 0.8 | -10° | 0.2 | Alongside FeaturedProducts |
-| 50–75% | Right side | 1.2 | 20° | 0.15 | Behind WhyChooseUs |
-| 75–100% | Center, shrinks | 0.3 | 45° | 0 | Fades out for lower sections |
+### 2. FeaturedProducts (scroll 25–50% — element goes left)
+- The 3-column grid **shifts right** as a group, leaving space on the left for the element
+- The left-most card slightly scales down and fades while the other two cards shift right
+- Smooth `translateX` and `opacity` transforms on the grid
 
-## The Floating Element
+### 3. WhyChooseUs (scroll 50–75% — element goes right)
+- The 4-column grid content **shifts left**, mirroring the FeaturedProducts behavior
+- The rightmost card fades/scales slightly while others compress left
+- Header text shifts left with a subtle parallax offset
 
-An **olive branch SVG** — a simple, elegant inline SVG with 2-3 leaves and an olive. Rendered in the brand's gold/green colors with a subtle blur/glow. This ties to the "Olive Foods" brand without being heavy.
+### 4. CategoriesSection (scroll ~35–45%)
+- Cards **fan out** slightly — top row cards spread apart with increased gap
+- Creates a breathing effect as the element passes overhead
+
+## Implementation
+
+### New hook: `useScrollSectionReaction.ts`
+A reusable hook that takes a scroll range `[start, end]` and returns motion values for common reactions (shift, gap, scale, opacity). Each section imports this and applies the values.
+
+```typescript
+function useScrollSectionReaction(scrollRange: [number, number]) {
+  const { scrollYProgress } = useScroll();
+  const shift = useTransform(scrollYProgress, 
+    [scrollRange[0], midpoint, scrollRange[1]], 
+    [0, peakShift, 0]
+  );
+  // ... returns { shift, gap, fadeLeft, fadeRight }
+}
+```
+
+### Modified sections
+Each section wraps its content grid in a `<motion.div>` that uses the hook's output values.
 
 ## Files
 
 | Action | File | Changes |
 |--------|------|---------|
-| Create | `src/components/landing/ScrollFloatingElement.tsx` | The floating element component with `useScroll`/`useTransform` logic and inline olive branch SVG |
-| Modify | `src/pages/Index.tsx` | Import and render `ScrollFloatingElement` as a sibling to all sections |
+| Create | `src/hooks/useScrollSectionReaction.ts` | Reusable hook returning scroll-linked motion values |
+| Modify | `src/components/landing/LogoStrip.tsx` | Split logos into two halves that separate |
+| Modify | `src/components/landing/FeaturedProducts.tsx` | Grid shifts right during element pass-through |
+| Modify | `src/components/landing/WhyChooseUs.tsx` | Grid shifts left during element pass-through |
+| Modify | `src/components/landing/CategoriesSection.tsx` | Cards fan out with increased gap |
 
-## Technical Details
-
-- Uses `framer-motion`'s `useScroll({ offset: ["start start", "end end"] })` on the page container
-- `useTransform` maps `scrollYProgress` (0→1) to arrays of values for x, y, scale, rotate, opacity
-- The element is `position: fixed` with `pointer-events-none` so it never blocks interaction
-- Hidden on mobile (`hidden md:block`) to avoid performance issues on smaller devices
-- Pure CSS/Framer Motion — no GSAP or ScrollTrigger needed
+## Technical Notes
+- All transforms use Framer Motion `useTransform` for GPU-accelerated, frame-synced animation
+- Reactions are subtle (20–40px shifts, 0.95 scale) so content stays readable
+- Hidden on mobile (same as the floating element itself)
+- Each reaction peaks at the midpoint of the element's presence in that section, then smoothly returns to normal
 
