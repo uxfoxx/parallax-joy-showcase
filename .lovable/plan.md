@@ -1,28 +1,46 @@
 
 
-# Fix: Team Video Background, Hero Sticky Issue, Cursor Visibility
+# Navbar Section-Aware Colors + WhatsApp Button + Video Fix
 
-## Three Issues
+## 1. Navbar — Section-Aware Color Switching
 
-### 1. Team Section — Video Background
-**Problem**: "Three Decades of Excellence" section uses animated CSS gradient orbs instead of a video.
-**Fix** in `TeamSection.tsx`: Replace the dark gradient orbs background (lines 26-49) with a full-width `<video>` element using a royalty-free factory/warehouse video (e.g. from Pexels/Pixabay CDN). Add a dark overlay on top for text readability. Keep the parallax effect on the video via `motion.div` with `style={{ y: bgY }}`.
+**Approach**: Use `IntersectionObserver` to detect which section is currently in view. Each section declares whether it's "dark" or "light" via a `data-navbar-theme` attribute. The navbar reads this and switches between light text (on dark sections) and dark text (on light sections) with a smooth CSS transition.
 
-### 2. Hero Section — Still Follows When Scrolling
-**Problem**: The hero is wrapped in `sticky top-0 z-0` in `Index.tsx` (line 28), so it stays pinned behind all content. The user wants it to scroll away normally, not follow.
-**Fix** in `Index.tsx`: Remove the sticky wrapper. Change the structure so HeroSection is just a normal block element, and the rest of the content follows naturally below it. Remove the `z-0`/`z-[1]` layering.
+### Changes:
+- **`Navbar.tsx`**: Replace the simple `scrolled` + `isLanding` logic with a `currentTheme` state (`"dark" | "light"`) driven by an `IntersectionObserver` that watches elements with `data-navbar-theme`. When a dark section is in view → white text, dark glass bg. When a light section is in view → dark text, white glass bg. Smooth `transition-all duration-500` handles the color change.
+- **`Index.tsx`**: Add `data-navbar-theme="dark"` or `data-navbar-theme="light"` to each section wrapper. Dark sections: Hero, FeaturedProducts, StatsSection, DarkStatsBanner, TeamSection, FAQSection, Footer. Light sections: LogoStrip, WhyChooseUs, CategoriesSection, LocationsSection.
 
-### 3. Custom Cursor Green Dot — Not Visible
-**Problem**: The CSS rule `.immersive-cursor * { cursor: none !important; }` hides the native cursor, but the green dot itself starts at position `(-100, -100)` — off-screen until the user moves the mouse. Also the dot may be too small or blend into backgrounds.
-**Fixes**:
-- **`CustomCursor.tsx`**: Increase lerp speed from `0.12` to `0.25` for snappier following. Increase dot size to `w-4 h-4`. Add a stronger `boxShadow` with both white and dark outlines so it's visible on ALL backgrounds: `0 0 0 2px white, 0 0 0 3.5px rgba(0,0,0,0.3), 0 0 8px hsl(75 38% 45% / 0.9)`. Increase glow lerp from `0.06` to `0.12`.
-- **`src/index.css`**: Keep `cursor: none` rule — this is correct (hides native cursor so only the green dot shows). The issue is the dot itself not being visible enough, which the above fixes address.
+### Navbar color modes:
+| Mode | Background | Text | Logo | Button |
+|------|-----------|------|------|--------|
+| Dark section | `bg-forest-deep/80 backdrop-blur-xl` | white | inverted (white) | white fill |
+| Light section | `bg-white/80 backdrop-blur-xl shadow-md` | dark | normal | green fill |
+
+## 2. Floating WhatsApp Button
+
+Create a new component `src/components/FloatingWhatsApp.tsx`:
+- Fixed position `bottom-6 right-6 z-50`
+- Green circle button with WhatsApp icon (SVG inline or lucide `MessageCircle` styled green)
+- On click: `window.open("https://wa.me/94XXXXXXXXXX")` — use a placeholder number the user can update
+- Pulse animation on idle to draw attention
+- Tooltip on hover: "Chat with us"
+- Render in `Index.tsx` and `PageLayout.tsx`
+
+## 3. Team Section Video — Ensure Playback
+
+The video element exists but may not autoplay due to browser policies. Fix:
+- Add `preload="auto"` attribute
+- Use a higher quality video URL (current one is 360p SD)
+- Add an `onCanPlay` handler to explicitly call `.play()` as fallback
+- Ensure `muted` is set (required for autoplay)
 
 ## Files
 
 | Action | File |
 |--------|------|
-| Modify | `src/components/landing/TeamSection.tsx` — replace gradient orbs with `<video>` background |
-| Modify | `src/pages/Index.tsx` — remove sticky hero wrapper, make hero scroll normally |
-| Modify | `src/components/landing/CustomCursor.tsx` — bigger dot, stronger contrast outline, faster lerp |
+| Modify | `src/components/landing/Navbar.tsx` — IntersectionObserver-based theme switching |
+| Modify | `src/pages/Index.tsx` — add `data-navbar-theme` attributes to sections |
+| Create | `src/components/FloatingWhatsApp.tsx` — floating WhatsApp chat button |
+| Modify | `src/components/PageLayout.tsx` — add FloatingWhatsApp |
+| Modify | `src/components/landing/TeamSection.tsx` — fix video autoplay |
 
