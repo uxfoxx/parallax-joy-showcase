@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { toast } from "sonner";
 
-const emptyBrand = { name: "", slug: "", description: "", origin: "", established: undefined as number | undefined };
+const emptyBrand = { name: "", slug: "", description: "", origin: "", established: undefined as number | undefined, image_url: "" };
 
 const AdminBrands = () => {
   const { data: brands, isLoading } = useBrands();
@@ -25,15 +25,15 @@ const AdminBrands = () => {
   const filtered = brands?.filter((b) => b.name.toLowerCase().includes(search.toLowerCase())) ?? [];
 
   const openCreate = () => { setEditing(null); setForm(emptyBrand); setOpen(true); };
-  const openEdit = (b: Brand) => { setEditing(b); setForm({ name: b.name, slug: b.slug, description: b.description, origin: b.origin, established: b.established ?? undefined }); setOpen(true); };
+  const openEdit = (b: Brand) => { setEditing(b); setForm({ name: b.name, slug: b.slug, description: b.description, origin: b.origin, established: b.established ?? undefined, image_url: b.image_url ?? "" }); setOpen(true); };
 
   const handleSave = async () => {
     try {
       if (editing) {
-        await updateBrand.mutateAsync({ id: editing.id, ...form });
+        await updateBrand.mutateAsync({ id: editing.id, ...form, image_url: form.image_url || null });
         toast.success("Brand updated");
       } else {
-        await createBrand.mutateAsync({ ...form, slug: form.slug || form.name.toLowerCase().replace(/\s+/g, "-") });
+        await createBrand.mutateAsync({ ...form, slug: form.slug || form.name.toLowerCase().replace(/\s+/g, "-"), image_url: form.image_url || null });
         toast.success("Brand created");
       }
       setOpen(false);
@@ -64,6 +64,9 @@ const AdminBrands = () => {
             <div className="space-y-4">
               <div><Label className="font-body">Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="font-body" /></div>
               <div><Label className="font-body">Slug</Label><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="auto-generated" className="font-body" /></div>
+              <div><Label className="font-body">Image URL</Label><Input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} className="font-body" placeholder="https://..." />
+                {form.image_url && <img src={form.image_url} alt="Preview" className="mt-2 h-20 w-20 object-cover rounded-lg border border-border" />}
+              </div>
               <div><Label className="font-body">Description</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="font-body" /></div>
               <div className="grid grid-cols-2 gap-4">
                 <div><Label className="font-body">Origin</Label><Input value={form.origin} onChange={(e) => setForm({ ...form, origin: e.target.value })} className="font-body" /></div>
@@ -84,6 +87,7 @@ const AdminBrands = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="font-body w-14">Image</TableHead>
               <TableHead className="font-body">Name</TableHead>
               <TableHead className="font-body">Origin</TableHead>
               <TableHead className="font-body">Est.</TableHead>
@@ -92,12 +96,13 @@ const AdminBrands = () => {
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableRow><TableCell colSpan={4} className="text-center font-body text-muted-foreground py-10">Loading...</TableCell></TableRow>
+              <TableRow><TableCell colSpan={5} className="text-center font-body text-muted-foreground py-10">Loading...</TableCell></TableRow>
             ) : filtered.length === 0 ? (
-              <TableRow><TableCell colSpan={4} className="text-center font-body text-muted-foreground py-10">No brands found</TableCell></TableRow>
+              <TableRow><TableCell colSpan={5} className="text-center font-body text-muted-foreground py-10">No brands found</TableCell></TableRow>
             ) : (
               filtered.map((b) => (
                 <TableRow key={b.id}>
+                  <TableCell>{b.image_url ? <img src={b.image_url} alt={b.name} className="h-10 w-10 rounded-md object-cover" /> : <div className="h-10 w-10 rounded-md bg-muted" />}</TableCell>
                   <TableCell className="font-body font-medium">{b.name}</TableCell>
                   <TableCell className="font-body text-muted-foreground">{b.origin}</TableCell>
                   <TableCell className="font-body text-muted-foreground">{b.established ?? "—"}</TableCell>

@@ -18,6 +18,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import AdminBrands from "./pages/admin/AdminBrands.tsx";
 import AdminProducts from "./pages/admin/AdminProducts.tsx";
 import AdminCategories from "./pages/admin/AdminCategories.tsx";
+import AdminFeatured from "./pages/admin/AdminFeatured.tsx";
+import AdminSubmissions from "./pages/admin/AdminSubmissions.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
 
 const queryClient = new QueryClient();
@@ -44,6 +46,8 @@ const App = () => (
             <Route path="brands" element={<AdminBrands />} />
             <Route path="products" element={<AdminProducts />} />
             <Route path="categories" element={<AdminCategories />} />
+            <Route path="featured" element={<AdminFeatured />} />
+            <Route path="submissions" element={<AdminSubmissions />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

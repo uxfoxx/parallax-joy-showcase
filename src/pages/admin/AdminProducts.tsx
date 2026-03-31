@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { toast } from "sonner";
 
-const emptyForm = { name: "", slug: "", brand_id: "", category: "", description: "", featured: false, tags: "" as string, origin: "", sku: "" };
+const emptyForm = { name: "", slug: "", brand_id: "", category: "", description: "", featured: false, tags: "" as string, origin: "", sku: "", image_url: "" };
 
 const AdminProducts = () => {
   const { data: products, isLoading } = useProducts();
@@ -32,7 +32,7 @@ const AdminProducts = () => {
   const openCreate = () => { setEditing(null); setForm(emptyForm); setOpen(true); };
   const openEdit = (p: Product) => {
     setEditing(p);
-    setForm({ name: p.name, slug: p.slug, brand_id: p.brand_id, category: p.category, description: p.description, featured: p.featured, tags: (p.tags ?? []).join(", "), origin: p.origin, sku: p.sku });
+    setForm({ name: p.name, slug: p.slug, brand_id: p.brand_id, category: p.category, description: p.description, featured: p.featured, tags: (p.tags ?? []).join(", "), origin: p.origin, sku: p.sku, image_url: p.image_url ?? "" });
     setOpen(true);
   };
 
@@ -48,6 +48,7 @@ const AdminProducts = () => {
         tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
         origin: form.origin,
         sku: form.sku,
+        image_url: form.image_url || null,
       };
       if (editing) {
         await updateProduct.mutateAsync({ id: editing.id, ...payload });
@@ -103,6 +104,9 @@ const AdminProducts = () => {
                 <div><Label className="font-body">Origin</Label><Input value={form.origin} onChange={(e) => setForm({ ...form, origin: e.target.value })} className="font-body" /></div>
                 <div><Label className="font-body">SKU</Label><Input value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })} className="font-body" /></div>
               </div>
+              <div><Label className="font-body">Image URL</Label><Input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} className="font-body" placeholder="https://..." />
+                {form.image_url && <img src={form.image_url} alt="Preview" className="mt-2 h-20 w-20 object-cover rounded-lg border border-border" />}
+              </div>
               <div><Label className="font-body">Tags (comma separated)</Label><Input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} className="font-body" placeholder="organic, premium" /></div>
               <div className="flex items-center gap-3">
                 <Switch checked={form.featured} onCheckedChange={(v) => setForm({ ...form, featured: v })} />
@@ -123,6 +127,7 @@ const AdminProducts = () => {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="font-body w-14">Image</TableHead>
               <TableHead className="font-body">Name</TableHead>
               <TableHead className="font-body">Brand</TableHead>
               <TableHead className="font-body">Category</TableHead>
@@ -132,12 +137,13 @@ const AdminProducts = () => {
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableRow><TableCell colSpan={5} className="text-center font-body text-muted-foreground py-10">Loading...</TableCell></TableRow>
+              <TableRow><TableCell colSpan={6} className="text-center font-body text-muted-foreground py-10">Loading...</TableCell></TableRow>
             ) : filtered.length === 0 ? (
-              <TableRow><TableCell colSpan={5} className="text-center font-body text-muted-foreground py-10">No products found</TableCell></TableRow>
+              <TableRow><TableCell colSpan={6} className="text-center font-body text-muted-foreground py-10">No products found</TableCell></TableRow>
             ) : (
               filtered.map((p) => (
                 <TableRow key={p.id}>
+                  <TableCell>{p.image_url ? <img src={p.image_url} alt={p.name} className="h-10 w-10 rounded-md object-cover" /> : <div className="h-10 w-10 rounded-md bg-muted" />}</TableCell>
                   <TableCell className="font-body font-medium">{p.name}</TableCell>
                   <TableCell className="font-body text-muted-foreground">{p.brands?.name ?? "—"}</TableCell>
                   <TableCell><Badge variant="outline" className="font-body text-xs">{p.category}</Badge></TableCell>
