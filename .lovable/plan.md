@@ -1,47 +1,41 @@
 
 
-# Navbar Vibration Effect + Fix Button Text Visibility
+# Fix Button Visibility + Replace Hero Text with Logo
 
-## 1. Navbar Subtle Vibration Effect
+## 1. Replace Hero Text with Logo
 
-Add a periodic micro-vibration to the navbar bar using Framer Motion. The effect will be a very subtle horizontal shake (±1px) that fires in bursts — 3 quick shakes every 8 seconds. It's decorative and barely perceptible, like a heartbeat pulse.
+**File: `src/components/landing/HeroSection.tsx`**
 
-**File: `src/components/landing/Navbar.tsx`**
-- Add a `useEffect` with `setInterval` (every 8s) that triggers a Framer Motion animation sequence on the inner bar
-- Use `useAnimationControls()` from Framer Motion to programmatically trigger a shake sequence: `[0, -1, 1, -0.5, 0.5, 0]` over ~0.4s with spring easing
-- Apply controls to the inner `motion.div` bar element
+Replace the `<h1>` block ("Premium Food / Imports") with the uploaded SVG logo displayed large and centered. The logo will be imported from `src/assets/olive-foods-hero-logo.svg` (the new colored version). Keep the subtitle text and buttons below it. The logo will use `brightness-0 invert` to render white/cream on the dark hero background, sized at roughly `max-w-lg` to fill the hero nicely.
 
-## 2. Button Text Visibility Fixes
+- Copy `user-uploads://logo_olive-01_1-2.svg` → `src/assets/olive-foods-hero-logo.svg`
+- Replace lines 69-73 (the `<h1>` tag) with an `<img>` of the new logo, wrapped in a motion div for the same fade-in animation
+- Keep the marquee "OLIVE FOODS" text in the background as-is
 
-**Problem**: `bg-accent text-accent-foreground` uses olive-gold bg (`hsl(75 38% 45%)`) with dark green text (`hsl(140 30% 10%)`). The contrast is poor — both are medium-dark tones. The dark green text on olive-gold background is hard to read.
+## 2. Button Visibility Audit & Fixes
 
-**Fix**: Change `text-accent-foreground` to `text-white` across all accent-colored buttons, since white on olive-gold has excellent contrast. Also applies to accent badges.
+After reviewing every button across the site, the issue is with the **default `Button` variant** (`bg-primary text-primary-foreground`). The base CSS defines `primary` = dark green and `primary-foreground` = cream — these are fine for contrast. However, several admin pages use `<Button>` with no explicit className override inside `DialogContent` and light backgrounds, which inherits the default variant. These are actually readable (dark green bg + cream text).
 
-**Affected locations** (all `bg-accent text-accent-foreground` → `bg-accent text-white`):
+The **actual invisible buttons** are likely the `outline` variant buttons on hover: `hover:bg-accent hover:text-accent-foreground`. Since `accent` = olive-gold (`hsl(75 38% 45%)`) and `accent-foreground` = dark green (`hsl(140 30% 10%)`), this should have decent contrast.
 
-| File | Location |
-|------|----------|
-| `src/components/landing/Navbar.tsx` | Light-mode "Contact Us" button (line 123), mobile menu button (line 176) |
-| `src/components/landing/HeroSection.tsx` | "Explore Products" button |
-| `src/components/landing/StatsSection.tsx` | "View Products" button |
-| `src/pages/AboutPage.tsx` | CTA "Contact Us" button |
-| `src/pages/ContactPage.tsx` | "Send Message" submit button |
-| `src/pages/admin/AdminLogin.tsx` | Login/signup button |
-| `src/components/ProductCard.tsx` | "Featured" badge |
-| `src/pages/admin/AdminProducts.tsx` | Featured "Yes" badge |
+Looking more carefully — the most probable "white on white" culprit is the **Navbar "Contact Us" button on light mode**: `bg-primary-foreground text-forest-deep`. `primary-foreground` = cream (`hsl(60 20% 95%)`) which is nearly white. On a white backdrop with the white/80 navbar, a cream button would be almost invisible. 
 
-Additionally, the Product Detail page "Inquire" button uses `bg-primary text-primary-foreground` which on a light page means dark green bg with cream text — this is fine. The Brand Detail "Inquire" button uses `bg-primary-foreground text-forest-deep` (cream bg, dark green text) — also fine.
+**Fix:** Change the light-mode navbar Contact Us button from `bg-primary-foreground` to `bg-forest-deep text-white` — dark green button with white text, clearly visible on the light navbar.
+
+Also scan and fix any other instances where `bg-primary-foreground` is used as a button background on light sections:
+
+| Location | Current | Fix |
+|----------|---------|-----|
+| Navbar light-mode CTA (line 137) | `bg-primary-foreground text-forest-deep` → cream bg on white navbar | `bg-forest-deep text-primary-foreground` — dark green bg, cream text |
+| WhyChooseUs icon containers (line 129) | `bg-primary-foreground` — used as icon bg on dark section | Fine, keep as-is |
+| About page icon containers | Same pattern on dark sections | Fine |
+| BrandDetail "Inquire" button (line 52) | `bg-primary-foreground text-forest-deep` on dark section hero | Fine |
 
 ## Files
 
 | File | Change |
 |------|--------|
-| `src/components/landing/Navbar.tsx` | Add vibration effect + fix accent button text |
-| `src/components/landing/HeroSection.tsx` | Fix accent button text color |
-| `src/components/landing/StatsSection.tsx` | Fix accent button text color |
-| `src/pages/AboutPage.tsx` | Fix accent button text color |
-| `src/pages/ContactPage.tsx` | Fix accent button text color |
-| `src/pages/admin/AdminLogin.tsx` | Fix accent button text color |
-| `src/components/ProductCard.tsx` | Fix accent badge text color |
-| `src/pages/admin/AdminProducts.tsx` | Fix accent badge text color |
+| `src/assets/olive-foods-hero-logo.svg` | New — copy from upload |
+| `src/components/landing/HeroSection.tsx` | Replace h1 text with logo image |
+| `src/components/landing/Navbar.tsx` | Fix light-mode Contact Us button colors |
 
