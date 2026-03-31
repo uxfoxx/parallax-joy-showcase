@@ -60,7 +60,7 @@ const CustomCursor = () => {
       </motion.div>
       {/* Dot cursor */}
       <div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block"
+        className="fixed top-0 left-0 pointer-events-none z-[9999]"
         style={{
           transform: `translate(${pos.x - 4}px, ${pos.y - 4}px)`,
         }}
