@@ -31,9 +31,9 @@ const FAQSection = () => {
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse at 20% 30%, hsl(140 35% 16% / 0.5) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 70%, hsl(140 30% 14% / 0.4) 0%, transparent 50%),
-            linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 10%), hsl(140 45% 8%))
+            radial-gradient(ellipse at 20% 30%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 70%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 14%), hsl(150 40% 10%))
           `,
         }}
       />
@@ -42,11 +42,11 @@ const FAQSection = () => {
       <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
         <div
           className="absolute w-[500px] h-[400px] top-1/3 -left-40 rounded-full opacity-[0.05]"
-          style={{ background: "radial-gradient(ellipse, hsl(140 50% 25%), transparent 70%)" }}
+          style={{ background: "radial-gradient(ellipse, hsl(80 50% 31%), transparent 70%)" }}
         />
         <div
           className="absolute w-[300px] h-[300px] bottom-20 right-10 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(42 60% 50%), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }}
         />
       </motion.div>
 
@@ -83,7 +83,7 @@ const FAQSection = () => {
                 transition={{ duration: 0.4, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 className="rounded-xl border border-primary-foreground/15 overflow-hidden hover:border-primary-foreground/25 transition-all duration-500"
                 style={{
-                  background: `linear-gradient(135deg, hsl(140 35% 14% / 0.8), hsl(140 40% 12% / 0.6))`,
+                  background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))`,
                 }}
               >
                 <button

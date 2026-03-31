@@ -37,9 +37,9 @@ const LocationsSection = () => {
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse at 30% 20%, hsl(140 35% 18% / 0.5) 0%, transparent 50%),
-            radial-gradient(ellipse at 70% 80%, hsl(140 30% 14% / 0.4) 0%, transparent 50%),
-            linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))
+            radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 19%), hsl(150 40% 10%))
           `,
         }}
       />
@@ -49,13 +49,13 @@ const LocationsSection = () => {
         <motion.div
           className="absolute w-[400px] h-[400px] top-20 -right-20 rounded-full opacity-[0.06]"
           style={{
-            background: "radial-gradient(circle, hsl(42 70% 55%), transparent 70%)",
+            background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
             x: accentX,
           }}
         />
         <div
           className="absolute w-[350px] h-[350px] -bottom-20 left-10 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(140 50% 25%), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
         />
       </motion.div>
 
@@ -93,8 +93,8 @@ const LocationsSection = () => {
               className="group relative p-10 rounded-2xl border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
               style={{
                 background: `
-                  radial-gradient(ellipse at 30% 20%, hsl(140 30% 16% / 0.4) 0%, transparent 60%),
-                  linear-gradient(180deg, hsl(140 40% 12%), hsl(140 45% 10%))
+                  radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%),
+                  linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))
                 `,
               }}
             >

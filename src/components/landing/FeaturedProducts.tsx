@@ -30,9 +30,9 @@ const FeaturedProducts = () => {
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse at 30% 20%, hsl(140 35% 18% / 0.5) 0%, transparent 50%),
-            radial-gradient(ellipse at 70% 80%, hsl(140 30% 14% / 0.4) 0%, transparent 50%),
-            linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))
+            radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 19%), hsl(150 40% 10%))
           `,
         }}
       />
@@ -42,13 +42,13 @@ const FeaturedProducts = () => {
         <motion.div
           className="absolute w-[400px] h-[400px] -top-20 -right-20 rounded-full opacity-[0.08]"
           style={{
-            background: "radial-gradient(circle, hsl(42 80% 55%), transparent 70%)",
+            background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
             x: orbX,
           }}
         />
         <div
           className="absolute w-[500px] h-[500px] -bottom-40 -left-40 rounded-full opacity-[0.05]"
-          style={{ background: "radial-gradient(circle, hsl(140 50% 30%), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
         />
       </motion.div>
 
@@ -73,7 +73,7 @@ const FeaturedProducts = () => {
               className="group relative rounded-2xl overflow-hidden border border-primary-foreground/10 hover:border-primary-foreground/20 hover:shadow-2xl hover:shadow-forest-mid/40 transition-all duration-500"
               style={i === 0 ? { scale: firstCardScale, opacity: firstCardOpacity } : undefined}
             >
-              <div style={{ background: `radial-gradient(ellipse at 50% 0%, hsl(140 30% 22% / 0.6) 0%, transparent 60%), linear-gradient(180deg, hsl(140 40% 14%), hsl(140 45% 11%))` }}>
+              <div style={{ background: `radial-gradient(ellipse at 50% 0%, hsl(140 50% 19% / 0.6) 0%, transparent 60%), linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))` }}>
                 <div className="p-6 pb-0">
                   <div className="flex items-center gap-3 mb-5">
                     <span className="px-3 py-1 rounded-full bg-forest-mid/80 text-primary-foreground text-xs font-body font-medium border border-primary-foreground/10">{product.featured ? "Featured" : "New"}</span>

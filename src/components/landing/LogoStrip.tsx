@@ -34,7 +34,7 @@ const LogoStrip = () => {
       >
         <div
           className="absolute w-[600px] h-[300px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.07]"
-          style={{ background: "radial-gradient(ellipse, hsl(140 40% 30%), transparent 70%)" }}
+          style={{ background: "radial-gradient(ellipse, hsl(80 50% 31%), transparent 70%)" }}
         />
       </motion.div>
 

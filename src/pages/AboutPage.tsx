@@ -36,7 +36,7 @@ const AboutPage = () => {
     <PageLayout>
       {/* Hero Banner */}
       <section className="relative overflow-hidden py-28 lg:py-36">
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 19%), hsl(150 40% 10%))' }} />
         <div className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-overlay"><svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg"><filter id="noiseA"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter><rect width="100%" height="100%" filter="url(#noiseA)" /></svg></div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <motion.h1
@@ -248,7 +248,7 @@ const AboutPage = () => {
 
       {/* CTA */}
       <section className="py-20 lg:py-28 relative overflow-hidden">
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 19%), hsl(150 40% 10%))' }} />
         <div className="max-w-3xl mx-auto px-6 text-center space-y-8 relative z-10">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}

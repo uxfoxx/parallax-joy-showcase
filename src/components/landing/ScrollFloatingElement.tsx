@@ -52,8 +52,8 @@ const ScrollFloatingElement = () => {
         >
           {/* Main stem */}
           <path
-            d="M40 160 C60 140, 80 100, 120 60 C140 40, 160 30, 170 25"
-            stroke="hsl(140 35% 22%)"
+             d="M40 160 C60 140, 80 100, 120 60 C140 40, 160 30, 170 25"
+             stroke="hsl(140 50% 19%)"
             strokeWidth="3"
             strokeLinecap="round"
             fill="none"
@@ -61,7 +61,7 @@ const ScrollFloatingElement = () => {
           {/* Branch */}
           <path
             d="M90 110 C100 95, 115 85, 130 80"
-            stroke="hsl(140 35% 22%)"
+            stroke="hsl(140 50% 19%)"
             strokeWidth="2"
             strokeLinecap="round"
             fill="none"
@@ -71,62 +71,62 @@ const ScrollFloatingElement = () => {
             cx="155" cy="35"
             rx="18" ry="10"
             transform="rotate(-35 155 35)"
-            fill="hsl(140 35% 22% / 0.7)"
+            fill="hsl(140 50% 19% / 0.7)"
           />
           {/* Leaf 2 - mid right */}
           <ellipse
             cx="130" cy="65"
             rx="15" ry="8"
             transform="rotate(-25 130 65)"
-            fill="hsl(140 25% 32% / 0.6)"
+            fill="hsl(80 50% 31% / 0.6)"
           />
           {/* Leaf 3 - mid left */}
           <ellipse
             cx="95" cy="85"
             rx="14" ry="8"
             transform="rotate(20 95 85)"
-            fill="hsl(140 35% 22% / 0.65)"
+            fill="hsl(140 50% 19% / 0.65)"
           />
           {/* Leaf 4 - lower */}
           <ellipse
             cx="70" cy="120"
             rx="13" ry="7"
             transform="rotate(30 70 120)"
-            fill="hsl(140 25% 32% / 0.5)"
+            fill="hsl(80 50% 31% / 0.5)"
           />
           {/* Leaf 5 - small branch */}
           <ellipse
             cx="125" cy="82"
             rx="12" ry="6"
             transform="rotate(-15 125 82)"
-            fill="hsl(140 35% 22% / 0.55)"
+            fill="hsl(140 50% 19% / 0.55)"
           />
           {/* Olive 1 */}
           <ellipse
             cx="110" cy="72"
             rx="7" ry="9"
-            fill="hsl(42 80% 55% / 0.8)"
+            fill="hsl(75 38% 45% / 0.8)"
           />
           <ellipse
             cx="108" cy="70"
             rx="3" ry="4"
-            fill="hsl(42 70% 75% / 0.5)"
+            fill="hsl(75 40% 60% / 0.5)"
           />
           {/* Olive 2 */}
           <ellipse
             cx="78" cy="108"
             rx="6" ry="8"
-            fill="hsl(42 80% 55% / 0.7)"
+            fill="hsl(75 38% 45% / 0.7)"
           />
           <ellipse
             cx="76" cy="106"
             rx="2.5" ry="3.5"
-            fill="hsl(42 70% 75% / 0.4)"
+            fill="hsl(75 40% 60% / 0.4)"
           />
           {/* Leaf veins */}
-          <line x1="145" y1="35" x2="165" y2="33" stroke="hsl(140 25% 32% / 0.3)" strokeWidth="0.5" />
-          <line x1="120" y1="67" x2="140" y2="62" stroke="hsl(140 25% 32% / 0.3)" strokeWidth="0.5" />
-          <line x1="85" y1="87" x2="105" y2="82" stroke="hsl(140 25% 32% / 0.3)" strokeWidth="0.5" />
+          <line x1="145" y1="35" x2="165" y2="33" stroke="hsl(80 50% 31% / 0.3)" strokeWidth="0.5" />
+          <line x1="120" y1="67" x2="140" y2="62" stroke="hsl(80 50% 31% / 0.3)" strokeWidth="0.5" />
+          <line x1="85" y1="87" x2="105" y2="82" stroke="hsl(80 50% 31% / 0.3)" strokeWidth="0.5" />
         </svg>
       </div>
     </motion.div>
