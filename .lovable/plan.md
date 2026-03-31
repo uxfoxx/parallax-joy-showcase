@@ -1,44 +1,52 @@
 
 
-# Redesign Team Section — Clean Horizontal Carousel
+# Immersive Scroll Experience + Modern Font Update
 
-## Problem
-The current implementation uses absolute positioning with manual `x` offsets (`wrappedDiff * 180`) causing overlapping, messy layout. The 3D rotateY and z-index sorting creates visual clutter rather than elegance.
+## Summary
 
-## New Design
-A clean **horizontal strip carousel** similar to the reference image — all items visible in a row, center item smoothly scales up with a highlight, sides stay smaller. No 3D rotation, no absolute positioning chaos.
+Two changes in one pass: (1) implement the approved immersive scroll design with seamless morphing, interactive backgrounds, and enhanced animations; (2) swap fonts from Playfair Display + DM Sans to a cleaner, modern pairing.
 
-### Layout
-```text
- [small] [small] [  ACTIVE  ] [small] [small]
-                    ↑ bigger
-                    ↑ lifted
-                    ↑ glow border
-```
+## Font Change
 
-### Implementation
-- Use a single `flex` row with `overflow-hidden` on the container
-- All 6 items rendered normally in flow, centered via `justify-center`
-- Active item: `scale(1.1)`, full opacity, accent border glow, slight `translateY(-8px)` lift
-- Adjacent items (distance 1): `scale(0.9)`, opacity 0.7
-- Far items (distance 2+): `scale(0.8)`, opacity 0.4
-- No `rotateY`, no absolute positioning, no z-index sorting
-- Smooth Framer Motion `animate` transitions on scale/opacity/y
-- Click any item to select it
-- Auto-play with 4s interval, pause on hover
-- Below: AnimatePresence bio text (keep existing)
-- Below: animated progress dots (keep existing)
-- Cards are taller portrait rectangles with gradient bg, centered icon, name at bottom
+**Current**: Playfair Display (serif headings) + DM Sans (body)
+**New**: **Inter** (body/UI) + **Space Grotesk** (headings) — geometric, clean, techy, pairs perfectly with dark gradient themes. Both are Google Fonts, free.
 
-### Key Fixes
-- Remove `absolute md:relative` — all items are `relative` in normal flow
-- Remove `x: wrappedDiff * 180` manual offset
-- Remove `rotateY` and `perspective`
-- Remove `sortedIndices` z-index sorting hack
-- Use simple `gap` between items and let flexbox handle layout
+### Files for font change:
+- `src/index.css` — update Google Fonts import, update `body` and heading font-family rules
+- `tailwind.config.ts` — update `fontFamily.display` to `Space Grotesk` and `fontFamily.body` to `Inter`
+- `index.html` — optionally add preconnect hints for faster font loading
 
-## File
-| Action | File |
-|--------|------|
-| Modify | `src/components/landing/TeamSection.tsx` |
+## Immersive Scroll Changes (from approved plan)
+
+### New Components
+| File | Purpose |
+|------|---------|
+| `ImmersiveBackground.tsx` | Fixed layer: animated gradient orbs, mouse-following glow, floating CSS particles, noise overlay |
+| `SectionTransition.tsx` | SVG wave divider that morphs colors between sections |
+| `CustomCursor.tsx` | Accent dot cursor + trailing glow (desktop only) |
+
+### Modified Components
+| File | Change |
+|------|--------|
+| `Index.tsx` | Add ImmersiveBackground + CustomCursor, wrap in perspective container, insert SectionTransitions between sections |
+| `index.css` | Custom cursor styles, particle keyframes, perspective utilities |
+| `HeroSection.tsx` | Transparent bg, mouse-parallax on content |
+| `LogoStrip.tsx` | Speed-reactive marquee, glow trails, transparent bg |
+| `FeaturedProducts.tsx` | 3D flip card entry, enhanced hover, transparent bg |
+| `WhyChooseUs.tsx` | Alternating entry animations, icon glow, transparent bg |
+| `CategoriesSection.tsx` | Arc layout animation, transparent bg |
+| `StatsSection.tsx` | Slot machine number roll, floating cards, transparent bg |
+| `DarkStatsBanner.tsx` | Horizontal wipe reveal, transparent bg |
+| `TeamSection.tsx` | Blurred backdrop behind active item |
+| `LocationsSection.tsx` | Pin-drop bounce, connecting lines, transparent bg |
+| `FAQSection.tsx` | Slide-from-right stagger, spring accordion, transparent bg |
+| `Footer.tsx` | Cinematic reveal, scroll-to-top button, transparent bg |
+
+### Technical Notes
+- All section backgrounds become transparent to let ImmersiveBackground show through
+- ImmersiveBackground gradient orbs shift with `scrollYProgress`
+- Mouse glow uses a single page-level `mousemove` listener
+- Custom cursor hidden on mobile; particles reduced on mobile
+- No new packages — Framer Motion handles all animations
+- Font swap is a simple find-and-replace across 3 files
 
