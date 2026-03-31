@@ -128,9 +128,9 @@ const AboutPage = () => {
               <motion.div
                 key={a.title}
                 variants={item}
-                className="p-8 rounded-2xl border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-300"
+                className="p-6 rounded-lg border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-300"
               >
-                <div className="w-14 h-14 rounded-xl bg-forest-deep/10 flex items-center justify-center mb-6">
+                <div className="w-12 h-12 rounded-lg bg-forest-deep/10 flex items-center justify-center mb-4">
                   <a.icon className="w-6 h-6 text-forest-mid" />
                 </div>
                 <h4 className="font-display text-lg font-semibold text-foreground mb-3">{a.title}</h4>
