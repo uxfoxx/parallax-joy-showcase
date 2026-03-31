@@ -46,7 +46,7 @@ const FAQSection = () => {
         />
         <div
           className="absolute w-[300px] h-[300px] bottom-20 right-10 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(42 60% 50%), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }}
         />
       </motion.div>
 
