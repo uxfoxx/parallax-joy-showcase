@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Package, Warehouse, Thermometer, Truck } from "lucide-react";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
 
@@ -27,10 +27,16 @@ const features = [
 
 const WhyChooseUs = () => {
   const { ref, gradientStyle } = useMouseGradient();
+  const { scrollYProgress } = useScroll();
+
+  // Element is at right side during scroll 50-75%, so grid shifts left
+  const gridShift = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -45, 0]);
+  const headerShift = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -20, 0]);
+  const lastCardScale = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [1, 0.92, 1]);
+  const lastCardOpacity = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [1, 0.6, 1]);
 
   return (
     <section ref={ref as React.RefObject<HTMLElement>} id="about" className="relative overflow-hidden py-28 lg:py-36">
-      {/* Standardized dark gradient */}
       <div
         className="absolute inset-0"
         style={{
@@ -42,7 +48,6 @@ const WhyChooseUs = () => {
         }}
       />
 
-      {/* Mouse-follow gradient */}
       <div className="absolute inset-0 pointer-events-none z-[1] opacity-30" style={gradientStyle} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
@@ -53,6 +58,7 @@ const WhyChooseUs = () => {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto mb-20"
+          style={{ x: headerShift }}
         >
           <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
             Why Choose Us
@@ -68,7 +74,7 @@ const WhyChooseUs = () => {
         </motion.div>
 
         {/* Feature cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8" style={{ x: gridShift }}>
           {features.map((f, i) => (
             <motion.div
               key={f.title}
@@ -83,6 +89,7 @@ const WhyChooseUs = () => {
                   radial-gradient(ellipse at 30% 20%, hsl(140 30% 16% / 0.4) 0%, transparent 60%),
                   linear-gradient(180deg, hsl(140 40% 12%), hsl(140 45% 10%))
                 `,
+                ...(i === 3 ? { scale: lastCardScale, opacity: lastCardOpacity } : {}),
               }}
             >
               <motion.div
@@ -100,7 +107,7 @@ const WhyChooseUs = () => {
               </p>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

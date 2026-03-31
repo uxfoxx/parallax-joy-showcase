@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFeaturedProducts } from "@/lib/api";
@@ -6,10 +6,15 @@ import { useFeaturedProducts } from "@/lib/api";
 const FeaturedProducts = () => {
   const { data: products = [] } = useFeaturedProducts();
   const displayProducts = products.slice(0, 3);
+  const { scrollYProgress } = useScroll();
+
+  // Element is at left side during scroll 25-50%, so grid shifts right
+  const gridShift = useTransform(scrollYProgress, [0.22, 0.37, 0.52], [0, 50, 0]);
+  const firstCardScale = useTransform(scrollYProgress, [0.22, 0.37, 0.52], [1, 0.92, 1]);
+  const firstCardOpacity = useTransform(scrollYProgress, [0.22, 0.37, 0.52], [1, 0.6, 1]);
 
   return (
     <section id="products" className="relative overflow-hidden py-28 lg:py-36">
-      {/* Standardized dark gradient */}
       <div
         className="absolute inset-0"
         style={{
@@ -27,7 +32,10 @@ const FeaturedProducts = () => {
           <p className="text-primary-foreground/50 font-body text-base max-w-sm leading-relaxed">Carefully selected food products sourced from certified international suppliers.</p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <motion.div
+          className="grid md:grid-cols-3 gap-8"
+          style={{ x: gridShift }}
+        >
           {displayProducts.map((product, i) => (
             <motion.div
               key={product.id}
@@ -37,6 +45,7 @@ const FeaturedProducts = () => {
               transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -8, transition: { duration: 0.3 } }}
               className="group relative rounded-2xl overflow-hidden border border-primary-foreground/10 hover:border-primary-foreground/20 hover:shadow-2xl hover:shadow-forest-mid/40 transition-all duration-500"
+              style={i === 0 ? { scale: firstCardScale, opacity: firstCardOpacity } : undefined}
             >
               <div style={{ background: `radial-gradient(ellipse at 50% 0%, hsl(140 30% 22% / 0.6) 0%, transparent 60%), linear-gradient(180deg, hsl(140 40% 14%), hsl(140 45% 11%))` }}>
                 <div className="p-6 pb-0">
@@ -65,7 +74,7 @@ const FeaturedProducts = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
