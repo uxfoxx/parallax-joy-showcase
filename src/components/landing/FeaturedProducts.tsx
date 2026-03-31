@@ -70,7 +70,7 @@ const FeaturedProducts = () => {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              className="group relative rounded-2xl overflow-hidden border border-primary-foreground/10 hover:border-primary-foreground/20 hover:shadow-2xl hover:shadow-forest-mid/40 transition-all duration-500"
+              className="group relative rounded-lg overflow-hidden border border-primary-foreground/10 hover:border-primary-foreground/20 hover:shadow-2xl hover:shadow-forest-mid/40 transition-all duration-500"
               style={i === 0 ? { scale: firstCardScale, opacity: firstCardOpacity } : undefined}
             >
               <div style={{ background: `radial-gradient(ellipse at 50% 0%, hsl(140 50% 19% / 0.6) 0%, transparent 60%), linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))` }}>
