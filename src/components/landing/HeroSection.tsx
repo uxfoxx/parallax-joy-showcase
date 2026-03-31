@@ -77,7 +77,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="flex flex-wrap gap-4 justify-center pt-4"
+            className="flex flex-wrap gap-4 justify-center"
           >
             <Link to="/products">
               <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl h-12 px-8 text-base transition-all duration-300 shadow-lg shadow-accent/20 group">
