@@ -46,7 +46,7 @@ const FeaturedProducts = () => {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
             >
-              <ProductCard product={product} large />
+              <ProductCard product={product} large variant="dark" />
             </motion.div>
           ))}
         </div>
