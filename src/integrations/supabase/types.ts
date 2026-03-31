@@ -20,6 +20,7 @@ export type Database = {
           description: string
           established: number | null
           id: string
+          image_url: string | null
           name: string
           origin: string
           slug: string
@@ -29,6 +30,7 @@ export type Database = {
           description?: string
           established?: number | null
           id?: string
+          image_url?: string | null
           name: string
           origin?: string
           slug: string
@@ -38,6 +40,7 @@ export type Database = {
           description?: string
           established?: number | null
           id?: string
+          image_url?: string | null
           name?: string
           origin?: string
           slug?: string
@@ -73,6 +76,7 @@ export type Database = {
           description: string
           featured: boolean
           id: string
+          image_url: string | null
           name: string
           origin: string
           sku: string
@@ -86,6 +90,7 @@ export type Database = {
           description?: string
           featured?: boolean
           id?: string
+          image_url?: string | null
           name: string
           origin?: string
           sku?: string
@@ -99,6 +104,7 @@ export type Database = {
           description?: string
           featured?: boolean
           id?: string
+          image_url?: string | null
           name?: string
           origin?: string
           sku?: string
