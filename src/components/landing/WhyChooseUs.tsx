@@ -1,22 +1,27 @@
 import { motion } from "framer-motion";
-import { ShieldCheck, Globe, Truck } from "lucide-react";
+import { Package, Warehouse, Thermometer, Truck } from "lucide-react";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
 
 const features = [
   {
-    icon: ShieldCheck,
-    title: "Quality Assurance",
-    desc: "Every product undergoes rigorous laboratory testing, certification verification, and compliance checks with international food safety standards before reaching you.",
+    icon: Package,
+    title: "Integrated Import-to-Distribution",
+    desc: "End-to-end import and brand representation services — from sourcing and customs clearance to shelf-ready distribution across Sri Lanka.",
   },
   {
-    icon: Globe,
-    title: "Global Sourcing",
-    desc: "Our network spans 25+ countries with long-term partnerships with certified producers, farmers, and artisans — ensuring consistent quality and supply.",
+    icon: Warehouse,
+    title: "Bonded Warehousing",
+    desc: "Customs-approved bonded warehouse facilities enabling duty optimization, secure storage, and streamlined import processing.",
+  },
+  {
+    icon: Thermometer,
+    title: "Cold-Chain Logistics",
+    desc: "Temperature-controlled storage and transport at -18°C for frozen and chilled products, ensuring quality from port to point of sale.",
   },
   {
     icon: Truck,
-    title: "Efficient Distribution",
-    desc: "Temperature-controlled logistics and optimized cold-chain infrastructure ensure your products arrive fresh, on time, and in perfect condition.",
+    title: "Island-Wide Distribution",
+    desc: "Comprehensive distribution network serving HoReCa, Modern Trade, and General Trade channels across Sri Lanka with reliable, on-time delivery.",
   },
 ];
 
@@ -53,24 +58,24 @@ const WhyChooseUs = () => {
             Why Choose Us
           </span>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
-            Reliable Food Import
+            Your Complete FMCG
             <br />
-            Solutions for Your Business
+            Distribution Partner
           </h2>
           <p className="text-primary-foreground/45 font-body text-lg leading-relaxed">
-            We simplify sourcing with a strong global network, strict quality control, and efficient logistics
+            Three decades of experience in import, warehousing, and distribution — built on strong global supplier relationships
           </p>
         </motion.div>
 
         {/* Feature cards */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((f, i) => (
             <motion.div
               key={f.title}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -6, transition: { duration: 0.3 } }}
               className="group relative p-10 rounded-2xl border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
               style={{

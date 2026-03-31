@@ -74,7 +74,7 @@ const HeroSection = () => {
             <span className="text-gradient-gold">Imports</span>
           </h1>
           <p className="font-body text-lg sm:text-xl text-primary-foreground/50 max-w-xl mx-auto leading-relaxed">
-            Connecting global producers with local businesses — quality ingredients sourced from 25+ countries.
+            Your trusted import, bonded warehousing & FMCG distribution partner serving Sri Lanka's HoReCa, Modern Trade and General Trade sectors.
           </p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
