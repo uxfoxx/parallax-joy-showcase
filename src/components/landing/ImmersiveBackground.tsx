@@ -1,13 +1,13 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const ImmersiveBackground = () => {
   const { scrollYProgress } = useScroll();
-  const [mouse, setMouse] = useState({ x: 50, y: 50 });
+  const glowRef = useRef<HTMLDivElement>(null);
   const current = useRef({ x: 50, y: 50 });
+  const smooth = useRef({ x: 50, y: 50 });
   const raf = useRef(0);
 
-  // Gradient orbs shift with scroll
   const orb1Y = useTransform(scrollYProgress, [0, 1], ["0%", "60%"]);
   const orb2Y = useTransform(scrollYProgress, [0, 1], ["10%", "80%"]);
   const orb3Y = useTransform(scrollYProgress, [0, 1], ["50%", "20%"]);
@@ -23,10 +23,14 @@ const ImmersiveBackground = () => {
     };
 
     const animate = () => {
-      setMouse((prev) => ({
-        x: prev.x + (current.current.x - prev.x) * 0.05,
-        y: prev.y + (current.current.y - prev.y) * 0.05,
-      }));
+      smooth.current.x += (current.current.x - smooth.current.x) * 0.05;
+      smooth.current.y += (current.current.y - smooth.current.y) * 0.05;
+
+      if (glowRef.current) {
+        glowRef.current.style.left = `${smooth.current.x}%`;
+        glowRef.current.style.top = `${smooth.current.y}%`;
+      }
+
       raf.current = requestAnimationFrame(animate);
     };
 
@@ -40,7 +44,6 @@ const ImmersiveBackground = () => {
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* Base gradient */}
       <div
         className="absolute inset-0"
         style={{
@@ -55,7 +58,6 @@ const ImmersiveBackground = () => {
         }}
       />
 
-      {/* Animated gradient orbs */}
       <motion.div
         className="absolute w-[800px] h-[800px] rounded-full opacity-[0.12] animate-orb"
         style={{
@@ -85,18 +87,17 @@ const ImmersiveBackground = () => {
         }}
       />
 
-      {/* Mouse-following glow */}
+      {/* Mouse-following glow — ref-based, no setState */}
       <div
-        className="absolute w-[600px] h-[600px] rounded-full transition-opacity duration-700 hidden md:block"
+        ref={glowRef}
+        className="absolute w-[600px] h-[600px] rounded-full hidden md:block"
         style={{
           background: `radial-gradient(circle, hsl(75 38% 45% / 0.06), transparent 70%)`,
-          left: `${mouse.x}%`,
-          top: `${mouse.y}%`,
           transform: "translate(-50%, -50%)",
         }}
       />
 
-      {/* Floating particles — CSS only */}
+      {/* Floating particles */}
       <div className="hidden md:block">
         {Array.from({ length: 12 }).map((_, i) => (
           <div
@@ -112,7 +113,7 @@ const ImmersiveBackground = () => {
         ))}
       </div>
 
-      {/* Noise texture overlay */}
+      {/* Noise texture */}
       <div className="absolute inset-0 opacity-[0.04] mix-blend-overlay">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <filter id="immersiveNoise">

@@ -89,14 +89,37 @@
     @apply border-border;
   }
 
-  html, body {
+  html {
     overflow-x: hidden;
+    overflow-y: auto;
     max-width: 100vw;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(140 50% 19% / 0.4) transparent;
   }
 
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  /* Custom scrollbar — Webkit */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(140 50% 19% / 0.35);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(140 50% 19% / 0.55);
+    background-clip: content-box;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -236,9 +259,9 @@
     animation: gradient-move var(--gradient-duration, 5s) ease infinite;
   }
 
-  /* Custom cursor */
+  /* Hide native cursor globally on fine-pointer devices */
   @media (pointer: fine) {
-    .immersive-cursor * {
+    html, html * {
       cursor: none !important;
     }
   }

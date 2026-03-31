@@ -13,14 +13,12 @@ import FAQSection from "@/components/landing/FAQSection";
 import Footer from "@/components/landing/Footer";
 import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
 import SectionTransition from "@/components/landing/SectionTransition";
-import CustomCursor from "@/components/landing/CustomCursor";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 const Index = () => {
   return (
-    <div className="smooth-scroll immersive-cursor overflow-x-hidden" style={{ perspective: "1200px" }}>
+    <div className="smooth-scroll overflow-x-hidden">
       <ImmersiveBackground />
-      <CustomCursor />
       <ScrollFloatingElement />
       <Navbar />
       <FloatingWhatsApp />
