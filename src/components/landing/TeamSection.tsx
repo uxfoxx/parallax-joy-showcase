@@ -18,27 +18,25 @@ const TeamSection = () => {
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const videoY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
   return (
     <section ref={sectionRef} className="relative min-h-[80vh] overflow-hidden flex items-center">
-      {/* Video-style animated dark background */}
-      <div className="absolute inset-0 bg-forest-deep">
-        <motion.div className="absolute inset-0" style={{ y: bgY }}>
-          <div
-            className="absolute w-[900px] h-[900px] -top-60 -left-60 rounded-full animate-orb opacity-[0.15]"
-            style={{ background: "radial-gradient(circle, hsl(140 50% 19%), transparent 70%)" }}
-          />
-          <div
-            className="absolute w-[700px] h-[700px] top-1/3 right-0 rounded-full animate-orb opacity-[0.1]"
-            style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)", animationDelay: "-7s", animationDuration: "25s" }}
-          />
-          <div
-            className="absolute w-[600px] h-[600px] -bottom-40 left-1/3 rounded-full animate-orb opacity-[0.12]"
-            style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)", animationDelay: "-14s", animationDuration: "30s" }}
+      {/* Video background */}
+      <div className="absolute inset-0">
+        <motion.div className="absolute inset-0" style={{ y: videoY }}>
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-[120%] object-cover"
+            src="https://videos.pexels.com/video-files/5532765/5532765-sd_640_360_25fps.mp4"
+            poster="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&h=1080&fit=crop"
           />
         </motion.div>
-        <div className="absolute inset-0 bg-forest-deep/60" />
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-forest-deep/70" />
         {/* Noise texture */}
         <div className="absolute inset-0 opacity-[0.06] pointer-events-none mix-blend-overlay">
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">

@@ -25,18 +25,18 @@ const CustomCursor = () => {
     };
 
     const animate = () => {
-      // Dot follows faster
-      dotPos.current.x += (target.current.x - dotPos.current.x) * 0.12;
-      dotPos.current.y += (target.current.y - dotPos.current.y) * 0.12;
+      // Dot follows fast
+      dotPos.current.x += (target.current.x - dotPos.current.x) * 0.25;
+      dotPos.current.y += (target.current.y - dotPos.current.y) * 0.25;
       // Glow trails behind
-      glowPos.current.x += (target.current.x - glowPos.current.x) * 0.06;
-      glowPos.current.y += (target.current.y - glowPos.current.y) * 0.06;
+      glowPos.current.x += (target.current.x - glowPos.current.x) * 0.12;
+      glowPos.current.y += (target.current.y - glowPos.current.y) * 0.12;
 
       const dotScale = hovering.current ? 1.5 : 1;
       const glowScale = hovering.current ? 2 : 1;
 
       if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${dotPos.current.x - 6}px, ${dotPos.current.y - 6}px) scale(${dotScale})`;
+        dotRef.current.style.transform = `translate(${dotPos.current.x - 8}px, ${dotPos.current.y - 8}px) scale(${dotScale})`;
       }
       if (glowRef.current) {
         glowRef.current.style.transform = `translate(${glowPos.current.x - 20}px, ${glowPos.current.y - 20}px) scale(${glowScale})`;
@@ -77,10 +77,10 @@ const CustomCursor = () => {
         style={{ transition: "none" }}
       >
         <div
-          className="w-3 h-3 rounded-full bg-accent"
+          className="w-4 h-4 rounded-full bg-accent"
           style={{
             boxShadow:
-              "0 0 0 1.5px white, 0 0 6px hsl(75 38% 45% / 0.8), 0 0 12px hsl(75 38% 45% / 0.4)",
+              "0 0 0 2px white, 0 0 0 3.5px rgba(0,0,0,0.3), 0 0 8px hsl(75 38% 45% / 0.9)",
             transition: "transform 0.15s ease",
           }}
         />
