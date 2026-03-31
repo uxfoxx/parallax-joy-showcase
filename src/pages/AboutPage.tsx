@@ -9,7 +9,7 @@ import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
 import ScrollFloatingElement from "@/components/landing/ScrollFloatingElement";
 import SectionTransition from "@/components/landing/SectionTransition";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
-import { useRef } from "react";
+
 
 const advantages = [
   { icon: Package, title: "Integrated Model", description: "End-to-end import-to-distribution — sourcing, customs, warehousing, and delivery under one roof." },
