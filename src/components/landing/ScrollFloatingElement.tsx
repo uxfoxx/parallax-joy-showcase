@@ -110,7 +110,7 @@ const ScrollFloatingElement = () => {
           <ellipse
             cx="108" cy="70"
             rx="3" ry="4"
-            fill="hsl(42 70% 75% / 0.5)"
+            fill="hsl(75 40% 60% / 0.5)"
           />
           {/* Olive 2 */}
           <ellipse
