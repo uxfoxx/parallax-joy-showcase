@@ -2,7 +2,7 @@ import { useInView } from "@/hooks/useInView";
 import { useCountUp } from "@/hooks/useCountUp";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, Handshake, Globe, GitBranch } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useCallback, useRef, useState } from "react";
 
@@ -58,36 +58,12 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode; cla
 
 const StatsSection = () => {
   const { ref, isInView } = useInView();
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll();
-
-  // Parallax decorative element
-  const orbY = useTransform(scrollYProgress, [0, 1], ["60px", "-60px"]);
-  const orbX = useTransform(scrollYProgress, [0, 1], ["-20px", "20px"]);
 
   return (
     <section
-      ref={(el) => {
-        (ref as React.MutableRefObject<HTMLElement | null>).current = el;
-        (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
-      }}
-      className="relative py-28 lg:py-36 bg-muted/30 overflow-hidden"
+      ref={ref as React.RefObject<HTMLElement>}
+      className="relative py-28 lg:py-36 bg-white overflow-hidden"
     >
-      {/* Parallax decorative element */}
-      <motion.div className="absolute inset-0 pointer-events-none" style={{ y: orbY }}>
-        <motion.div
-          className="absolute w-[500px] h-[500px] -top-40 -right-40 rounded-full opacity-[0.06]"
-          style={{
-            background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
-            x: orbX,
-          }}
-        />
-        <div
-          className="absolute w-[300px] h-[300px] bottom-10 left-10 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
-        />
-      </motion.div>
-
       <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Left */}

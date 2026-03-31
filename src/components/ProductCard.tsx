@@ -18,12 +18,12 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      whileHover={{ y: -4 }}
+      whileHover={{ y: -6 }}
       transition={{ duration: 0.4 }}
     >
       <Link to={`/products/${product.slug}`} className="block group">
         <div
-          className={`relative rounded-lg overflow-hidden ${large ? "aspect-[3/4]" : "aspect-[4/5]"}`}
+          className={`relative rounded-lg overflow-hidden ${large ? "aspect-[3/4]" : "aspect-[4/5]"} shadow-md hover:shadow-xl transition-shadow duration-500 border border-border/30`}
         >
           {/* Full image background */}
           {product.image_url ? (
@@ -38,7 +38,10 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
             </div>
           )}
 
-          {/* Always-visible top badges */}
+          {/* Shine effect on hover */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%]" style={{ transition: "opacity 0.7s, transform 0.9s" }} />
+
+          {/* Top badges — always visible */}
           <div className="absolute top-3 left-3 right-3 flex items-start justify-between z-10">
             {product.featured ? (
               <Badge className="bg-accent text-accent-foreground font-body text-xs shadow-md">
@@ -50,28 +53,30 @@ const ProductCard = ({ product, large = false }: ProductCardProps) => {
             </Badge>
           </div>
 
-          {/* Gradient overlay — always subtle, stronger on hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+          {/* Three-stop gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
 
-          {/* Bottom details — slide up on hover */}
-          <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-2 group-hover:translate-y-0 transition-transform duration-400">
-            <h3 className="font-display text-lg font-semibold text-white mb-1 drop-shadow-md">
+          {/* Bottom details — name always visible, rest on hover */}
+          <div className="absolute bottom-0 left-0 right-0 p-5 pb-6">
+            <h3 className="font-display text-lg font-semibold text-white drop-shadow-md leading-tight">
               {product.name}
             </h3>
-            <p className="text-white/70 text-sm font-body line-clamp-2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-400 delay-75">
-              {product.description}
-            </p>
-            <div className="flex items-center justify-between">
-              <Link
-                to={`/brands/${brandSlug}`}
-                className="text-xs font-body font-medium text-white/90 hover:underline"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {brandName}
-              </Link>
-              <span className="text-xs font-body text-white/60">
-                {product.origin}
-              </span>
+            <div className="max-h-0 group-hover:max-h-24 overflow-hidden transition-all duration-500 ease-out">
+              <p className="text-white/75 text-sm font-body line-clamp-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                {product.description}
+              </p>
+              <div className="flex items-center justify-between mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-150">
+                <Link
+                  to={`/brands/${brandSlug}`}
+                  className="text-xs font-body font-medium text-white/90 hover:underline"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {brandName}
+                </Link>
+                <span className="text-xs font-body text-white/60">
+                  {product.origin}
+                </span>
+              </div>
             </div>
           </div>
         </div>
