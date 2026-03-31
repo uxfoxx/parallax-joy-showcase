@@ -55,7 +55,7 @@ const LocationsSection = () => {
         />
         <div
           className="absolute w-[350px] h-[350px] -bottom-20 left-10 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(140 50% 25%), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
         />
       </motion.div>
 
