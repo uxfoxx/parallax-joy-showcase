@@ -83,26 +83,18 @@ const AboutPage = () => {
 
       <SectionTransition />
 
-      {/* Who We Are */}
-      <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden py-28 lg:py-36">
-          <div className="absolute inset-0" style={{
-            background: `
-              radial-gradient(ellipse at 70% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 50%),
-              radial-gradient(ellipse at 30% 80%, hsl(150 40% 14% / 0.3) 0%, transparent 50%),
-              linear-gradient(180deg, hsl(150 40% 8%), hsl(140 50% 14%), hsl(150 40% 10%))
-            `,
-          }} />
-          <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
-            <motion.div className="absolute w-[400px] h-[400px] -top-20 -left-20 rounded-full opacity-[0.05]" style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)", y: orbY }} />
-          </motion.div>
+      {/* Who We Are — Light */}
+      <div data-navbar-theme="light">
+        <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
+          <div className="absolute w-[400px] h-[400px] -top-20 -left-20 rounded-full opacity-[0.08]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
+          <div className="absolute w-[300px] h-[300px] bottom-10 right-10 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
           <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="space-y-8">
-              <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 tracking-widest uppercase">
+              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 tracking-widest uppercase">
                 Our Story
               </span>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">Who We Are</h2>
-              <div className="space-y-5 font-body text-primary-foreground/45 leading-relaxed text-lg">
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight tracking-tight">Who We Are</h2>
+              <div className="space-y-5 font-body text-muted-foreground leading-relaxed text-lg">
                 <p>Olive Foods (Pvt) Ltd is a trusted import, bonded warehousing, and FMCG distribution company based in Sri Lanka. With over three decades of industry experience, we have built strong relationships with global suppliers and established ourselves as a reliable partner for businesses across the island.</p>
                 <p>We specialize in importing and distributing a wide range of food products — from frozen goods and dairy to grocery staples, edible oils, and specialty imports — sourced from leading producers in Australia, Italy, the Netherlands, Thailand, Singapore, UAE, India, and China.</p>
                 <p>Our integrated model covers every step of the supply chain: from international sourcing and customs clearance through our bonded warehouse facilities, to cold-chain logistics and island-wide distribution across HoReCa, Modern Trade, and General Trade channels.</p>
