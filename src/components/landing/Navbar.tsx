@@ -135,7 +135,7 @@ const Navbar = () => {
                   className={`font-body font-semibold rounded-xl h-10 px-6 text-sm transition-all duration-500 ${
                     isDark
                       ? "bg-primary-foreground text-forest-deep hover:bg-primary-foreground/90 shadow-lg shadow-white/10"
-                      : "bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg shadow-accent/20"
+                      : "bg-accent text-white hover:bg-accent/90 shadow-lg shadow-accent/20"
                   }`}
                 >
                   Contact Us
