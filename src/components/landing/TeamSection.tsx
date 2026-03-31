@@ -1,14 +1,13 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { ShoppingCart, Globe, Warehouse, Truck, Shield, Headphones } from "lucide-react";
 
 const team = [
-  { icon: ShoppingCart, name: "Sales & Marketing", color: "hsl(80 50% 31%)" },
-  { icon: Globe, name: "Procurement", color: "hsl(140 50% 19%)" },
-  { icon: Warehouse, name: "Warehousing", color: "hsl(150 40% 10%)" },
-  { icon: Truck, name: "Logistics", color: "hsl(75 38% 45%)" },
-  { icon: Shield, name: "Quality Control", color: "hsl(80 50% 31%)" },
-  { icon: Headphones, name: "Customer Service", color: "hsl(140 50% 19%)" },
+  { name: "Sales & Marketing", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=500&fit=crop&crop=face" },
+  { name: "Procurement", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=500&fit=crop&crop=face" },
+  { name: "Warehousing", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=500&fit=crop&crop=face" },
+  { name: "Logistics", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=500&fit=crop&crop=face" },
+  { name: "Quality Control", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop&crop=face" },
+  { name: "Customer Service", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=500&fit=crop&crop=face" },
 ];
 
 const duplicatedTeam = [...team, ...team];
@@ -19,26 +18,34 @@ const TeamSection = () => {
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
   return (
-    <section ref={sectionRef} className="relative min-h-[80vh] overflow-hidden flex items-center bg-background">
-      {/* Subtle animated orbs on white */}
-      <div className="absolute inset-0">
+    <section ref={sectionRef} className="relative min-h-[80vh] overflow-hidden flex items-center">
+      {/* Video-style animated dark background */}
+      <div className="absolute inset-0 bg-forest-deep">
         <motion.div className="absolute inset-0" style={{ y: bgY }}>
           <div
-            className="absolute w-[800px] h-[800px] -top-40 -left-40 rounded-full animate-orb opacity-[0.07]"
-            style={{ background: "radial-gradient(circle, hsl(140 50% 19% / 0.5), transparent 70%)" }}
+            className="absolute w-[900px] h-[900px] -top-60 -left-60 rounded-full animate-orb opacity-[0.15]"
+            style={{ background: "radial-gradient(circle, hsl(140 50% 19%), transparent 70%)" }}
           />
           <div
-            className="absolute w-[600px] h-[600px] top-1/2 right-0 rounded-full animate-orb opacity-[0.05]"
-            style={{ background: "radial-gradient(circle, hsl(80 50% 31% / 0.4), transparent 70%)", animationDelay: "-7s", animationDuration: "25s" }}
+            className="absolute w-[700px] h-[700px] top-1/3 right-0 rounded-full animate-orb opacity-[0.1]"
+            style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)", animationDelay: "-7s", animationDuration: "25s" }}
           />
           <div
-            className="absolute w-[500px] h-[500px] -bottom-20 left-1/3 rounded-full animate-orb opacity-[0.06]"
-            style={{ background: "radial-gradient(circle, hsl(75 38% 45% / 0.4), transparent 70%)", animationDelay: "-14s", animationDuration: "30s" }}
+            className="absolute w-[600px] h-[600px] -bottom-40 left-1/3 rounded-full animate-orb opacity-[0.12]"
+            style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)", animationDelay: "-14s", animationDuration: "30s" }}
           />
         </motion.div>
+        <div className="absolute inset-0 bg-forest-deep/60" />
+        {/* Noise texture */}
+        <div className="absolute inset-0 opacity-[0.06] pointer-events-none mix-blend-overlay">
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <filter id="noiseTeam"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
+            <rect width="100%" height="100%" filter="url(#noiseTeam)" />
+          </svg>
+        </div>
       </div>
 
       <div className="relative z-10 w-full py-20 lg:py-28">
@@ -51,48 +58,35 @@ const TeamSection = () => {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="lg:pr-12"
           >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent font-body text-xs font-medium border border-accent/20 mb-6 tracking-[0.2em] uppercase">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-xs font-medium border border-primary-foreground/15 mb-6 tracking-[0.2em] uppercase">
               Our Team
             </span>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6 leading-[1.1] tracking-tight">
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-primary-foreground mb-6 leading-[1.1] tracking-tight">
               Three Decades
               <br />
               of <span className="text-gradient-gold">Excellence</span>
             </h2>
-            <p className="text-muted-foreground font-body text-base lg:text-lg leading-relaxed max-w-md">
+            <p className="text-primary-foreground/50 font-body text-base lg:text-lg leading-relaxed max-w-md">
               Dedicated departments working together to deliver seamless solutions.
             </p>
           </motion.div>
 
-          {/* Right — sliding cards */}
+          {/* Right — sliding photo cards */}
           <div className="overflow-hidden">
-            <div className="flex gap-5 animate-marquee hover:[animation-play-state:paused] w-max">
-              {duplicatedTeam.map((member, index) => {
-                const Icon = member.icon;
-                return (
-                  <div
-                    key={`${member.name}-${index}`}
-                    className="flex-shrink-0 w-40 h-56 sm:w-48 sm:h-64 md:w-56 md:h-72 rounded-2xl overflow-hidden backdrop-blur-md bg-white/80 border border-border shadow-lg transition-all duration-500 hover:bg-white hover:shadow-xl hover:scale-105 hover:-translate-y-2 group cursor-pointer"
-                  >
-                    <div className="flex flex-col items-center justify-center h-full p-6 relative">
-                      {/* Gradient accent top */}
-                      <div
-                        className="absolute top-0 left-0 right-0 h-1 opacity-60 group-hover:opacity-100 transition-opacity"
-                        style={{ background: `linear-gradient(90deg, transparent, ${member.color}, transparent)` }}
-                      />
-                      <div
-                        className="w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-500 group-hover:scale-110"
-                        style={{ background: `linear-gradient(135deg, ${member.color}22, ${member.color}0D)` }}
-                      >
-                        <Icon className="w-8 h-8 md:w-10 md:h-10 text-forest-mid group-hover:text-forest-deep transition-colors duration-300" />
-                      </div>
-                      <p className="text-foreground font-display text-sm md:text-base font-semibold text-center leading-tight">
-                        {member.name}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="flex gap-4 animate-marquee hover:[animation-play-state:paused] w-max">
+              {duplicatedTeam.map((member, index) => (
+                <div
+                  key={`${member.name}-${index}`}
+                  className="flex-shrink-0 w-36 h-48 sm:w-44 sm:h-56 md:w-48 md:h-60 rounded-lg overflow-hidden transition-all duration-500 hover:scale-105 hover:-translate-y-2 cursor-pointer group relative"
+                >
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+              ))}
             </div>
           </div>
         </div>

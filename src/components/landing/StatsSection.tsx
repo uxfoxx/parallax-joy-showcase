@@ -41,7 +41,7 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode; cla
       }}
     >
       <div
-        className="absolute -inset-[1px] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        className="absolute -inset-[1px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{
           background: isHovered
             ? "conic-gradient(from 180deg, hsl(var(--accent)), hsl(var(--forest-mid)), hsl(var(--gold-light)), hsl(var(--accent)))"
@@ -49,7 +49,7 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode; cla
           filter: "blur(1px)",
         }}
       />
-      <div className="relative rounded-2xl bg-card border border-border p-7 h-full transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-accent/10">
+      <div className="relative rounded-lg bg-card border border-border p-5 h-full transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-accent/10">
         {children}
       </div>
     </div>

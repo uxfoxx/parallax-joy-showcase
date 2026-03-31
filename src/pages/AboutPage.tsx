@@ -101,15 +101,15 @@ const AboutPage = () => {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
           >
             {businessActivities.slice(0, 3).map((a) => (
               <motion.div
                 key={a.title}
                 variants={item}
-                className="p-8 rounded-2xl border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-300"
+                className="p-6 rounded-lg border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-300"
               >
-                <div className="w-14 h-14 rounded-xl bg-forest-deep/10 flex items-center justify-center mb-6">
+                <div className="w-12 h-12 rounded-lg bg-forest-deep/10 flex items-center justify-center mb-4">
                   <a.icon className="w-6 h-6 text-forest-mid" />
                 </div>
                 <h4 className="font-display text-lg font-semibold text-foreground mb-3">{a.title}</h4>
@@ -122,15 +122,15 @@ const AboutPage = () => {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid sm:grid-cols-2 gap-8 mt-8 max-w-2xl mx-auto lg:max-w-none lg:px-[16.666%]"
+            className="grid sm:grid-cols-2 gap-5 mt-5 max-w-2xl mx-auto lg:max-w-none lg:px-[16.666%]"
           >
             {businessActivities.slice(3).map((a) => (
               <motion.div
                 key={a.title}
                 variants={item}
-                className="p-8 rounded-2xl border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-300"
+                className="p-6 rounded-lg border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-300"
               >
-                <div className="w-14 h-14 rounded-xl bg-forest-deep/10 flex items-center justify-center mb-6">
+                <div className="w-12 h-12 rounded-lg bg-forest-deep/10 flex items-center justify-center mb-4">
                   <a.icon className="w-6 h-6 text-forest-mid" />
                 </div>
                 <h4 className="font-display text-lg font-semibold text-foreground mb-3">{a.title}</h4>
@@ -185,15 +185,15 @@ const AboutPage = () => {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"
           >
             {advantages.map((v) => (
               <motion.div
                 key={v.title}
                 variants={item}
-                className="text-center space-y-4 p-6 rounded-2xl border border-border hover:border-forest-mid/20 hover:shadow-lg transition-all duration-300"
+                className="text-center space-y-4 p-5 rounded-lg border border-border hover:border-forest-mid/20 hover:shadow-lg transition-all duration-300"
               >
-                <div className="w-14 h-14 rounded-2xl bg-forest-deep/5 flex items-center justify-center mx-auto">
+                <div className="w-12 h-12 rounded-lg bg-forest-deep/5 flex items-center justify-center mx-auto">
                   <v.icon className="w-7 h-7 text-forest-mid" />
                 </div>
                 <h4 className="font-display text-lg font-semibold text-foreground">{v.title}</h4>
@@ -228,13 +228,13 @@ const AboutPage = () => {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid grid-cols-2 sm:grid-cols-3 gap-6"
+            className="grid grid-cols-2 sm:grid-cols-3 gap-5"
           >
             {clientSegments.map((s) => (
               <motion.div
                 key={s.label}
                 variants={item}
-                className="flex flex-col items-center gap-4 p-8 rounded-2xl border border-border hover:border-forest-mid/20 hover:shadow-lg transition-all duration-300"
+                className="flex flex-col items-center gap-4 p-6 rounded-lg border border-border hover:border-forest-mid/20 hover:shadow-lg transition-all duration-300"
               >
                 <div className="w-12 h-12 rounded-xl bg-forest-deep/10 flex items-center justify-center">
                   <s.icon className="w-6 h-6 text-forest-mid" />
@@ -243,6 +243,65 @@ const AboutPage = () => {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* Our Location */}
+      <section className="py-20 lg:py-28 bg-background">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-display text-3xl md:text-4xl font-bold text-foreground text-center mb-12"
+          >
+            Our Location
+          </motion.h2>
+          <div className="grid lg:grid-cols-[1fr_1.5fr] gap-10 items-start">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-5"
+            >
+              <div>
+                <h4 className="font-display text-lg font-semibold text-foreground mb-1">Address</h4>
+                <p className="text-muted-foreground font-body text-sm leading-relaxed">
+                  Olive Foods (Pvt) Ltd<br />Colombo, Sri Lanka
+                </p>
+              </div>
+              <div>
+                <h4 className="font-display text-lg font-semibold text-foreground mb-1">Phone</h4>
+                <p className="text-muted-foreground font-body text-sm">+94 11 234 5678</p>
+              </div>
+              <div>
+                <h4 className="font-display text-lg font-semibold text-foreground mb-1">Email</h4>
+                <p className="text-muted-foreground font-body text-sm">info@olivefoods.lk</p>
+              </div>
+              <div>
+                <h4 className="font-display text-lg font-semibold text-foreground mb-1">Hours</h4>
+                <p className="text-muted-foreground font-body text-sm">Mon – Fri: 8:30 AM – 5:30 PM</p>
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="rounded-lg overflow-hidden border border-border shadow-lg"
+            >
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.58585953498!2d79.7861!3d6.9271!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+                width="100%"
+                height="350"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Olive Foods Location"
+                className="w-full h-[350px]"
+              />
+            </motion.div>
+          </div>
         </div>
       </section>
 

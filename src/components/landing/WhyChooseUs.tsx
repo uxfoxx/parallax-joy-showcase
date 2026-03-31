@@ -108,7 +108,7 @@ const WhyChooseUs = () => {
         </motion.div>
 
         {/* Feature cards */}
-        <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8" style={{ x: gridShift, skewX: gridSkew }}>
+        <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5" style={{ x: gridShift, skewX: gridSkew }}>
           {features.map((f, i) => (
             <motion.div
               key={f.title}
@@ -117,7 +117,7 @@ const WhyChooseUs = () => {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -6, transition: { duration: 0.3 } }}
-              className="group relative p-10 rounded-2xl border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
+              className="group relative p-6 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
               style={{
                 background: `
                   radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%),
@@ -129,7 +129,7 @@ const WhyChooseUs = () => {
               <motion.div
                 whileHover={{ scale: 1.15, rotate: 5 }}
                 transition={{ type: "spring", stiffness: 300 }}
-                className="w-14 h-14 rounded-xl bg-primary-foreground flex items-center justify-center mb-7 shadow-lg shadow-primary-foreground/10"
+                className="w-12 h-12 rounded-lg bg-primary-foreground flex items-center justify-center mb-4 shadow-lg shadow-primary-foreground/10"
               >
                 <f.icon className="w-6 h-6 text-forest-deep" />
               </motion.div>

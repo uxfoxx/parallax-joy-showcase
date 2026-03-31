@@ -100,6 +100,9 @@
 }
 
 @layer components {
+  html {
+    scroll-behavior: smooth;
+  }
   .smooth-scroll {
     scroll-behavior: smooth;
   }

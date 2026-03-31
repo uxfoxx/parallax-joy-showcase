@@ -1,38 +1,18 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { MapPin } from "lucide-react";
-import { useMouseGradient } from "@/hooks/useMouseGradient";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useRef } from "react";
 
-const locations = [
-  { region: "Middle East", countries: "UAE, Saudi Arabia, Qatar, Oman, Bahrain, Kuwait" },
-  { region: "Southeast Asia", countries: "Thailand, Vietnam, Indonesia, Malaysia, Philippines" },
-  { region: "East Africa", countries: "Kenya, Tanzania, Ethiopia, Uganda, Rwanda" },
-  { region: "South Asia", countries: "India, Sri Lanka, Pakistan, Bangladesh, Nepal" },
-  { region: "Mediterranean", countries: "Turkey, Greece, Egypt, Morocco, Tunisia" },
-  { region: "Latin America", countries: "Brazil, Colombia, Peru, Chile, Argentina" },
-];
-
 const LocationsSection = () => {
-  const { ref, gradientStyle } = useMouseGradient();
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-
-  // Parallax bg
   const bgY = useTransform(scrollYProgress, [0, 1], ["-60px", "60px"]);
-  const accentX = useTransform(scrollYProgress, [0, 1], ["20px", "-20px"]);
 
   return (
-    <section
-      ref={(el) => {
-        (ref as React.MutableRefObject<HTMLElement | null>).current = el;
-        (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
-      }}
-      className="relative overflow-hidden py-28 lg:py-36"
-    >
-      {/* Standardized dark gradient */}
+    <section ref={sectionRef} className="relative overflow-hidden py-28 lg:py-36">
+      {/* Dark gradient bg */}
       <div
         className="absolute inset-0"
         style={{
@@ -44,23 +24,12 @@ const LocationsSection = () => {
         }}
       />
 
-      {/* Parallax floating accent */}
       <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
-        <motion.div
-          className="absolute w-[400px] h-[400px] top-20 -right-20 rounded-full opacity-[0.06]"
-          style={{
-            background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
-            x: accentX,
-          }}
-        />
         <div
-          className="absolute w-[350px] h-[350px] -bottom-20 left-10 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
+          className="absolute w-[400px] h-[400px] top-20 -right-20 rounded-full opacity-[0.06]"
+          style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }}
         />
       </motion.div>
-
-      {/* Mouse-follow gradient */}
-      <div className="absolute inset-0 pointer-events-none z-[1] opacity-30" style={gradientStyle} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         <motion.div
@@ -68,51 +37,86 @@ const LocationsSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center max-w-3xl mx-auto mb-20"
+          className="text-center max-w-3xl mx-auto mb-16"
         >
           <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
-            Our Reach
+            Our Location
           </span>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
-            Locations We Cover
+            Where to Find Us
           </h2>
-          <p className="text-primary-foreground/45 font-body text-lg leading-relaxed">
-            Our global sourcing network spans six continents, connecting you with the finest food products worldwide
-          </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {locations.map((loc, i) => (
-            <motion.div
-              key={loc.region}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -6, transition: { duration: 0.25 } }}
-              className="group relative p-10 rounded-2xl border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
-              style={{
-                background: `
-                  radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%),
-                  linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))
-                `,
-              }}
-            >
-              <motion.div
-                whileHover={{ scale: 1.15, rotate: -5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className="w-14 h-14 rounded-xl bg-primary-foreground flex items-center justify-center mb-7 shadow-lg shadow-primary-foreground/10"
-              >
-                <MapPin className="w-6 h-6 text-forest-deep" />
-              </motion.div>
-              <h3 className="font-display text-xl font-semibold text-primary-foreground mb-4 tracking-tight">
-                {loc.region}
-              </h3>
-              <p className="text-primary-foreground/45 font-body leading-relaxed text-sm">
-                {loc.countries}
-              </p>
-            </motion.div>
-          ))}
+        <div className="grid lg:grid-cols-[1fr_1.5fr] gap-10 items-start">
+          {/* Left — Address */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="space-y-6"
+          >
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-primary-foreground/10 flex items-center justify-center flex-shrink-0">
+                <MapPin className="w-5 h-5 text-accent" />
+              </div>
+              <div>
+                <h4 className="font-display text-lg font-semibold text-primary-foreground mb-1">Address</h4>
+                <p className="text-primary-foreground/50 font-body text-sm leading-relaxed">
+                  Olive Foods (Pvt) Ltd<br />
+                  Colombo, Sri Lanka
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-primary-foreground/10 flex items-center justify-center flex-shrink-0">
+                <Phone className="w-5 h-5 text-accent" />
+              </div>
+              <div>
+                <h4 className="font-display text-lg font-semibold text-primary-foreground mb-1">Phone</h4>
+                <p className="text-primary-foreground/50 font-body text-sm">+94 11 234 5678</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-primary-foreground/10 flex items-center justify-center flex-shrink-0">
+                <Mail className="w-5 h-5 text-accent" />
+              </div>
+              <div>
+                <h4 className="font-display text-lg font-semibold text-primary-foreground mb-1">Email</h4>
+                <p className="text-primary-foreground/50 font-body text-sm">info@olivefoods.lk</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-lg bg-primary-foreground/10 flex items-center justify-center flex-shrink-0">
+                <Clock className="w-5 h-5 text-accent" />
+              </div>
+              <div>
+                <h4 className="font-display text-lg font-semibold text-primary-foreground mb-1">Hours</h4>
+                <p className="text-primary-foreground/50 font-body text-sm">Mon – Fri: 8:30 AM – 5:30 PM</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right — Google Map */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="rounded-lg overflow-hidden border border-primary-foreground/10 shadow-2xl"
+          >
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.58585953498!2d79.7861!3d6.9271!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Olive Foods Location"
+              className="w-full h-[400px]"
+            />
+          </motion.div>
         </div>
       </div>
     </section>

@@ -81,7 +81,7 @@ const FAQSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="rounded-xl border border-primary-foreground/15 overflow-hidden hover:border-primary-foreground/25 transition-all duration-500"
+                className="rounded-lg border border-primary-foreground/15 overflow-hidden hover:border-primary-foreground/25 transition-all duration-500"
                 style={{
                   background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))`,
                 }}
