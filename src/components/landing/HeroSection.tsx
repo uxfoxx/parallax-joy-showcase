@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
+import heroLogo from "@/assets/olive-foods-hero-logo.svg";
 
 const HeroSection = () => {
   const { ref, gradientStyle } = useMouseGradient();
@@ -66,11 +67,11 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-4xl mx-auto space-y-8"
         >
-          <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-bold text-primary-foreground leading-[0.95] tracking-tight">
-            Premium Food
-            <br />
-            <span className="text-gradient-gold">Imports</span>
-          </h1>
+          <img
+            src={heroLogo}
+            alt="Olive Foods"
+            className="max-w-xs sm:max-w-sm lg:max-w-lg w-full h-auto brightness-0 invert mx-auto"
+          />
           <p className="font-body text-lg sm:text-xl text-primary-foreground/50 max-w-xl mx-auto leading-relaxed">
             Your trusted import, bonded warehousing & FMCG distribution partner serving Sri Lanka's HoReCa, Modern Trade and General Trade sectors.
           </p>
