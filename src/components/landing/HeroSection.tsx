@@ -72,9 +72,7 @@ const HeroSection = () => {
             alt="Olive Foods"
             className="max-w-xs sm:max-w-sm lg:max-w-lg w-full h-auto brightness-0 invert mx-auto"
           />
-          <p className="font-body text-lg sm:text-xl text-primary-foreground/50 max-w-xl mx-auto leading-relaxed">
-            Your trusted import, bonded warehousing & FMCG distribution partner serving Sri Lanka's HoReCa, Modern Trade and General Trade sectors.
-          </p>
+          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
