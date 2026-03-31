@@ -86,7 +86,7 @@ const BannerStat = ({ stat, isInView, index }: { stat: StatType; isInView: boole
       transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
       className="px-6 sm:px-10 text-center sm:text-left"
     >
-      <div className="w-10 h-10 rounded-xl bg-primary-foreground/5 flex items-center justify-center mb-3 mx-auto sm:mx-0">
+      <div className="w-10 h-10 rounded-lg bg-primary-foreground/5 flex items-center justify-center mb-3 mx-auto sm:mx-0">
         <Icon className="w-5 h-5 text-accent" />
       </div>
       <div className="font-display text-4xl lg:text-5xl font-bold text-primary-foreground">

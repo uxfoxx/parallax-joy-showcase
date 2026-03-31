@@ -26,7 +26,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Determine if we're on a "dark header" context
   const useLightText = isLanding || scrolled;
 
   const barBg = scrolled
@@ -49,14 +48,10 @@ const Navbar = () => {
             paddingBottom: scrolled ? 8 : 12,
           }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className={`flex items-center justify-between px-5 rounded-2xl transition-all duration-500 ${barBg}`}
+          className={`flex items-center justify-between px-5 rounded-xl transition-all duration-500 ${barBg}`}
         >
-          {/* Logo */}
           <Link to="/" className="flex items-center shrink-0">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <img
                 src={logoSvg}
                 alt="Olive Foods"
@@ -65,7 +60,6 @@ const Navbar = () => {
             </motion.div>
           </Link>
 
-          {/* Center links */}
           <div className="hidden md:flex items-center gap-1 relative">
             {links.map((link) => {
               const isActive = link.href === "/" ? location.pathname === "/" : location.pathname.startsWith(link.href);
@@ -73,20 +67,18 @@ const Navbar = () => {
                 <Link
                   key={link.label}
                   to={link.href}
-                  className="relative px-5 py-2 text-sm font-body font-medium transition-colors duration-300"
+                  className="relative px-5 py-2 text-sm font-body transition-colors duration-300"
                 >
-                  {isActive && (
-                    <motion.div
-                      layoutId="nav-pill"
-                      className={`absolute inset-0 rounded-xl ${useLightText ? "bg-primary-foreground/10" : "bg-forest-deep/10"}`}
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    />
-                  )}
-                  <span className={`relative z-10 transition-colors duration-300 ${
-                    isActive
-                      ? (useLightText ? "text-primary-foreground" : "text-foreground")
-                      : (useLightText ? "text-primary-foreground/60 hover:text-primary-foreground" : "text-muted-foreground hover:text-foreground")
-                  }`}>
+                  <span
+                    className={`relative z-10 transition-all duration-300 ${
+                      isActive
+                        ? `font-bold ${useLightText ? "text-primary-foreground" : "text-foreground"}`
+                        : `font-medium ${useLightText ? "text-primary-foreground/60 hover:text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`
+                    }`}
+                    style={isActive ? {
+                      textShadow: "0 0 8px hsl(75 38% 45% / 0.6), 0 0 20px hsl(75 38% 45% / 0.3)"
+                    } : undefined}
+                  >
                     {link.label}
                   </span>
                 </Link>
@@ -94,7 +86,6 @@ const Navbar = () => {
             })}
           </div>
 
-          {/* Right side */}
           <div className="hidden md:flex items-center gap-3">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl h-10 px-6 text-sm transition-all duration-300 shadow-lg shadow-accent/20">
@@ -103,18 +94,16 @@ const Navbar = () => {
             </motion.div>
           </div>
 
-          {/* Mobile toggle */}
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => setMobileOpen(!mobileOpen)}
-            className={`md:hidden w-10 h-10 rounded-xl flex items-center justify-center ${useLightText ? "bg-primary-foreground/10 text-primary-foreground" : "bg-forest-deep/10 text-foreground"}`}
+            className={`md:hidden w-10 h-10 rounded-lg flex items-center justify-center ${useLightText ? "bg-primary-foreground/10 text-primary-foreground" : "bg-forest-deep/10 text-foreground"}`}
           >
             {mobileOpen ? <X size={18} /> : <Menu size={18} />}
           </motion.button>
         </motion.div>
       </motion.nav>
 
-      {/* Full-screen mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div

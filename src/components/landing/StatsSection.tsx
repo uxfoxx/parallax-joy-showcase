@@ -49,7 +49,7 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode; cla
           filter: "blur(1px)",
         }}
       />
-      <div className="relative rounded-2xl bg-card border border-border p-7 h-full transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-accent/10">
+      <div className="relative rounded-lg bg-card border border-border p-5 h-full transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-accent/10">
         {children}
       </div>
     </div>

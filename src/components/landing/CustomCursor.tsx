@@ -9,7 +9,6 @@ const CustomCursor = () => {
   const current = useRef({ x: -100, y: -100 });
 
   useEffect(() => {
-    // Only on desktop with fine pointer
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
     const onMove = (e: MouseEvent) => {
@@ -24,8 +23,8 @@ const CustomCursor = () => {
     };
 
     const animate = () => {
-      current.current.x += (target.current.x - current.current.x) * 0.12;
-      current.current.y += (target.current.y - current.current.y) * 0.12;
+      current.current.x += (target.current.x - current.current.x) * 0.08;
+      current.current.y += (target.current.y - current.current.y) * 0.08;
       setPos({ x: current.current.x, y: current.current.y });
       raf.current = requestAnimationFrame(animate);
     };
@@ -41,7 +40,6 @@ const CustomCursor = () => {
     };
   }, []);
 
-  // Don't render on touch devices
   if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
     return null;
   }
@@ -52,13 +50,13 @@ const CustomCursor = () => {
       <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9998] hidden md:block"
         animate={{
-          x: pos.x - 20,
-          y: pos.y - 20,
+          x: pos.x - 28,
+          y: pos.y - 28,
           scale: isHovering ? 1.8 : 1,
         }}
-        transition={{ type: "spring", stiffness: 150, damping: 15 }}
+        transition={{ type: "spring", stiffness: 80, damping: 20 }}
       >
-        <div className="w-10 h-10 rounded-full bg-accent/15 blur-md" />
+        <div className="w-14 h-14 rounded-full bg-accent/15 blur-xl" />
       </motion.div>
       {/* Dot cursor */}
       <div

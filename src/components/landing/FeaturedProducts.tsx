@@ -58,8 +58,8 @@ const FeaturedProducts = () => {
           <p className="text-primary-foreground/50 font-body text-base max-w-sm leading-relaxed">Carefully selected food products sourced from certified international suppliers.</p>
         </motion.div>
 
-        <motion.div
-          className="grid md:grid-cols-3 gap-8"
+         <motion.div
+          className="grid md:grid-cols-3 gap-5"
           style={{ x: gridShift, rotate: gridRotate }}
         >
           {displayProducts.map((product, i) => (
