@@ -67,11 +67,24 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-4xl mx-auto space-y-2"
         >
-          <img
-            src={heroLogo}
-            alt="Olive Foods"
-            className="max-w-sm sm:max-w-md lg:max-w-2xl w-full h-auto mx-auto"
-          />
+          <div className="relative mx-auto max-w-sm sm:max-w-md lg:max-w-2xl">
+            {/* Pulsing radial glow behind logo */}
+            <div
+              className="absolute -inset-16 rounded-full opacity-60 blur-3xl animate-pulse"
+              style={{
+                background: 'radial-gradient(ellipse at center, hsl(100 40% 30% / 0.4) 0%, hsl(140 50% 20% / 0.2) 40%, transparent 70%)',
+                animationDuration: '3s',
+              }}
+            />
+            <img
+              src={heroLogo}
+              alt="Olive Foods"
+              className="relative w-full h-auto"
+              style={{
+                filter: 'drop-shadow(0 0 30px hsl(100 40% 30% / 0.5)) drop-shadow(0 0 60px hsl(140 50% 20% / 0.3)) drop-shadow(0 0 100px hsl(100 40% 30% / 0.15))',
+              }}
+            />
+          </div>
           
           <motion.div
             initial={{ opacity: 0, y: 20 }}
