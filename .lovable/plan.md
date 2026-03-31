@@ -1,125 +1,96 @@
 
 
-# Full UI/UX Overhaul — Consistency, Polish, and Smoothness
+# Integrate Olive Foods Company Profile into Website
 
-## Issues Found
+## Summary
 
-### Content Problems
-1. **WhyChooseUs descriptions are SaaS/finance boilerplate** — "No in-app analytics", "Bank-level security", "Track all your expenses"
-2. **CategoriesSection descriptions are keyboard shortcut copy** — "Effortlessly configure your preferred keyboard shortcuts"
-3. **CategoriesSection intro is Claypro boilerplate** — "This customization increases Claypro's flexibility"
-4. **FAQ intro paragraph is social media copy** — "your voice on social media is your brand's heartbeat"
-5. **Footer missing brand name** — copyright says "©2026 . All rights reserved." with no name
-6. **Categories use blue hexagon SVG icons** that clash with the green/gold palette
+Replace all placeholder/generic content with real Olive Foods (Pvt) Ltd company data from the uploaded profile. The brand name changes from "FreshLine" to "Olive Foods". Content updates span the landing page and About page.
 
-### Layout & Spacing Problems
-7. **Scroll snap is `y proximity` in CSS but sections use `min-height: 100vh`** — creates jarring jumps between sections that aren't full-viewport content
-8. **CategoriesSection carousel is broken on mobile** — cards are `w-[calc(50%-16px)]` which overflows on small screens; dark cards on light background look jarring
-9. **Hero section is empty** — just a gradient with faint marquee text, no headline or CTA
-10. **LogoStrip has bordered boxes** that look unfinished and cheap
-11. **StatsSection has random colored circles** under each stat that serve no purpose
-12. **Inner page headers** (About, Products, Brands) are flat gradient rectangles with no texture
-13. **ProductCard image area** shows just a single letter — looks broken
-14. **Navbar on inner pages** starts with white bg then jumps to dark on scroll — the text color logic creates jarring transitions
-15. **`snap-section` vs `snap-section-auto`** used inconsistently, some sections snap, some don't
+## Changes
 
-### Animation & Smoothness Problems
-16. **No smooth scroll behavior on the snap container** — CSS has `scroll-behavior: smooth` but snap sections create abrupt jumps
-17. **Marquee animation** at 30s in CSS but Tailwind config says 20s — inconsistent
-18. **`hover:${textBase}` in Navbar** — Tailwind doesn't support dynamic class interpolation, so hover states on non-active nav links are broken
+### Landing Page Updates
 
-### Visual Consistency Problems
-19. **Dark section gradients vary wildly** — some use hex colors (#08120A, #194B22, #5C7928), others use HSL, creating slight mismatches
-20. **Card styles inconsistent** — FeaturedProducts uses custom gradient cards, WhyChooseUs uses different gradient cards, CategoriesSection uses yet another style
-21. **Button styles vary** — some rounded-full, some rounded-xl, inconsistent heights
+**1. Hero Section (`HeroSection.tsx`)**
+- Subtitle: "Your trusted import, bonded warehousing & FMCG distribution partner serving Sri Lanka's HoReCa, Modern Trade and General Trade sectors."
+- Keep "OLIVE FOODS" marquee as-is (already correct)
 
----
+**2. Logo Strip (`LogoStrip.tsx`)**
+- Replace generic logos (ADIRA, Holcim, etc.) with real brand partners: AZIZAA, Hungritos, Fletcher, Granoro, Daily Dairy, Snorre Foods, Wai Wai, Royal Arm
+- Update header text to "Our Brand Partners"
 
-## Plan
+**3. WhyChooseUs (`WhyChooseUs.tsx`)**
+- Update to 4 cards matching the profile's competitive advantages:
+  - Integrated Import-to-Distribution (import + brand representation)
+  - Bonded Warehousing (customs-approved, duty optimization)
+  - Cold-Chain Logistics (-18°C frozen/chilled)
+  - Island-Wide Distribution (HoReCa, Modern Trade, General Trade)
+- Add icons: Package, Warehouse, Thermometer, Truck
 
-### 1. Navbar — Clean up color logic and fix hover bug
-- Fix broken `hover:${textBase}` dynamic class — use proper conditional classes
-- Simplify color states: always use light text on landing (dark bg), dark text on inner pages when not scrolled, light text when scrolled (dark bg)
-- Smoother padding transition, consistent border-radius
-- Remove redundant "Inquire" text — just keep "Contact Us" button
+**4. Categories Section (`CategoriesSection.tsx`)**
+- Replace with real product categories from profile:
+  - Frozen (French fries, meats, seafood, fruits)
+  - Dairy (Cheese, butter, specialty dairy)
+  - Grocery & Staples (Rice, pasta, canned goods, condiments)
+  - Edible Oils (Vegetable and specialty oils)
+  - Specialty Imports (Seasonal and premium international foods)
+- 5 cards in grid
 
-### 2. Hero Section — Add content overlay
-- Add centered headline ("Premium Food Imports"), subtitle, and CTA button
-- Layer above marquee (z-20), below navbar
-- Subtle fade-in animation on load
+**5. Stats Section (`StatsSection.tsx`)**
+- Update stats to match profile: 30+ years experience, 8+ brand partners, sourcing from 8+ countries (Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, China)
 
-### 3. Fix all placeholder/wrong copy
-- **WhyChooseUs**: Rewrite 3 feature descriptions to match food import context (quality testing, global supplier network, cold-chain logistics)
-- **CategoriesSection**: Replace keyboard shortcut text with actual category descriptions, replace Claypro intro
-- **FAQSection**: Fix social media intro paragraph to match food import context
-- **Footer**: Add "FreshLine" to copyright line
+**6. DarkStatsBanner (`DarkStatsBanner.tsx`)**
+- Update banner stats to reflect real figures from profile context
 
-### 4. CategoriesSection — Full redesign
-- Replace dark cards with light-themed cards (white bg, subtle border) to match the light section background
-- Replace blue hexagon SVGs with Lucide icons (Wheat, Coffee, Milk, Snowflake)
-- Replace broken carousel with responsive grid (2 cols on md, 4 on lg)
-- Remove carousel controls
+**7. Team Section (`TeamSection.tsx`)**
+- Keep structure but update header copy to reference "three decades of industry experience"
+- Note: profile doesn't list specific team members, so keep placeholder team but update bios to match Olive Foods context (sales, procurement, logistics teams mentioned)
 
-### 5. LogoStrip — Polish
-- Remove bordered boxes, use plain text with opacity treatment
-- Keep marquee animation
+**8. Footer (`Footer.tsx`)**
+- Brand name: "Olive Foods (Pvt) Ltd"
+- Email: info@olivefoods.lk
+- Phone: +94 11 207 1717
 
-### 6. StatsSection — Remove colored circles
-- Remove the 3 colored circles under each stat card
-- Clean, minimal stat cards
+### About Page Updates (`AboutPage.tsx`)
 
-### 7. Scroll behavior — Remove snap, use smooth scroll
-- Remove `scroll-snap-type` from `.snap-container` entirely — the mandatory/proximity snapping causes jarring movement
-- Keep `.snap-container` as a plain scrollable div with `scroll-behavior: smooth`
-- Remove `scroll-snap-align` from all section classes
-- Sections use natural content height instead of forced `min-height: 100vh` (except hero)
-- This makes the entire page scroll naturally and smoothly
+**1. Hero Banner**
+- Title stays "Our Story"
+- Subtitle updated to Olive Foods intro paragraph
 
-### 8. Standardize dark section gradients
-- Create one consistent gradient pattern using HSL values for all dark sections (WhyChooseUs, FeaturedProducts, LocationsSection, FAQSection, Footer, DarkStatsBanner)
-- Base: `linear-gradient(180deg, hsl(140 45% 8%), hsl(140 40% 12%), hsl(140 45% 8%))` with subtle radial accents
+**2. Our Story Section**
+- Replace generic FreshLine copy with real Olive Foods description from profile (trusted import, bonded warehousing, FMCG distribution partner, 30+ years experience, strong global supplier relationships)
 
-### 9. ProductCard — Better placeholder
-- Replace single letter with Package icon from Lucide + product name initial
-- Subtle gradient background that feels intentional
+**3. Mission & Vision**
+- **Mission**: "To deliver superior products and seamless distribution solutions through strong global sourcing, advanced logistics infrastructure and customer-focused service, empowering our partners to grow sustainably."
+- **Vision**: "To be Sri Lanka's most trusted and progressive FMCG distribution partner, connecting world-class brands with businesses and households through reliability, innovation and operational excellence."
 
-### 10. Inner page headers — Add noise texture
-- Add same noise SVG overlay from hero to all inner page dark headers for consistency
+**4. Values Section → Competitive Advantage**
+- Rename to "Our Competitive Advantage"
+- Cards: Integrated model, Faster lead times, Strong supplier relationships, Consistent quality control, Nationwide delivery, Experienced team (pick top 4)
 
-### 11. Standardize button styles
-- All CTAs: `rounded-xl` (not mix of rounded-full and rounded-xl)
-- Consistent height `h-11` for standard buttons, `h-12` for hero/prominent
+**5. Add Client Segments Section** (new section before CTA)
+- Grid showing who they serve: Hotels & Resorts, Restaurants & Cafes, Catering Companies, Supermarket Chains, Retail Distributors, Food Manufacturers
 
-### 12. Fix marquee animation duration
-- Align CSS (30s) and Tailwind config — use 30s everywhere
+**6. Add Core Business Activities Section** (new section after story)
+- 5 cards: Import & Brand Representation, Bonded Warehousing, Cold-Chain Logistics, HoReCa Distribution, Modern Trade & General Trade
 
-### 13. PageLayout — Add smooth scroll
-- Ensure inner pages also scroll smoothly
+### Navbar (`Navbar.tsx`)
+- Update brand name from "FreshLine" to "Olive Foods"
 
----
+### PageLayout (`PageLayout.tsx`)
+- No changes needed
 
 ## Files Modified
 
 | File | Changes |
 |------|---------|
-| `src/index.css` | Remove snap behavior, fix marquee duration, keep smooth scroll |
-| `src/components/landing/Navbar.tsx` | Fix hover classes, simplify color logic, remove "Inquire" |
-| `src/components/landing/HeroSection.tsx` | Add headline, subtitle, CTA overlay |
-| `src/components/landing/WhyChooseUs.tsx` | Fix all 3 feature descriptions |
-| `src/components/landing/CategoriesSection.tsx` | Full redesign: grid layout, light cards, proper icons, fixed copy |
-| `src/components/landing/LogoStrip.tsx` | Remove bordered boxes |
-| `src/components/landing/StatsSection.tsx` | Remove colored circles |
-| `src/components/landing/FAQSection.tsx` | Fix intro paragraph |
-| `src/components/landing/Footer.tsx` | Add brand name to copyright |
-| `src/components/landing/FeaturedProducts.tsx` | Standardize gradient |
-| `src/components/landing/LocationsSection.tsx` | Standardize gradient |
-| `src/components/landing/DarkStatsBanner.tsx` | Standardize gradient |
-| `src/components/ProductCard.tsx` | Better placeholder with icon |
-| `src/pages/AboutPage.tsx` | Add noise texture to header |
-| `src/pages/ProductsPage.tsx` | Add noise texture to header |
-| `src/pages/BrandsPage.tsx` | Add noise texture to header |
-| `src/pages/FeaturedPage.tsx` | Add noise texture to header |
-| `src/pages/BrandDetailPage.tsx` | Add noise texture to header |
-| `src/components/PageLayout.tsx` | Smooth scroll wrapper |
-| `tailwind.config.ts` | Fix marquee duration to 30s |
+| `src/components/landing/HeroSection.tsx` | Update subtitle copy |
+| `src/components/landing/LogoStrip.tsx` | Real brand partners |
+| `src/components/landing/WhyChooseUs.tsx` | 4 real service cards |
+| `src/components/landing/CategoriesSection.tsx` | 5 real product categories |
+| `src/components/landing/StatsSection.tsx` | Real stats (30+ years, etc.) |
+| `src/components/landing/DarkStatsBanner.tsx` | Updated stats |
+| `src/components/landing/TeamSection.tsx` | Updated copy |
+| `src/components/landing/Footer.tsx` | Olive Foods name, real contact info |
+| `src/components/landing/Navbar.tsx` | Brand name to "Olive Foods" |
+| `src/pages/AboutPage.tsx` | Full rewrite with real company data, new sections |
 
