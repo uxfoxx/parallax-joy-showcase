@@ -18,6 +18,17 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const location = useLocation();
+  const vibrateControls = useAnimationControls();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      vibrateControls.start({
+        x: [0, -1, 1, -0.5, 0.5, 0],
+        transition: { duration: 0.4, ease: "easeInOut" },
+      });
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [vibrateControls]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
