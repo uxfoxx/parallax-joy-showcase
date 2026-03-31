@@ -24,33 +24,26 @@ const Index = () => {
       <Navbar />
 
       {/* Hero pinned — content scrolls over it */}
-      <div className="relative">
-        <div className="sticky top-0 z-0 h-screen">
-          <HeroSection />
-        </div>
-        <div className="relative z-[1]">
-          <SectionTransition colorFrom="hsl(150 40% 8% / 0.4)" colorTo="hsl(140 50% 12% / 0.3)" />
-          <LogoStrip />
-          <SectionTransition colorFrom="hsl(140 50% 12% / 0.2)" colorTo="hsl(150 40% 10% / 0.4)" flip />
-          <FeaturedProducts />
-          <SectionTransition colorFrom="hsl(150 40% 10% / 0.3)" colorTo="hsl(140 50% 14% / 0.3)" />
-          <WhyChooseUs />
-          <SectionTransition colorFrom="hsl(140 50% 14% / 0.2)" colorTo="hsl(150 40% 8% / 0.3)" flip />
-          <CategoriesSection />
-          <SectionTransition colorFrom="hsl(150 40% 8% / 0.3)" colorTo="hsl(140 50% 12% / 0.4)" />
-          <StatsSection />
-          <SectionTransition colorFrom="hsl(140 50% 12% / 0.2)" colorTo="hsl(150 40% 10% / 0.3)" flip />
-
-          <DarkStatsBanner />
-          <SectionTransition colorFrom="hsl(150 40% 10% / 0.3)" colorTo="hsl(140 50% 14% / 0.2)" />
-          <TeamSection />
-          <SectionTransition colorFrom="hsl(140 50% 14% / 0.2)" colorTo="hsl(150 40% 8% / 0.3)" flip />
-          <LocationsSection />
-          <SectionTransition colorFrom="hsl(150 40% 8% / 0.3)" colorTo="hsl(140 50% 12% / 0.3)" />
-          <FAQSection />
-          <Footer />
-        </div>
-      </div>
+      <HeroSection />
+      <SectionTransition colorFrom="hsl(150 40% 8% / 0.4)" colorTo="hsl(140 50% 12% / 0.3)" />
+      <LogoStrip />
+      <SectionTransition colorFrom="hsl(140 50% 12% / 0.2)" colorTo="hsl(150 40% 10% / 0.4)" flip />
+      <FeaturedProducts />
+      <SectionTransition colorFrom="hsl(150 40% 10% / 0.3)" colorTo="hsl(140 50% 14% / 0.3)" />
+      <WhyChooseUs />
+      <SectionTransition colorFrom="hsl(140 50% 14% / 0.2)" colorTo="hsl(150 40% 8% / 0.3)" flip />
+      <CategoriesSection />
+      <SectionTransition colorFrom="hsl(150 40% 8% / 0.3)" colorTo="hsl(140 50% 12% / 0.4)" />
+      <StatsSection />
+      <SectionTransition colorFrom="hsl(140 50% 12% / 0.2)" colorTo="hsl(150 40% 10% / 0.3)" flip />
+      <DarkStatsBanner />
+      <SectionTransition colorFrom="hsl(150 40% 10% / 0.3)" colorTo="hsl(140 50% 14% / 0.2)" />
+      <TeamSection />
+      <SectionTransition colorFrom="hsl(140 50% 14% / 0.2)" colorTo="hsl(150 40% 8% / 0.3)" flip />
+      <LocationsSection />
+      <SectionTransition colorFrom="hsl(150 40% 8% / 0.3)" colorTo="hsl(140 50% 12% / 0.3)" />
+      <FAQSection />
+      <Footer />
     </div>
   );
 };
