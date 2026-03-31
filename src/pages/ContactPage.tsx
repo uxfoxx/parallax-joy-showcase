@@ -117,20 +117,11 @@ const ContactPage = () => {
 
       <SectionTransition />
 
-      {/* Form + Details */}
-      <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden py-28 lg:py-36">
-          <div className="absolute inset-0" style={{
-            background: `
-              radial-gradient(ellipse at 20% 30%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 70%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-              linear-gradient(180deg, hsl(140 50% 14%), hsl(150 40% 10%), hsl(150 40% 6%))
-            `,
-          }} />
-          <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
-            <div className="absolute w-[500px] h-[400px] top-1/3 -left-40 rounded-full opacity-[0.05]" style={{ background: "radial-gradient(ellipse, hsl(80 50% 31%), transparent 70%)" }} />
-            <div className="absolute w-[300px] h-[300px] bottom-20 right-10 rounded-full opacity-[0.04]" style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }} />
-          </motion.div>
+      {/* Form + Details — Light */}
+      <div data-navbar-theme="light">
+        <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
+          <div className="absolute w-[400px] h-[400px] -top-20 -left-20 rounded-full opacity-[0.07]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
+          <div className="absolute w-[300px] h-[300px] bottom-20 right-10 rounded-full opacity-[0.05]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
 
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
             <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20">
@@ -141,38 +132,37 @@ const ContactPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="p-8 rounded-lg border border-primary-foreground/15 space-y-6"
-                style={{ background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))` }}
+                className="p-8 rounded-lg border border-border bg-card shadow-lg space-y-6"
               >
                 <div>
-                  <span className="inline-block px-4 py-1.5 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-xs font-medium border border-primary-foreground/15 mb-4 tracking-widest uppercase">
+                  <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent font-body text-xs font-medium border border-accent/20 mb-4 tracking-widest uppercase">
                     Send a Message
                   </span>
-                  <h2 className="font-display text-2xl font-bold text-primary-foreground tracking-tight">How Can We Help?</h2>
+                  <h2 className="font-display text-2xl font-bold text-foreground tracking-tight">How Can We Help?</h2>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="font-body text-sm text-primary-foreground/60">Name *</Label>
-                    <input className={inputClasses} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your name" />
-                    {errors.name && <p className="text-red-400 text-xs font-body">{errors.name}</p>}
+                    <Label className="font-body text-sm text-muted-foreground">Name *</Label>
+                    <input className={lightInputClasses} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your name" />
+                    {errors.name && <p className="text-destructive text-xs font-body">{errors.name}</p>}
                   </div>
                   <div className="space-y-2">
-                    <Label className="font-body text-sm text-primary-foreground/60">Email *</Label>
-                    <input className={inputClasses} type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" />
-                    {errors.email && <p className="text-red-400 text-xs font-body">{errors.email}</p>}
+                    <Label className="font-body text-sm text-muted-foreground">Email *</Label>
+                    <input className={lightInputClasses} type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" />
+                    {errors.email && <p className="text-destructive text-xs font-body">{errors.email}</p>}
                   </div>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="font-body text-sm text-primary-foreground/60">Phone (optional)</Label>
-                    <input className={inputClasses} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+94 XX XXX XXXX" />
+                    <Label className="font-body text-sm text-muted-foreground">Phone (optional)</Label>
+                    <input className={lightInputClasses} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+94 XX XXX XXXX" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="font-body text-sm text-primary-foreground/60">Subject *</Label>
+                    <Label className="font-body text-sm text-muted-foreground">Subject *</Label>
                     <Select value={form.subject} onValueChange={(v) => setForm({ ...form, subject: v })}>
-                      <SelectTrigger className="h-11 rounded-lg border-primary-foreground/10 bg-primary-foreground/5 text-primary-foreground font-body">
+                      <SelectTrigger className="h-11 rounded-lg border-border bg-background text-foreground font-body">
                         <SelectValue placeholder="Select subject" />
                       </SelectTrigger>
                       <SelectContent>
@@ -181,14 +171,14 @@ const ContactPage = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                    {errors.subject && <p className="text-red-400 text-xs font-body">{errors.subject}</p>}
+                    {errors.subject && <p className="text-destructive text-xs font-body">{errors.subject}</p>}
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="font-body text-sm text-primary-foreground/60">Message *</Label>
-                  <textarea className={`${inputClasses} min-h-[130px] resize-none`} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Tell us how we can help..." />
-                  {errors.message && <p className="text-red-400 text-xs font-body">{errors.message}</p>}
+                  <Label className="font-body text-sm text-muted-foreground">Message *</Label>
+                  <textarea className={`${lightInputClasses} min-h-[130px] resize-none`} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Tell us how we can help..." />
+                  {errors.message && <p className="text-destructive text-xs font-body">{errors.message}</p>}
                 </div>
 
                 <Button type="submit" disabled={loading} className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-xl px-8 h-12 text-base gap-2">
@@ -206,41 +196,41 @@ const ContactPage = () => {
                 className="space-y-8"
               >
                 <div>
-                  <span className="inline-block px-4 py-1.5 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-xs font-medium border border-primary-foreground/15 mb-4 tracking-widest uppercase">
+                  <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent font-body text-xs font-medium border border-accent/20 mb-4 tracking-widest uppercase">
                     Reach Out
                   </span>
-                  <h2 className="font-display text-2xl font-bold text-primary-foreground tracking-tight mb-2">Contact Details</h2>
-                  <p className="font-body text-primary-foreground/40 text-sm">Reach us through any of the channels below.</p>
+                  <h2 className="font-display text-2xl font-bold text-foreground tracking-tight mb-2">Contact Details</h2>
+                  <p className="font-body text-muted-foreground text-sm">Reach us through any of the channels below.</p>
                 </div>
 
                 <div className="space-y-4">
                   {contactInfo.map((ci) => (
-                    <motion.div key={ci.label} whileHover={{ y: -4, transition: { duration: 0.3 } }} className="flex items-start gap-4 p-5 rounded-lg border border-primary-foreground/15 hover:border-primary-foreground/25 transition-all duration-500" style={{ background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))` }}>
-                      <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-10 h-10 rounded-lg bg-primary-foreground flex items-center justify-center shrink-0 shadow-lg shadow-primary-foreground/10">
-                        <ci.icon className="w-5 h-5 text-forest-deep" />
+                    <motion.div key={ci.label} whileHover={{ y: -4, transition: { duration: 0.3 } }} className="flex items-start gap-4 p-5 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
+                      <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
+                        <ci.icon className="w-5 h-5 text-accent" />
                       </motion.div>
                       <div>
-                        <p className="font-body text-xs uppercase tracking-widest text-primary-foreground/50 mb-1">{ci.label}</p>
+                        <p className="font-body text-xs uppercase tracking-widest text-muted-foreground mb-1">{ci.label}</p>
                         {ci.href ? (
-                          <a href={ci.href} target={ci.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="font-body text-sm text-primary-foreground hover:text-accent transition-colors">
+                          <a href={ci.href} target={ci.href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="font-body text-sm text-foreground hover:text-accent transition-colors">
                             {ci.value}
                           </a>
                         ) : (
-                          <p className="font-body text-sm text-primary-foreground">{ci.value}</p>
+                          <p className="font-body text-sm text-foreground">{ci.value}</p>
                         )}
                       </div>
                     </motion.div>
                   ))}
                 </div>
 
-                <motion.div whileHover={{ y: -4, transition: { duration: 0.3 } }} className="p-6 rounded-lg border border-primary-foreground/15 hover:border-primary-foreground/25 transition-all duration-500" style={{ background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))` }}>
+                <motion.div whileHover={{ y: -4, transition: { duration: 0.3 } }} className="p-6 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-lg bg-primary-foreground flex items-center justify-center shadow-lg shadow-primary-foreground/10">
-                      <Clock className="w-5 h-5 text-forest-deep" />
+                    <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                      <Clock className="w-5 h-5 text-accent" />
                     </div>
-                    <h3 className="font-display text-lg font-bold text-primary-foreground">Business Hours</h3>
+                    <h3 className="font-display text-lg font-bold text-foreground">Business Hours</h3>
                   </div>
-                  <div className="space-y-1.5 font-body text-sm text-primary-foreground/45 ml-[52px]">
+                  <div className="space-y-1.5 font-body text-sm text-muted-foreground ml-[52px]">
                     <p>Monday – Friday: 8:30 AM – 5:30 PM</p>
                     <p>Saturday: 8:30 AM – 1:00 PM</p>
                     <p>Sunday & Holidays: Closed</p>
