@@ -13,9 +13,7 @@ const HeroSection = () => {
     offset: ["start start", "end start"],
   });
 
-  // Parallax: bg shifts up slower than scroll
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0px", "80px"]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0px", "40px"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0px", "60px"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
@@ -24,23 +22,17 @@ const HeroSection = () => {
         (ref as React.MutableRefObject<HTMLElement | null>).current = el;
         (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
       }}
-      className="relative min-h-screen overflow-hidden bg-background"
+      className="relative min-h-screen overflow-hidden"
     >
-      {/* Animated gradient background with parallax */}
-      <motion.div
+      {/* Subtle extra glow for hero only */}
+      <div
         className="absolute inset-0 z-0"
         style={{
-          y: bgY,
           background: `
-            radial-gradient(ellipse 90% 70% at 25% 35%, hsl(150 40% 10% / 0.95) 0%, transparent 65%),
-            radial-gradient(ellipse 50% 60% at 75% 25%, hsl(75 38% 45% / 0.18) 0%, transparent 55%),
-            radial-gradient(ellipse 80% 55% at 50% 85%, hsl(140 50% 19% / 0.8) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 50% at 85% 65%, hsl(75 40% 60% / 0.1) 0%, transparent 45%),
-            radial-gradient(ellipse 40% 40% at 10% 80%, hsl(80 50% 31% / 0.12) 0%, transparent 50%),
-            linear-gradient(150deg, hsl(150 40% 10%) 0%, hsl(140 50% 19%) 35%, hsl(150 40% 10%) 70%, hsl(150 40% 10%) 100%)
+            radial-gradient(ellipse 90% 70% at 25% 35%, hsl(150 40% 10% / 0.6) 0%, transparent 65%),
+            radial-gradient(ellipse 50% 60% at 75% 25%, hsl(75 38% 45% / 0.1) 0%, transparent 55%),
+            radial-gradient(ellipse 80% 55% at 50% 85%, hsl(140 50% 19% / 0.4) 0%, transparent 60%)
           `,
-          backgroundSize: '250% 250%',
-          animation: 'gradient-shift 18s ease infinite',
         }}
       />
 
@@ -50,17 +42,6 @@ const HeroSection = () => {
         style={{ ...gradientStyle, opacity: 0.25 }}
       />
 
-      {/* Noise texture overlay */}
-      <div className="absolute inset-0 z-[2] opacity-[0.10] pointer-events-none mix-blend-overlay">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <filter id="heroNoise">
-            <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" />
-            <feColorMatrix type="saturate" values="0" />
-          </filter>
-          <rect width="100%" height="100%" filter="url(#heroNoise)" />
-        </svg>
-      </div>
-
       {/* Full-height marquee text overlay */}
       <div className="absolute inset-0 flex items-center pointer-events-none select-none z-[5]">
         <div className="w-full h-full overflow-hidden flex flex-col justify-center">
@@ -68,8 +49,7 @@ const HeroSection = () => {
             {Array.from({ length: 6 }).map((_, i) => (
               <span
                 key={i}
-                className="text-[100vh] leading-[100vh] font-black uppercase tracking-tighter text-primary-foreground/[0.04] mx-8"
-                style={{ fontFamily: "'Inter', sans-serif" }}
+                className="text-[100vh] leading-[100vh] font-black uppercase tracking-tighter text-primary-foreground/[0.03] mx-8 font-display"
               >
                 OLIVE FOODS
               </span>
@@ -78,7 +58,7 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Hero content overlay with parallax */}
+      {/* Hero content overlay */}
       <motion.div
         className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 text-center"
         style={{ y: contentY, opacity: contentOpacity }}
