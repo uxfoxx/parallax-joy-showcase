@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Snowflake, Milk, Wheat, Droplets, Sparkles } from "lucide-react";
 
 const categories = [
@@ -30,6 +30,11 @@ const categories = [
 ];
 
 const CategoriesSection = () => {
+  const { scrollYProgress } = useScroll();
+
+  // Fan-out effect: cards spread apart when element passes (~35-45%)
+  const fanGap = useTransform(scrollYProgress, [0.32, 0.40, 0.48], [24, 48, 24]);
+
   return (
     <section id="brands" className="py-28 lg:py-36 bg-background">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
@@ -50,16 +55,19 @@ const CategoriesSection = () => {
         </motion.div>
 
         {/* Grid — 5 cards: 3 top, 2 bottom centered */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3" style={{ gap: fanGap }}>
           {categories.slice(0, 3).map((cat, i) => (
             <CategoryCard key={cat.name} cat={cat} i={i} />
           ))}
-        </div>
-        <div className="grid sm:grid-cols-2 gap-6 mt-6 max-w-2xl mx-auto lg:max-w-none lg:grid-cols-2 lg:px-[16.666%]">
+        </motion.div>
+        <motion.div
+          className="grid sm:grid-cols-2 mt-6 max-w-2xl mx-auto lg:max-w-none lg:grid-cols-2 lg:px-[16.666%]"
+          style={{ gap: fanGap }}
+        >
           {categories.slice(3).map((cat, i) => (
             <CategoryCard key={cat.name} cat={cat} i={i + 3} />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
