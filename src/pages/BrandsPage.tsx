@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, MapPin } from "lucide-react";
+import { MapPin, Package } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import { useBrands, useProducts } from "@/lib/api";
+import { Badge } from "@/components/ui/badge";
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } };
@@ -27,31 +28,45 @@ const BrandsPage = () => {
           {isLoading ? (
             <p className="text-center font-body text-muted-foreground py-20">Loading brands...</p>
           ) : (
-            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
               {brands.map((brand) => {
                 const prodCount = products.filter((p) => p.brand_id === brand.id).length;
                 return (
                   <motion.div key={brand.id} variants={item}>
                     <Link to={`/brands/${brand.slug}`} className="block group">
-                       <div className="rounded-lg border border-border bg-card p-6 space-y-4 transition-all duration-300 hover:shadow-xl hover:border-forest-mid/30 h-full">
+                      <div className="relative rounded-lg overflow-hidden aspect-[4/5] shadow-md hover:shadow-xl transition-shadow duration-500 border border-border/30">
                         {brand.image_url ? (
-                          <div className="w-full h-40 rounded-lg overflow-hidden">
-                            <img src={brand.image_url} alt={brand.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                          </div>
+                          <img src={brand.image_url} alt={brand.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                         ) : (
-                          <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-forest-deep/10 to-accent/10 flex items-center justify-center">
-                            <span className="font-display text-2xl font-bold text-forest-mid">{brand.name.charAt(0)}</span>
+                          <div className="absolute inset-0 bg-gradient-to-br from-forest-deep/20 via-forest-mid/10 to-accent/10 flex items-center justify-center">
+                            <span className="font-display text-5xl font-bold text-forest-mid/25">{brand.name.charAt(0)}</span>
                           </div>
                         )}
-                        <div className="space-y-2">
-                          <h3 className="font-display text-xl font-semibold text-foreground group-hover:text-forest-mid transition-colors">{brand.name}</h3>
-                          <p className="font-body text-sm text-muted-foreground line-clamp-2">{brand.description}</p>
+
+                        {/* Shine effect */}
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%]" style={{ transition: "opacity 0.7s, transform 0.9s" }} />
+
+                        {/* Top badge */}
+                        <div className="absolute top-3 right-3 z-10">
+                          <Badge variant="outline" className="bg-background/80 backdrop-blur-sm font-body text-xs text-foreground border-border shadow-sm">
+                            {prodCount} product{prodCount !== 1 ? "s" : ""}
+                          </Badge>
                         </div>
-                        <div className="flex items-center justify-between pt-2">
-                          <div className="flex items-center gap-1.5 text-xs font-body text-muted-foreground"><MapPin className="w-3.5 h-3.5" />{brand.origin}</div>
-                          <span className="text-xs font-body text-muted-foreground">{prodCount} product{prodCount !== 1 ? "s" : ""}</span>
+
+                        {/* Gradient overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
+
+                        {/* Bottom details */}
+                        <div className="absolute bottom-0 left-0 right-0 p-5 pb-6">
+                          <h3 className="font-display text-lg font-semibold text-white drop-shadow-md leading-tight">{brand.name}</h3>
+                          <div className="max-h-0 group-hover:max-h-24 overflow-hidden transition-all duration-500 ease-out">
+                            <p className="text-white/75 text-sm font-body line-clamp-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">{brand.description}</p>
+                            <div className="flex items-center gap-1.5 mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-150">
+                              <MapPin className="w-3.5 h-3.5 text-white/60" />
+                              <span className="text-xs font-body text-white/60">{brand.origin}</span>
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2 text-sm font-body font-medium text-forest-mid group-hover:gap-3 transition-all">View Brand <ArrowRight className="w-4 h-4" /></div>
                       </div>
                     </Link>
                   </motion.div>

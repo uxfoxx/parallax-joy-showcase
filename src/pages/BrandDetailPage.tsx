@@ -58,7 +58,7 @@ const BrandDetailPage = () => {
             <Link to="/brands" className="flex items-center gap-2 text-sm font-body text-forest-mid hover:underline"><ArrowLeft className="w-4 h-4" /> All Brands</Link>
           </div>
           {brandProducts.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">{brandProducts.map((product) => <ProductCard key={product.id} product={product} />)}</div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">{brandProducts.map((product) => <ProductCard key={product.id} product={product} />)}</div>
           ) : (
             <p className="font-body text-muted-foreground text-center py-16">No products available for this brand yet.</p>
           )}
