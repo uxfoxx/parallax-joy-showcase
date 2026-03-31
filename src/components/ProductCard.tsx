@@ -45,7 +45,7 @@ const ProductCard = ({ product, large = false, variant = "light" }: ProductCardP
           {/* Top badges — always visible */}
           <div className="absolute top-3 left-3 right-3 flex items-start justify-between z-10">
             {product.featured ? (
-              <Badge className="bg-accent text-accent-foreground font-body text-xs shadow-md">
+              <Badge className="bg-accent text-white font-body text-xs shadow-md">
                 Featured
               </Badge>
             ) : <span />}
