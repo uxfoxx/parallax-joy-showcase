@@ -48,7 +48,7 @@ const FeaturedProducts = () => {
         />
         <div
           className="absolute w-[500px] h-[500px] -bottom-40 -left-40 rounded-full opacity-[0.05]"
-          style={{ background: "radial-gradient(circle, hsl(140 50% 30%), transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
         />
       </motion.div>
 
