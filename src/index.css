@@ -181,8 +181,8 @@
   }
 
   @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 0 0 hsl(42 80% 55% / 0.3); }
-    50% { box-shadow: 0 0 20px 5px hsl(42 80% 55% / 0.15); }
+    0%, 100% { box-shadow: 0 0 0 0 hsl(75 38% 45% / 0.3); }
+    50% { box-shadow: 0 0 20px 5px hsl(75 38% 45% / 0.15); }
   }
 
   .animate-float { animation: float 6s ease-in-out infinite; }
