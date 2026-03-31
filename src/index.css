@@ -123,7 +123,7 @@
     border-radius: inherit;
     opacity: 0;
     transition: opacity 0.5s ease;
-    background: linear-gradient(135deg, hsl(42 80% 55% / 0.3), hsl(140 35% 22% / 0.3));
+    background: linear-gradient(135deg, hsl(75 38% 45% / 0.3), hsl(140 50% 19% / 0.3));
     z-index: -1;
     filter: blur(8px);
   }
