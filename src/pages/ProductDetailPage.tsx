@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Package, MessageCircle, Share2, MapPin, Tag, Building2 } from "lucide-react";
+import { ArrowLeft, Package, MessageCircle, Share2, MapPin, Tag, Building2, ChevronLeft, ChevronRight } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useProduct, useProducts, useProductImages } from "@/lib/api";
 
 const ProductDetailPage = () => {
