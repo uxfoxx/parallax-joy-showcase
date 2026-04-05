@@ -64,7 +64,7 @@ const ProductCard = ({ product, large = false, variant = "light" }: ProductCardP
             </h3>
             <div className="max-h-0 group-hover:max-h-24 overflow-hidden transition-all duration-500 ease-out">
               <p className="text-white/75 text-sm font-body line-clamp-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                {product.description}
+                {product.description.includes("<") ? new DOMParser().parseFromString(product.description, "text/html").body.textContent || "" : product.description}
               </p>
               <div className="flex items-center justify-between mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-150">
                 <Link
