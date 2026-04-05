@@ -1,30 +1,19 @@
 
+# Convert DarkStatsBanner to Light/White Background
 
-# Add Image Lightbox to Product Detail Page
+## Changes
 
-## Summary
-Add a fullscreen lightbox modal that opens when clicking the main product image. Uses the existing shadcn `Dialog` component — no new packages needed.
+### 1. `src/components/landing/DarkStatsBanner.tsx`
+- **Background**: Replace the dark forest gradient with a clean white/light background (`bg-background`)
+- **Remove** the dark gradient `motion.div`, the pulsing SVG line, and the mouse-follow glow overlay (they don't suit a light theme)
+- **Text colors**: Change `text-primary-foreground` → `text-foreground` for stat numbers, `text-forest-light` → `text-muted-foreground` for labels
+- **Icon container**: Change `bg-primary-foreground/5` → `bg-forest-deep/10`, keep icon color as `text-forest-mid` (matches the accent on light bg)
+- **Dividers**: Change `sm:divide-primary-foreground/10` → `sm:divide-border`
 
-## Changes in `src/pages/ProductDetailPage.tsx`
-
-1. **Add lightbox state** — `const [lightboxOpen, setLightboxOpen] = useState(false)`
-
-2. **Make main image clickable** — add `onClick={() => setLightboxOpen(true)}` to the main image container, with a cursor-zoom-in style
-
-3. **Add lightbox Dialog** — a fullscreen `Dialog` overlay showing:
-   - The currently active image at full size (`object-contain` on dark backdrop)
-   - Left/right arrow buttons to navigate between images
-   - Keyboard navigation (left/right arrows)
-   - Thumbnail strip at the bottom for quick selection
-   - Close button (already provided by Dialog)
-
-4. **Import Dialog** from `@/components/ui/dialog`
-
-5. **Import ChevronLeft, ChevronRight** from lucide-react for navigation arrows
-
-## Files
+### 2. `src/pages/Index.tsx`
+- Change `data-navbar-theme="dark"` → `data-navbar-theme="light"` on the DarkStatsBanner wrapper (line 49)
 
 | File | Change |
 |------|--------|
-| `src/pages/ProductDetailPage.tsx` | Add lightbox dialog with image navigation |
-
+| `src/components/landing/DarkStatsBanner.tsx` | Light background, remove dark overlays, update text/icon colors |
+| `src/pages/Index.tsx` | Switch navbar theme to `light` for this section |
