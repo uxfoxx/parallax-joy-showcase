@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, Search, ImagePlus, X } from "lucide-react";
 import { toast } from "sonner";
 
-const emptyForm = { name: "", slug: "", brand_id: "", category: "", description: "", featured: false, tags: "" as string, origin: "", sku: "", image_url: "" };
+const emptyForm = { name: "", slug: "", brand_id: "", category: "", description: "", featured: false, our_product: false, tags: "" as string, origin: "", sku: "", image_url: "" };
 
 const ProductImagesManager = ({ productId }: { productId: string }) => {
   const { data: images = [] } = useProductImages(productId);
