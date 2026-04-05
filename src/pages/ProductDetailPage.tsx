@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Package, MessageCircle, Share2, MapPin, Tag, Building2 } from "lucide-react";
+import { ArrowLeft, Package, MessageCircle, Share2, MapPin, Tag, Building2, ChevronLeft, ChevronRight } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useProduct, useProducts, useProductImages } from "@/lib/api";
 
 const ProductDetailPage = () => {
@@ -15,6 +16,27 @@ const ProductDetailPage = () => {
   const { data: allProducts = [] } = useProducts();
   const { data: extraImages = [] } = useProductImages(product?.id || "");
   const [activeImage, setActiveImage] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  const navigateLightbox = useCallback((dir: 1 | -1) => {
+    if (!product) return;
+    const imgs = [
+      ...(product.image_url ? [product.image_url] : []),
+      ...extraImages.map((img) => img.image_url),
+    ];
+    setActiveImage((prev) => (prev + dir + imgs.length) % imgs.length);
+  }, [product, extraImages]);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") navigateLightbox(-1);
+      if (e.key === "ArrowRight") navigateLightbox(1);
+      if (e.key === "Escape") setLightboxOpen(false);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [lightboxOpen, navigateLightbox]);
 
   const relatedProducts = product
     ? allProducts.filter((p) => p.brand_id === product.brand_id && p.id !== product.id).slice(0, 4)
@@ -66,7 +88,7 @@ const ProductDetailPage = () => {
               className="space-y-4 lg:sticky lg:top-24 lg:self-start"
             >
               {/* Main Image */}
-              <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted/50 group cursor-pointer">
+              <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted/50 group cursor-zoom-in" onClick={() => allImages.length > 0 && setLightboxOpen(true)}>
                 <AnimatePresence mode="wait">
                   {allImages.length > 0 ? (
                     <motion.img
@@ -295,6 +317,69 @@ const ProductDetailPage = () => {
           </div>
         </section>
       )}
+
+      {/* Lightbox */}
+      <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] w-full h-[95vh] p-0 border-none bg-black/95 backdrop-blur-xl [&>button]:text-white [&>button]:hover:text-white/80">
+          <div className="relative w-full h-full flex flex-col items-center justify-center">
+            {/* Navigation Arrows */}
+            {allImages.length > 1 && (
+              <>
+                <button
+                  onClick={() => navigateLightbox(-1)}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button
+                  onClick={() => navigateLightbox(1)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              </>
+            )}
+
+            {/* Main Image */}
+            <div className="flex-1 flex items-center justify-center w-full px-16 py-4">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={activeImage}
+                  src={allImages[activeImage]}
+                  alt={product?.name}
+                  className="max-w-full max-h-full object-contain"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                />
+              </AnimatePresence>
+            </div>
+
+            {/* Thumbnail Strip */}
+            {allImages.length > 1 && (
+              <div className="flex gap-2 pb-4 px-4">
+                {allImages.map((img, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveImage(i)}
+                    className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${
+                      i === activeImage ? "border-white ring-2 ring-white/30" : "border-white/20 hover:border-white/50 opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={img} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Counter */}
+            <div className="absolute top-4 left-4 text-white/60 text-sm font-body">
+              {activeImage + 1} / {allImages.length}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </PageLayout>
   );
 };
