@@ -32,13 +32,6 @@ const getIcon = (name: string): LucideIcon => {
   return Sparkles;
 };
 
-const flyInPositions = [
-  { x: -400, y: -200, rotate: -30, scale: 0.3 },
-  { x: 100, y: -400, rotate: 15, scale: 0.2 },
-  { x: 400, y: -150, rotate: 25, scale: 0.3 },
-  { x: -300, y: 300, rotate: -20, scale: 0.3 },
-  { x: 350, y: 250, rotate: 18, scale: 0.3 },
-];
 
 const CategoriesSection = () => {
   const { data: allCategories = [] } = useCategories();
