@@ -265,10 +265,4 @@
     animation: gradient-move var(--gradient-duration, 5s) ease infinite;
   }
 
-  /* Hide native cursor globally on fine-pointer devices */
-  @media (pointer: fine) {
-    html, html * {
-      cursor: none !important;
-    }
-  }
 }
