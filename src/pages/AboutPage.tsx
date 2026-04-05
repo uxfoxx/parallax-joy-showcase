@@ -33,8 +33,6 @@ const clientSegments = [
   { icon: UtensilsCrossed, label: "Restaurants & Cafes" },
   { icon: Users, label: "Catering Companies" },
   { icon: ShoppingBag, label: "Supermarket Chains" },
-  { icon: Truck, label: "Retail Distributors" },
-  { icon: Factory, label: "Food Manufacturers" },
 ];
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
