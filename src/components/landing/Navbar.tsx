@@ -103,7 +103,7 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center gap-1 relative">
             {links.map((link) => {
-              const isActive = link.href === "/" ? location.pathname === "/" : location.pathname.startsWith(link.href);
+              const isActive = link.href === "/" ? location.pathname === "/" : (location.pathname + location.search).startsWith(link.href);
               return (
                 <Link
                   key={link.label}
