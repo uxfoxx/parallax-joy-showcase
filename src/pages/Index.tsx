@@ -35,6 +35,10 @@ const Index = () => {
       <div data-navbar-theme="light">
         <FeaturedProducts />
       </div>
+      <SectionTransition />
+      <div data-navbar-theme="light">
+        <OurProductsSection />
+      </div>
       <div data-navbar-theme="light">
         <WhyChooseUs />
       </div>
