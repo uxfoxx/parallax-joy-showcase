@@ -36,7 +36,7 @@ const ProductsPage = () => {
     if (selectedCategory) results = results.filter((p) => p.category === selectedCategory);
     if (selectedBrand) results = results.filter((p) => p.brands?.slug === selectedBrand);
     return results;
-  }, [query, selectedCategory, selectedBrand, products]);
+  }, [query, selectedCategory, selectedBrand, products, showOurProducts]);
 
   const hasFilters = !!selectedCategory || !!selectedBrand;
 
