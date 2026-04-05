@@ -42,12 +42,12 @@ const ProductsPage = () => {
 
   return (
     <PageLayout>
-      <section className="relative overflow-hidden py-16 lg:py-24">
+      <section className="relative overflow-hidden py-10 lg:py-14">
         <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
         <div className="absolute inset-0 opacity-[0.06] pointer-events-none mix-blend-overlay"><svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg"><filter id="noiseP"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter><rect width="100%" height="100%" filter="url(#noiseP)" /></svg></div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="font-display text-3xl md:text-4xl font-bold text-primary-foreground mb-3">{showOurProducts ? "Our Products" : "All Products"}</motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.5 }} className="font-body text-base text-primary-foreground/70 max-w-xl mx-auto">{showOurProducts ? "Our curated selection of premium food products for the Sri Lankan market." : "Browse our complete catalog of premium food imports from around the world."}</motion.p>
+          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="font-display text-2xl md:text-3xl font-bold text-primary-foreground mb-2">{showOurProducts ? "Our Products" : "All Products"}</motion.h1>
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.5 }} className="font-body text-sm text-primary-foreground/70 max-w-xl mx-auto">{showOurProducts ? "Our curated selection of premium food products for the Sri Lankan market." : "Browse our complete catalog of premium food imports from around the world."}</motion.p>
         </div>
       </section>
 

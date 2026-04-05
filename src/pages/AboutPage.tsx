@@ -53,7 +53,7 @@ const AboutPage = () => {
 
       {/* Hero */}
       <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden py-16 lg:py-24">
+        <section className="relative overflow-hidden py-10 lg:py-14">
           <div
             className="absolute inset-0"
             style={{
@@ -68,13 +68,13 @@ const AboutPage = () => {
             <div className="absolute w-[600px] h-[600px] -top-40 -right-40 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
           </motion.div>
           <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-            <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-6 tracking-widest uppercase">
+            <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="inline-block px-4 py-1.5 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-xs font-medium border border-primary-foreground/15 mb-4 tracking-widest uppercase">
               About Us
             </motion.span>
-            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="font-display text-3xl md:text-4xl font-bold text-primary-foreground mb-3 leading-tight tracking-tight">
+            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="font-display text-2xl md:text-3xl font-bold text-primary-foreground mb-2 leading-tight tracking-tight">
               Our Story
             </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="font-body text-base text-primary-foreground/50 max-w-xl mx-auto leading-relaxed">
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="font-body text-sm text-primary-foreground/50 max-w-xl mx-auto leading-relaxed">
               Olive Foods (Pvt) Ltd — Sri Lanka's trusted import, bonded warehousing & FMCG distribution partner for over three decades.
             </motion.p>
           </div>
