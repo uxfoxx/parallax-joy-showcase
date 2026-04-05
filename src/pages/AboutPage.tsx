@@ -255,7 +255,7 @@ const AboutPage = () => {
               </p>
             </motion.div>
 
-            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 sm:grid-cols-3 gap-5">
+            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 sm:grid-cols-4 gap-5">
               {clientSegments.map((s) => (
                 <motion.div key={s.label} variants={item} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="flex flex-col items-center gap-4 p-6 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
                   <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
