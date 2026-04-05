@@ -88,7 +88,7 @@ const ProductDetailPage = () => {
               className="space-y-4 lg:sticky lg:top-24 lg:self-start"
             >
               {/* Main Image */}
-              <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted/50 group cursor-pointer">
+              <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted/50 group cursor-zoom-in" onClick={() => allImages.length > 0 && setLightboxOpen(true)}>
                 <AnimatePresence mode="wait">
                   {allImages.length > 0 ? (
                     <motion.img
