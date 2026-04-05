@@ -19,7 +19,7 @@ const items = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
   { title: "Brands", url: "/admin/brands", icon: Tag },
   { title: "Products", url: "/admin/products", icon: Box },
-  { title: "Our Products", url: "/admin/featured", icon: Star },
+  { title: "Product Showcase", url: "/admin/featured", icon: Star },
   { title: "Categories", url: "/admin/categories", icon: Layers },
   { title: "Submissions", url: "/admin/submissions", icon: MessageSquare },
 ];
