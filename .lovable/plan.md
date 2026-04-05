@@ -1,45 +1,56 @@
 
 
-# Fix Button Borders, Add Glassmorphism, Tune Logo Glow + Animate Entrance, Fix Navbar Vibration
+# Redesign Product Detail Page, Replace Featured with Our Products, Add Rich Text Editor, Remove Custom Cursor
 
-## 1. Reduce Button Border Radius
+## Summary
+Redesign the product detail page to match the reference layout (large image + thumbnails on left, details on right), replace the "Featured" page/nav with "Our Products", add a rich text editor for product descriptions in admin, and remove the custom cursor.
 
-The base `button.tsx` uses `rounded-md` (6px) which is fine, but many buttons throughout the site override with `rounded-xl` (12px) which is too curved. Change all `rounded-xl` on buttons to `rounded-lg` (8px) for a subtler, more refined curve.
+## Changes
 
-**Files:** `src/components/ui/button.tsx`, `src/components/landing/HeroSection.tsx`, `src/components/landing/Navbar.tsx`, plus any other pages with `rounded-xl` on buttons.
+### 1. Remove Custom Cursor
+- Delete `src/components/landing/CustomCursor.tsx`
+- Remove import and `<CustomCursor />` from `src/App.tsx`
 
-## 2. Add Glassmorphism Vibe to Buttons
+### 2. Redesign Product Detail Page (`src/pages/ProductDetailPage.tsx`)
+Inspired by the reference image layout while keeping our dark/green style:
+- **Left side (55%)**: Large main product image with thumbnail strip below it (small clickable thumbnails in a horizontal row, active one highlighted with border)
+- **Right side (45%)**: Breadcrumb → Product name → Brand → Description (rendered as HTML from rich text) → Details table (Category, Origin, SKU, Brand) → Tags → Inquire button
+- Keep the "More from brand" related products section below
 
-Add a subtle glass effect to the hero and navbar CTA buttons:
-- Semi-transparent backgrounds with `backdrop-blur-sm`
-- Faint white/light inner border using `border border-white/20`
-- Slight transparency in the bg color (e.g., `bg-accent/90 backdrop-blur-sm border border-white/15`)
-- The outline "Our Story" button already has some glass qualities — enhance with `backdrop-blur-sm`
+### 3. Replace Featured Page with "Our Products" Page
+- Rename `FeaturedPage.tsx` → remove it
+- Rename `/featured` route → `/our-products` in `App.tsx`
+- Create new `OurProductsPage.tsx` — a curated page showing "Our Products" (products marked as featured or a dedicated flag), same style as current products page but titled "Our Products"
+- Update `FeaturedProducts` landing section link from `/featured` to `/our-products`, button text to "View Our Products →"
 
-**Files:** `src/components/landing/HeroSection.tsx`, `src/components/landing/Navbar.tsx`
+### 4. Update Navigation
+- In `Navbar.tsx` links array: change `{ label: "Featured", href: "/featured" }` → `{ label: "Our Products", href: "/our-products" }`
+- In `AdminSidebar.tsx`: rename "Featured" → "Our Products" (keeps same admin page for toggling featured flag)
 
-## 3. Tune Logo Glow + Animate Entrance
+### 5. Rich Text Editor for Product Description (Admin)
+- Install `@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/extension-link`, `@tiptap/extension-underline` — lightweight rich text editor
+- Create `src/components/admin/RichTextEditor.tsx` — toolbar with bold, italic, underline, bullet list, ordered list, link buttons + the tiptap editor area
+- Replace `<Textarea>` for description in `AdminProducts.tsx` with this rich text editor component
+- Store HTML string in the `description` field
+- In `ProductDetailPage.tsx` and `ProductCard.tsx`, render description using `dangerouslySetInnerHTML` (detail page) or strip tags for card preview
 
-Current glow is a static `animate-pulse` on a blur div + drop-shadows. Improvements:
-- **Animate logo entrance**: Wrap logo `<img>` in a `motion.div` with `initial={{ opacity: 0, scale: 0.8 }}`, `animate={{ opacity: 1, scale: 1 }}`, with a spring transition and `delay: 0.2`
-- **Animate glow entrance**: The glow div starts at `opacity: 0, scale: 0.5` and expands to full with a delayed transition (0.5s after logo)
-- **Tune glow**: Reduce `animate-pulse` opacity swing — instead use a custom Framer Motion animation that smoothly oscillates opacity between 0.4 and 0.7, and scale between 0.95 and 1.05 for a breathing effect rather than harsh pulse
-
-**File:** `src/components/landing/HeroSection.tsx`
-
-## 4. Fix Navbar Vibration
-
-The vibration code looks correct structurally — `vibrateControls` is applied to a `motion.div` wrapper (line 81). The issue is likely that the `x` animation on the wrapper is being clipped by the parent `motion.nav` or the inner `motion.div` with padding animation. The fix: move the `animate={vibrateControls}` to the inner bar div itself (the one with `rounded-xl` and `barBg`), merging it with the existing padding animation by using `vibrateControls` to fire the vibration while keeping the scroll-based padding as inline style or separate animation.
-
-Actually, the simpler fix: the inner `motion.div` (line 85) already has its own `animate` prop for padding. The outer wrapper (line 81-84) with `vibrateControls` should work, but the issue is likely that `useAnimationControls` needs the component to be mounted with an initial `animate` value. Add `initial={{ x: 0 }}` to the vibrate wrapper div.
-
-**File:** `src/components/landing/Navbar.tsx`
+### 6. Product Detail Page — Thumbnail Strip
+Instead of prev/next arrows + dots (current), show a horizontal row of small square thumbnails below the main image (matching the reference). Clicking a thumbnail switches the main image. Active thumbnail gets a visible border highlight.
 
 ## Files
 
 | File | Change |
 |------|--------|
-| `src/components/landing/HeroSection.tsx` | Reduce button radius to `rounded-lg`, add glassmorphism, animate logo entrance with scale+opacity, tune glow to breathing effect |
-| `src/components/landing/Navbar.tsx` | Fix vibration by adding `initial={{ x: 0 }}`, reduce CTA button radius, add glass effect to CTA |
-| `src/components/ui/button.tsx` | No change — keep base `rounded-md`, fixes are on per-component overrides |
+| `src/components/landing/CustomCursor.tsx` | Delete |
+| `src/App.tsx` | Remove CustomCursor, replace `/featured` route with `/our-products`, remove FeaturedPage import, add OurProductsPage |
+| `src/pages/ProductDetailPage.tsx` | Redesign layout — thumbnail strip below main image, HTML description rendering |
+| `src/pages/OurProductsPage.tsx` | New — replaces FeaturedPage, shows featured/curated products |
+| `src/pages/FeaturedPage.tsx` | Delete |
+| `src/components/admin/RichTextEditor.tsx` | New — Tiptap-based rich text editor component |
+| `src/pages/admin/AdminProducts.tsx` | Replace Textarea with RichTextEditor for description |
+| `src/components/landing/Navbar.tsx` | "Featured" → "Our Products" in links |
+| `src/components/admin/AdminSidebar.tsx` | "Featured" → "Our Products" label |
+| `src/components/landing/FeaturedProducts.tsx` | Link → `/our-products`, button text update |
+| `src/components/ProductCard.tsx` | Strip HTML tags from description for card preview |
+| `package.json` | Add tiptap dependencies |
 
