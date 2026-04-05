@@ -32,13 +32,6 @@ const getIcon = (name: string): LucideIcon => {
   return Sparkles;
 };
 
-const flyInPositions = [
-  { x: -400, y: -200, rotate: -30, scale: 0.3 },
-  { x: 100, y: -400, rotate: 15, scale: 0.2 },
-  { x: 400, y: -150, rotate: 25, scale: 0.3 },
-  { x: -300, y: 300, rotate: -20, scale: 0.3 },
-  { x: 350, y: 250, rotate: 18, scale: 0.3 },
-];
 
 const CategoriesSection = () => {
   const { data: allCategories = [] } = useCategories();
@@ -66,12 +59,10 @@ const CategoriesSection = () => {
             return (
               <motion.div
                 key={cat.id}
-                custom={i}
-                initial={flyInPositions[i]}
-                whileInView={{ x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ type: "spring", damping: 20, stiffness: 80, delay: i * 0.1 }}
-                style={{ opacity: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
               >
                 <CategoryCard name={cat.name} desc={cat.description || ""} icon={Icon} />
               </motion.div>
@@ -85,12 +76,10 @@ const CategoriesSection = () => {
               return (
                 <motion.div
                   key={cat.id}
-                  custom={i + 3}
-                  initial={flyInPositions[i + 3]}
-                  whileInView={{ x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ type: "spring", damping: 20, stiffness: 80, delay: (i + 3) * 0.1 }}
-                  style={{ opacity: 0 }}
+                  transition={{ duration: 0.5, delay: (i + 3) * 0.1 }}
                 >
                   <CategoryCard name={cat.name} desc={cat.description || ""} icon={Icon} />
                 </motion.div>
