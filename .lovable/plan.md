@@ -1,36 +1,45 @@
 
 
-# Fix Product Detail Page: Responsive + Sticky Gallery
+# Fix Netlify SPA Routing + Reduce Page Header Sizes
 
-## Problems
-1. **Not responsive on mobile** — the `lg:grid-cols-[55%_45%]` grid stacks on mobile but images/text sizing isn't optimized for small screens
-2. **Gallery not sticking** — `lg:sticky lg:top-24` is set but likely fails because the grid row doesn't have enough height difference (both columns are similar height, so there's nothing to scroll against). The right column needs to be naturally taller than the left for sticky to work.
-3. **Thumbnails use percentage-based `basis-1/5`** — too small on mobile
+## Problem 1: Admin panel URLs not working on Netlify
+Netlify doesn't know how to handle client-side routes like `/admin` — it tries to find actual files and returns 404. Need a `public/_redirects` file for SPA fallback.
 
-## Fixes in `src/pages/ProductDetailPage.tsx`
+## Problem 2: Page headers take too much space
+All non-home pages (About, Contact, Brands, Products, Our Products) have large hero sections with `py-28 lg:py-36` or `py-32 lg:py-44` padding, making the title/subtitle area consume most of the viewport before content appears.
 
-### 1. Fix Sticky Gallery
-The sticky behavior only works when the parent grid row is taller than the sticky element. The right column content must be taller than the gallery. To ensure this:
-- Add `lg:min-h-[120vh]` or use `lg:items-start` on the grid (already has `lg:self-start` on gallery which is correct)
-- The real issue: the `motion.div` wrapper on the gallery column may be interfering. Change from `motion.div` to a plain `div` for the gallery wrapper, keep animations on inner elements
-- Ensure `overflow` on parent containers isn't clipping — check `PageLayout`'s `overflow-x-hidden`
-- Set explicit `lg:max-h-[calc(100vh-6rem)]` on the sticky gallery so it doesn't exceed viewport
+## Changes
 
-### 2. Mobile Responsiveness
-- Main image: change from `aspect-square` to `aspect-[4/3]` on mobile, `lg:aspect-square`
-- Product name: scale down to `text-2xl` on small screens (currently `text-3xl`)
-- Thumbnail carousel: change `basis-1/5` to `basis-1/4` on mobile, `sm:basis-1/5`
-- Reduce `gap-12` to `gap-6` on mobile: `gap-6 lg:gap-12`
-- Reduce padding: `px-4 sm:px-6`, `py-8 lg:py-20`
-- Related products grid: add `grid-cols-2` for very small screens
+### 1. Create `public/_redirects`
+Add a Netlify SPA catch-all redirect:
+```
+/*    /index.html   200
+```
 
-### 3. Gallery Column Structure
-- Use a regular `div` with sticky classes instead of `motion.div` to avoid transform-based positioning conflicts (CSS `position: sticky` doesn't work inside elements with CSS transforms applied by framer-motion)
-- Move the fade-in animation to the inner elements instead
+### 2. Reduce hero padding on all sub-pages
 
-## Files
+| Page | Current padding | New padding |
+|------|----------------|-------------|
+| `AboutPage.tsx` | `py-32 lg:py-44` | `py-16 lg:py-24` |
+| `ContactPage.tsx` | `py-32 lg:py-44` | `py-16 lg:py-24` |
+| `BrandsPage.tsx` | `py-28 lg:py-36` | `py-16 lg:py-24` |
+| `ProductsPage.tsx` (via PageLayout `pt-24`) | `py-28 lg:py-36` (if hero exists) | Reduce similarly |
+| `OurProductsPage.tsx` | `py-28 lg:py-36` | `py-16 lg:py-24` |
+
+Additionally:
+- Reduce title font sizes from `text-4xl md:text-6xl` → `text-3xl md:text-4xl`
+- Reduce subtitle max-width and bottom margin
+- Remove the large icon circle on OurProductsPage (the Star icon taking 64px)
+- Tighten `mb-6` on headings to `mb-3`
+
+### 3. Files
 
 | File | Change |
 |------|--------|
-| `src/pages/ProductDetailPage.tsx` | Fix sticky (remove motion wrapper on gallery), improve mobile responsive classes |
+| `public/_redirects` | Create with `/*  /index.html  200` |
+| `src/pages/AboutPage.tsx` | Reduce hero padding, font sizes |
+| `src/pages/ContactPage.tsx` | Reduce hero padding, font sizes |
+| `src/pages/BrandsPage.tsx` | Reduce hero padding, font sizes |
+| `src/pages/OurProductsPage.tsx` | Reduce hero padding, font sizes, shrink icon |
+| `src/pages/ProductsPage.tsx` | Check and reduce any header spacing |
 
