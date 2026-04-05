@@ -10,7 +10,7 @@ import BrandsPage from "./pages/BrandsPage.tsx";
 import BrandDetailPage from "./pages/BrandDetailPage.tsx";
 import ProductsPage from "./pages/ProductsPage.tsx";
 import ProductDetailPage from "./pages/ProductDetailPage.tsx";
-import OurProductsPage from "./pages/OurProductsPage.tsx";
+
 import AdminLogin from "./pages/admin/AdminLogin.tsx";
 import AdminLayout from "./pages/admin/AdminLayout.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
