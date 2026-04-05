@@ -1,75 +1,60 @@
 
 
-# Update Website with Company Portfolio Data + Enhance Product Detail Page
+# Restructure Products & Our Products Sections
 
-## Summary
-Two main objectives: (1) Update all website content to match the official company portfolio PDF, and (2) significantly improve the product detail page with better animations and effects.
+## Overview
+Remove the standalone `/our-products` page. Split the landing page into two sections: a new **Featured Products** section (3 products) and the existing **Our Products** section. Both link to `/products` with appropriate filters. Add a new `our_product` boolean column to the database.
 
-## Content Updates from Company Portfolio
+## Database Change
+- Add `our_product` boolean column to `products` table (default `false`)
+- This separates "featured" (3 products shown in new section) from "our product" (curated selection)
 
-### 1. About Page (`src/pages/AboutPage.tsx`)
-Content is already well-aligned with the PDF. Minor updates:
-- Update "Who We Are" paragraph to match PDF verbatim (currently close but not exact)
-- Ensure Vision & Mission text matches PDF exactly
-- Add "Nationwide delivery coverage" and "Experienced, service-driven team" to competitive advantages (PDF lists 6 items, we show 4)
-- Update client segments to match PDF exactly: Hotels & Resorts, Restaurants & Cafes, Catering companies, Supermarket chains (remove "Retail Distributors" and "Food Manufacturers" which aren't in the PDF)
+## Files to Change
 
-### 2. Product Categories — Update to match PDF
-The PDF defines these product categories: **Frozen, Dairy, Grocery & Staples, Edible Oils, Specialty Imports**. Update the `src/data/products.ts` categories array and ensure the categories in the DB align.
+### 1. DB Migration
+Add column: `ALTER TABLE products ADD COLUMN our_product boolean NOT NULL DEFAULT false;`
 
-### 3. Footer (`src/components/landing/Footer.tsx`)
-- Update contact info: `info@olivefoods.lk` and `+94 11 207 1717` (already correct)
-- Fix "Featured" link → "Our Products"
+### 2. `src/lib/api.ts`
+- Add `useOurProducts()` hook — fetches products where `our_product = true`
+- Keep `useFeaturedProducts()` as-is (fetches `featured = true`)
 
-### 4. FAQ Section (`src/components/landing/FAQSection.tsx`)
-- Update FAQ answers to reference actual product categories from the PDF (Frozen, Dairy, Grocery & Staples, Edible Oils, Specialty Imports)
-- Update delivery answer to mention HoReCa, Modern Trade, General Trade channels
+### 3. `src/components/landing/FeaturedProducts.tsx` → Rename to show "Featured Products"
+- Title: "Featured Products" instead of "Our Products"
+- Button: "View All Products →" linking to `/products`
+- Still uses `useFeaturedProducts()`, shows 3
 
-### 5. Stats/Numbers Updates
-- `StatsSection.tsx`: Update brand partners count to match PDF (8 listed: AZIZAA, Hungritos, Fletcher, Granoro, Daily Dairy, Snorre Foods, Wai Wai, Royal Arm) — already shows 8+, good
-- `DarkStatsBanner.tsx`: Keep as-is (500+ products, etc.)
+### 4. New `src/components/landing/OurProductsSection.tsx`
+- Uses `useOurProducts()` to show "our product" items
+- Title: "Our Products"
+- Button: "View Our Products →" linking to `/products?our=true`
 
-### 6. WhyChooseUs (`src/components/landing/WhyChooseUs.tsx`)
-- Already well-aligned with PDF's "Why Olive Foods" section. No changes needed.
+### 5. `src/pages/Index.tsx`
+- Add `OurProductsSection` AFTER `FeaturedProducts`
+- Order: LogoStrip → FeaturedProducts → OurProductsSection → WhyChooseUs
 
-### 7. LogoStrip (`src/components/landing/LogoStrip.tsx`)
-- Already has correct brand names from PDF. No changes needed.
+### 6. `src/pages/ProductsPage.tsx`
+- Read `?our=true` from URL search params
+- When present, filter products to `our_product = true` and show "Our Products" title instead of "All Products"
 
-### 8. Contact Page (`src/pages/ContactPage.tsx`)
-- Already has correct contact info. No changes needed.
+### 7. Remove `src/pages/OurProductsPage.tsx`
+- Delete the file
 
-## Product Detail Page Enhancement (`src/pages/ProductDetailPage.tsx`)
+### 8. `src/App.tsx`
+- Remove `/our-products` route and import
 
-Major visual upgrade with animations and effects:
+### 9. `src/components/landing/Navbar.tsx`
+- Remove "Our Products" from nav links
 
-### Layout Improvements
-- Add a subtle gradient hero bar at the top with the product category
-- Staggered entrance animations for each section (currently basic fade-in)
-- Add a parallax scroll effect on the main image
+### 10. Admin Panel Changes
 
-### Animation Enhancements
-- **Image hover**: Add a ken-burns slow zoom effect on the main image
-- **Section reveals**: Use staggered `whileInView` animations with different delays for each info block
-- **Floating badges**: Animate the category/origin badges with a subtle bounce-in
-- **Inquiry card**: Add a pulsing glow border effect on the CTA card
-- **Related products**: Add horizontal scroll entrance animation
-- **Breadcrumb**: Subtle slide-in from left
+**`src/pages/admin/AdminFeatured.tsx`** → Rename to "Our Products" admin
+- Manage `our_product` flag instead of `featured`
+- Add a separate section or tab for managing the 3 featured products
+- Enforce max 3 featured products with validation
 
-### Visual Enhancements
-- Add a gradient accent line under the product name
-- Add subtle background texture/pattern to the info column
-- Make the specifications table more visual with alternating row backgrounds
-- Add a "Product Highlights" section with icon chips if tags exist (replacing plain badge list)
-- Increase spacing and typography hierarchy for better readability
-- Add subtle separator animations (width expansion on scroll)
+**`src/components/admin/AdminSidebar.tsx`**
+- Update sidebar: "Our Products" manages `our_product`, add "Featured" for `featured` (or combine into one page with two tabs)
 
-## Files
-
-| File | Change |
-|------|--------|
-| `src/pages/AboutPage.tsx` | Update text content to match PDF, add 2 more competitive advantages, fix client segments |
-| `src/pages/ProductDetailPage.tsx` | Major visual enhancement with animations, effects, better layout |
-| `src/components/landing/Footer.tsx` | Fix "Featured" → "Our Products" link |
-| `src/components/landing/FAQSection.tsx` | Update FAQ content to reference actual product categories |
-| `src/data/products.ts` | Update categories array to match PDF |
+### 11. `src/components/landing/Footer.tsx`
+- Update "Our Products" link to `/products?our=true`
 
