@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Search, X, SlidersHorizontal } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
 import { Input } from "@/components/ui/input";
