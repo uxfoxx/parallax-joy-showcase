@@ -3,12 +3,12 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { Plus } from "lucide-react";
 
 const faqs = [
-  { q: "What types of food products do you import?", a: "We import a wide range of food products including grains, processed foods, beverages, dairy, frozen goods, spices, oils, and specialty gourmet items from over 25 countries worldwide." },
-  { q: "Do you supply wholesale and retail businesses?", a: "Yes, we serve both wholesale distributors and retail businesses. Our flexible ordering system accommodates bulk purchases as well as smaller curated selections." },
-  { q: "Are your products certified and safe?", a: "Every product undergoes rigorous quality checks including laboratory testing, certification verification, and compliance with local food safety regulations before distribution." },
-  { q: "Can I request specific products for import?", a: "Absolutely! If you're looking for a specific product or brand not in our catalogue, our sourcing team can locate and import it through our extensive network of global suppliers." },
-  { q: "What are your delivery timelines?", a: "Delivery timelines vary by product origin and destination. Domestic deliveries typically take 3-5 business days, while international sourcing may take 2-6 weeks depending on the product." },
-  { q: "Do you offer bulk pricing or discounts?", a: "Yes, we offer competitive bulk pricing and volume-based discounts. Contact our sales team for a customized quote based on your specific requirements." },
+  { q: "What types of food products do you import?", a: "We import across five core categories: Frozen foods, Dairy products, Grocery & Staples, Edible Oils, and Specialty Imports — sourced from leading producers in Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China." },
+  { q: "Who do you supply to?", a: "We distribute across three key channels: HoReCa (Hotels, Restaurants & Catering), Modern Trade (supermarket chains), and General Trade (retail outlets and distributors) — covering businesses island-wide across Sri Lanka." },
+  { q: "Are your products certified and safe?", a: "Every product undergoes rigorous quality checks including laboratory testing, certification verification, and compliance with local food safety regulations before distribution. We maintain cold-chain integrity at -18°C for frozen products." },
+  { q: "Can I request specific products for import?", a: "Absolutely! If you're looking for a specific product or brand not in our catalogue, our sourcing team can locate and import it through our extensive network of global suppliers across 8+ countries." },
+  { q: "What are your delivery timelines?", a: "We provide island-wide delivery coverage. Domestic deliveries are handled through our own logistics fleet, ensuring timely and temperature-controlled transport for all product categories." },
+  { q: "What brands do you represent?", a: "We are the exclusive Sri Lankan representatives for leading international brands including AZIZAA, Hungritos, Fletcher, Granoro, Daily Dairy, Snorre Foods, Wai Wai, and Royal Arm, among others." },
 ];
 
 const FAQSection = () => {

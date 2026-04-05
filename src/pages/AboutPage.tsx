@@ -16,6 +16,8 @@ const advantages = [
   { icon: Zap, title: "Faster Lead Times", description: "Streamlined processes and bonded warehousing mean shorter turnaround from port to shelf." },
   { icon: Globe, title: "Strong Supplier Relationships", description: "Long-term partnerships with producers across Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China." },
   { icon: Shield, title: "Consistent Quality Control", description: "Rigorous testing and compliance with international food safety standards at every stage." },
+  { icon: Truck, title: "Nationwide Delivery Coverage", description: "Island-wide distribution network covering HoReCa, Modern Trade, and General Trade channels across Sri Lanka." },
+  { icon: Users, title: "Experienced, Service-Driven Team", description: "A dedicated team with decades of industry expertise, focused on building long-term partnerships and delivering exceptional service." },
 ];
 
 const businessActivities = [
@@ -31,8 +33,6 @@ const clientSegments = [
   { icon: UtensilsCrossed, label: "Restaurants & Cafes" },
   { icon: Users, label: "Catering Companies" },
   { icon: ShoppingBag, label: "Supermarket Chains" },
-  { icon: Truck, label: "Retail Distributors" },
-  { icon: Factory, label: "Food Manufacturers" },
 ];
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
@@ -221,7 +221,7 @@ const AboutPage = () => {
               </h2>
             </motion.div>
 
-            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {advantages.map((v, i) => (
                 <motion.div key={v.title} variants={item} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="group relative p-6 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20 text-center" style={{ background: `radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%), linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))` }}>
                   <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-primary-foreground flex items-center justify-center mb-4 mx-auto shadow-lg shadow-primary-foreground/10">
@@ -255,7 +255,7 @@ const AboutPage = () => {
               </p>
             </motion.div>
 
-            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 sm:grid-cols-3 gap-5">
+            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 sm:grid-cols-4 gap-5">
               {clientSegments.map((s) => (
                 <motion.div key={s.label} variants={item} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="flex flex-col items-center gap-4 p-6 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
                   <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">

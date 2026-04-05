@@ -23,12 +23,11 @@ export interface Product {
 }
 
 export const categories = [
-  "Grains & Cereals",
-  "Beverages",
+  "Frozen",
   "Dairy",
-  "Processed Foods",
-  "Spices & Seasonings",
-  "Seafood",
+  "Grocery & Staples",
+  "Edible Oils",
+  "Specialty Imports",
 ];
 
 export const brands: Brand[] = [
