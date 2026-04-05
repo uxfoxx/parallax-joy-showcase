@@ -76,12 +76,10 @@ const CategoriesSection = () => {
               return (
                 <motion.div
                   key={cat.id}
-                  custom={i + 3}
-                  initial={flyInPositions[i + 3]}
-                  whileInView={{ x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ type: "spring", damping: 20, stiffness: 80, delay: (i + 3) * 0.1 }}
-                  style={{ opacity: 0 }}
+                  transition={{ duration: 0.5, delay: (i + 3) * 0.1 }}
                 >
                   <CategoryCard name={cat.name} desc={cat.description || ""} icon={Icon} />
                 </motion.div>
