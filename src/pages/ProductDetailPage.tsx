@@ -16,6 +16,27 @@ const ProductDetailPage = () => {
   const { data: allProducts = [] } = useProducts();
   const { data: extraImages = [] } = useProductImages(product?.id || "");
   const [activeImage, setActiveImage] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  const navigateLightbox = useCallback((dir: 1 | -1) => {
+    if (!product) return;
+    const imgs = [
+      ...(product.image_url ? [product.image_url] : []),
+      ...extraImages.map((img) => img.image_url),
+    ];
+    setActiveImage((prev) => (prev + dir + imgs.length) % imgs.length);
+  }, [product, extraImages]);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") navigateLightbox(-1);
+      if (e.key === "ArrowRight") navigateLightbox(1);
+      if (e.key === "Escape") setLightboxOpen(false);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [lightboxOpen, navigateLightbox]);
 
   const relatedProducts = product
     ? allProducts.filter((p) => p.brand_id === product.brand_id && p.id !== product.id).slice(0, 4)
