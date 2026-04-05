@@ -10,6 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { useProducts, useBrands, useCategories } from "@/lib/api";
 
 const ProductsPage = () => {
+  const [searchParams] = useSearchParams();
+  const showOurProducts = searchParams.get("our") === "true";
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
