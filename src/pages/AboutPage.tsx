@@ -221,7 +221,7 @@ const AboutPage = () => {
               </h2>
             </motion.div>
 
-            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {advantages.map((v, i) => (
                 <motion.div key={v.title} variants={item} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="group relative p-6 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20 text-center" style={{ background: `radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%), linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))` }}>
                   <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-primary-foreground flex items-center justify-center mb-4 mx-auto shadow-lg shadow-primary-foreground/10">
