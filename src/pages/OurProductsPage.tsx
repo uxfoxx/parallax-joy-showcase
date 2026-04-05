@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Star } from "lucide-react";
+import {} from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
 import { useFeaturedProducts } from "@/lib/api";
