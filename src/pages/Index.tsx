@@ -3,6 +3,7 @@ import HeroSection from "@/components/landing/HeroSection";
 import LogoStrip from "@/components/landing/LogoStrip";
 import ScrollFloatingElement from "@/components/landing/ScrollFloatingElement";
 import FeaturedProducts from "@/components/landing/FeaturedProducts";
+import OurProductsSection from "@/components/landing/OurProductsSection";
 import WhyChooseUs from "@/components/landing/WhyChooseUs";
 import CategoriesSection from "@/components/landing/CategoriesSection";
 import StatsSection from "@/components/landing/StatsSection";
@@ -33,6 +34,10 @@ const Index = () => {
       <SectionTransition />
       <div data-navbar-theme="light">
         <FeaturedProducts />
+      </div>
+      <SectionTransition />
+      <div data-navbar-theme="light">
+        <OurProductsSection />
       </div>
       <div data-navbar-theme="light">
         <WhyChooseUs />

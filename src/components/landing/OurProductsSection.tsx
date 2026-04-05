@@ -1,15 +1,16 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useFeaturedProducts } from "@/lib/api";
+import { useOurProducts } from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
 
-const FeaturedProducts = () => {
-  const { data: products = [] } = useFeaturedProducts();
-  const displayProducts = products.slice(0, 3);
+const OurProductsSection = () => {
+  const { data: products = [] } = useOurProducts();
+
+  if (products.length === 0) return null;
 
   return (
-    <section id="products" className="relative overflow-hidden py-28 lg:py-36 bg-background">
+    <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -19,15 +20,15 @@ const FeaturedProducts = () => {
           className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6"
         >
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
-            Featured Products
+            Our Products
           </h2>
           <p className="text-muted-foreground font-body text-base max-w-sm leading-relaxed">
-            Handpicked favorites from our premium international food catalog.
+            Our curated selection of premium food products, carefully chosen for the Sri Lankan market.
           </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {displayProducts.map((product, i) => (
+          {products.map((product, i) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 40 }}
@@ -47,9 +48,9 @@ const FeaturedProducts = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-center mt-12"
         >
-          <Link to="/products">
+          <Link to="/products?our=true">
             <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body rounded-lg px-8 py-5 transition-all duration-300 border border-forest-deep/20 hover:shadow-lg">
-              View All Products →
+              View Our Products →
             </Button>
           </Link>
         </motion.div>
@@ -58,4 +59,4 @@ const FeaturedProducts = () => {
   );
 };
 
-export default FeaturedProducts;
+export default OurProductsSection;

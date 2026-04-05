@@ -1,0 +1,1 @@
+ALTER TABLE public.products ADD COLUMN our_product boolean NOT NULL DEFAULT false;
