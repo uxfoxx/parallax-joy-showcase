@@ -195,6 +195,7 @@ const AdminProducts = () => {
               <TableHead className="font-body">Brand</TableHead>
               <TableHead className="font-body">Category</TableHead>
               <TableHead className="font-body">Featured</TableHead>
+              <TableHead className="font-body">Our Product</TableHead>
               <TableHead className="font-body w-24">Actions</TableHead>
             </TableRow>
           </TableHeader>
