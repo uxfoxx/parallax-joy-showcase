@@ -69,9 +69,9 @@ const ProductDetailPage = () => {
   return (
     <PageLayout>
       <section className="bg-background">
-        <div className="max-w-7xl mx-auto px-6 py-12 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 lg:py-20">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-xs font-body text-muted-foreground mb-8">
+          <nav className="flex items-center gap-2 text-xs font-body text-muted-foreground mb-6 lg:mb-8">
             <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
             <span>/</span>
             <Link to="/products" className="hover:text-foreground transition-colors">Products</Link>
