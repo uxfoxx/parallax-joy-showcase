@@ -141,6 +141,7 @@ export type Database = {
           image_url: string | null
           name: string
           origin: string
+          our_product: boolean
           sku: string
           slug: string
           tags: string[] | null
@@ -155,6 +156,7 @@ export type Database = {
           image_url?: string | null
           name: string
           origin?: string
+          our_product?: boolean
           sku?: string
           slug: string
           tags?: string[] | null
@@ -169,6 +171,7 @@ export type Database = {
           image_url?: string | null
           name?: string
           origin?: string
+          our_product?: boolean
           sku?: string
           slug?: string
           tags?: string[] | null
