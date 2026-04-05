@@ -169,7 +169,11 @@ const AdminProducts = () => {
               <div><Label className="font-body">Tags (comma separated)</Label><Input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} className="font-body" placeholder="organic, premium" /></div>
               <div className="flex items-center gap-3">
                 <Switch checked={form.featured} onCheckedChange={(v) => setForm({ ...form, featured: v })} />
-                <Label className="font-body">Featured product</Label>
+                <Label className="font-body">Featured product (max 3)</Label>
+              </div>
+              <div className="flex items-center gap-3">
+                <Switch checked={form.our_product} onCheckedChange={(v) => setForm({ ...form, our_product: v })} />
+                <Label className="font-body">Our Product (curated selection)</Label>
               </div>
               <Button onClick={handleSave} className="w-full font-body">{editing ? "Update" : "Create"}</Button>
             </div>
