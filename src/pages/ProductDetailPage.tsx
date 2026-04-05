@@ -69,9 +69,9 @@ const ProductDetailPage = () => {
   return (
     <PageLayout>
       <section className="bg-background">
-        <div className="max-w-7xl mx-auto px-6 py-12 lg:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 lg:py-20">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-xs font-body text-muted-foreground mb-8">
+          <nav className="flex items-center gap-2 text-xs font-body text-muted-foreground mb-6 lg:mb-8">
             <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
             <span>/</span>
             <Link to="/products" className="hover:text-foreground transition-colors">Products</Link>
@@ -79,16 +79,17 @@ const ProductDetailPage = () => {
             <span className="text-foreground">{product.name}</span>
           </nav>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-6 lg:gap-12 items-start">
             {/* Left — Gallery (Sticky) */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="space-y-4 lg:sticky lg:top-24 lg:self-start"
-            >
+            <div className="space-y-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)]">
               {/* Main Image */}
-              <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted/50 group cursor-zoom-in" onClick={() => allImages.length > 0 && setLightboxOpen(true)}>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="relative aspect-[4/3] lg:aspect-square rounded-2xl overflow-hidden bg-muted/50 group cursor-zoom-in"
+                onClick={() => allImages.length > 0 && setLightboxOpen(true)}
+              >
                 <AnimatePresence mode="wait">
                   {allImages.length > 0 ? (
                     <motion.img
@@ -107,15 +108,15 @@ const ProductDetailPage = () => {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </motion.div>
 
               {/* Thumbnail Carousel */}
               {allImages.length > 1 && (
-                <div className="px-10">
+                <div className="px-6 sm:px-10">
                   <Carousel opts={{ align: "start", dragFree: true }} className="w-full">
                     <CarouselContent className="-ml-2">
                       {allImages.map((img, i) => (
-                        <CarouselItem key={i} className="pl-2 basis-1/5">
+                        <CarouselItem key={i} className="pl-2 basis-1/4 sm:basis-1/5">
                           <button
                             onClick={() => setActiveImage(i)}
                             className={`w-full aspect-square rounded-lg overflow-hidden border-2 transition-all ${i === activeImage ? "border-accent ring-2 ring-accent/30" : "border-border hover:border-accent/50"}`}
@@ -130,7 +131,7 @@ const ProductDetailPage = () => {
                   </Carousel>
                 </div>
               )}
-            </motion.div>
+            </div>
 
             {/* Right — Details */}
             <motion.div
@@ -151,7 +152,7 @@ const ProductDetailPage = () => {
 
               {/* Product Name */}
               <motion.h1
-                className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-4"
+                className="font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-4"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
@@ -311,7 +312,7 @@ const ProductDetailPage = () => {
                 View All →
               </Link>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
               {relatedProducts.map((p) => <ProductCard key={p.id} product={p} large />)}
             </div>
           </div>
