@@ -53,7 +53,7 @@ const AboutPage = () => {
 
       {/* Hero */}
       <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden py-16 lg:py-24">
+        <section className="relative overflow-hidden py-10 lg:py-14">
           <div
             className="absolute inset-0"
             style={{
