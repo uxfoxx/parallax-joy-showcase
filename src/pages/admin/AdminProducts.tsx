@@ -92,13 +92,14 @@ const AdminProducts = () => {
 
   const handleSave = async () => {
     try {
-      const payload = {
+      const payload: any = {
         name: form.name,
         slug: form.slug || form.name.toLowerCase().replace(/\s+/g, "-"),
         brand_id: form.brand_id,
         category: form.category,
         description: form.description,
         featured: form.featured,
+        our_product: form.our_product,
         tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
         origin: form.origin,
         sku: form.sku,
