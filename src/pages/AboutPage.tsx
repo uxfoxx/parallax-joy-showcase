@@ -16,6 +16,8 @@ const advantages = [
   { icon: Zap, title: "Faster Lead Times", description: "Streamlined processes and bonded warehousing mean shorter turnaround from port to shelf." },
   { icon: Globe, title: "Strong Supplier Relationships", description: "Long-term partnerships with producers across Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China." },
   { icon: Shield, title: "Consistent Quality Control", description: "Rigorous testing and compliance with international food safety standards at every stage." },
+  { icon: Truck, title: "Nationwide Delivery Coverage", description: "Island-wide distribution network covering HoReCa, Modern Trade, and General Trade channels across Sri Lanka." },
+  { icon: Users, title: "Experienced, Service-Driven Team", description: "A dedicated team with decades of industry expertise, focused on building long-term partnerships and delivering exceptional service." },
 ];
 
 const businessActivities = [
