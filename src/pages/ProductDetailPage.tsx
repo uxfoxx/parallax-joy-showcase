@@ -6,7 +6,6 @@ import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { useProduct, useProducts, useProductImages } from "@/lib/api";
 
@@ -59,8 +58,13 @@ const ProductDetailPage = () => {
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-12">
-            {/* Left — Gallery */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="space-y-4">
+            {/* Left — Gallery (Sticky) */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="space-y-4 lg:sticky lg:top-24 lg:self-start"
+            >
               {/* Main Image */}
               <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted/50 group cursor-pointer">
                 <AnimatePresence mode="wait">
@@ -135,7 +139,7 @@ const ProductDetailPage = () => {
 
               {/* Category + Origin Pills */}
               <motion.div
-                className="flex flex-wrap gap-2 mb-6"
+                className="flex flex-wrap gap-2 mb-8"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
@@ -154,74 +158,84 @@ const ProductDetailPage = () => {
                 )}
               </motion.div>
 
-              {/* Tabbed Content */}
+              {/* Description Section */}
               <motion.div
-                className="flex-1 mb-8"
+                className="mb-8"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.35 }}
               >
-                <Tabs defaultValue="description" className="w-full">
-                  <TabsList className="w-full justify-start bg-muted/50">
-                    <TabsTrigger value="description" className="font-body text-xs">Description</TabsTrigger>
-                    <TabsTrigger value="specifications" className="font-body text-xs">Specifications</TabsTrigger>
-                    {(product.tags ?? []).length > 0 && (
-                      <TabsTrigger value="tags" className="font-body text-xs">Tags</TabsTrigger>
-                    )}
-                  </TabsList>
+                <h3 className="font-display text-lg font-semibold text-foreground mb-3">About this product</h3>
+                {isHtml ? (
+                  <div
+                    className="font-body text-muted-foreground leading-relaxed text-sm prose prose-sm max-w-none [&_a]:text-accent"
+                    dangerouslySetInnerHTML={{ __html: product.description }}
+                  />
+                ) : (
+                  <p className="font-body text-muted-foreground leading-relaxed text-sm">{product.description}</p>
+                )}
+              </motion.div>
 
-                  <TabsContent value="description" className="mt-4">
-                    {isHtml ? (
-                      <div
-                        className="font-body text-muted-foreground leading-relaxed text-sm prose prose-sm max-w-none [&_a]:text-accent"
-                        dangerouslySetInnerHTML={{ __html: product.description }}
-                      />
-                    ) : (
-                      <p className="font-body text-muted-foreground leading-relaxed text-sm">{product.description}</p>
-                    )}
-                  </TabsContent>
+              <Separator className="mb-8" />
 
-                  <TabsContent value="specifications" className="mt-4">
-                    <div className="space-y-0">
-                      {[
-                        { label: "Category", value: product.category },
-                        { label: "Origin", value: product.origin },
-                        { label: "SKU", value: product.sku },
-                        { label: "Brand", value: brandName, link: `/brands/${brandSlug}` },
-                      ].map((d, i, arr) => (
-                        <div key={d.label}>
-                          <div className="flex items-center justify-between py-3">
-                            <span className="font-body text-xs uppercase tracking-widest text-muted-foreground">{d.label}</span>
-                            {d.link ? (
-                              <Link to={d.link} className="font-body text-sm text-foreground hover:text-accent transition-colors">{d.value}</Link>
-                            ) : (
-                              <span className="font-body text-sm text-foreground">{d.value}</span>
-                            )}
-                          </div>
-                          {i < arr.length - 1 && <Separator />}
-                        </div>
+              {/* Specifications Section */}
+              <motion.div
+                className="mb-8"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
+                <h3 className="font-display text-lg font-semibold text-foreground mb-3">Specifications</h3>
+                <div className="space-y-0">
+                  {[
+                    { label: "Category", value: product.category },
+                    { label: "Origin", value: product.origin },
+                    { label: "SKU", value: product.sku },
+                    { label: "Brand", value: brandName, link: `/brands/${brandSlug}` },
+                  ].map((d, i, arr) => (
+                    <div key={d.label}>
+                      <div className="flex items-center justify-between py-3">
+                        <span className="font-body text-xs uppercase tracking-widest text-muted-foreground">{d.label}</span>
+                        {d.link ? (
+                          <Link to={d.link} className="font-body text-sm text-foreground hover:text-accent transition-colors">{d.value}</Link>
+                        ) : (
+                          <span className="font-body text-sm text-foreground">{d.value}</span>
+                        )}
+                      </div>
+                      {i < arr.length - 1 && <Separator />}
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Tags Section */}
+              {(product.tags ?? []).length > 0 && (
+                <>
+                  <Separator className="mb-8" />
+                  <motion.div
+                    className="mb-8"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.45 }}
+                  >
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-3">Tags</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {(product.tags ?? []).map((tag) => (
+                        <Badge key={tag} variant="secondary" className="font-body text-xs">{tag}</Badge>
                       ))}
                     </div>
-                  </TabsContent>
+                  </motion.div>
+                </>
+              )}
 
-                  {(product.tags ?? []).length > 0 && (
-                    <TabsContent value="tags" className="mt-4">
-                      <div className="flex flex-wrap gap-2">
-                        {(product.tags ?? []).map((tag) => (
-                          <Badge key={tag} variant="secondary" className="font-body text-xs">{tag}</Badge>
-                        ))}
-                      </div>
-                    </TabsContent>
-                  )}
-                </Tabs>
-              </motion.div>
+              <Separator className="mb-8" />
 
               {/* Inquiry CTA Card */}
               <motion.div
                 className="rounded-xl border border-border/50 bg-muted/30 backdrop-blur-sm p-6 space-y-4"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.5 }}
               >
                 <p className="font-body text-sm text-muted-foreground">Interested in this product? Get in touch with our team.</p>
                 <div className="flex flex-wrap items-center gap-3">
@@ -245,7 +259,7 @@ const ProductDetailPage = () => {
                 className="mt-6"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.45 }}
+                transition={{ delay: 0.55 }}
               >
                 <Link to="/products" className="inline-flex items-center gap-2 text-sm font-body text-muted-foreground hover:text-foreground transition-colors">
                   <ArrowLeft className="w-4 h-4" /> Back to all products
