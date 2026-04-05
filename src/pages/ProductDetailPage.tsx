@@ -130,7 +130,7 @@ const ProductDetailPage = () => {
                   </Carousel>
                 </div>
               )}
-            </motion.div>
+            </div>
 
             {/* Right — Details */}
             <motion.div
