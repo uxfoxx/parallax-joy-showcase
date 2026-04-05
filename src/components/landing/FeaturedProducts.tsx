@@ -19,10 +19,10 @@ const FeaturedProducts = () => {
           className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6"
         >
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
-            Our Products
+            Featured Products
           </h2>
           <p className="text-muted-foreground font-body text-base max-w-sm leading-relaxed">
-            Carefully selected food products sourced from certified international suppliers.
+            Handpicked favorites from our premium international food catalog.
           </p>
         </motion.div>
 
