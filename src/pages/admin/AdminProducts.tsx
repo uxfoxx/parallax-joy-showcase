@@ -86,7 +86,7 @@ const AdminProducts = () => {
   const openCreate = () => { setEditing(null); setForm(emptyForm); setOpen(true); };
   const openEdit = (p: Product) => {
     setEditing(p);
-    setForm({ name: p.name, slug: p.slug, brand_id: p.brand_id, category: p.category, description: p.description, featured: p.featured, tags: (p.tags ?? []).join(", "), origin: p.origin, sku: p.sku, image_url: p.image_url ?? "" });
+    setForm({ name: p.name, slug: p.slug, brand_id: p.brand_id, category: p.category, description: p.description, featured: p.featured, our_product: (p as any).our_product ?? false, tags: (p.tags ?? []).join(", "), origin: p.origin, sku: p.sku, image_url: p.image_url ?? "" });
     setOpen(true);
   };
 
