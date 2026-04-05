@@ -1,72 +1,133 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Snowflake, Milk, Wheat, Droplets, Sparkles } from "lucide-react";
-import { useRef } from "react";
+import { motion } from "framer-motion";
+import { Snowflake, Milk, Wheat, Droplets, Sparkles, Coffee, Cookie, Fish, Beef, Apple, ShoppingBasket } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useCategories } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import type { LucideIcon } from "lucide-react";
 
-const categories = [
-  { name: "Frozen", desc: "French fries, meats, seafood, fruits, and vegetables — stored and transported at -18°C for guaranteed freshness.", icon: Snowflake },
-  { name: "Dairy", desc: "Cheese, butter, cream, and specialty dairy products from leading international producers.", icon: Milk },
-  { name: "Grocery & Staples", desc: "Rice, pasta, canned goods, condiments, sauces, and everyday essentials from trusted global brands.", icon: Wheat },
-  { name: "Edible Oils", desc: "Premium vegetable oils, olive oils, and specialty cooking oils for commercial and retail use.", icon: Droplets },
-  { name: "Specialty Imports", desc: "Seasonal and premium international foods, gourmet ingredients, and exclusive brand offerings.", icon: Sparkles },
+const iconMap: Record<string, LucideIcon> = {
+  frozen: Snowflake,
+  dairy: Milk,
+  cheese: Milk,
+  butter: Milk,
+  oil: Droplets,
+  flour: Wheat,
+  grain: Wheat,
+  rice: Wheat,
+  pasta: Wheat,
+  grocery: ShoppingBasket,
+  beverage: Coffee,
+  chocolate: Cookie,
+  pastry: Cookie,
+  seafood: Fish,
+  meat: Beef,
+  fruit: Apple,
+};
+
+const getIcon = (name: string): LucideIcon => {
+  const lower = name.toLowerCase();
+  for (const [key, icon] of Object.entries(iconMap)) {
+    if (lower.includes(key)) return icon;
+  }
+  return Sparkles;
+};
+
+const flyInPositions = [
+  { x: -400, y: -200, rotate: -30, scale: 0.3 },
+  { x: 100, y: -400, rotate: 15, scale: 0.2 },
+  { x: 400, y: -150, rotate: 25, scale: 0.3 },
+  { x: -300, y: 300, rotate: -20, scale: 0.3 },
+  { x: 350, y: 250, rotate: 18, scale: 0.3 },
 ];
 
 const CategoriesSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll();
-
-  const fanGap = useTransform(scrollYProgress, [0.32, 0.40, 0.48], [16, 72, 16]);
-  const cardRotate1 = useTransform(scrollYProgress, [0.32, 0.40, 0.48], [0, -2, 0]);
-  const cardRotate2 = useTransform(scrollYProgress, [0.32, 0.40, 0.48], [0, 2, 0]);
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-50px", "50px"]);
+  const { data: allCategories = [] } = useCategories();
+  const categories = allCategories.slice(0, 5);
 
   return (
-    <section ref={sectionRef} id="brands" className="relative py-28 lg:py-36 bg-background overflow-hidden">
-      <motion.div className="absolute inset-0 pointer-events-none" style={{ y: bgY }}>
-        <div className="absolute w-[700px] h-[500px] top-1/4 left-1/2 -translate-x-1/2 rounded-full opacity-[0.05]" style={{ background: "radial-gradient(ellipse, hsl(75 38% 45%), transparent 70%)" }} />
-        <div className="absolute w-[400px] h-[400px] bottom-0 -left-20 rounded-full opacity-[0.04]" style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
-      </motion.div>
+    <section id="brands" className="relative py-28 lg:py-36 bg-background overflow-hidden">
+      <div className="absolute w-[700px] h-[500px] top-1/4 left-1/2 -translate-x-1/2 rounded-full opacity-[0.05] pointer-events-none" style={{ background: "radial-gradient(ellipse, hsl(75 38% 45%), transparent 70%)" }} />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="text-center max-w-2xl mx-auto mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center max-w-2xl mx-auto mb-16"
+        >
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-5 tracking-tight">Product Categories</h2>
           <p className="text-muted-foreground font-body text-base leading-relaxed">We import and distribute across all major food categories, ensuring variety and quality for every business need.</p>
         </motion.div>
 
-        <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3" style={{ gap: fanGap }}>
-          {categories.slice(0, 3).map((cat, i) => (
-            <motion.div key={cat.name} style={{ rotate: i === 0 ? cardRotate1 : i === 2 ? cardRotate2 : undefined }}>
-              <CategoryCard cat={cat} i={i} />
-            </motion.div>
-          ))}
-        </motion.div>
-        <motion.div className="grid sm:grid-cols-2 mt-6 max-w-2xl mx-auto lg:max-w-none lg:grid-cols-2 lg:px-[16.666%]" style={{ gap: fanGap }}>
-          {categories.slice(3).map((cat, i) => (
-            <motion.div key={cat.name} style={{ rotate: i === 0 ? cardRotate1 : cardRotate2 }}>
-              <CategoryCard cat={cat} i={i + 3} />
-            </motion.div>
-          ))}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {categories.slice(0, 3).map((cat, i) => {
+            const Icon = getIcon(cat.name);
+            return (
+              <motion.div
+                key={cat.id}
+                custom={i}
+                initial={flyInPositions[i]}
+                whileInView={{ x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ type: "spring", damping: 20, stiffness: 80, delay: i * 0.1 }}
+                style={{ opacity: 0 }}
+              >
+                <CategoryCard name={cat.name} desc={cat.description || ""} icon={Icon} />
+              </motion.div>
+            );
+          })}
+        </div>
+        {categories.length > 3 && (
+          <div className="grid sm:grid-cols-2 mt-5 max-w-2xl mx-auto lg:max-w-none lg:grid-cols-2 lg:px-[16.666%] gap-5">
+            {categories.slice(3, 5).map((cat, i) => {
+              const Icon = getIcon(cat.name);
+              return (
+                <motion.div
+                  key={cat.id}
+                  custom={i + 3}
+                  initial={flyInPositions[i + 3]}
+                  whileInView={{ x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ type: "spring", damping: 20, stiffness: 80, delay: (i + 3) * 0.1 }}
+                  style={{ opacity: 0 }}
+                >
+                  <CategoryCard name={cat.name} desc={cat.description || ""} icon={Icon} />
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="text-center mt-12"
+        >
+          <Link to="/products">
+            <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body rounded-lg px-8 py-5 transition-all duration-300 border border-forest-deep/20 hover:shadow-lg">
+              View All Categories →
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>
   );
 };
 
-const CategoryCard = ({ cat, i }: { cat: typeof categories[0]; i: number }) => (
-  <Link to={`/products?category=${encodeURIComponent(cat.name)}`}>
+const CategoryCard = ({ name, desc, icon: Icon }: { name: string; desc: string; icon: LucideIcon }) => (
+  <Link to={`/products?category=${encodeURIComponent(name)}`}>
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: i * 0.1 }}
       whileHover={{ y: -6, transition: { duration: 0.3 } }}
       className="group p-6 rounded-lg border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-500 cursor-pointer"
     >
       <motion.div whileHover={{ scale: 1.1, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-14 h-14 rounded-xl bg-forest-deep/10 flex items-center justify-center mb-6">
-        <cat.icon className="w-6 h-6 text-forest-mid" />
+        <Icon className="w-6 h-6 text-forest-mid" />
       </motion.div>
-      <h3 className="font-display text-xl font-semibold text-foreground mb-3 tracking-tight">{cat.name}</h3>
-      <p className="text-muted-foreground font-body text-sm leading-relaxed">{cat.desc}</p>
+      <h3 className="font-display text-xl font-semibold text-foreground mb-3 tracking-tight">{name}</h3>
+      <p className="text-muted-foreground font-body text-sm leading-relaxed">{desc}</p>
     </motion.div>
   </Link>
 );

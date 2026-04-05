@@ -49,7 +49,7 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode; cla
           filter: "blur(1px)",
         }}
       />
-      <div className="relative rounded-lg bg-card border border-border p-5 h-full transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-accent/10">
+      <div className="relative rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm p-5 h-full transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-accent/10">
         {children}
       </div>
     </div>
@@ -62,8 +62,19 @@ const StatsSection = () => {
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
-      className="relative py-28 lg:py-36 bg-white overflow-hidden"
+      className="relative py-28 lg:py-36 overflow-hidden"
     >
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 19%), hsl(150 40% 10%))
+          `,
+        }}
+      />
+
       <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Left */}
@@ -74,16 +85,16 @@ const StatsSection = () => {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="space-y-8"
           >
-            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight tracking-tight">
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">
               Three Decades of{" "}
               <span className="text-gradient-gold">Excellence</span>
             </h2>
-            <p className="text-muted-foreground font-body text-lg leading-relaxed max-w-lg">
+            <p className="text-primary-foreground/60 font-body text-lg leading-relaxed max-w-lg">
               Over 30 years of importing excellence, connecting global suppliers with Sri Lankan businesses. Sourcing from Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China.
             </p>
             <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}>
               <Link to="/products">
-                <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-lg px-8 h-12 text-base transition-all duration-300 hover:shadow-xl hover:shadow-accent/25 group">
+                <Button className="bg-white/10 backdrop-blur-sm text-primary-foreground hover:bg-white/20 font-body font-semibold rounded-lg px-8 h-12 text-base transition-all duration-300 border border-white/10 hover:border-white/20 group">
                   View Products
                   <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-2" />
                 </Button>
@@ -102,12 +113,12 @@ const StatsSection = () => {
             >
               <TiltCard>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
                     <Calendar className="w-5 h-5 text-accent" />
                   </div>
-                  <p className="text-muted-foreground font-body text-sm tracking-wide">{stats[0].label}</p>
+                  <p className="text-primary-foreground/60 font-body text-sm tracking-wide">{stats[0].label}</p>
                 </div>
-                <div className="font-display text-5xl lg:text-6xl font-bold text-foreground group-hover:text-accent transition-colors duration-300 mb-5">
+                <div className="font-display text-5xl lg:text-6xl font-bold text-primary-foreground group-hover:text-accent transition-colors duration-300 mb-5">
                   <CountValue target={stats[0].value} isInView={isInView} />{stats[0].suffix}
                 </div>
                 <div className="flex items-center gap-2 mt-2">
@@ -115,9 +126,9 @@ const StatsSection = () => {
                     <div key={year} className="flex items-center gap-2 flex-1">
                       <div className="flex flex-col items-center">
                         <div className="w-3 h-3 rounded-full bg-accent/70 group-hover:bg-accent transition-colors duration-300" />
-                        <span className="text-[10px] text-muted-foreground font-body mt-1.5">{year}</span>
+                        <span className="text-[10px] text-primary-foreground/50 font-body mt-1.5">{year}</span>
                       </div>
-                      {i < 3 && <div className="flex-1 h-[1px] bg-border group-hover:bg-accent/30 transition-colors duration-500" />}
+                      {i < 3 && <div className="flex-1 h-[1px] bg-white/10 group-hover:bg-accent/30 transition-colors duration-500" />}
                     </div>
                   ))}
                 </div>
@@ -133,13 +144,13 @@ const StatsSection = () => {
                 transition={{ duration: 0.5, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
               >
                 <TiltCard>
-                  <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
+                  <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center mb-4">
                     <stat.icon className="w-4 h-4 text-accent" />
                   </div>
-                  <div className="font-display text-4xl lg:text-5xl font-bold text-foreground group-hover:text-accent transition-colors duration-300">
+                  <div className="font-display text-4xl lg:text-5xl font-bold text-primary-foreground group-hover:text-accent transition-colors duration-300">
                     <CountValue target={stat.value} isInView={isInView} />{stat.suffix}
                   </div>
-                  <p className="text-muted-foreground font-body text-sm mt-3 tracking-wide">{stat.label}</p>
+                  <p className="text-primary-foreground/60 font-body text-sm mt-3 tracking-wide">{stat.label}</p>
                 </TiltCard>
               </motion.div>
             ))}

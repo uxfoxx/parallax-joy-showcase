@@ -31,7 +31,7 @@ const Index = () => {
         <LogoStrip />
       </div>
       <SectionTransition />
-      <div data-navbar-theme="dark">
+      <div data-navbar-theme="light">
         <FeaturedProducts />
       </div>
       <div data-navbar-theme="light">
