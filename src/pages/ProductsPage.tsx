@@ -22,7 +22,7 @@ const ProductsPage = () => {
   const { data: categories = [] } = useCategories();
 
   const filtered = useMemo(() => {
-    let results = products;
+    let results = showOurProducts ? products.filter((p) => (p as any).our_product) : products;
     if (query) {
       const q = query.toLowerCase();
       results = results.filter(
