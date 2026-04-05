@@ -112,7 +112,7 @@ export const useOurProducts = () =>
   useQuery({
     queryKey: ["products", "our_products"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("products").select("*, brands(*)").eq("our_product" as any, true).order("name");
+      const { data, error } = await (supabase.from("products").select("*, brands(*)") as any).eq("our_product", true).order("name");
       if (error) throw error;
       return data as Product[];
     },
