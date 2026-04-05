@@ -30,7 +30,7 @@ const FeaturedProducts = () => {
           className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6"
         >
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground tracking-tight">
-            Featured Products
+            Our Products
           </h2>
           <p className="text-primary-foreground/50 font-body text-base max-w-sm leading-relaxed">
             Carefully selected food products sourced from certified international suppliers.
@@ -59,9 +59,9 @@ const FeaturedProducts = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-center mt-12"
         >
-          <Link to="/featured">
+          <Link to="/our-products">
             <Button className="bg-white/10 hover:bg-white/20 text-primary-foreground font-body rounded-lg px-8 py-5 transition-all duration-300 border border-primary-foreground/10 hover:border-primary-foreground/20">
-              View All Featured Products →
+              View Our Products →
             </Button>
           </Link>
         </motion.div>

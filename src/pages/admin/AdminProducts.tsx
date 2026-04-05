@@ -3,7 +3,7 @@ import { useProducts, useBrands, useCategories, useCreateProduct, useUpdateProdu
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -153,7 +153,7 @@ const AdminProducts = () => {
                   <SelectContent>{categories?.map((c) => <SelectItem key={c.id} value={c.name} className="font-body">{c.name}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
-              <div><Label className="font-body">Description</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="font-body" /></div>
+              <div><Label className="font-body">Description</Label><RichTextEditor value={form.description} onChange={(html) => setForm({ ...form, description: html })} /></div>
               <div className="grid grid-cols-2 gap-4">
                 <div><Label className="font-body">Origin</Label><Input value={form.origin} onChange={(e) => setForm({ ...form, origin: e.target.value })} className="font-body" /></div>
                 <div><Label className="font-body">SKU</Label><Input value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })} className="font-body" /></div>
