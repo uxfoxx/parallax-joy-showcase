@@ -1,30 +1,30 @@
 
 
-# Remove Tabs, Stack Sections, Make Gallery Sticky
+# Add Image Lightbox to Product Detail Page
 
 ## Summary
-Replace the tabbed content with stacked sections (Description, Specifications, Tags all visible), and make the left gallery column sticky so it stays in view while the user scrolls through the right-side info.
+Add a fullscreen lightbox modal that opens when clicking the main product image. Uses the existing shadcn `Dialog` component — no new packages needed.
 
 ## Changes in `src/pages/ProductDetailPage.tsx`
 
-### 1. Remove Tabs, Stack All Sections Vertically
-Replace the `<Tabs>` component with stacked sections separated by headings and dividers:
-- **Description** section with an "About this product" heading
-- **Specifications** table (Category, Origin, SKU, Brand)
-- **Tags** section (if any)
+1. **Add lightbox state** — `const [lightboxOpen, setLightboxOpen] = useState(false)`
 
-Each section separated by a `<Separator />` for clean visual hierarchy.
+2. **Make main image clickable** — add `onClick={() => setLightboxOpen(true)}` to the main image container, with a cursor-zoom-in style
 
-### 2. Make Gallery Sticky
-- Add `lg:sticky lg:top-24 lg:self-start` to the left gallery column so it stays pinned while the right column scrolls
-- This creates the effect where the image stays visible as the user reads through the product details below
+3. **Add lightbox Dialog** — a fullscreen `Dialog` overlay showing:
+   - The currently active image at full size (`object-contain` on dark backdrop)
+   - Left/right arrow buttons to navigate between images
+   - Keyboard navigation (left/right arrows)
+   - Thumbnail strip at the bottom for quick selection
+   - Close button (already provided by Dialog)
 
-### 3. Remove unused Tabs imports
-- Remove `Tabs, TabsContent, TabsList, TabsTrigger` imports since they're no longer needed
+4. **Import Dialog** from `@/components/ui/dialog`
+
+5. **Import ChevronLeft, ChevronRight** from lucide-react for navigation arrows
 
 ## Files
 
 | File | Change |
 |------|--------|
-| `src/pages/ProductDetailPage.tsx` | Remove Tabs, stack sections vertically, add `sticky` to gallery column |
+| `src/pages/ProductDetailPage.tsx` | Add lightbox dialog with image navigation |
 
