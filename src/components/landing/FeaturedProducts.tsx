@@ -9,7 +9,7 @@ const FeaturedProducts = () => {
   const displayProducts = products.slice(0, 3);
 
   return (
-    <section id="products" className="relative overflow-hidden py-28 lg:py-36 bg-background">
+    <section id="products" className="relative overflow-hidden py-28 lg:py-36">
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

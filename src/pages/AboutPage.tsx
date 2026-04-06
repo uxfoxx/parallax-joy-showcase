@@ -52,31 +52,13 @@ const AboutPage = () => {
       <FloatingWhatsApp />
 
       {/* Hero */}
-      <div data-navbar-theme="dark">
+      <div data-navbar-theme="dark" className="pt-24">
         <section className="relative overflow-hidden py-10 lg:py-14">
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `
-                radial-gradient(ellipse at 50% 30%, hsl(140 50% 19% / 0.6) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 70%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-                linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 14%), hsl(150 40% 8%))
-              `,
-            }}
-          />
-          <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
-            <div className="absolute w-[600px] h-[600px] -top-40 -right-40 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
-          </motion.div>
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+          <div className="absolute inset-0 opacity-[0.06] pointer-events-none mix-blend-overlay"><svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg"><filter id="noiseA"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter><rect width="100%" height="100%" filter="url(#noiseA)" /></svg></div>
           <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-            <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="inline-block px-4 py-1.5 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-xs font-medium border border-primary-foreground/15 mb-4 tracking-widest uppercase">
-              About Us
-            </motion.span>
-            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="font-display text-2xl md:text-3xl font-bold text-primary-foreground mb-2 leading-tight tracking-tight">
-              Our Story
-            </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="font-body text-sm text-primary-foreground/50 max-w-xl mx-auto leading-relaxed">
-              Olive Foods (Pvt) Ltd — Sri Lanka's trusted import, bonded warehousing & FMCG distribution partner for over three decades.
-            </motion.p>
+            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="font-display text-2xl md:text-3xl font-bold text-primary-foreground mb-2">About Us</motion.h1>
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.5 }} className="font-body text-sm text-primary-foreground/70 max-w-xl mx-auto">Olive Foods (Pvt) Ltd — Sri Lanka's trusted import, bonded warehousing & FMCG distribution partner for over three decades.</motion.p>
           </div>
         </section>
       </div>

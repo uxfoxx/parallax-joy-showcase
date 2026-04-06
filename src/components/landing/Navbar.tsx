@@ -10,7 +10,6 @@ const links = [
   { label: "About", href: "/about" },
   { label: "Brands", href: "/brands" },
   { label: "Products", href: "/products" },
-  { label: "Our Products", href: "/products?our=true" },
 ];
 
 const Navbar = () => {
