@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFeaturedProducts } from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
+import ProductQuickView from "@/components/ProductQuickView";
+import type { Product } from "@/lib/api";
 import {
   Carousel,
   CarouselContent,
@@ -20,6 +22,7 @@ const FeaturedProducts = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
   const onSelect = useCallback(() => {
     if (!api) return;
@@ -68,7 +71,7 @@ const FeaturedProducts = () => {
             <CarouselContent className="-ml-5">
               {products.map((product) => (
                 <CarouselItem key={product.id} className="pl-5 basis-full md:basis-1/2 lg:basis-1/3">
-                  <ProductCard product={product} large />
+                  <ProductCard product={product} large onQuickView={() => setQuickViewProduct(product)} />
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -109,6 +112,12 @@ const FeaturedProducts = () => {
           </Link>
         </motion.div>
       </div>
+
+      <ProductQuickView
+        product={quickViewProduct}
+        open={!!quickViewProduct}
+        onOpenChange={(open) => !open && setQuickViewProduct(null)}
+      />
     </section>
   );
 };
