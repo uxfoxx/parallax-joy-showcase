@@ -1,38 +1,66 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useRef, useState, useEffect, useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const teamPhotos = [
+const teamSlides = [
   {
     label: "Leadership Team",
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=500&fit=crop",
-    span: "col-span-1 sm:col-span-2 row-span-2",
+    dept: "01",
+    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=800&fit=crop",
+    desc: "Setting the vision and direction for over three decades of FMCG excellence across Sri Lanka.",
   },
   {
     label: "Sales & Distribution",
-    image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=600&h=400&fit=crop",
-    span: "col-span-1 row-span-1",
+    dept: "02",
+    image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&h=800&fit=crop",
+    desc: "Connecting world-class brands to retail partners across the island with precision and dedication.",
   },
   {
     label: "Warehouse Operations",
-    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop",
-    span: "col-span-1 row-span-1",
+    dept: "03",
+    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&h=800&fit=crop",
+    desc: "Managing cold-chain and bonded storage facilities with zero-compromise quality standards.",
   },
   {
     label: "Quality Assurance",
-    image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=500&fit=crop",
-    span: "col-span-1 row-span-1",
+    dept: "04",
+    image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1200&h=800&fit=crop",
+    desc: "Ensuring every product that reaches our partners meets the highest international benchmarks.",
   },
   {
     label: "Logistics & Supply Chain",
-    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&h=400&fit=crop",
-    span: "col-span-1 sm:col-span-2 row-span-1",
+    dept: "05",
+    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&h=800&fit=crop",
+    desc: "On-time island-wide delivery through a fully optimised and reliable logistics network.",
   },
 ];
 
 const MeetTheTeam = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll();
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-50px", "50px"]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  // Track selected slide
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    return () => { emblaApi.off("select", onSelect); };
+  }, [emblaApi]);
+
+  // Autoplay — 5s interval
+  useEffect(() => {
+    if (!emblaApi) return;
+    const timer = setInterval(() => emblaApi.scrollNext(), 5000);
+    return () => clearInterval(timer);
+  }, [emblaApi]);
+
+  const total = teamSlides.length;
+  const slide = teamSlides[selectedIndex];
 
   return (
     <section
@@ -51,33 +79,24 @@ const MeetTheTeam = () => {
         }}
       />
 
-      {/* Parallax orbs */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none overflow-hidden"
-        style={{ y: bgY }}
-      >
-        <div
-          className="absolute w-[500px] h-[500px] -top-32 right-0 rounded-full opacity-[0.05]"
-          style={{
-            background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute w-[350px] h-[350px] bottom-20 -left-20 rounded-full opacity-[0.04]"
-          style={{
-            background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
-          }}
-        />
-      </motion.div>
+      {/* Animated orbs */}
+      <div
+        className="absolute w-[500px] h-[500px] -top-32 right-0 rounded-full opacity-[0.06] pointer-events-none animate-orb"
+        style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
+      />
+      <div
+        className="absolute w-[350px] h-[350px] bottom-20 -left-20 rounded-full opacity-[0.05] pointer-events-none animate-orb"
+        style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)", animationDelay: "9s" }}
+      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header */}
+        {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center max-w-3xl mx-auto mb-20"
+          className="text-center max-w-3xl mx-auto mb-16"
         >
           <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
             Our People
@@ -85,47 +104,127 @@ const MeetTheTeam = () => {
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
             Meet the Team
           </h2>
-          <p className="text-primary-foreground/45 font-body text-lg leading-relaxed">
-            Dedicated departments working together to deliver seamless supply chain solutions across Sri Lanka
+          <p className="text-primary-foreground/50 font-body text-lg leading-relaxed">
+            Dedicated departments working together to deliver seamless supply chain solutions across Sri Lanka.
           </p>
         </motion.div>
 
-        {/* Masonry Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 auto-rows-[200px] sm:auto-rows-[220px]">
-          {teamPhotos.map((photo, i) => (
-            <motion.div
-              key={photo.label}
-              initial={{ clipPath: "inset(100% 0 0 0)" }}
-              whileInView={{ clipPath: "inset(0% 0 0 0)" }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{
-                duration: 0.8,
-                delay: i * 0.12,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className={`${photo.span} relative rounded-xl overflow-hidden cursor-pointer group`}
-            >
-              {/* Image */}
-              <img
-                src={photo.image}
-                alt={photo.label}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-
-              {/* Permanent subtle gradient at bottom */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-
-              {/* Hover overlay */}
-              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              {/* Caption — slides up on hover */}
-              <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                <span className="inline-block px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-white font-body text-xs font-medium border border-white/20 tracking-wider">
-                  {photo.label}
+        {/* Main carousel area: split panel */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="rounded-2xl overflow-hidden border border-white/[0.08] bg-white/[0.03] flex flex-col lg:flex-row"
+          style={{ minHeight: 480 }}
+        >
+          {/* Left panel — info */}
+          <div className="lg:w-[42%] flex flex-col justify-between p-8 lg:p-12 order-2 lg:order-1">
+            <div className="flex flex-col gap-6">
+              {/* Counter */}
+              <div className="flex items-center gap-3">
+                <span className="font-display text-4xl font-bold text-primary-foreground/20 tabular-nums leading-none">
+                  {String(selectedIndex + 1).padStart(2, "0")}
+                </span>
+                <span className="font-display text-sm text-primary-foreground/30 tabular-nums">
+                  / {String(total).padStart(2, "0")}
                 </span>
               </div>
-            </motion.div>
-          ))}
+
+              {/* Animated heading + description */}
+              <div className="min-h-[120px] lg:min-h-[140px]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={selectedIndex}
+                    initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, y: -16, filter: "blur(6px)" }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <h3 className="font-display text-2xl lg:text-3xl font-bold text-primary-foreground mb-4 leading-snug tracking-tight">
+                      {slide.label}
+                    </h3>
+                    <p className="text-primary-foreground/55 font-body text-base leading-relaxed">
+                      {slide.desc}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* Navigation */}
+            <div className="flex items-center gap-4 mt-8 lg:mt-0">
+              <button
+                onClick={scrollPrev}
+                className="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors duration-200"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft className="w-5 h-5 text-primary-foreground" />
+              </button>
+              <button
+                onClick={scrollNext}
+                className="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors duration-200"
+                aria-label="Next slide"
+              >
+                <ChevronRight className="w-5 h-5 text-primary-foreground" />
+              </button>
+
+              {/* Dot indicators */}
+              <div className="flex gap-1.5 ml-2">
+                {teamSlides.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => emblaApi?.scrollTo(i)}
+                    className={`rounded-full transition-all duration-300 ${
+                      i === selectedIndex
+                        ? "w-5 h-1.5 bg-accent"
+                        : "w-1.5 h-1.5 bg-white/25 hover:bg-white/40"
+                    }`}
+                    aria-label={`Go to slide ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right panel — Embla carousel */}
+          <div className="lg:w-[58%] relative order-1 lg:order-2">
+            <div className="overflow-hidden h-full" ref={emblaRef} style={{ minHeight: 320 }}>
+              <div className="flex h-full">
+                {teamSlides.map((s, i) => (
+                  <div
+                    key={i}
+                    className="flex-[0_0_100%] relative"
+                    style={{ minHeight: 320 }}
+                  >
+                    <img
+                      src={s.image}
+                      alt={s.label}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    {/* Bottom gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                    {/* Right-edge gradient fade into left panel */}
+                    <div className="hidden lg:block absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black/40 to-transparent" />
+                    {/* Department label */}
+                    <div className="absolute bottom-5 left-5">
+                      <span className="inline-block px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-white font-body text-xs font-medium border border-white/20 tracking-wider">
+                        {s.label}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Progress bar */}
+        <div className="mt-4 h-[2px] bg-white/[0.08] rounded-full overflow-hidden">
+          <div
+            key={selectedIndex}
+            className="h-full bg-accent origin-left animate-progress-bar"
+          />
         </div>
       </div>
     </section>
