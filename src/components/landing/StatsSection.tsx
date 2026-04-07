@@ -72,13 +72,17 @@ const StatsSection = () => {
       <div
         className="absolute inset-0"
         style={{
-          background: `
-            radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
-            radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-            linear-gradient(180deg, hsl(150 40% 10%), hsl(140 50% 19%), hsl(150 40% 10%))
-          `,
+          background: `linear-gradient(180deg, hsl(150 40% 8%), hsl(140 50% 17%), hsl(150 40% 9%))`,
         }}
       />
+
+      {/* Animated orbs */}
+      <div className="absolute w-[550px] h-[550px] -top-24 -left-24 rounded-full opacity-[0.10] pointer-events-none animate-orb"
+        style={{ background: "radial-gradient(circle, hsl(140 55% 25%), transparent 70%)" }} />
+      <div className="absolute w-[400px] h-[400px] bottom-0 right-0 rounded-full opacity-[0.07] pointer-events-none animate-orb"
+        style={{ background: "radial-gradient(circle, hsl(80 50% 28%), transparent 70%)", animationDelay: "7s" }} />
+      <div className="absolute w-[280px] h-[280px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.05] pointer-events-none animate-orb"
+        style={{ background: "radial-gradient(circle, hsl(75 42% 35%), transparent 70%)", animationDelay: "12s" }} />
 
       {/* Mouse gradient overlay */}
       <div className="absolute inset-0 pointer-events-none z-[1] opacity-25" style={gradientStyle} />

@@ -237,7 +237,7 @@
   .animate-counter-roll { animation: counter-roll 0.5s ease-out forwards; }
   .animate-marquee { animation: marquee 30s linear infinite; }
   .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
-  .animate-gradient-shift { animation: gradient-shift 12s ease infinite; }
+  .animate-gradient-shift { animation: gradient-shift 8s ease infinite; }
   .animate-particle { animation: particle-float linear infinite; }
   .animate-orb { animation: orb-drift 20s ease-in-out infinite; }
   .animate-gradient-sweep { animation: gradient-sweep 3s linear infinite; }
@@ -248,9 +248,10 @@
   }
 
   @keyframes gradient-shift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0%   { background-position: 0% 0%; }
+    33%  { background-position: 100% 50%; }
+    66%  { background-position: 50% 100%; }
+    100% { background-position: 0% 0%; }
   }
 
   @keyframes gradient-move {

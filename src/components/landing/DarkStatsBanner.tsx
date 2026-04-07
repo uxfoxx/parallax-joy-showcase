@@ -18,7 +18,7 @@ const DarkStatsBanner = () => {
       className="relative bg-background py-24 border-y border-border overflow-hidden"
     >
       {/* Animated gradient background */}
-      <div className="absolute inset-0 animate-gradient-shift opacity-[0.03]" style={{ background: "linear-gradient(135deg, hsl(140 50% 19%), hsl(75 38% 45%), hsl(80 50% 31%), hsl(140 50% 19%))", backgroundSize: "300% 300%" }} />
+      <div className="absolute inset-0 animate-gradient-shift opacity-[0.07]" style={{ background: "linear-gradient(135deg, hsl(150 40% 8%), hsl(140 55% 20%), hsl(80 50% 22%), hsl(75 42% 28%), hsl(80 50% 18%), hsl(140 50% 15%), hsl(150 40% 8%))", backgroundSize: "400% 400%" }} />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-4">

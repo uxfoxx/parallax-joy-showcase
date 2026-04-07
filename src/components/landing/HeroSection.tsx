@@ -32,16 +32,31 @@ const HeroSection = () => {
       }}
       className="relative min-h-screen overflow-hidden"
     >
-      {/* Background gradient */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background: `
-            radial-gradient(ellipse 80% 60% at 15% 40%, hsl(140 50% 14% / 0.8) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 70% at 85% 20%, hsl(75 38% 45% / 0.08) 0%, transparent 55%),
-            radial-gradient(ellipse 70% 55% at 50% 90%, hsl(150 40% 10% / 0.5) 0%, transparent 60%)
-          `,
-        }}
+      {/* Background — dark base + animated mesh orbs */}
+      <div className="absolute inset-0 z-0" style={{ background: "hsl(150 40% 5%)" }} />
+
+      {/* Orb 1 — large forest-mid, top-left, slow drift */}
+      <motion.div
+        className="absolute rounded-full z-0 pointer-events-none"
+        style={{ width: 700, height: 700, top: "-15%", left: "-15%", background: "hsl(140 55% 20%)", filter: "blur(140px)", opacity: 0.55 }}
+        animate={{ x: [0, 80, -40, 0], y: [0, 50, -30, 0], scale: [1, 1.12, 0.95, 1] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Orb 2 — lime-green, bottom-right, medium */}
+      <motion.div
+        className="absolute rounded-full z-0 pointer-events-none"
+        style={{ width: 500, height: 500, bottom: "-5%", right: "-10%", background: "hsl(80 55% 22%)", filter: "blur(120px)", opacity: 0.35 }}
+        animate={{ x: [0, -60, 30, 0], y: [0, -40, 20, 0], scale: [1, 0.9, 1.08, 1] }}
+        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+      />
+
+      {/* Orb 3 — gold accent, center-right, faster */}
+      <motion.div
+        className="absolute rounded-full z-0 pointer-events-none"
+        style={{ width: 350, height: 350, top: "25%", right: "20%", background: "hsl(75 45% 30%)", filter: "blur(100px)", opacity: 0.22 }}
+        animate={{ x: [0, 40, -20, 0], y: [0, -60, 30, 0], scale: [1, 1.2, 0.88, 1] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 8 }}
       />
 
       {/* Mouse-following glow */}

@@ -72,11 +72,14 @@ const WhyChooseUs = () => {
         `,
       }}
     >
-      {/* Decorative orbs */}
-      <div className="absolute w-[500px] h-[500px] -top-32 -left-32 rounded-full opacity-[0.06] pointer-events-none"
+      {/* Decorative orbs — animated */}
+      <div className="absolute w-[500px] h-[500px] -top-32 -left-32 rounded-full opacity-[0.08] pointer-events-none animate-orb"
         style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
-      <div className="absolute w-[350px] h-[350px] bottom-0 right-10 rounded-full opacity-[0.04] pointer-events-none"
-        style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }} />
+      <div className="absolute w-[350px] h-[350px] bottom-0 right-10 rounded-full opacity-[0.06] pointer-events-none animate-orb"
+        style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)", animationDelay: "7s" }} />
+      {/* Gold accent orb — center */}
+      <div className="absolute w-[300px] h-[300px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.04] pointer-events-none animate-orb"
+        style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)", animationDelay: "13s" }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         {/* Header */}

@@ -88,8 +88,8 @@ const BrandsPage = () => {
           <div
             className="absolute inset-0 animate-gradient-shift"
             style={{
-              background: `linear-gradient(135deg, hsl(150 40% 6%), hsl(140 50% 16%), hsl(150 40% 9%), hsl(140 50% 13%))`,
-              backgroundSize: "300% 300%",
+              background: `linear-gradient(135deg, hsl(150 40% 4%), hsl(140 50% 16%), hsl(80 45% 18%), hsl(75 38% 13%), hsl(140 55% 21%), hsl(150 40% 5%), hsl(140 50% 16%))`,
+              backgroundSize: "400% 400%",
             }}
           />
           {/* Grid overlay */}
