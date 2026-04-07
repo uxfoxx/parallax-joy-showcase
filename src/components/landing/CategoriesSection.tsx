@@ -24,6 +24,26 @@ const iconMap: Record<string, LucideIcon> = {
   fruit: Apple,
 };
 
+// Per-category color themes: [gradientFrom, gradientTo, iconColor, borderHover]
+const colorMap: Record<string, [string, string, string, string]> = {
+  frozen:    ["from-blue-50",   "to-cyan-50",    "text-blue-500",    "hover:border-blue-200"],
+  dairy:     ["from-yellow-50", "to-amber-50",   "text-amber-500",   "hover:border-amber-200"],
+  cheese:    ["from-yellow-50", "to-orange-50",  "text-amber-600",   "hover:border-amber-200"],
+  butter:    ["from-amber-50",  "to-yellow-50",  "text-amber-500",   "hover:border-amber-200"],
+  oil:       ["from-lime-50",   "to-green-50",   "text-lime-600",    "hover:border-lime-200"],
+  flour:     ["from-orange-50", "to-yellow-50",  "text-orange-400",  "hover:border-orange-200"],
+  grain:     ["from-orange-50", "to-amber-50",   "text-orange-400",  "hover:border-orange-200"],
+  rice:      ["from-stone-50",  "to-amber-50",   "text-stone-500",   "hover:border-stone-200"],
+  pasta:     ["from-amber-50",  "to-orange-50",  "text-amber-600",   "hover:border-amber-200"],
+  grocery:   ["from-green-50",  "to-emerald-50", "text-emerald-500", "hover:border-emerald-200"],
+  beverage:  ["from-brown-50",  "to-amber-50",   "text-amber-700",   "hover:border-amber-200"],
+  chocolate: ["from-amber-50",  "to-orange-50",  "text-amber-700",   "hover:border-amber-200"],
+  pastry:    ["from-pink-50",   "to-rose-50",    "text-rose-400",    "hover:border-rose-200"],
+  seafood:   ["from-sky-50",    "to-blue-50",    "text-sky-500",     "hover:border-sky-200"],
+  meat:      ["from-red-50",    "to-rose-50",    "text-red-500",     "hover:border-red-200"],
+  fruit:     ["from-green-50",  "to-lime-50",    "text-green-500",   "hover:border-green-200"],
+};
+
 const getIcon = (name: string): LucideIcon => {
   const lower = name.toLowerCase();
   for (const [key, icon] of Object.entries(iconMap)) {
@@ -32,6 +52,43 @@ const getIcon = (name: string): LucideIcon => {
   return Sparkles;
 };
 
+const getColors = (name: string): [string, string, string, string] => {
+  const lower = name.toLowerCase();
+  for (const [key, colors] of Object.entries(colorMap)) {
+    if (lower.includes(key)) return colors;
+  }
+  return ["from-accent/5", "to-forest-mid/5", "text-accent", "hover:border-accent/30"];
+};
+
+const CategoryCard = ({ name, desc, icon: Icon, index }: { name: string; desc: string; icon: LucideIcon; index: number }) => {
+  const [gradFrom, gradTo, iconColor, borderHover] = getColors(name);
+
+  return (
+    <Link to={`/products?category=${encodeURIComponent(name)}`}>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.5, delay: index * 0.08 }}
+        whileHover={{ y: -8 }}
+        className={`group p-6 rounded-xl border border-border bg-gradient-to-br ${gradFrom} ${gradTo} ${borderHover} hover:shadow-xl transition-all duration-500 cursor-pointer relative overflow-hidden`}
+      >
+        {/* Left accent border on hover */}
+        <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-xl bg-current opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+
+        <motion.div
+          whileHover={{ scale: 1.2 }}
+          transition={{ type: "spring", stiffness: 300, damping: 18 }}
+          className={`w-12 h-12 rounded-xl bg-white/70 flex items-center justify-center mb-5 shadow-sm`}
+        >
+          <Icon className={`w-6 h-6 ${iconColor}`} />
+        </motion.div>
+        <h3 className="font-display text-lg font-semibold text-foreground mb-2 tracking-tight group-hover:text-forest-deep transition-colors duration-300">{name}</h3>
+        <p className="text-muted-foreground font-body text-sm leading-relaxed">{desc}</p>
+      </motion.div>
+    </Link>
+  );
+};
 
 const CategoriesSection = () => {
   const { data: allCategories = [] } = useCategories();
@@ -53,36 +110,24 @@ const CategoriesSection = () => {
           <p className="text-muted-foreground font-body text-base leading-relaxed">We import and distribute across all major food categories, ensuring variety and quality for every business need.</p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Mobile: horizontal scroll / Desktop: grid */}
+        <div className="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6 snap-x snap-mandatory scrollbar-hide sm:overflow-visible sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-5">
           {categories.slice(0, 3).map((cat, i) => {
             const Icon = getIcon(cat.name);
             return (
-              <motion.div
-                key={cat.id}
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-              >
-                <CategoryCard name={cat.name} desc={cat.description || ""} icon={Icon} />
-              </motion.div>
+              <div key={cat.id} className="min-w-[260px] sm:min-w-0 snap-start shrink-0 sm:shrink sm:snap-none">
+                <CategoryCard name={cat.name} desc={cat.description || ""} icon={Icon} index={i} />
+              </div>
             );
           })}
         </div>
+
         {categories.length > 3 && (
-          <div className="grid sm:grid-cols-2 mt-5 max-w-2xl mx-auto lg:max-w-none lg:grid-cols-2 lg:px-[16.666%] gap-5">
+          <div className="hidden sm:grid sm:grid-cols-2 mt-5 max-w-2xl mx-auto lg:max-w-none lg:grid-cols-2 lg:px-[16.666%] gap-5">
             {categories.slice(3, 5).map((cat, i) => {
               const Icon = getIcon(cat.name);
               return (
-                <motion.div
-                  key={cat.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: (i + 3) * 0.1 }}
-                >
-                  <CategoryCard name={cat.name} desc={cat.description || ""} icon={Icon} />
-                </motion.div>
+                <CategoryCard key={cat.id} name={cat.name} desc={cat.description || ""} icon={Icon} index={i + 3} />
               );
             })}
           </div>
@@ -105,24 +150,5 @@ const CategoriesSection = () => {
     </section>
   );
 };
-
-const CategoryCard = ({ name, desc, icon: Icon }: { name: string; desc: string; icon: LucideIcon }) => (
-  <Link to={`/products?category=${encodeURIComponent(name)}`}>
-    <motion.div
-      whileHover={{ y: -8, transition: { duration: 0.3 } }}
-      className="group glow-border p-6 rounded-lg border border-border bg-card hover:border-forest-mid/30 hover:shadow-xl transition-all duration-500 cursor-pointer relative overflow-hidden"
-    >
-      {/* Hover gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-forest-deep/[0.02] to-accent/[0.03] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-      <div className="relative z-10">
-        <motion.div whileHover={{ scale: 1.15, rotate: 8 }} transition={{ type: "spring", stiffness: 300 }} className="w-14 h-14 rounded-xl bg-forest-deep/10 group-hover:bg-accent/10 flex items-center justify-center mb-6 transition-colors duration-300">
-          <Icon className="w-6 h-6 text-forest-mid group-hover:text-accent transition-colors duration-300" />
-        </motion.div>
-        <h3 className="font-display text-xl font-semibold text-foreground mb-3 tracking-tight group-hover:text-accent transition-colors duration-300">{name}</h3>
-        <p className="text-muted-foreground font-body text-sm leading-relaxed">{desc}</p>
-      </div>
-    </motion.div>
-  </Link>
-);
 
 export default CategoriesSection;

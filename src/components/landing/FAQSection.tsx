@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ChevronDown } from "lucide-react";
 
 const faqs = [
   { q: "What types of food products do you import?", a: "We import across five core categories: Frozen foods, Dairy products, Grocery & Staples, Edible Oils, and Specialty Imports — sourced from leading producers in Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China." },
@@ -21,23 +20,21 @@ const FAQSection = () => {
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden py-28 lg:py-36 bg-background">
+      {/* Dot grid pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.4]"
+        style={{
+          backgroundImage: `radial-gradient(circle, hsl(var(--forest-mid) / 0.15) 1px, transparent 1px)`,
+          backgroundSize: "28px 28px",
+        }}
+      />
+
       {/* Decorative accent orbs */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none overflow-hidden"
-        style={{ y: bgY }}
-      >
-        <div
-          className="absolute w-[500px] h-[500px] -top-40 -right-40 rounded-full opacity-[0.07]"
-          style={{
-            background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute w-[400px] h-[400px] bottom-20 -left-20 rounded-full opacity-[0.05]"
-          style={{
-            background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)",
-          }}
-        />
+      <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
+        <div className="absolute w-[500px] h-[500px] -top-40 -right-40 rounded-full opacity-[0.07]"
+          style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
+        <div className="absolute w-[400px] h-[400px] bottom-20 -left-20 rounded-full opacity-[0.05]"
+          style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
       </motion.div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
@@ -48,69 +45,76 @@ const FAQSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="relative"
           >
-            <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
-              FAQs
+            {/* Large decorative FAQ text */}
+            <span className="absolute -top-6 -left-2 font-display text-[8rem] font-black text-foreground/[0.04] leading-none select-none pointer-events-none">
+              FAQ
             </span>
-            <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight tracking-tight">
-              Frequently
-              <br />
-              Asked Questions
-            </h2>
-            <p className="text-muted-foreground font-body text-base leading-relaxed max-w-sm">
-              Everything you need to know about our food import services, from
-              sourcing to delivery.
-            </p>
+            <div className="relative">
+              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
+                FAQs
+              </span>
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight tracking-tight">
+                Frequently
+                <br />
+                Asked Questions
+              </h2>
+              <p className="text-muted-foreground font-body text-base leading-relaxed max-w-sm">
+                Everything you need to know about our food import services, from
+                sourcing to delivery.
+              </p>
+            </div>
           </motion.div>
 
           {/* Right — Accordion */}
-          <div className="space-y-4">
+          <div className="space-y-0">
             {faqs.map((faq, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{
-                  duration: 0.4,
-                  delay: i * 0.08,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className={`rounded-lg border overflow-hidden transition-all duration-500 ${
-                  openIndex === i
-                    ? "border-accent/40 bg-card shadow-md shadow-accent/5"
-                    : "border-border bg-card hover:border-accent/30 hover:shadow-md"
+                transition={{ duration: 0.4, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                className={`border-b transition-colors duration-300 ${
+                  openIndex === i ? "border-accent/30" : "border-border"
                 }`}
               >
                 <button
                   onClick={() => toggle(i)}
-                  className="w-full flex items-center justify-between px-7 py-6 text-left group"
+                  className="w-full flex items-center justify-between py-6 text-left group"
                 >
-                  <span className="font-body font-medium text-foreground text-base pr-4">
-                    {faq.q}
-                  </span>
-                  <motion.div
-                    animate={{ rotate: openIndex === i ? 180 : 0 }}
-                    transition={{
-                      duration: 0.3,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                    className="flex-shrink-0 w-8 h-8 rounded-md border border-border flex items-center justify-center group-hover:border-accent/30 transition-colors"
+                  <div className="flex items-center gap-4 pr-4">
+                    <span className={`font-display text-sm font-bold transition-colors duration-300 shrink-0 ${openIndex === i ? "text-accent" : "text-muted-foreground/50"}`}>
+                      {String(i + 1).padStart(2, "0")}.
+                    </span>
+                    <span className={`font-body font-medium text-base transition-colors duration-300 ${openIndex === i ? "text-accent" : "text-foreground group-hover:text-accent"}`}>
+                      {faq.q}
+                    </span>
+                  </div>
+                  <motion.span
+                    animate={{ rotate: openIndex === i ? 45 : 0 }}
+                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                    className={`flex-shrink-0 w-7 h-7 rounded-md border flex items-center justify-center transition-colors duration-300 text-lg font-light leading-none ${
+                      openIndex === i
+                        ? "border-accent/40 text-accent bg-accent/5"
+                        : "border-border text-muted-foreground group-hover:border-accent/30"
+                    }`}
                   >
-                    <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                  </motion.div>
+                    +
+                  </motion.span>
                 </button>
                 <AnimatePresence>
                   {openIndex === i && (
                     <motion.div
-                      initial={{ height: 0, opacity: 0, y: -4 }}
-                      animate={{ height: "auto", opacity: 1, y: 0 }}
-                      exit={{ height: 0, opacity: 0, y: -4 }}
-                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                       className="overflow-hidden"
                     >
-                      <div className="mx-7 mb-6 pt-0 border-t border-border/50">
-                        <p className="pt-4 font-body text-muted-foreground text-sm leading-relaxed">
+                      <div className="pl-10 pb-6">
+                        <p className="font-body text-muted-foreground text-sm leading-relaxed">
                           {faq.a}
                         </p>
                       </div>

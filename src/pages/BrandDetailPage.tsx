@@ -39,7 +39,7 @@ const BrandDetailPage = () => {
         <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
         <div className="absolute inset-0 opacity-[0.06] pointer-events-none mix-blend-overlay"><svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg"><filter id="noiseBD"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter><rect width="100%" height="100%" filter="url(#noiseBD)" /></svg></div>
         <div className="relative z-10 max-w-5xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 text-sm font-body text-primary-foreground/50 mb-8">
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 text-sm font-body text-primary-foreground/60 mb-8">
             <Link to="/" className="hover:text-primary-foreground/80 transition-colors">Home</Link><span>/</span>
             <Link to="/brands" className="hover:text-primary-foreground/80 transition-colors">Brands</Link><span>/</span>
             <span className="text-primary-foreground/80">{brand.name}</span>
@@ -50,8 +50,8 @@ const BrandDetailPage = () => {
             </motion.div>
             <div>
               <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="font-display text-3xl md:text-5xl font-bold text-primary-foreground mb-4">{brand.name}</motion.h1>
-              <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="font-body text-primary-foreground/60 text-lg max-w-2xl">{brand.description}</motion.p>
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="flex items-center gap-6 mt-6 text-sm font-body text-primary-foreground/50">
+              <motion.p initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="font-body text-primary-foreground/70 text-lg max-w-2xl">{brand.description}</motion.p>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="flex items-center gap-6 mt-6 text-sm font-body text-primary-foreground/70">
                 <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4" /> {brand.origin}</span>
                 {brand.established && <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" /> Est. {brand.established}</span>}
               </motion.div>

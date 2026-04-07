@@ -52,7 +52,7 @@ const AdminLogin = () => {
             <Leaf className="w-7 h-7 text-forest-light" />
           </div>
           <h1 className="font-display text-2xl font-bold text-primary-foreground">Admin Panel</h1>
-          <p className="font-body text-sm text-primary-foreground/50 mt-2">Sign in to manage products & brands</p>
+          <p className="font-body text-sm text-primary-foreground/70 mt-2">Sign in to manage products & brands</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">

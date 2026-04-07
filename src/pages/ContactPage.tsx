@@ -93,25 +93,56 @@ const ContactPage = () => {
 
       {/* Hero */}
       <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden pt-28 pb-10 lg:pt-32 lg:pb-14">
-          <div className="absolute inset-0" style={{
-            background: `
-              radial-gradient(ellipse at 50% 30%, hsl(140 50% 19% / 0.6) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 70%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-              linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 14%), hsl(150 40% 8%))
-            `,
-          }} />
-          <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
-            <div className="absolute w-[600px] h-[600px] -top-40 -left-40 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
-          </motion.div>
-          <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-            <motion.span initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="inline-block px-4 py-1.5 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-xs font-medium border border-primary-foreground/15 mb-4 tracking-widest uppercase">
-              Contact Us
-            </motion.span>
-            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="font-display text-2xl md:text-3xl font-bold text-primary-foreground mb-2 leading-tight tracking-tight">
+        <section className="relative overflow-hidden min-h-[280px] flex items-center">
+          {/* Animated gradient background */}
+          <div
+            className="absolute inset-0 animate-gradient-shift"
+            style={{
+              background: `linear-gradient(135deg, hsl(150 40% 6%), hsl(140 50% 16%), hsl(150 40% 9%), hsl(140 50% 13%))`,
+              backgroundSize: "300% 300%",
+            }}
+          />
+          {/* Grid overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+              backgroundSize: "40px 40px",
+            }}
+          />
+          {/* Noise overlay */}
+          <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay">
+            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+              <filter id="noiseC"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
+              <rect width="100%" height="100%" filter="url(#noiseC)" />
+            </svg>
+          </div>
+          {/* Decorative orb */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full opacity-[0.08] pointer-events-none" style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
+
+          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-20 lg:py-28">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="font-body text-xs text-primary-foreground/50 tracking-widest uppercase mb-4"
+            >
+              Olive Foods / Contact
+            </motion.p>
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight tracking-tight mb-4"
+            >
               Get in Touch
             </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="font-body text-sm text-primary-foreground/50 max-w-xl mx-auto leading-relaxed">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25, duration: 0.5 }}
+              className="font-body text-base text-primary-foreground/70 max-w-xl leading-relaxed"
+            >
               Have questions about our products, brands, or partnership opportunities? We'd love to hear from you.
             </motion.p>
           </div>
@@ -135,7 +166,7 @@ const ContactPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="relative p-8 rounded-xl border border-border bg-card shadow-lg space-y-6 overflow-hidden"
+                className="relative p-8 rounded-lg border border-border bg-card shadow-lg space-y-6 overflow-hidden"
               >
                 {/* Success overlay */}
                 <AnimatePresence>

@@ -50,7 +50,18 @@ const FeaturedProducts = () => {
           className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6"
         >
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
-            Featured Products
+            {"Featured Products".split(" ").map((word, i) => (
+              <motion.span
+                key={i}
+                className="inline-block mr-[0.25em]"
+                initial={{ opacity: 0, y: 30, filter: "blur(4px)" }}
+                whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {word}
+              </motion.span>
+            ))}
           </h2>
           <p className="text-muted-foreground font-body text-base max-w-sm leading-relaxed">
             Handpicked favorites from our premium international food catalog.
@@ -79,21 +90,11 @@ const FeaturedProducts = () => {
             <CarouselNext className="hidden md:flex -right-4 w-10 h-10 rounded-full border-border bg-background/90 backdrop-blur-sm shadow-lg hover:bg-accent hover:text-white hover:border-accent transition-all" />
           </Carousel>
 
-          {/* Dot indicators */}
           {count > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
-              {Array.from({ length: count }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => api?.scrollTo(i)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    i === current
-                      ? "w-6 bg-accent"
-                      : "w-2 bg-border hover:bg-muted-foreground"
-                  }`}
-                  aria-label={`Go to slide ${i + 1}`}
-                />
-              ))}
+            <div className="flex justify-center items-center gap-3 mt-8">
+              <span className="text-muted-foreground font-body text-sm tabular-nums">
+                {current + 1} / {count}
+              </span>
             </div>
           )}
         </motion.div>

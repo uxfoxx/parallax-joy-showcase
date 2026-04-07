@@ -121,7 +121,7 @@ const NotFound = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45, duration: 0.5 }}
-            className="font-body text-primary-foreground/50 text-base leading-relaxed mb-10 max-w-sm mx-auto"
+            className="font-body text-primary-foreground/70 text-base leading-relaxed mb-10 max-w-sm mx-auto"
           >
             The page you're looking for has been moved, deleted, or never existed.
             Let's get you back on track.

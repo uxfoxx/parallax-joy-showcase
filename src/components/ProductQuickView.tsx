@@ -84,7 +84,7 @@ const ProductQuickView = ({ product, open, onOpenChange }: ProductQuickViewProps
                 className="flex-1"
                 onClick={() => onOpenChange(false)}
               >
-                <Button className="w-full bg-accent hover:bg-accent/90 text-white font-body font-semibold rounded-xl h-11 text-sm gap-2 shine-sweep">
+                <Button className="w-full bg-accent hover:bg-accent/90 text-white font-body font-semibold rounded-lg h-11 text-sm gap-2 shine-sweep">
                   View Full Details
                   <ArrowRight className="w-4 h-4" />
                 </Button>
@@ -93,7 +93,7 @@ const ProductQuickView = ({ product, open, onOpenChange }: ProductQuickViewProps
                 to={`/contact?subject=Product+Inquiry&product=${encodeURIComponent(product.name)}`}
                 onClick={() => onOpenChange(false)}
               >
-                <Button variant="outline" className="rounded-xl h-11 font-body text-sm border-border hover:border-accent/40 gap-2">
+                <Button variant="outline" className="rounded-lg h-11 font-body text-sm border-border hover:border-accent/40 gap-2">
                   <MessageCircle className="w-4 h-4" />
                   Inquire
                 </Button>

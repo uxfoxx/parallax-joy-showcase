@@ -7,13 +7,13 @@ const FloatingWhatsApp = () => {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className="fixed bottom-6 right-6 z-[9999] group"
+      className="fixed bottom-6 right-4 sm:right-6 z-[9999] group print:hidden"
     >
       <div className="relative">
         {/* Pulse ring */}
         <div className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-30" />
         {/* Button */}
-        <div className="relative w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg shadow-[#25D366]/30 transition-transform duration-300 group-hover:scale-110">
+        <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg shadow-[#25D366]/30 transition-transform duration-300 group-hover:scale-110">
           <MessageCircle className="w-6 h-6 text-white fill-white" />
         </div>
       </div>

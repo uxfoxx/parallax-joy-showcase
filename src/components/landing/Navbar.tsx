@@ -66,8 +66,8 @@ const Navbar = () => {
   const isDark = theme === "dark";
 
   const barBg = isDark
-    ? "bg-forest-deep/80 backdrop-blur-xl border border-primary-foreground/10"
-    : "bg-white/80 backdrop-blur-xl shadow-md border border-border";
+    ? `bg-forest-deep/85 backdrop-blur-xl border border-primary-foreground/10 ${scrolled ? "shadow-xl shadow-black/20" : ""}`
+    : `bg-background/90 backdrop-blur-xl border border-border/50 ${scrolled ? "shadow-lg shadow-black/8" : "shadow-md"}`;
 
   return (
     <>
@@ -143,11 +143,7 @@ const Navbar = () => {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link to="/contact">
                   <Button
-                    className={`shine-sweep font-body font-semibold rounded-lg h-10 px-6 text-sm transition-all duration-500 backdrop-blur-sm border border-white/15 ${
-                      isDark
-                        ? "bg-primary-foreground/90 text-forest-deep hover:bg-primary-foreground/80 shadow-lg shadow-white/10"
-                        : "bg-forest-deep/90 text-primary-foreground hover:bg-forest-mid/90 shadow-lg shadow-forest-deep/20"
-                    }`}
+                    className="shine-sweep font-body font-semibold rounded-lg h-10 px-6 text-sm bg-accent text-white hover:bg-accent/90 shadow-lg shadow-accent/20 border border-white/10 transition-all duration-300"
                   >
                     Contact Us
                   </Button>

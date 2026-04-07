@@ -50,7 +50,18 @@ const OurProductsSection = () => {
           className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6"
         >
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
-            Our Products
+            {"Our Products".split(" ").map((word, i) => (
+              <motion.span
+                key={i}
+                className="inline-block mr-[0.25em]"
+                initial={{ opacity: 0, y: 30, filter: "blur(4px)" }}
+                whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {word}
+              </motion.span>
+            ))}
           </h2>
           <p className="text-muted-foreground font-body text-base max-w-sm leading-relaxed">
             Our curated selection of premium food products, carefully chosen for the Sri Lankan market.
@@ -80,19 +91,10 @@ const OurProductsSection = () => {
           </Carousel>
 
           {count > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
-              {Array.from({ length: count }).map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => api?.scrollTo(i)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    i === current
-                      ? "w-6 bg-accent"
-                      : "w-2 bg-border hover:bg-muted-foreground"
-                  }`}
-                  aria-label={`Go to slide ${i + 1}`}
-                />
-              ))}
+            <div className="flex justify-center items-center gap-3 mt-8">
+              <span className="text-muted-foreground font-body text-sm tabular-nums">
+                {current + 1} / {count}
+              </span>
             </div>
           )}
         </motion.div>

@@ -1,136 +1,82 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Package, Warehouse, Thermometer, Truck } from "lucide-react";
-import { useMouseGradient } from "@/hooks/useMouseGradient";
-import { useRef, useState, useCallback } from "react";
 
 const features = [
   {
     icon: Package,
+    number: "01",
     title: "Integrated Import-to-Distribution",
     desc: "End-to-end import and brand representation services — from sourcing and customs clearance to shelf-ready distribution across Sri Lanka.",
   },
   {
     icon: Warehouse,
+    number: "02",
     title: "Bonded Warehousing",
     desc: "Customs-approved bonded warehouse facilities enabling duty optimization, secure storage, and streamlined import processing.",
   },
   {
     icon: Thermometer,
+    number: "03",
     title: "Cold-Chain Logistics",
     desc: "Temperature-controlled storage and transport at -18°C for frozen and chilled products, ensuring quality from port to point of sale.",
   },
   {
     icon: Truck,
+    number: "04",
     title: "Island-Wide Distribution",
     desc: "Comprehensive distribution network serving HoReCa, Modern Trade, and General Trade channels across Sri Lanka with reliable, on-time delivery.",
   },
 ];
 
-const FeatureTiltCard = ({ feature: f, index: i, lastCardStyle }: { feature: typeof features[0]; index: number; lastCardStyle: any }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+const FeatureCard = ({ feature: f, index: i }: { feature: typeof features[0]; index: number }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 40 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-80px" }}
+    transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+    whileHover={{ x: 4 }}
+    className="group relative p-6 rounded-xl border-l-2 border-l-primary-foreground/15 hover:border-l-accent border border-primary-foreground/8 hover:border-primary-foreground/15 bg-primary-foreground/[0.04] hover:bg-primary-foreground/[0.07] transition-all duration-300 cursor-default overflow-hidden"
+  >
+    {/* Background number decoration */}
+    <span className="absolute -top-4 -right-2 font-display text-8xl font-black text-primary-foreground/[0.04] select-none pointer-events-none leading-none">
+      {f.number}
+    </span>
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const el = cardRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = ((e.clientY - rect.top) / rect.height - 0.5) * -10;
-    const y = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
-    setTilt({ x, y });
-  }, []);
+    {/* Number + icon row */}
+    <div className="flex items-center gap-3 mb-5">
+      <span className="font-display text-xs font-bold text-accent tracking-widest">{f.number}</span>
+      <div className="w-9 h-9 rounded-lg bg-primary-foreground/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors duration-300">
+        <f.icon className="w-4 h-4 text-accent" />
+      </div>
+    </div>
 
-  return (
-    <motion.div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => setTilt({ x: 0, y: 0 })}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative p-6 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20 transition-shadow duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
-      style={{
-        background: `
-          radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%),
-          linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))
-        `,
-        transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-        transition: "transform 0.15s ease-out",
-        transformStyle: "preserve-3d" as const,
-        ...lastCardStyle,
-      }}
-    >
-      <motion.div
-        whileHover={{ scale: 1.15, rotate: 5 }}
-        transition={{ type: "spring", stiffness: 300 }}
-        className="w-12 h-12 rounded-lg bg-primary-foreground flex items-center justify-center mb-4 shadow-lg shadow-primary-foreground/10"
-      >
-        <f.icon className="w-6 h-6 text-forest-deep" />
-      </motion.div>
-      <h3 className="font-display text-xl font-semibold text-primary-foreground mb-4 tracking-tight">
-        {f.title}
-      </h3>
-      <p className="text-primary-foreground/45 font-body leading-relaxed text-sm">
-        {f.desc}
-      </p>
-    </motion.div>
-  );
-};
+    <h3 className="font-display text-lg font-semibold text-primary-foreground mb-3 leading-snug tracking-tight">
+      {f.title}
+    </h3>
+    <p className="text-primary-foreground/70 font-body leading-relaxed text-sm">
+      {f.desc}
+    </p>
+  </motion.div>
+);
 
 const WhyChooseUs = () => {
-  const { ref, gradientStyle } = useMouseGradient();
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll();
-  const { scrollYProgress: sectionProgress } = useScroll();
-
-  // Amplified: Element is at right side during scroll 50-75%, so grid shifts left
-  const gridShift = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -90, 0]);
-  const gridSkew = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -1.5, 0]);
-  const headerShift = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -50, 0]);
-  const headerSkew = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [0, -2, 0]);
-  const lastCardScale = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [1, 0.82, 1]);
-  const lastCardOpacity = useTransform(scrollYProgress, [0.47, 0.62, 0.77], [1, 0.35, 1]);
-
-  // Parallax background
-  const bgY = useTransform(sectionProgress, [0, 1], ["-70px", "70px"]);
-  const orbY = useTransform(sectionProgress, [0, 1], ["40px", "-40px"]);
-
   return (
     <section
-      ref={(el) => {
-        (ref as React.MutableRefObject<HTMLElement | null>).current = el;
-        (sectionRef as React.MutableRefObject<HTMLElement | null>).current = el;
-      }}
       id="about"
       className="relative overflow-hidden py-28 lg:py-36"
+      style={{
+        background: `
+          radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
+          radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
+          linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 14%), hsl(150 40% 10%))
+        `,
+      }}
     >
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
-            radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-            linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 14%), hsl(150 40% 10%))
-          `,
-        }}
-      />
-
-      {/* Parallax decorative elements */}
-      <motion.div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ y: bgY }}>
-        <motion.div
-          className="absolute w-[500px] h-[500px] -top-32 -left-32 rounded-full opacity-[0.06]"
-          style={{
-            background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)",
-            y: orbY,
-          }}
-        />
-        <div
-          className="absolute w-[350px] h-[350px] bottom-0 right-10 rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }}
-        />
-      </motion.div>
-
-      <div className="absolute inset-0 pointer-events-none z-[1] opacity-30" style={gradientStyle} />
+      {/* Decorative orbs */}
+      <div className="absolute w-[500px] h-[500px] -top-32 -left-32 rounded-full opacity-[0.06] pointer-events-none"
+        style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
+      <div className="absolute w-[350px] h-[350px] bottom-0 right-10 rounded-full opacity-[0.04] pointer-events-none"
+        style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }} />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         {/* Header */}
@@ -140,7 +86,6 @@ const WhyChooseUs = () => {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto mb-20"
-          style={{ x: headerShift, skewX: headerSkew }}
         >
           <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
             Why Choose Us
@@ -150,17 +95,17 @@ const WhyChooseUs = () => {
             <br />
             Distribution Partner
           </h2>
-          <p className="text-primary-foreground/45 font-body text-lg leading-relaxed">
+          <p className="text-primary-foreground/70 font-body text-lg leading-relaxed">
             Three decades of experience in import, warehousing, and distribution — built on strong global supplier relationships
           </p>
         </motion.div>
 
-        {/* Feature cards */}
-        <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5" style={{ x: gridShift, skewX: gridSkew }}>
+        {/* Feature cards — 2×2 grid */}
+        <div className="grid md:grid-cols-2 gap-5">
           {features.map((f, i) => (
-            <FeatureTiltCard key={f.title} feature={f} index={i} lastCardStyle={i === 3 ? { scale: lastCardScale, opacity: lastCardOpacity } : {}} />
+            <FeatureCard key={f.title} feature={f} index={i} />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

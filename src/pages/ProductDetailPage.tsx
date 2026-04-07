@@ -104,9 +104,9 @@ const ProductDetailPage = () => {
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
             <Link to="/" className="hover:text-primary-foreground transition-colors">Home</Link>
-            <span className="text-primary-foreground/30">/</span>
+            <span className="text-primary-foreground/50">/</span>
             <Link to="/products" className="hover:text-primary-foreground transition-colors">Products</Link>
-            <span className="text-primary-foreground/30">/</span>
+            <span className="text-primary-foreground/50">/</span>
             <span className="text-primary-foreground/80">{product.name}</span>
           </motion.nav>
         </div>

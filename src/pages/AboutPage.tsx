@@ -113,7 +113,7 @@ const AboutPage = () => {
               <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
                 Core Business Activities
               </h2>
-              <p className="text-primary-foreground/45 font-body text-lg leading-relaxed">
+              <p className="text-primary-foreground/70 font-body text-lg leading-relaxed">
                 A fully integrated supply chain covering every step from port to shelf
               </p>
             </motion.div>
@@ -125,7 +125,7 @@ const AboutPage = () => {
                     <a.icon className="w-6 h-6 text-forest-deep" />
                   </motion.div>
                   <h3 className="font-display text-xl font-semibold text-primary-foreground mb-4 tracking-tight">{a.title}</h3>
-                  <p className="text-primary-foreground/45 font-body leading-relaxed text-sm">{a.desc}</p>
+                  <p className="text-primary-foreground/70 font-body leading-relaxed text-sm">{a.desc}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -136,7 +136,7 @@ const AboutPage = () => {
                     <a.icon className="w-6 h-6 text-forest-deep" />
                   </motion.div>
                   <h3 className="font-display text-xl font-semibold text-primary-foreground mb-4 tracking-tight">{a.title}</h3>
-                  <p className="text-primary-foreground/45 font-body leading-relaxed text-sm">{a.desc}</p>
+                  <p className="text-primary-foreground/70 font-body leading-relaxed text-sm">{a.desc}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -277,7 +277,7 @@ const AboutPage = () => {
               Get Started
             </motion.span>
             <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">Ready to Partner With Us?</motion.h2>
-            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="font-body text-primary-foreground/45 text-lg leading-relaxed">Let's discuss how Olive Foods can support your business with reliable import and distribution solutions.</motion.p>
+            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="font-body text-primary-foreground/70 text-lg leading-relaxed">Let's discuss how Olive Foods can support your business with reliable import and distribution solutions.</motion.p>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-wrap gap-4 justify-center">
               <Link to="/contact"><Button className="shine-sweep bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-lg px-8 h-12 text-base backdrop-blur-sm border border-white/15">Contact Us</Button></Link>
               <Link to="/products"><Button variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 font-body rounded-lg px-8 h-12 text-base backdrop-blur-sm">Explore Products</Button></Link>

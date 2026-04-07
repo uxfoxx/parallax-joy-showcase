@@ -1,13 +1,12 @@
 import { useInView } from "@/hooks/useInView";
 import { useCountUp } from "@/hooks/useCountUp";
 import { motion } from "framer-motion";
-import { Package, Users, Thermometer, MapPin } from "lucide-react";
 
 const bannerStats = [
-  { value: 500, suffix: "+", label: "Products Distributed", icon: Package },
-  { value: 1000, suffix: "+", label: "Active Retail Partners", icon: Users },
-  { value: 24, suffix: "/7", label: "Cold-Chain Monitoring", icon: Thermometer },
-  { value: 0, suffix: "", label: "Island-Wide Delivery", icon: MapPin, isText: true, displayText: "Island-Wide" },
+  { value: 500, suffix: "+", label: "Products Distributed" },
+  { value: 1000, suffix: "+", label: "Active Retail Partners" },
+  { value: 24, suffix: "/7", label: "Cold-Chain Monitoring" },
+  { value: 0, suffix: "", label: "Island-Wide Delivery", isText: true, displayText: "Island-Wide" },
 ];
 
 const DarkStatsBanner = () => {
@@ -36,7 +35,6 @@ type StatType = typeof bannerStats[0];
 
 const BannerStat = ({ stat, isInView, index, isLast }: { stat: StatType; isInView: boolean; index: number; isLast: boolean }) => {
   const count = useCountUp(stat.value, isInView, 2500);
-  const Icon = stat.icon;
 
   return (
     <motion.div
@@ -57,20 +55,18 @@ const BannerStat = ({ stat, isInView, index, isLast }: { stat: StatType; isInVie
         />
       )}
 
+      {/* Animated accent line */}
       <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        whileInView={{ scale: 1, opacity: 1 }}
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: index * 0.12 + 0.1, ease: [0.22, 1, 0.36, 1] }}
-        className={`w-10 h-10 rounded-lg bg-forest-deep/10 flex items-center justify-center mb-3 mx-auto sm:mx-0 ${isInView ? "animate-pulse-glow" : ""}`}
-        style={{ animationDelay: `${index * 0.3}s` }}
-      >
-        <Icon className="w-5 h-5 text-forest-mid" />
-      </motion.div>
-      <div className="font-display text-4xl lg:text-5xl font-bold text-foreground">
+        transition={{ duration: 0.5, delay: index * 0.12 + 0.2 }}
+        className="w-8 h-[2px] bg-accent rounded-full mb-3 mx-auto sm:mx-0 origin-left"
+      />
+      <div className="font-display text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-none">
         {stat.isText ? stat.displayText : <>{count}{stat.suffix}</>}
       </div>
-      <p className="text-muted-foreground font-body text-sm mt-2 tracking-widest uppercase">{stat.label}</p>
+      <p className="text-muted-foreground font-body text-xs mt-3 tracking-[0.15em] uppercase">{stat.label}</p>
     </motion.div>
   );
 };
