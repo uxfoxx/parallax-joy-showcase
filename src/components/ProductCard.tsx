@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Package, Eye } from "lucide-react";
@@ -16,6 +16,7 @@ const ProductCard = ({ product, large = false, variant = "light", onQuickView }:
   const brandName = product.brands?.name ?? "";
   const brandSlug = product.brands?.slug ?? "";
   const [imgLoaded, setImgLoaded] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <motion.div
@@ -100,13 +101,17 @@ const ProductCard = ({ product, large = false, variant = "light", onQuickView }:
                   : product.description}
               </p>
               <div className="flex items-center justify-between mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-150">
-                <Link
-                  to={`/brands/${brandSlug}`}
-                  className="text-xs font-body font-medium text-white/90 hover:underline"
-                  onClick={(e) => e.stopPropagation()}
+                <span
+                  role="link"
+                  className="text-xs font-body font-medium text-white/90 hover:underline cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigate(`/brands/${brandSlug}`);
+                  }}
                 >
                   {brandName}
-                </Link>
+                </span>
                 <span className="text-xs font-body text-white/60">{product.origin}</span>
               </div>
             </div>
