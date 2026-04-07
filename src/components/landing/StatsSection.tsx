@@ -1,5 +1,6 @@
 import { useInView } from "@/hooks/useInView";
 import { useCountUp } from "@/hooks/useCountUp";
+import { useMouseGradient } from "@/hooks/useMouseGradient";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, Handshake, Globe, GitBranch } from "lucide-react";
 import { motion } from "framer-motion";
@@ -58,10 +59,14 @@ const TiltCard = ({ children, className = "" }: { children: React.ReactNode; cla
 
 const StatsSection = () => {
   const { ref, isInView } = useInView();
+  const { ref: mouseRef, gradientStyle } = useMouseGradient();
 
   return (
     <section
-      ref={ref as React.RefObject<HTMLElement>}
+      ref={(el) => {
+        (ref as React.MutableRefObject<HTMLElement | null>).current = el;
+        (mouseRef as React.MutableRefObject<HTMLElement | null>).current = el;
+      }}
       className="relative py-28 lg:py-36 overflow-hidden"
     >
       <div
@@ -74,6 +79,9 @@ const StatsSection = () => {
           `,
         }}
       />
+
+      {/* Mouse gradient overlay */}
+      <div className="absolute inset-0 pointer-events-none z-[1] opacity-25" style={gradientStyle} />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-20 items-center">

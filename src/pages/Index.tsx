@@ -10,6 +10,7 @@ import CategoriesSection from "@/components/landing/CategoriesSection";
 import StatsSection from "@/components/landing/StatsSection";
 import DarkStatsBanner from "@/components/landing/DarkStatsBanner";
 import TeamSection from "@/components/landing/TeamSection";
+import MeetTheTeam from "@/components/landing/MeetTheTeam";
 import LocationsSection from "@/components/landing/LocationsSection";
 import FAQSection from "@/components/landing/FAQSection";
 import Footer from "@/components/landing/Footer";
@@ -62,11 +63,15 @@ const Index = () => {
         <TeamSection />
       </div>
       <SectionTransition />
-      <div data-navbar-theme="light">
-        <LocationsSection />
+      <div data-navbar-theme="dark">
+        <MeetTheTeam />
       </div>
       <SectionTransition />
       <div data-navbar-theme="dark">
+        <LocationsSection />
+      </div>
+      <SectionTransition />
+      <div data-navbar-theme="light">
         <FAQSection />
       </div>
       <div data-navbar-theme="dark">

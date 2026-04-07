@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,7 @@ interface ProductCardProps {
 const ProductCard = ({ product, large = false, variant = "light" }: ProductCardProps) => {
   const brandName = product.brands?.name ?? "";
   const brandSlug = product.brands?.slug ?? "";
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   return (
     <motion.div
@@ -26,12 +28,18 @@ const ProductCard = ({ product, large = false, variant = "light" }: ProductCardP
         <div
           className={`relative rounded-lg overflow-hidden ${large ? "aspect-[3/4]" : "aspect-[4/5]"} transition-shadow duration-500 border ${variant === "dark" ? "border-white/10 shadow-md hover:shadow-xl" : "border-border shadow-lg hover:shadow-2xl"}`}
         >
+          {/* Loading skeleton */}
+          {product.image_url && !imgLoaded && (
+            <div className="absolute inset-0 bg-muted animate-pulse" />
+          )}
+
           {/* Full image background */}
           {product.image_url ? (
             <img
               src={product.image_url}
               alt={product.name}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              onLoad={() => setImgLoaded(true)}
+              className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-forest-deep/30 via-forest-mid/20 to-accent/15 flex items-center justify-center">
@@ -40,16 +48,22 @@ const ProductCard = ({ product, large = false, variant = "light" }: ProductCardP
           )}
 
           {/* Shine effect on hover */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%]" style={{ transition: "opacity 0.7s, transform 0.9s" }} />
+          <div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%]"
+            style={{ transition: "opacity 0.7s, transform 0.9s" }}
+          />
 
           {/* Top badges — always visible */}
           <div className="absolute top-3 left-3 right-3 flex items-start justify-between z-10">
             {product.featured ? (
-              <Badge className="bg-accent text-white font-body text-xs shadow-md">
-                Featured
-              </Badge>
-            ) : <span />}
-            <Badge variant="outline" className="bg-background/80 backdrop-blur-sm font-body text-xs text-foreground border-border shadow-sm">
+              <Badge className="bg-accent text-white font-body text-xs shadow-md">Featured</Badge>
+            ) : (
+              <span />
+            )}
+            <Badge
+              variant="outline"
+              className="bg-background/80 backdrop-blur-sm font-body text-xs text-foreground border-border shadow-sm"
+            >
               {product.category}
             </Badge>
           </div>
@@ -64,7 +78,10 @@ const ProductCard = ({ product, large = false, variant = "light" }: ProductCardP
             </h3>
             <div className="max-h-0 group-hover:max-h-24 overflow-hidden transition-all duration-500 ease-out">
               <p className="text-white/75 text-sm font-body line-clamp-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                {product.description.includes("<") ? new DOMParser().parseFromString(product.description, "text/html").body.textContent || "" : product.description}
+                {product.description.includes("<")
+                  ? new DOMParser().parseFromString(product.description, "text/html").body
+                      .textContent || ""
+                  : product.description}
               </p>
               <div className="flex items-center justify-between mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-150">
                 <Link
@@ -74,9 +91,7 @@ const ProductCard = ({ product, large = false, variant = "light" }: ProductCardP
                 >
                   {brandName}
                 </Link>
-                <span className="text-xs font-body text-white/60">
-                  {product.origin}
-                </span>
+                <span className="text-xs font-body text-white/60">{product.origin}</span>
               </div>
             </div>
           </div>

@@ -1,6 +1,17 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import logoSvg from "@/assets/olive-foods-logo.svg";
+
+const quickLinks = [
+  { label: "About", href: "/about" },
+  { label: "Brands", href: "/brands" },
+  { label: "Products", href: "/products" },
+  { label: "Our Products", href: "/products?our=true" },
+  { label: "Contact", href: "/contact" },
+];
+
+const socialLinks = ["Facebook", "LinkedIn"];
 
 const Footer = () => {
   return (
@@ -27,33 +38,49 @@ const Footer = () => {
           {/* Brand */}
           <div className="space-y-5">
             <div className="flex items-center gap-3">
-              <img src={logoSvg} alt="Olive Foods" className="h-10 w-auto object-contain brightness-0 invert" />
+              <img
+                src={logoSvg}
+                alt="Olive Foods"
+                className="h-10 w-auto object-contain brightness-0 invert"
+              />
             </div>
             <p className="text-primary-foreground/45 font-body text-sm leading-relaxed max-w-xs">
-              Your trusted import, bonded warehousing & FMCG distribution partner — delivering quality and reliability across Sri Lanka for over 30 years.
+              Your trusted import, bonded warehousing & FMCG distribution partner — delivering
+              quality and reliability across Sri Lanka for over 30 years.
             </p>
             <p className="text-primary-foreground/30 font-body text-xs">
-              info@olivefoods.lk · +94 11 207 1717
+              <a
+                href="mailto:info@olivefoods.lk"
+                className="hover:text-primary-foreground/60 transition-colors duration-300"
+              >
+                info@olivefoods.lk
+              </a>
+              {" · "}
+              <a
+                href="tel:+94112071717"
+                className="hover:text-primary-foreground/60 transition-colors duration-300"
+              >
+                +94 11 207 1717
+              </a>
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-body text-sm font-semibold text-primary-foreground mb-5 tracking-widest uppercase">Quick Links</h4>
+            <h4 className="font-body text-sm font-semibold text-primary-foreground mb-5 tracking-widest uppercase">
+              Quick Links
+            </h4>
             <ul className="space-y-4">
-              {[
-                { label: "About", href: "/about" },
-                { label: "Brands", href: "/brands" },
-                { label: "Products", href: "/products" },
-                { label: "Our Products", href: "/products?our=true" },
-                { label: "Contact", href: "/contact" },
-              ].map((link) => (
+              {quickLinks.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300"
+                    className="group text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300 flex items-center gap-1.5"
                   >
-                    {link.label}
+                    <span className="transition-transform duration-300 group-hover:translate-x-1">
+                      {link.label}
+                    </span>
+                    <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-1 group-hover:translate-x-0" />
                   </Link>
                 </li>
               ))}
@@ -62,15 +89,20 @@ const Footer = () => {
 
           {/* Follow */}
           <div>
-            <h4 className="font-body text-sm font-semibold text-primary-foreground mb-5 tracking-widest uppercase">Follow</h4>
+            <h4 className="font-body text-sm font-semibold text-primary-foreground mb-5 tracking-widest uppercase">
+              Follow
+            </h4>
             <ul className="space-y-4">
-              {["Facebook", "LinkedIn"].map((link) => (
+              {socialLinks.map((link) => (
                 <li key={link}>
                   <a
                     href="#"
-                    className="text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300 underline underline-offset-4 decoration-primary-foreground/20 hover:decoration-primary-foreground/60"
+                    className="group text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300 flex items-center gap-1.5 underline underline-offset-4 decoration-primary-foreground/20 hover:decoration-primary-foreground/60"
                   >
-                    {link}
+                    <span className="transition-transform duration-300 group-hover:translate-x-1">
+                      {link}
+                    </span>
+                    <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-1 group-hover:translate-x-0" />
                   </a>
                 </li>
               ))}

@@ -19,13 +19,14 @@ const Navbar = () => {
   const location = useLocation();
   const vibrateControls = useAnimationControls();
 
+  // Vibrate every 20s (was 8s — reduced to avoid distraction)
   useEffect(() => {
     const interval = setInterval(() => {
       vibrateControls.start({
         x: [0, -1, 1, -0.5, 0.5, 0],
         transition: { duration: 0.4, ease: "easeInOut" },
       });
-    }, 8000);
+    }, 20000);
     return () => clearInterval(interval);
   }, [vibrateControls]);
 
@@ -42,7 +43,6 @@ const Navbar = () => {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Find the entry with the largest intersection ratio that is intersecting
         let best: IntersectionObserverEntry | null = null;
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -77,81 +77,92 @@ const Navbar = () => {
         transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         className="fixed top-4 left-0 right-0 z-50 mx-auto w-[calc(100%-2rem)] max-w-5xl"
       >
-        <motion.div
-          initial={{ x: 0 }}
-          animate={vibrateControls}
-          className="w-full"
-        >
-        <motion.div
-          animate={{
-            paddingTop: scrolled ? 8 : 12,
-            paddingBottom: scrolled ? 8 : 12,
-          }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className={`flex items-center justify-between px-5 rounded-lg transition-all duration-500 ${barBg}`}
-        >
-          <Link to="/" className="flex items-center shrink-0">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <img
-                src={logoSvg}
-                alt="Olive Foods"
-                className={`h-10 w-auto object-contain transition-all duration-500 ${isDark ? "brightness-0 invert" : ""}`}
-              />
-            </motion.div>
-          </Link>
-
-          <div className="hidden md:flex items-center gap-1 relative">
-            {links.map((link) => {
-              const isActive = link.href === "/" ? location.pathname === "/" : (location.pathname + location.search).startsWith(link.href);
-              return (
-                <Link
-                  key={link.label}
-                  to={link.href}
-                  className="relative px-5 py-2 text-sm font-body transition-colors duration-500"
-                >
-                  <span
-                    className={`relative z-10 transition-all duration-500 ${
-                      isActive
-                        ? `font-bold ${isDark ? "text-primary-foreground" : "text-foreground"}`
-                        : `font-medium ${isDark ? "text-primary-foreground/60 hover:text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`
-                    }`}
-                    style={isActive ? {
-                      textShadow: isDark
-                        ? "0 0 8px hsl(75 38% 45% / 0.6), 0 0 20px hsl(75 38% 45% / 0.3)"
-                        : "0 0 8px hsl(75 38% 45% / 0.4), 0 0 16px hsl(75 38% 45% / 0.2)"
-                    } : undefined}
-                  >
-                    {link.label}
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-
-          <div className="hidden md:flex items-center gap-3">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link to="/contact">
-                <Button
-                  className={`font-body font-semibold rounded-lg h-10 px-6 text-sm transition-all duration-500 backdrop-blur-sm border border-white/15 ${
-                    isDark
-                      ? "bg-primary-foreground/90 text-forest-deep hover:bg-primary-foreground/80 shadow-lg shadow-white/10"
-                      : "bg-forest-deep/90 text-primary-foreground hover:bg-forest-mid/90 shadow-lg shadow-forest-deep/20"
-                  }`}
-                >
-                  Contact Us
-                </Button>
-              </Link>
-            </motion.div>
-          </div>
-
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className={`md:hidden w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-500 ${isDark ? "bg-primary-foreground/10 text-primary-foreground" : "bg-forest-deep/10 text-foreground"}`}
+        <motion.div initial={{ x: 0 }} animate={vibrateControls} className="w-full">
+          <motion.div
+            animate={{
+              paddingTop: scrolled ? 8 : 12,
+              paddingBottom: scrolled ? 8 : 12,
+            }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className={`flex items-center justify-between px-5 rounded-lg transition-all duration-500 ${barBg}`}
           >
-            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-          </motion.button>
-        </motion.div>
+            <Link to="/" className="flex items-center shrink-0">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <img
+                  src={logoSvg}
+                  alt="Olive Foods"
+                  className={`h-10 w-auto object-contain transition-all duration-500 ${isDark ? "brightness-0 invert" : ""}`}
+                />
+              </motion.div>
+            </Link>
+
+            <div className="hidden md:flex items-center gap-1 relative">
+              {links.map((link) => {
+                const isActive =
+                  link.href === "/"
+                    ? location.pathname === "/"
+                    : (location.pathname + location.search).startsWith(link.href);
+                return (
+                  <Link
+                    key={link.label}
+                    to={link.href}
+                    className="relative px-5 py-2.5 text-sm font-body transition-colors duration-500"
+                  >
+                    <span
+                      className={`relative z-10 transition-all duration-500 ${
+                        isActive
+                          ? `font-bold ${isDark ? "text-primary-foreground" : "text-foreground"}`
+                          : `font-medium ${isDark ? "text-primary-foreground/60 hover:text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`
+                      }`}
+                      style={
+                        isActive
+                          ? {
+                              textShadow: isDark
+                                ? "0 0 8px hsl(75 38% 45% / 0.6), 0 0 20px hsl(75 38% 45% / 0.3)"
+                                : "0 0 8px hsl(75 38% 45% / 0.4), 0 0 16px hsl(75 38% 45% / 0.2)",
+                            }
+                          : undefined
+                      }
+                    >
+                      {link.label}
+                    </span>
+                    {/* Animated underline indicator */}
+                    {isActive && (
+                      <motion.div
+                        layoutId="navbar-active-indicator"
+                        className="absolute bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-accent"
+                        transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                      />
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+
+            <div className="hidden md:flex items-center gap-3">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link to="/contact">
+                  <Button
+                    className={`shine-sweep font-body font-semibold rounded-lg h-10 px-6 text-sm transition-all duration-500 backdrop-blur-sm border border-white/15 ${
+                      isDark
+                        ? "bg-primary-foreground/90 text-forest-deep hover:bg-primary-foreground/80 shadow-lg shadow-white/10"
+                        : "bg-forest-deep/90 text-primary-foreground hover:bg-forest-mid/90 shadow-lg shadow-forest-deep/20"
+                    }`}
+                  >
+                    Contact Us
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
+
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className={`md:hidden w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-500 ${isDark ? "bg-primary-foreground/10 text-primary-foreground" : "bg-forest-deep/10 text-foreground"}`}
+            >
+              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+            </motion.button>
+          </motion.div>
         </motion.div>
       </motion.nav>
 
