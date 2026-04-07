@@ -1,12 +1,40 @@
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFeaturedProducts } from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
+import type { UseEmblaCarouselType } from "embla-carousel-react";
+
+type CarouselApi = UseEmblaCarouselType[1];
 
 const FeaturedProducts = () => {
   const { data: products = [] } = useFeaturedProducts();
-  const displayProducts = products.slice(0, 3);
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+
+  const onSelect = useCallback(() => {
+    if (!api) return;
+    setCurrent(api.selectedScrollSnap());
+  }, [api]);
+
+  useEffect(() => {
+    if (!api) return;
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap());
+    api.on("select", onSelect);
+    return () => { api.off("select", onSelect); };
+  }, [api, onSelect]);
+
+  if (products.length === 0) return null;
 
   return (
     <section id="products" className="relative overflow-hidden py-28 lg:py-36">
@@ -26,19 +54,46 @@ const FeaturedProducts = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-5">
-          {displayProducts.map((product, i) => (
-            <motion.div
-              key={product.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <ProductCard product={product} large />
-            </motion.div>
-          ))}
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Carousel
+            setApi={setApi}
+            opts={{ align: "start", loop: true }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-5">
+              {products.map((product) => (
+                <CarouselItem key={product.id} className="pl-5 basis-full md:basis-1/2 lg:basis-1/3">
+                  <ProductCard product={product} large />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="hidden md:flex -left-4 w-10 h-10 rounded-full border-border bg-background/90 backdrop-blur-sm shadow-lg hover:bg-accent hover:text-white hover:border-accent transition-all" />
+            <CarouselNext className="hidden md:flex -right-4 w-10 h-10 rounded-full border-border bg-background/90 backdrop-blur-sm shadow-lg hover:bg-accent hover:text-white hover:border-accent transition-all" />
+          </Carousel>
+
+          {/* Dot indicators */}
+          {count > 1 && (
+            <div className="flex justify-center gap-2 mt-8">
+              {Array.from({ length: count }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => api?.scrollTo(i)}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    i === current
+                      ? "w-6 bg-accent"
+                      : "w-2 bg-border hover:bg-muted-foreground"
+                  }`}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
+              ))}
+            </div>
+          )}
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -48,7 +103,7 @@ const FeaturedProducts = () => {
           className="text-center mt-12"
         >
           <Link to="/products">
-            <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body rounded-lg px-8 py-5 transition-all duration-300 border border-forest-deep/20 hover:shadow-lg">
+            <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body rounded-lg px-8 py-5 transition-all duration-300 border border-forest-deep/20 hover:shadow-lg shine-sweep">
               View All Products →
             </Button>
           </Link>

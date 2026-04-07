@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Mail, Phone, MapPin, MessageCircle, Send, Clock } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { Mail, Phone, MapPin, MessageCircle, Send, Clock, CheckCircle2, Loader2 } from "lucide-react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -36,6 +36,7 @@ const ContactPage = () => {
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const { scrollYProgress } = useScroll();
@@ -76,6 +77,8 @@ const ContactPage = () => {
     } else {
       toast({ title: "Message Sent", description: "We'll get back to you shortly!" });
       setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 3500);
     }
   };
 
@@ -132,8 +135,32 @@ const ContactPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="p-8 rounded-lg border border-border bg-card shadow-lg space-y-6"
+                className="relative p-8 rounded-xl border border-border bg-card shadow-lg space-y-6 overflow-hidden"
               >
+                {/* Success overlay */}
+                <AnimatePresence>
+                  {submitted && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                      className="absolute inset-0 z-20 bg-card/95 backdrop-blur-sm flex flex-col items-center justify-center gap-4 rounded-xl"
+                    >
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.1, type: "spring", stiffness: 300, damping: 20 }}
+                        className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center"
+                      >
+                        <CheckCircle2 className="w-8 h-8 text-accent" />
+                      </motion.div>
+                      <h3 className="font-display text-xl font-bold text-foreground">Message Sent!</h3>
+                      <p className="font-body text-sm text-muted-foreground">We'll get back to you shortly.</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 <div>
                   <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent font-body text-xs font-medium border border-accent/20 mb-4 tracking-widest uppercase">
                     Send a Message
@@ -142,23 +169,61 @@ const ContactPage = () => {
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="font-body text-sm text-muted-foreground">Name *</Label>
-                    <input className={lightInputClasses} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your name" />
-                    {errors.name && <p className="text-destructive text-xs font-body">{errors.name}</p>}
+                  {/* Name */}
+                  <div className="relative">
+                    <input
+                      className={`${lightInputClasses} peer pt-5 pb-1`}
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      placeholder=" "
+                      id="contact-name"
+                    />
+                    <label
+                      htmlFor="contact-name"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground/60 transition-all duration-200 pointer-events-none peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px]"
+                    >
+                      Name *
+                    </label>
+                    {errors.name && <p className="text-destructive text-xs font-body mt-1">{errors.name}</p>}
                   </div>
-                  <div className="space-y-2">
-                    <Label className="font-body text-sm text-muted-foreground">Email *</Label>
-                    <input className={lightInputClasses} type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" />
-                    {errors.email && <p className="text-destructive text-xs font-body">{errors.email}</p>}
+                  {/* Email */}
+                  <div className="relative">
+                    <input
+                      className={`${lightInputClasses} peer pt-5 pb-1`}
+                      type="email"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      placeholder=" "
+                      id="contact-email"
+                    />
+                    <label
+                      htmlFor="contact-email"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground/60 transition-all duration-200 pointer-events-none peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px]"
+                    >
+                      Email *
+                    </label>
+                    {errors.email && <p className="text-destructive text-xs font-body mt-1">{errors.email}</p>}
                   </div>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="font-body text-sm text-muted-foreground">Phone (optional)</Label>
-                    <input className={lightInputClasses} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+94 XX XXX XXXX" />
+                  {/* Phone */}
+                  <div className="relative">
+                    <input
+                      className={`${lightInputClasses} peer pt-5 pb-1`}
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      placeholder=" "
+                      id="contact-phone"
+                    />
+                    <label
+                      htmlFor="contact-phone"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground/60 transition-all duration-200 pointer-events-none peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px]"
+                    >
+                      Phone (optional)
+                    </label>
                   </div>
+                  {/* Subject */}
                   <div className="space-y-2">
                     <Label className="font-body text-sm text-muted-foreground">Subject *</Label>
                     <Select value={form.subject} onValueChange={(v) => setForm({ ...form, subject: v })}>
@@ -175,14 +240,32 @@ const ContactPage = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label className="font-body text-sm text-muted-foreground">Message *</Label>
-                  <textarea className={`${lightInputClasses} min-h-[130px] resize-none`} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Tell us how we can help..." />
-                  {errors.message && <p className="text-destructive text-xs font-body">{errors.message}</p>}
+                {/* Message */}
+                <div className="relative">
+                  <textarea
+                    className={`${lightInputClasses} min-h-[130px] resize-none peer pt-6 pb-2`}
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    placeholder=" "
+                    id="contact-message"
+                  />
+                  <label
+                    htmlFor="contact-message"
+                    className="absolute left-4 top-4 font-body text-sm text-muted-foreground/60 transition-all duration-200 pointer-events-none peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px]"
+                  >
+                    Message *
+                  </label>
+                  {errors.message && <p className="text-destructive text-xs font-body mt-1">{errors.message}</p>}
                 </div>
 
-                <Button type="submit" disabled={loading} className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-lg px-8 h-12 text-base gap-2">
-                  <Send className="w-4 h-4" />
+                <Button type="submit" disabled={loading} className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl px-8 h-12 text-base gap-2 shine-sweep">
+                  {loading ? (
+                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
+                      <Loader2 className="w-4 h-4" />
+                    </motion.div>
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
                   {loading ? "Sending..." : "Send Message"}
                 </Button>
               </motion.form>

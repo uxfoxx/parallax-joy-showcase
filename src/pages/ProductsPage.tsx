@@ -4,6 +4,8 @@ import { Search, X, SlidersHorizontal, Star } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
+import PaginationControls from "@/components/PaginationControls";
+import { usePagination } from "@/hooks/usePagination";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +16,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
 import { useProducts, useBrands, useCategories } from "@/lib/api";
+import ProductQuickView from "@/components/ProductQuickView";
 import type { Product, Brand, Category } from "@/lib/api";
 
 type SortBy = "featured" | "name-asc" | "name-desc";
@@ -230,6 +233,7 @@ const ProductsPage = () => {
   const [featuredOnly, setFeaturedOnly] = useState(false);
   const [sortBy, setSortBy] = useState<SortBy>("featured");
   const [filterOpen, setFilterOpen] = useState(false);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
   const { data: allProducts = [], isLoading } = useProducts();
   const { data: brands = [] } = useBrands();
@@ -296,6 +300,11 @@ const ProductsPage = () => {
 
     return sorted;
   }, [query, selectedCategories, selectedBrands, featuredOnly, sortBy, allProducts, showOurProducts]);
+
+  /* ── Pagination ── */
+  const { currentPage, setCurrentPage, totalPages, paginatedItems, startIndex, endIndex, totalItems } =
+    usePagination(filtered, 12);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   /* ── Parallax orbs ── */
   const contentRef = useRef<HTMLDivElement>(null);
@@ -471,10 +480,14 @@ const ProductsPage = () => {
             )}
 
             {/* ── Result count ── */}
-            <div className="flex items-center gap-3 mb-7">
+            <div ref={gridRef} className="flex items-center gap-3 mb-7">
               <p className="font-body text-sm text-muted-foreground shrink-0">
-                <span className="font-semibold text-foreground">{filtered.length}</span>{" "}
-                product{filtered.length !== 1 ? "s" : ""} found
+                {totalItems > 0 ? (
+                  <>Showing <span className="font-semibold text-foreground">{startIndex + 1}–{endIndex}</span> of <span className="font-semibold text-foreground">{totalItems}</span> products</>
+                ) : (
+                  <span className="font-semibold text-foreground">0</span>
+                )}{" "}
+                {totalItems === 0 ? "products found" : ""}
               </p>
               <Separator className="flex-1" />
             </div>
@@ -486,18 +499,26 @@ const ProductsPage = () => {
                   <div key={i} className="rounded-xl bg-muted animate-pulse aspect-[4/5]" />
                 ))}
               </div>
-            ) : filtered.length > 0 ? (
-              <motion.div
-                key={`${selectedCategories.sort().join()}-${selectedBrands.sort().join()}-${featuredOnly}-${sortBy}-${query}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-                className="grid sm:grid-cols-2 md:grid-cols-3 gap-5"
-              >
-                {filtered.map((product) => (
-                  <ProductCard key={product.id} product={product} large />
-                ))}
-              </motion.div>
+            ) : paginatedItems.length > 0 ? (
+              <>
+                <motion.div
+                  key={currentPage}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                  className="grid sm:grid-cols-2 md:grid-cols-3 gap-5"
+                >
+                  {paginatedItems.map((product) => (
+                    <ProductCard key={product.id} product={product} large onQuickView={() => setQuickViewProduct(product)} />
+                  ))}
+                </motion.div>
+                <PaginationControls
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                  scrollTargetRef={gridRef as React.RefObject<HTMLElement>}
+                />
+              </>
             ) : (
               <div className="text-center py-24">
                 <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
@@ -540,11 +561,18 @@ const ProductsPage = () => {
             onToggleFeatured={() => setFeaturedOnly((v) => !v)}
             onClearAll={clearAll}
             hasFilters={hasFilters}
-            resultCount={filtered.length}
+            resultCount={totalItems}
             onClose={() => setFilterOpen(false)}
           />
         </SheetContent>
       </Sheet>
+
+      {/* Quick View Modal */}
+      <ProductQuickView
+        product={quickViewProduct}
+        open={!!quickViewProduct}
+        onOpenChange={(open) => { if (!open) setQuickViewProduct(null); }}
+      />
     </PageLayout>
   );
 };

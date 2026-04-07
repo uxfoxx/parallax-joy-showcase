@@ -1,15 +1,24 @@
+import { useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, MapPin, Calendar, MessageCircle } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
+import ProductQuickView from "@/components/ProductQuickView";
+import PaginationControls from "@/components/PaginationControls";
+import { usePagination } from "@/hooks/usePagination";
 import { useBrand, useProducts } from "@/lib/api";
+import type { Product } from "@/lib/api";
 
 const BrandDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: brand, isLoading } = useBrand(slug || "");
   const { data: allProducts = [] } = useProducts();
   const brandProducts = brand ? allProducts.filter((p) => p.brand_id === brand.id) : [];
+
+  const { currentPage, setCurrentPage, totalPages, paginatedItems } = usePagination(brandProducts, 12);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
   if (isLoading) return <PageLayout><div className="py-40 text-center font-body text-muted-foreground">Loading...</div></PageLayout>;
 
@@ -60,18 +69,42 @@ const BrandDetailPage = () => {
       </section>
 
       <section className="py-20 lg:py-28 bg-background/90 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6">
+        <div ref={gridRef} className="max-w-6xl mx-auto px-6">
           <div className="flex items-center justify-between mb-12">
             <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">Products by {brand.name}</h2>
             <Link to="/brands" className="flex items-center gap-2 text-sm font-body text-forest-mid hover:underline"><ArrowLeft className="w-4 h-4" /> All Brands</Link>
           </div>
-          {brandProducts.length > 0 ? (
-            <div className="grid md:grid-cols-3 gap-5">{brandProducts.map((product) => <ProductCard key={product.id} product={product} large />)}</div>
+          {paginatedItems.length > 0 ? (
+            <>
+              <motion.div
+                key={currentPage}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                className="grid md:grid-cols-3 gap-5"
+              >
+                {paginatedItems.map((product) => (
+                  <ProductCard key={product.id} product={product} large onQuickView={() => setQuickViewProduct(product)} />
+                ))}
+              </motion.div>
+              <PaginationControls
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+                scrollTargetRef={gridRef as React.RefObject<HTMLElement>}
+              />
+            </>
           ) : (
             <p className="font-body text-muted-foreground text-center py-16">No products available for this brand yet.</p>
           )}
         </div>
       </section>
+
+      <ProductQuickView
+        product={quickViewProduct}
+        open={!!quickViewProduct}
+        onOpenChange={(open) => { if (!open) setQuickViewProduct(null); }}
+      />
     </PageLayout>
   );
 };

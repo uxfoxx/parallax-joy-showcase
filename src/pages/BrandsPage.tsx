@@ -3,11 +3,10 @@ import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
+import PaginationControls from "@/components/PaginationControls";
+import { usePagination } from "@/hooks/usePagination";
 import { useBrands, useProducts } from "@/lib/api";
 import { Badge } from "@/components/ui/badge";
-
-const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
-const item = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
 
 interface BrandCardProps {
   brand: { id: string; name: string; slug: string; image_url?: string | null; description?: string | null; origin?: string | null };
@@ -20,11 +19,9 @@ const BrandCard = ({ brand, prodCount }: BrandCardProps) => {
   return (
     <Link to={`/brands/${brand.slug}`} className="block group">
       <div className="relative rounded-lg overflow-hidden aspect-[4/5] shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-border">
-        {/* Loading skeleton */}
         {brand.image_url && !imgLoaded && (
           <div className="absolute inset-0 bg-muted animate-pulse" />
         )}
-
         {brand.image_url ? (
           <img
             src={brand.image_url}
@@ -37,21 +34,16 @@ const BrandCard = ({ brand, prodCount }: BrandCardProps) => {
             <span className="font-display text-5xl font-bold text-forest-mid/25">{brand.name.charAt(0)}</span>
           </div>
         )}
-
-        {/* Shine effect on hover */}
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%]"
           style={{ transition: "opacity 0.7s, transform 0.9s" }}
         />
-
         <div className="absolute top-3 right-3 z-10">
           <Badge variant="outline" className="bg-background/80 backdrop-blur-sm font-body text-xs text-foreground border-border shadow-sm">
             {prodCount} product{prodCount !== 1 ? "s" : ""}
           </Badge>
         </div>
-
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
-
         <div className="absolute bottom-0 left-0 right-0 p-5 pb-6">
           <h3 className="font-display text-lg font-semibold text-white drop-shadow-md leading-tight">{brand.name}</h3>
           <div className="max-h-0 group-hover:max-h-24 overflow-hidden transition-all duration-500 ease-out">
@@ -71,6 +63,9 @@ const BrandsPage = () => {
   const { data: brands = [], isLoading } = useBrands();
   const { data: products = [] } = useProducts();
 
+  const { currentPage, setCurrentPage, totalPages, paginatedItems } = usePagination(brands, 9);
+  const gridRef = useRef<HTMLDivElement>(null);
+
   const contentRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: contentRef, offset: ["start end", "end start"] });
   const orb1Y = useTransform(scrollYProgress, [0, 1], ["-60px", "60px"]);
@@ -78,7 +73,6 @@ const BrandsPage = () => {
 
   return (
     <PageLayout>
-      {/* Hero */}
       <div data-navbar-theme="dark">
         <section className="relative overflow-hidden py-10 lg:py-14">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
@@ -99,10 +93,8 @@ const BrandsPage = () => {
         </section>
       </div>
 
-      {/* Content */}
       <div data-navbar-theme="light">
         <section ref={contentRef} className="relative py-20 lg:py-28 bg-background/90 backdrop-blur-sm overflow-hidden">
-          {/* Parallax orbs */}
           <motion.div
             className="absolute w-[500px] h-[500px] -top-40 -right-40 rounded-full pointer-events-none"
             style={{ y: orb1Y, background: "radial-gradient(circle, hsl(var(--accent) / 0.06), transparent 70%)" }}
@@ -112,20 +104,43 @@ const BrandsPage = () => {
             style={{ y: orb2Y, background: "radial-gradient(circle, hsl(var(--forest-mid) / 0.05), transparent 70%)" }}
           />
 
-          <div className="max-w-6xl mx-auto px-6 relative z-10">
+          <div ref={gridRef} className="max-w-6xl mx-auto px-6 relative z-10">
             {isLoading ? (
-              <p className="text-center font-body text-muted-foreground py-20">Loading brands...</p>
+              <div className="grid md:grid-cols-3 gap-5">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="rounded-lg bg-muted animate-pulse aspect-[4/5]" />
+                ))}
+              </div>
             ) : (
-              <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid md:grid-cols-3 gap-5">
-                {brands.map((brand) => {
-                  const prodCount = products.filter((p) => p.brand_id === brand.id).length;
-                  return (
-                    <motion.div key={brand.id} variants={item}>
-                      <BrandCard brand={brand} prodCount={prodCount} />
-                    </motion.div>
-                  );
-                })}
-              </motion.div>
+              <>
+                <motion.div
+                  key={currentPage}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                  className="grid md:grid-cols-3 gap-5"
+                >
+                  {paginatedItems.map((brand) => {
+                    const prodCount = products.filter((p) => p.brand_id === brand.id).length;
+                    return (
+                      <motion.div
+                        key={brand.id}
+                        initial={{ opacity: 0, y: 24 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <BrandCard brand={brand} prodCount={prodCount} />
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+                <PaginationControls
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                  scrollTargetRef={gridRef as React.RefObject<HTMLElement>}
+                />
+              </>
             )}
           </div>
         </section>

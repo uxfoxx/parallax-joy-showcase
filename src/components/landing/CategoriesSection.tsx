@@ -59,8 +59,8 @@ const CategoriesSection = () => {
             return (
               <motion.div
                 key={cat.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
@@ -109,14 +109,18 @@ const CategoriesSection = () => {
 const CategoryCard = ({ name, desc, icon: Icon }: { name: string; desc: string; icon: LucideIcon }) => (
   <Link to={`/products?category=${encodeURIComponent(name)}`}>
     <motion.div
-      whileHover={{ y: -6, transition: { duration: 0.3 } }}
-      className="group p-6 rounded-lg border border-border bg-card hover:border-forest-mid/30 hover:shadow-lg transition-all duration-500 cursor-pointer"
+      whileHover={{ y: -8, transition: { duration: 0.3 } }}
+      className="group glow-border p-6 rounded-lg border border-border bg-card hover:border-forest-mid/30 hover:shadow-xl transition-all duration-500 cursor-pointer relative overflow-hidden"
     >
-      <motion.div whileHover={{ scale: 1.1, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-14 h-14 rounded-xl bg-forest-deep/10 flex items-center justify-center mb-6">
-        <Icon className="w-6 h-6 text-forest-mid" />
-      </motion.div>
-      <h3 className="font-display text-xl font-semibold text-foreground mb-3 tracking-tight">{name}</h3>
-      <p className="text-muted-foreground font-body text-sm leading-relaxed">{desc}</p>
+      {/* Hover gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-forest-deep/[0.02] to-accent/[0.03] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div className="relative z-10">
+        <motion.div whileHover={{ scale: 1.15, rotate: 8 }} transition={{ type: "spring", stiffness: 300 }} className="w-14 h-14 rounded-xl bg-forest-deep/10 group-hover:bg-accent/10 flex items-center justify-center mb-6 transition-colors duration-300">
+          <Icon className="w-6 h-6 text-forest-mid group-hover:text-accent transition-colors duration-300" />
+        </motion.div>
+        <h3 className="font-display text-xl font-semibold text-foreground mb-3 tracking-tight group-hover:text-accent transition-colors duration-300">{name}</h3>
+        <p className="text-muted-foreground font-body text-sm leading-relaxed">{desc}</p>
+      </div>
     </motion.div>
   </Link>
 );

@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Package, Warehouse, Thermometer, Truck } from "lucide-react";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
-import { useRef } from "react";
+import { useRef, useState, useCallback } from "react";
 
 const features = [
   {
@@ -25,6 +25,57 @@ const features = [
     desc: "Comprehensive distribution network serving HoReCa, Modern Trade, and General Trade channels across Sri Lanka with reliable, on-time delivery.",
   },
 ];
+
+const FeatureTiltCard = ({ feature: f, index: i, lastCardStyle }: { feature: typeof features[0]; index: number; lastCardStyle: any }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = ((e.clientY - rect.top) / rect.height - 0.5) * -10;
+    const y = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
+    setTilt({ x, y });
+  }, []);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setTilt({ x: 0, y: 0 })}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+      className="group relative p-6 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20 transition-shadow duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
+      style={{
+        background: `
+          radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%),
+          linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))
+        `,
+        transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+        transition: "transform 0.15s ease-out",
+        transformStyle: "preserve-3d" as const,
+        ...lastCardStyle,
+      }}
+    >
+      <motion.div
+        whileHover={{ scale: 1.15, rotate: 5 }}
+        transition={{ type: "spring", stiffness: 300 }}
+        className="w-12 h-12 rounded-lg bg-primary-foreground flex items-center justify-center mb-4 shadow-lg shadow-primary-foreground/10"
+      >
+        <f.icon className="w-6 h-6 text-forest-deep" />
+      </motion.div>
+      <h3 className="font-display text-xl font-semibold text-primary-foreground mb-4 tracking-tight">
+        {f.title}
+      </h3>
+      <p className="text-primary-foreground/45 font-body leading-relaxed text-sm">
+        {f.desc}
+      </p>
+    </motion.div>
+  );
+};
 
 const WhyChooseUs = () => {
   const { ref, gradientStyle } = useMouseGradient();
@@ -107,36 +158,7 @@ const WhyChooseUs = () => {
         {/* Feature cards */}
         <motion.div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5" style={{ x: gridShift, skewX: gridSkew }}>
           {features.map((f, i) => (
-            <motion.div
-              key={f.title}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -6, transition: { duration: 0.3 } }}
-              className="group relative p-6 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20"
-              style={{
-                background: `
-                  radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%),
-                  linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))
-                `,
-                ...(i === 3 ? { scale: lastCardScale, opacity: lastCardOpacity } : {}),
-              }}
-            >
-              <motion.div
-                whileHover={{ scale: 1.15, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className="w-12 h-12 rounded-lg bg-primary-foreground flex items-center justify-center mb-4 shadow-lg shadow-primary-foreground/10"
-              >
-                <f.icon className="w-6 h-6 text-forest-deep" />
-              </motion.div>
-              <h3 className="font-display text-xl font-semibold text-primary-foreground mb-4 tracking-tight">
-                {f.title}
-              </h3>
-              <p className="text-primary-foreground/45 font-body leading-relaxed text-sm">
-                {f.desc}
-              </p>
-            </motion.div>
+            <FeatureTiltCard key={f.title} feature={f} index={i} lastCardStyle={i === 3 ? { scale: lastCardScale, opacity: lastCardOpacity } : {}} />
           ))}
         </motion.div>
       </div>

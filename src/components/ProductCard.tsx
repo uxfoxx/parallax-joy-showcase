@@ -2,16 +2,17 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { Package } from "lucide-react";
+import { Package, Eye } from "lucide-react";
 import type { Product } from "@/lib/api";
 
 interface ProductCardProps {
   product: Product;
   large?: boolean;
   variant?: "dark" | "light";
+  onQuickView?: () => void;
 }
 
-const ProductCard = ({ product, large = false, variant = "light" }: ProductCardProps) => {
+const ProductCard = ({ product, large = false, variant = "light", onQuickView }: ProductCardProps) => {
   const brandName = product.brands?.name ?? "";
   const brandSlug = product.brands?.slug ?? "";
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -52,6 +53,21 @@ const ProductCard = ({ product, large = false, variant = "light" }: ProductCardP
             className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%]"
             style={{ transition: "opacity 0.7s, transform 0.9s" }}
           />
+
+          {/* Quick view button */}
+          {onQuickView && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onQuickView();
+              }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/90 backdrop-blur-sm text-forest-deep font-body text-sm font-semibold shadow-lg opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all duration-300 hover:bg-white"
+            >
+              <Eye className="w-4 h-4" />
+              Quick View
+            </button>
+          )}
 
           {/* Top badges — always visible */}
           <div className="absolute top-3 left-3 right-3 flex items-start justify-between z-10">

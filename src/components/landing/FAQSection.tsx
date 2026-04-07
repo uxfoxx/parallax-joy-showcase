@@ -76,7 +76,11 @@ const FAQSection = () => {
                   delay: i * 0.08,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="rounded-lg border border-border bg-card overflow-hidden hover:border-accent/30 transition-all duration-500 hover:shadow-md"
+                className={`rounded-lg border overflow-hidden transition-all duration-500 ${
+                  openIndex === i
+                    ? "border-accent/40 bg-card shadow-md shadow-accent/5"
+                    : "border-border bg-card hover:border-accent/30 hover:shadow-md"
+                }`}
               >
                 <button
                   onClick={() => toggle(i)}
@@ -99,15 +103,17 @@ const FAQSection = () => {
                 <AnimatePresence>
                   {openIndex === i && (
                     <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      initial={{ height: 0, opacity: 0, y: -4 }}
+                      animate={{ height: "auto", opacity: 1, y: 0 }}
+                      exit={{ height: 0, opacity: 0, y: -4 }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="px-7 pb-6 font-body text-muted-foreground text-sm leading-relaxed">
-                        {faq.a}
-                      </p>
+                      <div className="mx-7 mb-6 pt-0 border-t border-border/50">
+                        <p className="pt-4 font-body text-muted-foreground text-sm leading-relaxed">
+                          {faq.a}
+                        </p>
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
