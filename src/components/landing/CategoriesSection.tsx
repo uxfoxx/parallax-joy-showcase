@@ -1,44 +1,45 @@
-import { motion } from "framer-motion";
-import { Snowflake, Milk, Wheat, Droplets, Sparkles, Coffee, Cookie, Fish, Beef, Apple, ShoppingBasket } from "lucide-react";
+import { motion, useMotionValue, useTransform, useSpring, useScroll } from "framer-motion";
+import { Snowflake, Milk, Wheat, Droplets, Sparkles, Coffee, Cookie, Fish, Beef, Apple, ShoppingBasket, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCategories } from "@/lib/api";
 import { Button } from "@/components/ui/button";
+import { useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 
 const iconMap: Record<string, LucideIcon> = {
-  frozen: Snowflake,
-  dairy: Milk,
-  cheese: Milk,
-  butter: Milk,
-  oil: Droplets,
-  flour: Wheat,
-  grain: Wheat,
-  rice: Wheat,
-  pasta: Wheat,
-  grocery: ShoppingBasket,
-  beverage: Coffee,
+  frozen:    Snowflake,
+  dairy:     Milk,
+  cheese:    Milk,
+  butter:    Milk,
+  oil:       Droplets,
+  flour:     Wheat,
+  grain:     Wheat,
+  rice:      Wheat,
+  pasta:     Wheat,
+  grocery:   ShoppingBasket,
+  beverage:  Coffee,
   chocolate: Cookie,
-  pastry: Cookie,
-  seafood: Fish,
-  meat: Beef,
-  fruit: Apple,
+  pastry:    Cookie,
+  seafood:   Fish,
+  meat:      Beef,
+  fruit:     Apple,
 };
 
-const darkColorMap: Record<string, { glow: string; iconClass: string }> = {
-  frozen:   { glow: "hsl(200 65% 40%)", iconClass: "text-sky-400" },
-  dairy:    { glow: "hsl(45 65% 45%)",  iconClass: "text-amber-400" },
-  cheese:   { glow: "hsl(30 65% 45%)",  iconClass: "text-orange-400" },
-  butter:   { glow: "hsl(45 60% 45%)",  iconClass: "text-amber-300" },
-  oil:      { glow: "hsl(80 55% 35%)",  iconClass: "text-lime-400" },
-  flour:    { glow: "hsl(30 60% 45%)",  iconClass: "text-orange-300" },
-  grain:    { glow: "hsl(40 60% 40%)",  iconClass: "text-amber-300" },
-  rice:     { glow: "hsl(40 50% 40%)",  iconClass: "text-amber-200" },
-  pasta:    { glow: "hsl(35 65% 40%)",  iconClass: "text-amber-400" },
-  grocery:  { glow: "hsl(140 50% 30%)", iconClass: "text-emerald-400" },
-  beverage: { glow: "hsl(25 60% 40%)",  iconClass: "text-amber-500" },
-  seafood:  { glow: "hsl(200 60% 40%)", iconClass: "text-sky-400" },
-  meat:     { glow: "hsl(0 55% 40%)",   iconClass: "text-red-400" },
-  fruit:    { glow: "hsl(100 50% 35%)", iconClass: "text-green-400" },
+const colorMap: Record<string, { iconClass: string; iconBg: string }> = {
+  frozen:    { iconClass: "text-sky-500",     iconBg: "bg-sky-50" },
+  dairy:     { iconClass: "text-amber-500",   iconBg: "bg-amber-50" },
+  cheese:    { iconClass: "text-orange-500",  iconBg: "bg-orange-50" },
+  butter:    { iconClass: "text-amber-500",   iconBg: "bg-amber-50" },
+  oil:       { iconClass: "text-lime-600",    iconBg: "bg-lime-50" },
+  flour:     { iconClass: "text-orange-400",  iconBg: "bg-orange-50" },
+  grain:     { iconClass: "text-amber-600",   iconBg: "bg-amber-50" },
+  rice:      { iconClass: "text-stone-500",   iconBg: "bg-stone-50" },
+  pasta:     { iconClass: "text-amber-600",   iconBg: "bg-amber-50" },
+  grocery:   { iconClass: "text-emerald-600", iconBg: "bg-emerald-50" },
+  beverage:  { iconClass: "text-amber-700",   iconBg: "bg-amber-50" },
+  seafood:   { iconClass: "text-sky-500",     iconBg: "bg-sky-50" },
+  meat:      { iconClass: "text-red-500",     iconBg: "bg-red-50" },
+  fruit:     { iconClass: "text-green-600",   iconBg: "bg-green-50" },
 };
 
 const getIcon = (name: string): LucideIcon => {
@@ -49,15 +50,15 @@ const getIcon = (name: string): LucideIcon => {
   return Sparkles;
 };
 
-const getDarkColors = (name: string) => {
+const getColors = (name: string) => {
   const lower = name.toLowerCase();
-  for (const [key, colors] of Object.entries(darkColorMap)) {
+  for (const [key, colors] of Object.entries(colorMap)) {
     if (lower.includes(key)) return colors;
   }
-  return { glow: "hsl(75 45% 35%)", iconClass: "text-accent" };
+  return { iconClass: "text-accent", iconBg: "bg-accent/10" };
 };
 
-const CategoryCard = ({
+const CategoryRow = ({
   name,
   desc,
   icon: Icon,
@@ -68,50 +69,87 @@ const CategoryCard = ({
   icon: LucideIcon;
   index: number;
 }) => {
-  const { glow, iconClass } = getDarkColors(name);
+  const [hovered, setHovered] = useState(false);
+  const { iconClass, iconBg } = getColors(name);
 
   return (
-    <Link to={`/products?category=${encodeURIComponent(name)}`} className="block h-full">
-      <motion.div
-        initial={{ opacity: 0, y: 60, filter: "blur(8px)", scale: 0.94 }}
-        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.7, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
-        whileHover={{ y: -6 }}
-        className="group relative p-6 rounded-xl border border-white/[0.08] bg-white/[0.04] hover:border-white/[0.15] hover:bg-white/[0.07] transition-all duration-300 overflow-hidden cursor-pointer h-full"
-      >
-        {/* Per-category top glow */}
-        <div
-          className="absolute top-0 left-0 right-0 h-36 rounded-t-xl pointer-events-none opacity-[0.15]"
-          style={{ background: `radial-gradient(ellipse at top, ${glow}, transparent 70%)` }}
+    <motion.div
+      initial={{ opacity: 0, x: -48 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.65, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="relative group"
+    >
+      <Link to={`/products?category=${encodeURIComponent(name)}`}>
+        {/* Hover background */}
+        <motion.div
+          animate={{ opacity: hovered ? 1 : 0 }}
+          transition={{ duration: 0.22 }}
+          className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/[0.06] via-accent/[0.02] to-transparent pointer-events-none"
         />
 
-        {/* Watermark number */}
-        <span className="absolute top-2 right-4 font-display text-8xl font-black text-white/[0.05] select-none leading-none pointer-events-none">
-          {String(index + 1).padStart(2, "0")}
-        </span>
+        {/* Left accent bar */}
+        <motion.div
+          animate={{ scaleY: hovered ? 1 : 0, opacity: hovered ? 1 : 0 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute left-0 top-3 bottom-3 w-[3px] bg-accent rounded-r-full origin-top"
+        />
 
-        {/* Icon */}
-        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center relative z-10 group-hover:bg-white/15 transition-colors duration-300">
-          <Icon className={`w-5 h-5 ${iconClass}`} />
+        <div className="relative flex items-center gap-5 md:gap-8 px-5 md:px-8 py-5 md:py-7">
+          {/* Number */}
+          <motion.span
+            animate={{ color: hovered ? "hsl(var(--foreground) / 0.14)" : "hsl(var(--foreground) / 0.07)" }}
+            transition={{ duration: 0.25 }}
+            className="font-display text-5xl md:text-6xl lg:text-7xl font-black select-none leading-none w-16 md:w-20 shrink-0 tabular-nums"
+          >
+            {String(index + 1).padStart(2, "0")}
+          </motion.span>
+
+          {/* Text content */}
+          <div className="flex-1 min-w-0">
+            <motion.h3
+              animate={{ color: hovered ? "hsl(var(--forest-deep))" : "hsl(var(--foreground))" }}
+              transition={{ duration: 0.25 }}
+              className="font-display text-xl md:text-2xl lg:text-3xl font-bold leading-snug tracking-tight"
+            >
+              {name}
+            </motion.h3>
+            <motion.p
+              animate={{ opacity: hovered ? 1 : 0.55, y: hovered ? 0 : 3 }}
+              transition={{ duration: 0.3 }}
+              className="font-body text-sm text-muted-foreground mt-1.5 leading-relaxed max-w-lg"
+            >
+              {desc}
+            </motion.p>
+          </div>
+
+          {/* Icon + arrow */}
+          <div className="flex items-center gap-3 md:gap-4 shrink-0">
+            <motion.div
+              animate={{
+                scale: hovered ? 1.12 : 1,
+                rotate: hovered ? 8 : 0,
+              }}
+              transition={{ type: "spring", stiffness: 280, damping: 18 }}
+              className={`w-11 h-11 rounded-xl ${iconBg} flex items-center justify-center shadow-sm`}
+            >
+              <Icon className={`w-5 h-5 ${iconClass}`} />
+            </motion.div>
+            <motion.div
+              animate={{ x: hovered ? 6 : 0, opacity: hovered ? 1 : 0.3 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ArrowRight className="w-5 h-5 text-accent" />
+            </motion.div>
+          </div>
         </div>
 
-        {/* Name */}
-        <h3 className="font-display text-xl font-semibold text-primary-foreground mt-4 mb-2 relative z-10 leading-snug tracking-tight">
-          {name}
-        </h3>
-
-        {/* Description */}
-        <p className="text-primary-foreground/55 font-body text-sm leading-relaxed relative z-10">
-          {desc}
-        </p>
-
-        {/* Explore link */}
-        <div className="mt-4 relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-1 group-hover:translate-y-0 transition-transform">
-          <span className="text-accent text-sm font-medium font-body">Explore →</span>
-        </div>
-      </motion.div>
-    </Link>
+        {/* Divider */}
+        <div className="h-px bg-border mx-5 md:mx-8" />
+      </Link>
+    </motion.div>
   );
 };
 
@@ -119,26 +157,51 @@ const CategoriesSection = () => {
   const { data: allCategories = [] } = useCategories();
   const categories = allCategories.slice(0, 5);
 
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Mouse parallax for watermark
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const smoothX = useSpring(mouseX, { damping: 28, stiffness: 90 });
+  const smoothY = useSpring(mouseY, { damping: 28, stiffness: 90 });
+  const wmarkX = useTransform(smoothX, [-0.5, 0.5], [-24, 24]);
+  const wmarkY = useTransform(smoothY, [-0.5, 0.5], [-14, 14]);
+
+  // Scroll parallax for watermark
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const wmarkScrollY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
+    mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+
   return (
     <section
+      ref={sectionRef}
       id="categories"
-      className="relative overflow-hidden py-28 lg:py-36"
-      style={{
-        background: `
-          radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
-          radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-          linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 14%), hsl(150 40% 10%))
-        `,
-      }}
+      className="relative overflow-hidden py-28 lg:py-36 bg-background"
+      onMouseMove={handleMouseMove}
     >
-      {/* Decorative orbs */}
+      {/* Mouse + scroll parallax watermark */}
+      <motion.div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none"
+        style={{ x: wmarkX, y: wmarkScrollY }}
+      >
+        <span className="font-display font-black text-[15vw] text-foreground/[0.025] leading-none whitespace-nowrap tracking-tight">
+          CATEGORIES
+        </span>
+      </motion.div>
+
+      {/* Subtle accent orb */}
       <div
-        className="absolute w-[500px] h-[500px] -top-32 -left-32 rounded-full opacity-[0.08] pointer-events-none animate-orb"
-        style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
+        className="absolute -top-24 -right-24 w-[380px] h-[380px] rounded-full opacity-[0.05] pointer-events-none"
+        style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }}
       />
       <div
-        className="absolute w-[350px] h-[350px] bottom-0 right-10 rounded-full opacity-[0.06] pointer-events-none animate-orb"
-        style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)", animationDelay: "7s" }}
+        className="absolute -bottom-16 -left-16 w-[280px] h-[280px] rounded-full opacity-[0.04] pointer-events-none"
+        style={{ background: "radial-gradient(circle, hsl(140 50% 19%), transparent 70%)" }}
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
@@ -148,27 +211,27 @@ const CategoriesSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center max-w-3xl mx-auto mb-20"
+          className="max-w-2xl mb-16"
         >
-          <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
+          <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
             Product Categories
           </span>
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-5 leading-tight tracking-tight">
             Everything Your
             <br />
             <span className="text-gradient-gold">Business Needs</span>
           </h2>
-          <p className="text-primary-foreground/60 font-body text-lg leading-relaxed">
+          <p className="text-muted-foreground font-body text-lg leading-relaxed">
             We import and distribute across all major food categories — quality and variety for every business need.
           </p>
         </motion.div>
 
-        {/* Top row — 3 cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-          {categories.slice(0, 3).map((cat, i) => {
+        {/* Category rows */}
+        <div className="border-t border-border">
+          {categories.map((cat, i) => {
             const Icon = getIcon(cat.name);
             return (
-              <CategoryCard
+              <CategoryRow
                 key={cat.id}
                 name={cat.name}
                 desc={cat.description || "Premium imported products from global suppliers."}
@@ -179,38 +242,18 @@ const CategoriesSection = () => {
           })}
         </div>
 
-        {/* Bottom row — 2 cards centered */}
-        {categories.length > 3 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 sm:max-w-2xl sm:mx-auto lg:max-w-none lg:grid-cols-2 lg:px-[16.666%]">
-            {categories.slice(3, 5).map((cat, i) => {
-              const Icon = getIcon(cat.name);
-              return (
-                <CategoryCard
-                  key={cat.id}
-                  name={cat.name}
-                  desc={cat.description || "Premium imported products from global suppliers."}
-                  icon={Icon}
-                  index={i + 3}
-                />
-              );
-            })}
-          </div>
-        )}
-
         {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="text-center mt-14"
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="mt-12"
         >
           <Link to="/products">
-            <Button
-              className="bg-white/10 backdrop-blur-sm text-primary-foreground hover:bg-white/20 font-body font-semibold rounded-lg px-8 h-12 text-base transition-all duration-300 border border-white/10 hover:border-white/20 group"
-            >
+            <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body font-semibold rounded-lg px-8 h-12 text-base transition-all duration-300 group">
               View All Products
-              <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1 inline-block">→</span>
+              <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
           </Link>
         </motion.div>

@@ -47,7 +47,7 @@ const Index = () => {
         <WhyChooseUs />
       </div>
       <SectionTransition />
-      <div data-navbar-theme="dark">
+      <div data-navbar-theme="light">
         <CategoriesSection />
       </div>
       <SectionTransition />
