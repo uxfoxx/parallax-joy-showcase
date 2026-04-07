@@ -65,27 +65,15 @@ const MeetTheTeam = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-28 lg:py-36"
+      className="relative overflow-hidden py-28 lg:py-36 bg-background"
     >
-      {/* Dark gradient background */}
+      {/* Subtle light orbs */}
       <div
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
-            radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-            linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 14%), hsl(150 40% 10%))
-          `,
-        }}
-      />
-
-      {/* Animated orbs */}
-      <div
-        className="absolute w-[500px] h-[500px] -top-32 right-0 rounded-full opacity-[0.06] pointer-events-none animate-orb"
-        style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }}
+        className="absolute w-[500px] h-[500px] -top-32 right-0 rounded-full opacity-[0.04] pointer-events-none animate-orb"
+        style={{ background: "radial-gradient(circle, hsl(140 50% 19%), transparent 70%)" }}
       />
       <div
-        className="absolute w-[350px] h-[350px] bottom-20 -left-20 rounded-full opacity-[0.05] pointer-events-none animate-orb"
+        className="absolute w-[350px] h-[350px] bottom-20 -left-20 rounded-full opacity-[0.03] pointer-events-none animate-orb"
         style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)", animationDelay: "9s" }}
       />
 
@@ -98,13 +86,13 @@ const MeetTheTeam = () => {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
+          <span className="inline-block px-5 py-2 rounded-full bg-primary/10 text-primary font-body text-sm font-medium border border-primary/15 mb-8 tracking-widest uppercase">
             Our People
           </span>
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight tracking-tight">
             Meet the Team
           </h2>
-          <p className="text-primary-foreground/50 font-body text-lg leading-relaxed">
+          <p className="text-muted-foreground font-body text-lg leading-relaxed">
             Dedicated departments working together to deliver seamless supply chain solutions across Sri Lanka.
           </p>
         </motion.div>
@@ -115,7 +103,7 @@ const MeetTheTeam = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="rounded-2xl overflow-hidden border border-white/[0.08] bg-white/[0.03] flex flex-col lg:flex-row"
+          className="rounded-2xl overflow-hidden border border-border bg-card shadow-sm flex flex-col lg:flex-row"
           style={{ minHeight: 480 }}
         >
           {/* Left panel — info */}
@@ -123,10 +111,10 @@ const MeetTheTeam = () => {
             <div className="flex flex-col gap-6">
               {/* Counter */}
               <div className="flex items-center gap-3">
-                <span className="font-display text-4xl font-bold text-primary-foreground/20 tabular-nums leading-none">
+                <span className="font-display text-4xl font-bold text-foreground/15 tabular-nums leading-none">
                   {String(selectedIndex + 1).padStart(2, "0")}
                 </span>
-                <span className="font-display text-sm text-primary-foreground/30 tabular-nums">
+                <span className="font-display text-sm text-muted-foreground tabular-nums">
                   / {String(total).padStart(2, "0")}
                 </span>
               </div>
@@ -141,10 +129,10 @@ const MeetTheTeam = () => {
                     exit={{ opacity: 0, y: -16, filter: "blur(6px)" }}
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <h3 className="font-display text-2xl lg:text-3xl font-bold text-primary-foreground mb-4 leading-snug tracking-tight">
+                    <h3 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4 leading-snug tracking-tight">
                       {slide.label}
                     </h3>
-                    <p className="text-primary-foreground/55 font-body text-base leading-relaxed">
+                    <p className="text-muted-foreground font-body text-base leading-relaxed">
                       {slide.desc}
                     </p>
                   </motion.div>
@@ -156,17 +144,17 @@ const MeetTheTeam = () => {
             <div className="flex items-center gap-4 mt-8 lg:mt-0">
               <button
                 onClick={scrollPrev}
-                className="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors duration-200"
+                className="w-11 h-11 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors duration-200"
                 aria-label="Previous slide"
               >
-                <ChevronLeft className="w-5 h-5 text-primary-foreground" />
+                <ChevronLeft className="w-5 h-5 text-foreground" />
               </button>
               <button
                 onClick={scrollNext}
-                className="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors duration-200"
+                className="w-11 h-11 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors duration-200"
                 aria-label="Next slide"
               >
-                <ChevronRight className="w-5 h-5 text-primary-foreground" />
+                <ChevronRight className="w-5 h-5 text-foreground" />
               </button>
 
               {/* Dot indicators */}
@@ -178,7 +166,7 @@ const MeetTheTeam = () => {
                     className={`rounded-full transition-all duration-300 ${
                       i === selectedIndex
                         ? "w-5 h-1.5 bg-accent"
-                        : "w-1.5 h-1.5 bg-white/25 hover:bg-white/40"
+                        : "w-1.5 h-1.5 bg-border hover:bg-muted-foreground/40"
                     }`}
                     aria-label={`Go to slide ${i + 1}`}
                   />
@@ -204,8 +192,8 @@ const MeetTheTeam = () => {
                     />
                     {/* Bottom gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-                    {/* Right-edge gradient fade into left panel */}
-                    <div className="hidden lg:block absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black/40 to-transparent" />
+                    {/* Right-edge gradient fade into left panel (white bg) */}
+                    <div className="hidden lg:block absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white/60 to-transparent" />
                     {/* Department label */}
                     <div className="absolute bottom-5 left-5">
                       <span className="inline-block px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-white font-body text-xs font-medium border border-white/20 tracking-wider">
@@ -220,7 +208,7 @@ const MeetTheTeam = () => {
         </motion.div>
 
         {/* Progress bar */}
-        <div className="mt-4 h-[2px] bg-white/[0.08] rounded-full overflow-hidden">
+        <div className="mt-4 h-[2px] bg-border rounded-full overflow-hidden">
           <div
             key={selectedIndex}
             className="h-full bg-accent origin-left animate-progress-bar"
