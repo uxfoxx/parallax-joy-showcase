@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
+import Marquee from "react-fast-marquee";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -20,10 +21,9 @@ type CarouselApi = UseEmblaCarouselType[1];
 
 const MARQUEE_ITEMS = [
   "Frozen Foods", "Premium Dairy", "Grocery & Staples",
-  "Edible Oils", "Specialty Imports", "Cold Chain Certified",
+  "Edible Oils", "Specialty Imports", "Cold-Chain Certified",
   "International Brands", "B2B Distribution", "Quality Assured",
 ];
-const MARQUEE_CONTENT = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
 
 const OurProductsSection = () => {
   const { data: products = [] } = useOurProducts();
@@ -106,19 +106,31 @@ const OurProductsSection = () => {
           </div>
         </motion.div>
 
-        {/* Marquee strip */}
-        <div className="relative overflow-hidden mb-10 bg-accent/5 border-y border-accent/10 py-2.5">
-          <div className="flex gap-8 animate-marquee w-max">
-            {MARQUEE_CONTENT.map((item, i) => (
+        {/* Marquee strip — doubled rows, counter-directional for parallax-carousel feel */}
+        <div className="relative mb-10 bg-accent/5 border-y border-accent/10">
+          <Marquee speed={36} gradient gradientColor="hsl(var(--background))" gradientWidth={60} pauseOnHover className="py-2.5">
+            {MARQUEE_ITEMS.map((item, i) => (
               <span
-                key={i}
-                className="font-body text-xs font-semibold tracking-[0.18em] uppercase text-accent/70 whitespace-nowrap flex items-center gap-3"
+                key={`r1-${i}`}
+                className="font-body text-xs font-semibold tracking-[0.18em] uppercase text-accent/80 whitespace-nowrap flex items-center gap-3 mx-4"
               >
                 {item}
                 <span className="w-1 h-1 rounded-full bg-accent/30 inline-block" />
               </span>
             ))}
-          </div>
+          </Marquee>
+          <div className="h-px bg-accent/10" />
+          <Marquee speed={22} direction="right" gradient gradientColor="hsl(var(--background))" gradientWidth={60} pauseOnHover className="py-2.5">
+            {MARQUEE_ITEMS.map((item, i) => (
+              <span
+                key={`r2-${i}`}
+                className="font-body text-[11px] font-medium tracking-[0.22em] uppercase text-forest-mid/70 whitespace-nowrap flex items-center gap-3 mx-4"
+              >
+                <span className="w-1 h-1 rounded-full bg-forest-mid/30 inline-block" />
+                {item}
+              </span>
+            ))}
+          </Marquee>
         </div>
 
         {/* Carousel — px-10 md:px-14 wrapper provides clearance for absolute arrow buttons */}

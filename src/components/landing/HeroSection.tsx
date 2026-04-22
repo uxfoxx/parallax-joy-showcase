@@ -1,174 +1,161 @@
-import { useMouseGradient } from "@/hooks/useMouseGradient";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView, useMotionValue, animate } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { lineRevealVariants, softFadeUp, EASE_OUT_EXPO } from "@/lib/motion";
 
-const words = ["Sri Lanka's", "Premier", "Food Import", "&", "Distribution", "Partner"];
-const accentWords = new Set(["Premier"]);
-
-const heroSlides = [
-  {
-    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&h=760&fit=crop",
-    label: "Premium Grocery",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=500&h=760&fit=crop",
-    label: "Bonded Warehousing",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&h=760&fit=crop",
-    label: "HoReCa Supply",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=500&h=760&fit=crop",
-    label: "Island Distribution",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1601924582970-9238bcb495d6?w=500&h=760&fit=crop",
-    label: "Quality Imports",
-  },
+const headlineLines: { text: string; gold?: boolean }[] = [
+  { text: "Sri Lanka's" },
+  { text: "Premier Food Import &", gold: true },
+  { text: "Distribution Partner" },
 ];
 
-type CardPos = {
-  x: number; y: number; rotateZ: number; rotateY: number;
-  scale: number; opacity: number; zIndex: number;
-};
+// Editorial background photograph — single cinematic shot, not a carousel.
+const HERO_IMAGE =
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1920&h=1080&fit=crop&q=75";
 
-const POSITIONS: Record<string, CardPos> = {
-  center:      { x: 0,    y: 0,  rotateZ: 0,   rotateY: 0,   scale: 1,    opacity: 1,    zIndex: 10 },
-  right:       { x: 188,  y: 24, rotateZ: 10,  rotateY: 14,  scale: 0.8,  opacity: 0.78, zIndex: 5  },
-  left:        { x: -188, y: 24, rotateZ: -10, rotateY: -14, scale: 0.8,  opacity: 0.78, zIndex: 5  },
-  hiddenRight: { x: 520,  y: 60, rotateZ: 26,  rotateY: 52,  scale: 0.45, opacity: 0,    zIndex: 0  },
-  hiddenLeft:  { x: -520, y: 60, rotateZ: -26, rotateY: -52, scale: 0.45, opacity: 0,    zIndex: 0  },
-};
-
-function getCardPos(idx: number, active: number, total: number): CardPos {
-  const diff = ((idx - active) % total + total) % total;
-  if (diff === 0) return POSITIONS.center;
-  if (diff === 1) return POSITIONS.right;
-  if (diff === total - 1) return POSITIONS.left;
-  return diff <= Math.floor(total / 2) ? POSITIONS.hiddenRight : POSITIONS.hiddenLeft;
-}
-
-const HeroSection = () => {
-  const { ref, gradientStyle } = useMouseGradient();
-  const { scrollYProgress } = useScroll();
-  const contentY = useTransform(scrollYProgress, [0, 0.15], ["0px", "60px"]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
-
-  const [activeIndex, setActiveIndex] = useState(0);
-  const total = heroSlides.length;
+/** Counter-roll — motion.dev "Number trend" pattern. */
+const CountUp = ({ to, suffix = "", duration = 1.6 }: { to: number; suffix?: string; duration?: number }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-20%" });
+  const value = useMotionValue(0);
 
   useEffect(() => {
-    const t = setInterval(() => setActiveIndex(i => (i + 1) % total), 3500);
-    return () => clearInterval(t);
-  }, [total]);
+    if (!inView) return;
+    const controls = animate(value, to, {
+      duration,
+      ease: EASE_OUT_EXPO,
+      onUpdate: (v) => {
+        if (ref.current) ref.current.textContent = Math.round(v).toLocaleString() + suffix;
+      },
+    });
+    return () => controls.stop();
+  }, [inView, to, suffix, duration, value]);
+
+  return <span ref={ref}>0{suffix}</span>;
+};
+
+const HeroSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Scroll-zoom: image scales up slowly as user scrolls past the hero.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.22]);
+  const imageOpacity = useTransform(scrollYProgress, [0, 0.9], [1, 0.55]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 80]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
   return (
     <section
-      ref={(el) => { (ref as React.MutableRefObject<HTMLElement | null>).current = el; }}
-      className="relative min-h-screen overflow-hidden flex flex-col"
+      ref={sectionRef}
+      data-navbar-theme="dark"
+      className="relative min-h-screen overflow-hidden"
+      style={{ backgroundColor: "hsl(150 40% 6%)" }}
     >
-      {/* Animated gradient background — same as About hero */}
+      {/* ── Cinematic background image (scroll-zoom) ─────────── */}
+      <motion.div
+        className="absolute inset-0"
+        style={{ scale: imageScale, opacity: imageOpacity }}
+      >
+        <img
+          src={HERO_IMAGE}
+          alt=""
+          className="w-full h-full object-cover"
+          loading="eager"
+        />
+      </motion.div>
+
+      {/* Editorial dark gradient — keeps text legible over any photograph */}
       <div
-        className="absolute inset-0 animate-gradient-shift"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background: `linear-gradient(135deg, hsl(150 40% 4%), hsl(140 50% 16%), hsl(80 45% 18%), hsl(75 38% 13%), hsl(140 55% 21%), hsl(150 40% 5%), hsl(140 50% 16%))`,
-          backgroundSize: "400% 400%",
+          background:
+            "linear-gradient(180deg, hsl(150 40% 4% / 0.45) 0%, hsl(150 40% 4% / 0.70) 55%, hsl(150 40% 4% / 0.92) 100%)",
         }}
       />
 
-      {/* Grid overlay — from About page hero */}
-      <div
-        className="absolute inset-0 pointer-events-none z-[1]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-        }}
-      />
-
-      {/* Noise overlay */}
-      <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay z-[1]">
+      {/* Film grain — single subtle layer */}
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none mix-blend-overlay">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <filter id="noiseHero">
-            <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" />
+          <filter id="heroGrain">
+            <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" />
             <feColorMatrix type="saturate" values="0" />
           </filter>
-          <rect width="100%" height="100%" filter="url(#noiseHero)" />
+          <rect width="100%" height="100%" filter="url(#heroGrain)" />
         </svg>
       </div>
 
-      {/* Soft orbs */}
-      <motion.div
-        className="absolute rounded-full z-0 pointer-events-none"
-        style={{ width: 600, height: 600, top: "-15%", left: "-10%", background: "hsl(140 55% 20%)", filter: "blur(130px)", opacity: 0.45 }}
-        animate={{ x: [0, 70, -35, 0], y: [0, 45, -22, 0], scale: [1, 1.1, 0.96, 1] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute rounded-full z-0 pointer-events-none"
-        style={{ width: 400, height: 400, bottom: "15%", right: "-8%", background: "hsl(80 55% 22%)", filter: "blur(110px)", opacity: 0.25 }}
-        animate={{ x: [0, -50, 25, 0], y: [0, -30, 15, 0] }}
-        transition={{ duration: 24, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+      {/* Gold radial glow — corner flourish for continuity with /premium surfaces */}
+      <div
+        className="absolute -top-40 -right-40 w-[640px] h-[640px] rounded-full pointer-events-none opacity-20"
+        style={{
+          background: "radial-gradient(circle, hsl(75 40% 60%), transparent 65%)",
+          filter: "blur(110px)",
+        }}
       />
 
-      {/* Mouse-following gradient */}
-      <div className="absolute inset-0 z-[2] pointer-events-none" style={{ ...gradientStyle, opacity: 0.15 }} />
-
-      {/* ── Text content — centered ──────────────────────────── */}
+      {/* ── Content layer ─────────────────────────────────────── */}
       <motion.div
-        className="relative z-10 flex flex-col items-center text-center px-6 pt-24 pb-4 flex-1"
+        className="relative z-10 min-h-screen flex flex-col justify-center items-start max-w-6xl mx-auto px-6 lg:px-10 pt-28 pb-24"
         style={{ y: contentY, opacity: contentOpacity }}
       >
-        {/* Eyebrow badge */}
+        {/* Eyebrow */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/10 border border-primary-foreground/15 mb-8"
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/15 backdrop-blur-sm mb-8"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-          <span className="font-body text-xs font-medium text-primary-foreground/80 tracking-widest uppercase">
-            Est. 1994 · Sri Lanka
+          <span className="font-body text-[11px] font-semibold text-white/75 tracking-[0.28em] uppercase">
+            30+ Years · Sri Lanka
           </span>
         </motion.div>
 
-        {/* Headline — word by word */}
-        <h1 className="font-display text-4xl sm:text-5xl lg:text-[56px] xl:text-[64px] font-bold leading-[1.08] tracking-tight mb-5 max-w-3xl">
-          {words.map((word, i) => (
-            <motion.span
-              key={i}
-              className={`inline-block mr-[0.2em] ${accentWords.has(word) ? "text-gradient-gold" : "text-primary-foreground"}`}
-              initial={{ opacity: 0, y: 32, filter: "blur(6px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ duration: 0.55, delay: 0.35 + i * 0.09, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {word}
-            </motion.span>
+        {/* Headline — line-by-line clip-path mask reveal */}
+        <motion.h1
+          initial="hidden"
+          animate="show"
+          className="font-display text-5xl sm:text-6xl lg:text-[78px] xl:text-[92px] font-bold leading-[1.02] tracking-tight mb-8 max-w-[18ch]"
+        >
+          {headlineLines.map((line, i) => (
+            <span key={i} className="block overflow-hidden">
+              <motion.span
+                variants={lineRevealVariants}
+                custom={i}
+                className={`block ${line.gold ? "text-gradient-gold italic" : "text-white"}`}
+              >
+                {line.text}
+              </motion.span>
+            </span>
           ))}
-        </h1>
+        </motion.h1>
 
-        {/* Subtext */}
+        {/* Sub-copy */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
-          className="font-body text-base md:text-lg text-primary-foreground/60 leading-relaxed mb-8 max-w-lg"
+          initial="hidden"
+          animate="show"
+          custom={0.55}
+          variants={softFadeUp}
+          className="font-body text-base md:text-lg text-white/65 leading-relaxed mb-10 max-w-xl"
         >
           Connecting global producers with Sri Lankan businesses across 8+ countries — bonded warehousing, cold-chain logistics, and island-wide distribution.
         </motion.p>
 
-        {/* CTA buttons */}
+        {/* CTAs */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.05 }}
-          className="flex flex-wrap justify-center gap-3 mb-8"
+          initial="hidden"
+          animate="show"
+          custom={0.7}
+          variants={softFadeUp}
+          className="flex flex-wrap gap-3 mb-14"
         >
           <Link to="/products">
-            <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-full h-12 px-7 text-sm md:text-base transition-all duration-300 shadow-xl shadow-accent/25 group border border-white/10 shine-sweep">
+            <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-full h-12 px-7 text-sm md:text-base transition-all duration-300 shadow-xl shadow-accent/25 group border border-white/10">
               Explore Products
               <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
@@ -176,103 +163,55 @@ const HeroSection = () => {
           <Link to="/about">
             <Button
               variant="outline"
-              className="border-primary-foreground/35 bg-primary-foreground/8 text-primary-foreground hover:bg-primary-foreground/15 font-body font-semibold rounded-full h-12 px-7 text-sm md:text-base transition-all duration-300 backdrop-blur-sm"
+              className="border-white/25 bg-white/5 text-white hover:bg-white/15 font-body font-semibold rounded-full h-12 px-7 text-sm md:text-base transition-all duration-300 backdrop-blur-sm"
             >
               Our Story
             </Button>
           </Link>
         </motion.div>
 
-        {/* Mini stats strip */}
+        {/* Stats — counter-roll (motion.dev "Number trend") */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.2 }}
-          className="flex flex-wrap justify-center items-center gap-5"
+          initial="hidden"
+          animate="show"
+          custom={0.85}
+          variants={softFadeUp}
+          className="flex flex-wrap items-end gap-x-10 gap-y-5"
         >
           {[
-            { value: "500+", label: "Products" },
-            { value: "1000+", label: "Retail Partners" },
-            { value: "30+", label: "Years Experience" },
+            { value: 500, suffix: "+", label: "Products" },
+            { value: 1000, suffix: "+", label: "Retail Partners" },
+            { value: 30, suffix: "+", label: "Years Experience" },
           ].map((stat, i) => (
-            <div key={i} className="flex items-center gap-3">
-              {i > 0 && <span className="w-px h-7 bg-primary-foreground/15" />}
+            <div key={i} className="flex items-end gap-4">
+              {i > 0 && <span className="w-px h-10 bg-white/15 mb-2" />}
               <div>
-                <div className="font-display text-lg font-bold text-primary-foreground leading-none">{stat.value}</div>
-                <div className="font-body text-xs text-primary-foreground/45 mt-0.5">{stat.label}</div>
+                <div className="font-display text-3xl md:text-4xl font-bold text-white leading-none tracking-tight">
+                  <CountUp to={stat.value} suffix={stat.suffix} />
+                </div>
+                <div className="font-body text-[11px] text-white/50 tracking-[0.2em] uppercase mt-2">
+                  {stat.label}
+                </div>
               </div>
             </div>
           ))}
         </motion.div>
       </motion.div>
 
-      {/* ── Sliding card deck ────────────────────────────────── */}
+      {/* Scroll indicator */}
       <motion.div
-        className="relative z-10 flex justify-center items-end flex-shrink-0"
-        style={{ height: 300 }}
-        initial={{ opacity: 0, y: 80 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, delay: 1.4, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.6, duration: 0.6 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none"
       >
-        {/* Perspective parent — gives 3D depth to rotateY */}
-        <div
-          className="relative w-full"
-          style={{
-            maxWidth: 580,
-            height: 300,
-            perspective: "1400px",
-            perspectiveOrigin: "50% 100%",
-          }}
-        >
-          {heroSlides.map((slide, idx) => {
-            const pos = getCardPos(idx, activeIndex, total);
-            return (
-              <motion.div
-                key={idx}
-                className="absolute overflow-hidden rounded-2xl shadow-2xl cursor-pointer"
-                style={{
-                  width: 176,
-                  height: 270,
-                  left: "calc(50% - 88px)",
-                  bottom: 0,
-                  zIndex: pos.zIndex,
-                  transformStyle: "preserve-3d",
-                }}
-                initial={false}
-                animate={{
-                  x: pos.x,
-                  y: pos.y,
-                  rotateZ: pos.rotateZ,
-                  rotateY: pos.rotateY,
-                  scale: pos.scale,
-                  opacity: pos.opacity,
-                }}
-                transition={{ type: "spring", stiffness: 80, damping: 22, mass: 1.2 }}
-                onClick={() => setActiveIndex(idx)}
-              >
-                <img
-                  src={slide.image}
-                  alt={slide.label}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                {/* Bottom gradient */}
-                <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/75 to-transparent" />
-                {/* Label */}
-                <div className="absolute bottom-3 left-3 right-3">
-                  <span className="font-body text-[10px] font-semibold tracking-[0.2em] uppercase text-white/70">
-                    {slide.label}
-                  </span>
-                </div>
-                {/* Active ring */}
-                {idx === activeIndex && (
-                  <div className="absolute inset-0 rounded-2xl ring-2 ring-accent/60 ring-inset" />
-                )}
-              </motion.div>
-            );
-          })}
-        </div>
+        <span className="font-body text-[10px] text-white/45 tracking-[0.3em] uppercase">Scroll</span>
+        <motion.span
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="w-px h-8 bg-gradient-to-b from-white/45 to-transparent"
+        />
       </motion.div>
-
     </section>
   );
 };

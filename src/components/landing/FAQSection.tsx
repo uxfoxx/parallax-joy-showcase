@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import GoldHairline from "@/components/GoldHairline";
 
 const faqs = [
   { q: "What types of food products do you import?", a: "We import across five core categories: Frozen foods, Dairy products, Grocery & Staples, Edible Oils, and Specialty Imports — sourced from leading producers in Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China." },
@@ -52,9 +53,10 @@ const FAQSection = () => {
               FAQ
             </span>
             <div className="relative">
-              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
+              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-4 tracking-widest uppercase">
                 FAQs
               </span>
+              <GoldHairline width={56} delay={0.15} className="mb-6 block" />
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight tracking-tight">
                 Frequently
                 <br />
@@ -88,9 +90,12 @@ const FAQSection = () => {
                     <span className={`font-display text-sm font-bold transition-colors duration-300 shrink-0 ${openIndex === i ? "text-accent" : "text-muted-foreground/50"}`}>
                       {String(i + 1).padStart(2, "0")}.
                     </span>
-                    <span className={`font-body font-medium text-base transition-colors duration-300 ${openIndex === i ? "text-accent" : "text-foreground group-hover:text-accent"}`}>
-                      {faq.q}
-                    </span>
+                    <div className="flex flex-col gap-1.5">
+                      <span className={`font-body font-medium text-base transition-colors duration-300 ${openIndex === i ? "text-accent" : "text-foreground group-hover:text-accent"}`}>
+                        {faq.q}
+                      </span>
+                      <GoldHairline width={28} inView className="opacity-70" />
+                    </div>
                   </div>
                   <motion.span
                     animate={{ rotate: openIndex === i ? 45 : 0 }}

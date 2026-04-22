@@ -12,6 +12,7 @@ import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
+import PageHero from "@/components/PageHero";
 import ScrollFloatingElement from "@/components/landing/ScrollFloatingElement";
 import SectionTransition from "@/components/landing/SectionTransition";
 
@@ -28,7 +29,7 @@ const subjects = ["General Inquiry", "Product Inquiry", "Brand Inquiry", "Partne
 const contactInfo = [
   { icon: Mail, label: "Email", value: "info@olivefoods.lk", href: "mailto:info@olivefoods.lk" },
   { icon: Phone, label: "Phone", value: "+94 11 207 1717", href: "tel:+94112071717" },
-  { icon: MessageCircle, label: "WhatsApp", value: "+94 77 123 4567", href: "https://wa.me/94771234567" },
+  { icon: MessageCircle, label: "WhatsApp", value: "+94 11 207 1717", href: "https://wa.me/94112071717" },
   { icon: MapPin, label: "Office", value: "Colombo, Sri Lanka", href: undefined },
 ];
 
@@ -91,63 +92,11 @@ const ContactPage = () => {
       <Navbar />
       <FloatingWhatsApp />
 
-      {/* Hero */}
-      <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden min-h-[280px] flex items-center">
-          {/* Animated gradient background */}
-          <div
-            className="absolute inset-0 animate-gradient-shift"
-            style={{
-              background: `linear-gradient(135deg, hsl(150 40% 4%), hsl(140 50% 16%), hsl(80 45% 18%), hsl(75 38% 13%), hsl(140 55% 21%), hsl(150 40% 5%), hsl(140 50% 16%))`,
-              backgroundSize: "400% 400%",
-            }}
-          />
-          {/* Grid overlay */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
-              backgroundSize: "40px 40px",
-            }}
-          />
-          {/* Noise overlay */}
-          <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay">
-            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-              <filter id="noiseC"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
-              <rect width="100%" height="100%" filter="url(#noiseC)" />
-            </svg>
-          </div>
-          {/* Decorative orb */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full opacity-[0.08] pointer-events-none" style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
-
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-20 lg:py-28">
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="font-body text-xs text-primary-foreground/50 tracking-widest uppercase mb-4"
-            >
-              Olive Foods / Contact
-            </motion.p>
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight tracking-tight mb-4"
-            >
-              Get in Touch
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25, duration: 0.5 }}
-              className="font-body text-base text-primary-foreground/70 max-w-xl leading-relaxed"
-            >
-              Have questions about our products, brands, or partnership opportunities? We'd love to hear from you.
-            </motion.p>
-          </div>
-        </section>
-      </div>
+      <PageHero
+        eyebrow="Olive Foods / Contact"
+        title={<>Get in <span className="text-gradient-gold italic">touch.</span></>}
+        subtitle="Questions about our products, brands, or partnership opportunities? We'd love to hear from you."
+      />
 
       <SectionTransition />
 

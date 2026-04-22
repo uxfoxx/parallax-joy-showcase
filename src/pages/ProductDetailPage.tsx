@@ -15,9 +15,15 @@ const stagger = {
   show: { transition: { staggerChildren: 0.08 } },
 };
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
+  hidden: { opacity: 0, y: 24, filter: "blur(6px)" },
+  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
 };
+
+const Eyebrow = ({ children }: { children: React.ReactNode }) => (
+  <span className="inline-block font-body text-[10px] font-semibold tracking-[0.25em] uppercase text-accent/80 mb-3 border-b border-accent/30 pb-1">
+    {children}
+  </span>
+);
 
 const ProductDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -245,6 +251,7 @@ const ProductDetailPage = () => {
 
               {/* Description Section */}
               <motion.div className="mb-8" variants={fadeUp}>
+                <Eyebrow>Description</Eyebrow>
                 <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                   <Box className="w-4 h-4 text-accent" />
                   About this product
@@ -265,6 +272,7 @@ const ProductDetailPage = () => {
 
               {/* Specifications Section */}
               <motion.div className="mb-8" variants={fadeUp}>
+                <Eyebrow>Specifications</Eyebrow>
                 <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                   <Hash className="w-4 h-4 text-accent" />
                   Specifications
@@ -296,6 +304,7 @@ const ProductDetailPage = () => {
               {/* Tags Section */}
               {(product.tags ?? []).length > 0 && (
                 <motion.div className="mb-8" variants={fadeUp}>
+                  <Eyebrow>Highlights</Eyebrow>
                   <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-accent" />
                     Product Highlights
@@ -402,9 +411,9 @@ const ProductDetailPage = () => {
               whileInView="show"
               viewport={{ once: true }}
             >
-              {relatedProducts.map((p) => (
+              {relatedProducts.map((p, i) => (
                 <motion.div key={p.id} variants={fadeUp}>
-                  <ProductCard product={p} large />
+                  <ProductCard product={p} index={i} columns={3} />
                 </motion.div>
               ))}
             </motion.div>

@@ -134,11 +134,11 @@ const StatsSection = () => {
                   <CountValue target={stats[0].value} isInView={isInView} />{stats[0].suffix}
                 </div>
                 <div className="flex items-center gap-2 mt-2">
-                  {[1994, 2004, 2014, 2024].map((year, i) => (
-                    <div key={year} className="flex items-center gap-2 flex-1">
+                  {["Start", "Growth", "Expansion", "Today"].map((label, i) => (
+                    <div key={label} className="flex items-center gap-2 flex-1">
                       <div className="flex flex-col items-center">
                         <div className="w-3 h-3 rounded-full bg-accent/70 group-hover:bg-accent transition-colors duration-300" />
-                        <span className="text-[10px] text-primary-foreground/50 font-body mt-1.5">{year}</span>
+                        <span className="text-[10px] text-primary-foreground/50 font-body mt-1.5">{label}</span>
                       </div>
                       {i < 3 && <div className="flex-1 h-[1px] bg-white/10 group-hover:bg-accent/30 transition-colors duration-500" />}
                     </div>

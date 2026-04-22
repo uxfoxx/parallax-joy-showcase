@@ -6,6 +6,7 @@ import FeaturedProducts from "@/components/landing/FeaturedProducts";
 import OurProductsSection from "@/components/landing/OurProductsSection";
 import WhyChooseUs from "@/components/landing/WhyChooseUs";
 import CategoriesSection from "@/components/landing/CategoriesSection";
+import PremiumTeaser from "@/components/landing/PremiumTeaser";
 import StatsSection from "@/components/landing/StatsSection";
 import DarkStatsBanner from "@/components/landing/DarkStatsBanner";
 import TeamSection from "@/components/landing/TeamSection";
@@ -47,6 +48,10 @@ const Index = () => {
       <SectionTransition />
       <div data-navbar-theme="light">
         <CategoriesSection />
+      </div>
+      <SectionTransition />
+      <div data-navbar-theme="dark">
+        <PremiumTeaser />
       </div>
       <SectionTransition />
       <div data-navbar-theme="dark">

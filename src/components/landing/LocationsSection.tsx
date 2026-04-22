@@ -11,8 +11,9 @@ const contactItems = [
 
 const LocationsSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll();
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-60px", "60px"]);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-80px", "80px"]);
+  const mapY = useTransform(scrollYProgress, [0, 1], ["-24px", "24px"]);
 
   return (
     <section
@@ -68,12 +69,13 @@ const LocationsSection = () => {
 
         {/* Map with floating glassmorphism card */}
         <div className="relative">
-          {/* Full-width map */}
+          {/* Full-width map — scroll-linked vertical drift for parallax feel */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            style={{ y: mapY }}
             className="rounded-2xl overflow-hidden shadow-2xl border border-primary-foreground/15"
           >
             <iframe

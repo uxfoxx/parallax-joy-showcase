@@ -4,6 +4,7 @@ import { Search, X, SlidersHorizontal, Star } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
+import PageHero from "@/components/PageHero";
 import PaginationControls from "@/components/PaginationControls";
 import { usePagination } from "@/hooks/usePagination";
 import { Input } from "@/components/ui/input";
@@ -314,67 +315,19 @@ const ProductsPage = () => {
 
   return (
     <PageLayout>
-      {/* ── Hero ── */}
-      <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden min-h-[280px] flex items-center">
-          {/* Animated gradient background */}
-          <div
-            className="absolute inset-0 animate-gradient-shift"
-            style={{
-              background: `linear-gradient(135deg, hsl(150 40% 4%), hsl(140 50% 16%), hsl(80 45% 18%), hsl(75 38% 13%), hsl(140 55% 21%), hsl(150 40% 5%), hsl(140 50% 16%))`,
-              backgroundSize: "400% 400%",
-            }}
-          />
-          {/* Grid overlay */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
-              backgroundSize: "40px 40px",
-            }}
-          />
-          {/* Noise overlay */}
-          <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay">
-            <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-              <filter id="noiseP"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch" /><feColorMatrix type="saturate" values="0" /></filter>
-              <rect width="100%" height="100%" filter="url(#noiseP)" />
-            </svg>
-          </div>
-          {/* Decorative orb */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full opacity-[0.08] pointer-events-none" style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
-
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-20 lg:py-24">
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="font-body text-xs text-primary-foreground/50 tracking-widest uppercase mb-4"
-            >
-              Olive Foods / {showOurProducts ? "Our Products" : "All Products"}
-            </motion.p>
-            <div className="flex items-end gap-6 flex-wrap">
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight tracking-tight"
-              >
-                {showOurProducts ? "Our Products" : "All Products"}
-              </motion.h1>
-            </div>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25, duration: 0.5 }}
-              className="font-body text-base text-primary-foreground/70 max-w-xl mt-4 leading-relaxed"
-            >
-              {showOurProducts
-                ? "Our curated selection of premium food products for the Sri Lankan market."
-                : "Browse our complete catalog of premium food imports from around the world."}
-            </motion.p>
-          </div>
-        </section>
-      </div>
+      <PageHero
+        eyebrow={`Olive Foods / ${showOurProducts ? "Our Products" : "All Products"}`}
+        title={
+          showOurProducts
+            ? (<>Our <span className="text-gradient-gold italic">curated</span> selection.</>)
+            : (<>Every <span className="text-gradient-gold italic">import</span>, one catalogue.</>)
+        }
+        subtitle={
+          showOurProducts
+            ? "The range we source and distribute ourselves — quality lines built for the Sri Lankan market."
+            : "Browse the complete catalogue of premium food imports from our supplier network across the world."
+        }
+      />
 
       {/* ── Content ── */}
       <div data-navbar-theme="light">
@@ -534,8 +487,14 @@ const ProductsPage = () => {
                   transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                   className="grid sm:grid-cols-2 md:grid-cols-3 gap-5"
                 >
-                  {paginatedItems.map((product) => (
-                    <ProductCard key={product.id} product={product} large onQuickView={() => setQuickViewProduct(product)} />
+                  {paginatedItems.map((product, i) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      index={i}
+                      columns={3}
+                      onQuickView={() => setQuickViewProduct(product)}
+                    />
                   ))}
                 </motion.div>
                 <PaginationControls

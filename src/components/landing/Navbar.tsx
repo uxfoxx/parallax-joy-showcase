@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import logoSvg from "@/assets/olive-foods-logo.svg";
 
 const links = [
@@ -10,6 +10,7 @@ const links = [
   { label: "About", href: "/about" },
   { label: "Brands", href: "/brands" },
   { label: "Products", href: "/products" },
+  { label: "Premium", href: "/premium", premium: true },
 ];
 
 const Navbar = () => {
@@ -17,18 +18,6 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const location = useLocation();
-  const vibrateControls = useAnimationControls();
-
-  // Vibrate every 20s (was 8s — reduced to avoid distraction)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      vibrateControls.start({
-        x: [0, -1, 1, -0.5, 0.5, 0],
-        transition: { duration: 0.4, ease: "easeInOut" },
-      });
-    }, 20000);
-    return () => clearInterval(interval);
-  }, [vibrateControls]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -77,24 +66,29 @@ const Navbar = () => {
         transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         className="fixed top-4 left-0 right-0 z-50 mx-auto w-[calc(100%-2rem)] max-w-5xl"
       >
-        <motion.div initial={{ x: 0 }} animate={vibrateControls} className="w-full">
-          <motion.div
-            animate={{
-              paddingTop: scrolled ? 8 : 12,
-              paddingBottom: scrolled ? 8 : 12,
-            }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className={`flex items-center justify-between px-5 rounded-lg transition-all duration-500 ${barBg}`}
-          >
-            <Link to="/" className="flex items-center shrink-0">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <img
-                  src={logoSvg}
-                  alt="Olive Foods"
-                  className={`h-10 w-auto object-contain transition-all duration-500 ${isDark ? "brightness-0 invert" : ""}`}
-                />
-              </motion.div>
-            </Link>
+        <motion.div
+          animate={{
+            paddingTop: scrolled ? 8 : 12,
+            paddingBottom: scrolled ? 8 : 12,
+          }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className={`flex items-center justify-between px-5 rounded-lg transition-all duration-500 ${barBg}`}
+        >
+          <Link to="/" className="flex items-center shrink-0 group">
+            <motion.div
+              animate={{ scale: [1, 1.015, 1] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
+              className="transition-[filter] duration-500 group-hover:drop-shadow-[0_0_12px_hsl(42_80%_55%/0.5)]"
+            >
+              <img
+                src={logoSvg}
+                alt="Olive Foods"
+                className={`h-11 w-auto object-contain transition-all duration-500 ${isDark ? "brightness-0 invert" : ""}`}
+              />
+            </motion.div>
+          </Link>
 
             <div className="hidden md:flex items-center gap-1 relative">
               {links.map((link) => {
@@ -109,7 +103,7 @@ const Navbar = () => {
                     className="relative px-5 py-2.5 text-sm font-body transition-colors duration-500"
                   >
                     <span
-                      className={`relative z-10 transition-all duration-500 ${
+                      className={`relative z-10 inline-flex items-center gap-1.5 transition-all duration-500 ${
                         isActive
                           ? `font-bold ${isDark ? "text-primary-foreground" : "text-foreground"}`
                           : `font-medium ${isDark ? "text-primary-foreground/60 hover:text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`
@@ -125,6 +119,12 @@ const Navbar = () => {
                       }
                     >
                       {link.label}
+                      {link.premium && (
+                        <span className="relative flex h-1.5 w-1.5">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent" />
+                        </span>
+                      )}
                     </span>
                     {/* Animated underline indicator */}
                     {isActive && (
@@ -158,7 +158,6 @@ const Navbar = () => {
             >
               {mobileOpen ? <X size={18} /> : <Menu size={18} />}
             </motion.button>
-          </motion.div>
         </motion.div>
       </motion.nav>
 

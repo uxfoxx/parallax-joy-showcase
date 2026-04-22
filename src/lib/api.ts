@@ -118,6 +118,16 @@ export const useOurProducts = () =>
     },
   });
 
+export const usePremiumProducts = () =>
+  useQuery({
+    queryKey: ["products", "premium"],
+    queryFn: async () => {
+      const { data, error } = await (supabase.from("products").select("*, brands(*)") as any).eq("premium", true).order("name");
+      if (error) throw error;
+      return data as Product[];
+    },
+  });
+
 export const useCreateProduct = () => {
   const qc = useQueryClient();
   return useMutation({

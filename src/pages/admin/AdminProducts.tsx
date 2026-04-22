@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, Search, ImagePlus, X } from "lucide-react";
 import { toast } from "sonner";
 
-const emptyForm = { name: "", slug: "", brand_id: "", category: "", description: "", featured: false, our_product: false, tags: "" as string, origin: "", sku: "", image_url: "" };
+const emptyForm = { name: "", slug: "", brand_id: "", category: "", description: "", featured: false, our_product: false, premium: false, tags: "" as string, origin: "", sku: "", image_url: "" };
 
 const ProductImagesManager = ({ productId }: { productId: string }) => {
   const { data: images = [] } = useProductImages(productId);
@@ -86,7 +86,7 @@ const AdminProducts = () => {
   const openCreate = () => { setEditing(null); setForm(emptyForm); setOpen(true); };
   const openEdit = (p: Product) => {
     setEditing(p);
-    setForm({ name: p.name, slug: p.slug, brand_id: p.brand_id, category: p.category, description: p.description, featured: p.featured, our_product: (p as any).our_product ?? false, tags: (p.tags ?? []).join(", "), origin: p.origin, sku: p.sku, image_url: p.image_url ?? "" });
+    setForm({ name: p.name, slug: p.slug, brand_id: p.brand_id, category: p.category, description: p.description, featured: p.featured, our_product: (p as any).our_product ?? false, premium: (p as any).premium ?? false, tags: (p.tags ?? []).join(", "), origin: p.origin, sku: p.sku, image_url: p.image_url ?? "" });
     setOpen(true);
   };
 
@@ -100,6 +100,7 @@ const AdminProducts = () => {
         description: form.description,
         featured: form.featured,
         our_product: form.our_product,
+        premium: form.premium,
         tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean),
         origin: form.origin,
         sku: form.sku,
@@ -175,6 +176,13 @@ const AdminProducts = () => {
                 <Switch checked={form.our_product} onCheckedChange={(v) => setForm({ ...form, our_product: v })} />
                 <Label className="font-body">Our Product (curated selection)</Label>
               </div>
+              <div className="flex items-center gap-3">
+                <Switch checked={form.premium} onCheckedChange={(v) => setForm({ ...form, premium: v })} />
+                <Label className="font-body">Premium (gourmet / imported — concierge)</Label>
+              </div>
+              <p className="text-xs text-muted-foreground font-body -mt-2 ml-11">
+                Tip: add tag "seasonal" to feature in the Seasonal Rail (e.g. Christmas turkey).
+              </p>
               <Button onClick={handleSave} className="w-full font-body">{editing ? "Update" : "Create"}</Button>
             </div>
           </DialogContent>
@@ -196,14 +204,15 @@ const AdminProducts = () => {
               <TableHead className="font-body">Category</TableHead>
               <TableHead className="font-body">Featured</TableHead>
               <TableHead className="font-body">Our Product</TableHead>
+              <TableHead className="font-body">Premium</TableHead>
               <TableHead className="font-body w-24">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableRow><TableCell colSpan={7} className="text-center font-body text-muted-foreground py-10">Loading...</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8} className="text-center font-body text-muted-foreground py-10">Loading...</TableCell></TableRow>
             ) : filtered.length === 0 ? (
-              <TableRow><TableCell colSpan={7} className="text-center font-body text-muted-foreground py-10">No products found</TableCell></TableRow>
+              <TableRow><TableCell colSpan={8} className="text-center font-body text-muted-foreground py-10">No products found</TableCell></TableRow>
             ) : (
               filtered.map((p) => (
                 <TableRow key={p.id}>
@@ -213,6 +222,7 @@ const AdminProducts = () => {
                   <TableCell><Badge variant="outline" className="font-body text-xs">{p.category}</Badge></TableCell>
                   <TableCell>{p.featured ? <Badge className="bg-accent text-white font-body text-xs">Yes</Badge> : <span className="font-body text-muted-foreground text-xs">No</span>}</TableCell>
                   <TableCell>{(p as any).our_product ? <Badge className="bg-forest-deep text-white font-body text-xs">Yes</Badge> : <span className="font-body text-muted-foreground text-xs">No</span>}</TableCell>
+                  <TableCell>{(p as any).premium ? <Badge className="bg-accent text-white font-body text-xs">Yes</Badge> : <span className="font-body text-muted-foreground text-xs">No</span>}</TableCell>
                   <TableCell>
                     <div className="flex gap-1">
                       <Button variant="ghost" size="icon" onClick={() => openEdit(p)}><Pencil className="w-4 h-4" /></Button>

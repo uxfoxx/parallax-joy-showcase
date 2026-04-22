@@ -2,8 +2,8 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "parallax-joy-showcase",
-      "runtimeExecutable": "/usr/local/bin/npm",
+      "name": "dev",
+      "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 8080
     }

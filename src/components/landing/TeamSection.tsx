@@ -103,9 +103,9 @@ const TeamSection = () => {
           transition={{ duration: 0.6, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-white/75 font-body text-base lg:text-lg leading-relaxed max-w-lg mx-auto"
         >
-          Since 1994, Olive Foods has been Sri Lanka's bridge between global food
-          producers and local businesses — building partnerships that stand the
-          test of time.
+          For over three decades, Olive Foods has been Sri Lanka's bridge between
+          global food producers and local businesses — building partnerships that
+          stand the test of time.
         </motion.p>
       </div>
     </section>

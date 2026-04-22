@@ -182,13 +182,16 @@ const MeetTheTeam = () => {
                 {teamSlides.map((s, i) => (
                   <div
                     key={i}
-                    className="flex-[0_0_100%] relative"
+                    className="flex-[0_0_100%] relative overflow-hidden group"
                     style={{ minHeight: 320 }}
                   >
-                    <img
+                    <motion.img
                       src={s.image}
                       alt={s.label}
                       className="absolute inset-0 w-full h-full object-cover"
+                      initial={false}
+                      animate={{ scale: i === selectedIndex ? 1.08 : 1 }}
+                      transition={{ duration: 6, ease: "linear" }}
                     />
                     {/* Bottom gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />

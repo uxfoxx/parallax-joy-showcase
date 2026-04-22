@@ -1,9 +1,13 @@
 import { MessageCircle } from "lucide-react";
 
+const DEFAULT_MSG = encodeURIComponent(
+  "Hi Olive Foods, I'd like to ask about your products and services."
+);
+
 const FloatingWhatsApp = () => {
   return (
     <a
-      href="https://wa.me/94112071717"
+      href={`https://wa.me/94112071717?text=${DEFAULT_MSG}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
