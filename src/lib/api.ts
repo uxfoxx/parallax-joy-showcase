@@ -207,6 +207,84 @@ export const useDeleteProductImage = () => {
   });
 };
 
+// ─── Partner Logos ───
+export type PartnerLogo = {
+  id: string;
+  name: string;
+  image_url: string;
+  link_url: string | null;
+  display_order: number;
+  active: boolean;
+  created_at: string;
+};
+
+export const usePartnerLogos = (opts?: { onlyActive?: boolean }) =>
+  useQuery({
+    queryKey: ["partner_logos", opts?.onlyActive ?? false],
+    queryFn: async () => {
+      let q: any = supabase.from("partner_logos" as any).select("*").order("display_order");
+      if (opts?.onlyActive) q = q.eq("active", true);
+      const { data, error } = await q;
+      if (error) throw error;
+      return (data as unknown) as PartnerLogo[];
+    },
+  });
+
+export const useCreatePartnerLogo = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (logo: Omit<PartnerLogo, "id" | "created_at">) => {
+      const { data, error } = await supabase.from("partner_logos" as any).insert(logo as any).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["partner_logos"] }),
+  });
+};
+
+export const useUpdatePartnerLogo = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: Partial<PartnerLogo> & { id: string }) => {
+      const { data, error } = await supabase.from("partner_logos" as any).update(updates as any).eq("id", id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["partner_logos"] }),
+  });
+};
+
+export const useDeletePartnerLogo = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("partner_logos" as any).delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["partner_logos"] }),
+  });
+};
+
+/**
+ * Reorder: accepts an array of ids in the desired order. Issues a
+ * per-row update so each gets its new display_order. (Supabase's
+ * `upsert` on partial rows would nullify required columns; update-by-id
+ * is the safe path here.)
+ */
+export const useReorderPartnerLogos = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (orderedIds: string[]) => {
+      await Promise.all(
+        orderedIds.map((id, index) =>
+          supabase.from("partner_logos" as any).update({ display_order: index } as any).eq("id", id),
+        ),
+      );
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["partner_logos"] }),
+  });
+};
+
 // ─── Categories ───
 export const useCategories = () =>
   useQuery({

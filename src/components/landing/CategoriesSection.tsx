@@ -1,78 +1,23 @@
 import { motion, useMotionValue, useTransform, useSpring, useScroll } from "framer-motion";
-import { Snowflake, Milk, Wheat, Droplets, Sparkles, Coffee, Cookie, Fish, Beef, Apple, ShoppingBasket, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCategories } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
-import type { LucideIcon } from "lucide-react";
 import SplitText from "@/components/motion/SplitText";
 import MagneticButton from "@/components/motion/MagneticButton";
-
-const iconMap: Record<string, LucideIcon> = {
-  frozen:    Snowflake,
-  dairy:     Milk,
-  cheese:    Milk,
-  butter:    Milk,
-  oil:       Droplets,
-  flour:     Wheat,
-  grain:     Wheat,
-  rice:      Wheat,
-  pasta:     Wheat,
-  grocery:   ShoppingBasket,
-  beverage:  Coffee,
-  chocolate: Cookie,
-  pastry:    Cookie,
-  seafood:   Fish,
-  meat:      Beef,
-  fruit:     Apple,
-};
-
-const colorMap: Record<string, { iconClass: string; iconBg: string }> = {
-  frozen:    { iconClass: "text-sky-500",     iconBg: "bg-sky-50" },
-  dairy:     { iconClass: "text-amber-500",   iconBg: "bg-amber-50" },
-  cheese:    { iconClass: "text-orange-500",  iconBg: "bg-orange-50" },
-  butter:    { iconClass: "text-amber-500",   iconBg: "bg-amber-50" },
-  oil:       { iconClass: "text-lime-600",    iconBg: "bg-lime-50" },
-  flour:     { iconClass: "text-orange-400",  iconBg: "bg-orange-50" },
-  grain:     { iconClass: "text-amber-600",   iconBg: "bg-amber-50" },
-  rice:      { iconClass: "text-stone-500",   iconBg: "bg-stone-50" },
-  pasta:     { iconClass: "text-amber-600",   iconBg: "bg-amber-50" },
-  grocery:   { iconClass: "text-emerald-600", iconBg: "bg-emerald-50" },
-  beverage:  { iconClass: "text-amber-700",   iconBg: "bg-amber-50" },
-  seafood:   { iconClass: "text-sky-500",     iconBg: "bg-sky-50" },
-  meat:      { iconClass: "text-red-500",     iconBg: "bg-red-50" },
-  fruit:     { iconClass: "text-green-600",   iconBg: "bg-green-50" },
-};
-
-const getIcon = (name: string): LucideIcon => {
-  const lower = name.toLowerCase();
-  for (const [key, icon] of Object.entries(iconMap)) {
-    if (lower.includes(key)) return icon;
-  }
-  return Sparkles;
-};
-
-const getColors = (name: string) => {
-  const lower = name.toLowerCase();
-  for (const [key, colors] of Object.entries(colorMap)) {
-    if (lower.includes(key)) return colors;
-  }
-  return { iconClass: "text-accent", iconBg: "bg-accent/10" };
-};
+import CategoryArt from "@/components/art/CategoryArt";
 
 const CategoryRow = ({
   name,
   desc,
-  icon: Icon,
   index,
 }: {
   name: string;
   desc: string;
-  icon: LucideIcon;
   index: number;
 }) => {
   const [hovered, setHovered] = useState(false);
-  const { iconClass, iconBg } = getColors(name);
 
   return (
     <motion.div
@@ -127,17 +72,18 @@ const CategoryRow = ({
             </motion.p>
           </div>
 
-          {/* Icon + arrow */}
+          {/* Art + arrow */}
           <div className="flex items-center gap-3 md:gap-4 shrink-0">
             <motion.div
               animate={{
-                scale: hovered ? 1.12 : 1,
-                rotate: hovered ? 8 : 0,
+                scale: hovered ? 1.08 : 1,
+                rotate: hovered ? 4 : 0,
+                color: hovered ? "hsl(var(--accent))" : "hsl(var(--forest-mid))",
               }}
-              transition={{ type: "spring", stiffness: 280, damping: 18 }}
-              className={`w-11 h-11 rounded-xl ${iconBg} flex items-center justify-center shadow-sm`}
+              transition={{ type: "spring", stiffness: 240, damping: 18 }}
+              className="shrink-0"
             >
-              <Icon className={`w-5 h-5 ${iconClass}`} />
+              <CategoryArt name={name} className="w-12 h-12 md:w-14 md:h-14" />
             </motion.div>
             <motion.div
               animate={{ x: hovered ? 6 : 0, opacity: hovered ? 1 : 0.3 }}
@@ -231,18 +177,14 @@ const CategoriesSection = () => {
 
         {/* Category rows */}
         <div className="border-t border-border">
-          {categories.map((cat, i) => {
-            const Icon = getIcon(cat.name);
-            return (
-              <CategoryRow
-                key={cat.id}
-                name={cat.name}
-                desc={cat.description || "Premium imported products from global suppliers."}
-                icon={Icon}
-                index={i}
-              />
-            );
-          })}
+          {categories.map((cat, i) => (
+            <CategoryRow
+              key={cat.id}
+              name={cat.name}
+              desc={cat.description || "Premium imported products from global suppliers."}
+              index={i}
+            />
+          ))}
         </div>
 
         {/* CTA */}

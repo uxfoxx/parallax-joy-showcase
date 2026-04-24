@@ -1,31 +1,31 @@
 import { motion } from "framer-motion";
 import Tilt from "react-parallax-tilt";
-import { Package, Warehouse, Thermometer, Truck } from "lucide-react";
 import { staggerGrid, EASE_OUT_EXPO } from "@/lib/motion";
 import SplitText from "@/components/motion/SplitText";
 import Parallax from "@/components/motion/Parallax";
+import FeatureArt, { type FeatureArtKey } from "@/components/art/FeatureArt";
 
-const features = [
+const features: Array<{ art: FeatureArtKey; number: string; title: string; desc: string }> = [
   {
-    icon: Package,
+    art: "import",
     number: "01",
     title: "Integrated Import-to-Distribution",
     desc: "End-to-end import and brand representation services — from sourcing and customs clearance to shelf-ready distribution across Sri Lanka.",
   },
   {
-    icon: Warehouse,
+    art: "warehouse",
     number: "02",
     title: "Bonded Warehousing",
     desc: "Customs-approved bonded warehouse facilities enabling duty optimization, secure storage, and streamlined import processing.",
   },
   {
-    icon: Thermometer,
+    art: "cold",
     number: "03",
     title: "Cold-Chain Logistics",
     desc: "Temperature-controlled storage and transport at -18°C for frozen and chilled products, ensuring quality from port to point of sale.",
   },
   {
-    icon: Truck,
+    art: "distribution",
     number: "04",
     title: "Island-Wide Distribution",
     desc: "Comprehensive distribution network serving HoReCa, Modern Trade, and General Trade channels across Sri Lanka with reliable, on-time delivery.",
@@ -55,12 +55,13 @@ const FeatureCard = ({ feature: f, index: i }: { feature: typeof features[0]; in
           {f.number}
         </span>
 
-        {/* Number + icon row */}
-        <div className="flex items-center gap-3 mb-5">
+        {/* Number + art row */}
+        <div className="flex items-center gap-4 mb-5">
           <span className="font-display text-xs font-bold text-accent tracking-widest">{f.number}</span>
-          <div className="w-9 h-9 rounded-lg bg-primary-foreground/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors duration-300">
-            <f.icon className="w-4 h-4 text-accent" />
-          </div>
+          <FeatureArt
+            kind={f.art}
+            className="w-14 h-14 text-primary-foreground/75 group-hover:text-accent transition-colors duration-300"
+          />
         </div>
 
         <h3 className="font-display text-lg font-semibold text-primary-foreground mb-3 leading-snug tracking-tight">

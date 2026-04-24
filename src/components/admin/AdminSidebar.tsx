@@ -1,4 +1,4 @@
-import { LayoutDashboard, Box, Tag, Layers, LogOut, Leaf, Star, MessageSquare } from "lucide-react";
+import { LayoutDashboard, Box, Tag, Layers, LogOut, Leaf, Star, MessageSquare, Handshake } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 const items = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
   { title: "Brands", url: "/admin/brands", icon: Tag },
+  { title: "Partner Logos", url: "/admin/partners", icon: Handshake },
   { title: "Products", url: "/admin/products", icon: Box },
   { title: "Product Showcase", url: "/admin/featured", icon: Star },
   { title: "Categories", url: "/admin/categories", icon: Layers },

@@ -67,7 +67,7 @@ const AdminBrands = () => {
               <div><Label className="font-body">Slug</Label><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="auto-generated" className="font-body" /></div>
               <ImageUploadField
                 label="Brand Logo"
-                hint="Shown in the landing page 'Our Brand Partners' marquee and on the Brands page card."
+                hint="Shown on the Brands page card and on the brand detail page."
                 value={form.image_url}
                 onChange={(url) => setForm({ ...form, image_url: url })}
                 folder="brand-logos"

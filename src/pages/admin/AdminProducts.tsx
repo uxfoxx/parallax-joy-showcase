@@ -14,6 +14,10 @@ import { Plus, Pencil, Trash2, Search, ImagePlus, X, Loader2 } from "lucide-reac
 import { toast } from "sonner";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import { uploadImage } from "@/lib/upload";
+import XlsxSyncBar from "@/components/admin/XlsxSyncBar";
+import { parseBool, parseCommaList, type SheetColumn } from "@/lib/xlsxSheet";
+import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
 
 const emptyForm = { name: "", slug: "", brand_id: "", category: "", description: "", featured: false, our_product: false, premium: false, tags: "" as string, origin: "", sku: "", image_url: "" };
 
@@ -123,6 +127,36 @@ const ProductImagesManager = ({ productId }: { productId: string }) => {
   );
 };
 
+type ProductRow = {
+  sku: string;
+  name: string;
+  slug: string;
+  brand: string;
+  category: string;
+  description: string;
+  origin: string;
+  tags: string | string[];
+  featured: boolean;
+  our_product: boolean;
+  premium: boolean;
+  image_url: string;
+};
+
+const productColumns: SheetColumn<keyof ProductRow & string>[] = [
+  { key: "sku",         header: "SKU",         sample: "OLV-001" },
+  { key: "name",        header: "Name",        sample: "Extra Virgin Olive Oil 500ml" },
+  { key: "slug",        header: "Slug",        sample: "extra-virgin-olive-oil-500ml" },
+  { key: "brand",       header: "Brand",       sample: "Olive Foods" },
+  { key: "category",    header: "Category",    sample: "Oil" },
+  { key: "description", header: "Description", sample: "Cold-pressed olive oil…" },
+  { key: "origin",      header: "Origin",      sample: "Italy" },
+  { key: "tags",        header: "Tags",        sample: "organic, premium", parse: parseCommaList },
+  { key: "featured",    header: "Featured",    sample: "no",  parse: parseBool },
+  { key: "our_product", header: "Our Product", sample: "no",  parse: parseBool },
+  { key: "premium",     header: "Premium",     sample: "no",  parse: parseBool },
+  { key: "image_url",   header: "Image URL",   sample: "https://…/image.jpg" },
+];
+
 const AdminProducts = () => {
   const { data: products, isLoading } = useProducts();
   const { data: brands } = useBrands();
@@ -130,6 +164,7 @@ const AdminProducts = () => {
   const createProduct = useCreateProduct();
   const updateProduct = useUpdateProduct();
   const deleteProduct = useDeleteProduct();
+  const qc = useQueryClient();
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
@@ -180,6 +215,101 @@ const AdminProducts = () => {
     } catch (err: any) {
       toast.error(err.message);
     }
+  };
+
+  // Build export rows from current products (brand shown by name, not id).
+  const currentRows: Record<keyof ProductRow & string, unknown>[] = (products ?? []).map((p) => ({
+    sku: p.sku ?? "",
+    name: p.name,
+    slug: p.slug,
+    brand: p.brands?.name ?? "",
+    category: p.category,
+    description: (p.description ?? "").replace(/<[^>]+>/g, "").trim(), // strip HTML for readability
+    origin: p.origin ?? "",
+    tags: (p.tags ?? []).join(", "),
+    featured: p.featured ? "yes" : "no",
+    our_product: (p as any).our_product ? "yes" : "no",
+    premium: (p as any).premium ? "yes" : "no",
+    image_url: p.image_url ?? "",
+  }));
+
+  const handleXlsxUpload = async (rows: Record<string, unknown>[]) => {
+    const brandByName = new Map<string, string>();
+    (brands ?? []).forEach((b) => brandByName.set(b.name.trim().toLowerCase(), b.id));
+    const existingBySku = new Map<string, string>();
+    (products ?? []).forEach((p) => {
+      if (p.sku) existingBySku.set(String(p.sku).trim().toLowerCase(), p.id);
+    });
+
+    let created = 0;
+    let updated = 0;
+    let skipped = 0;
+    const errors: string[] = [];
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i] as Partial<ProductRow>;
+      const rowLabel = `Row ${i + 2}`; // +2 = 1 for header + 1 for 1-indexing
+      const sku = String(row.sku ?? "").trim();
+      const name = String(row.name ?? "").trim();
+      const brandName = String(row.brand ?? "").trim();
+
+      if (!sku) {
+        skipped++;
+        errors.push(`${rowLabel}: missing SKU — skipped.`);
+        continue;
+      }
+      if (!name) {
+        skipped++;
+        errors.push(`${rowLabel} (${sku}): missing Name — skipped.`);
+        continue;
+      }
+      const brand_id = brandByName.get(brandName.toLowerCase());
+      if (!brand_id) {
+        skipped++;
+        errors.push(
+          `${rowLabel} (${sku}): brand "${brandName || "—"}" not found. Add the brand first on the Brands page.`,
+        );
+        continue;
+      }
+
+      const slug = String(row.slug ?? "").trim() || name.toLowerCase().replace(/\s+/g, "-");
+      const tags = Array.isArray(row.tags)
+        ? (row.tags as string[])
+        : parseCommaList(row.tags);
+      const payload: any = {
+        sku,
+        name,
+        slug,
+        brand_id,
+        category: String(row.category ?? "").trim(),
+        description: String(row.description ?? "") || "",
+        origin: String(row.origin ?? "").trim(),
+        tags,
+        featured: !!row.featured,
+        our_product: !!row.our_product,
+        premium: !!row.premium,
+        image_url: String(row.image_url ?? "").trim() || null,
+      };
+
+      const existingId = existingBySku.get(sku.toLowerCase());
+      try {
+        if (existingId) {
+          const { error } = await supabase.from("products").update(payload).eq("id", existingId);
+          if (error) throw error;
+          updated++;
+        } else {
+          const { error } = await supabase.from("products").insert(payload);
+          if (error) throw error;
+          created++;
+        }
+      } catch (err: any) {
+        skipped++;
+        errors.push(`${rowLabel} (${sku}): ${err.message ?? "save failed"}`);
+      }
+    }
+
+    qc.invalidateQueries({ queryKey: ["products"] });
+    return { created, updated, skipped, errors };
   };
 
   return (
@@ -247,6 +377,15 @@ const AdminProducts = () => {
           </DialogContent>
         </Dialog>
       </div>
+
+      <XlsxSyncBar
+        templateFilename="products.xlsx"
+        columns={productColumns}
+        currentRows={currentRows}
+        onUpload={handleXlsxUpload}
+        description="Download to edit all products in Excel, then upload to apply changes. Rows match by SKU — unknown SKUs create new products. Brand must already exist (add brands on the Brands page)."
+        downloadLabel={products && products.length > 0 ? "Download products" : "Download sample"}
+      />
 
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />

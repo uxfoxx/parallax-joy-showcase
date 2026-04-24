@@ -1,7 +1,6 @@
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import LogoStrip from "@/components/landing/LogoStrip";
-import ScrollFloatingElement from "@/components/landing/ScrollFloatingElement";
 import FeaturedProducts from "@/components/landing/FeaturedProducts";
 import OurProductsSection from "@/components/landing/OurProductsSection";
 import WhyChooseUs from "@/components/landing/WhyChooseUs";
@@ -23,7 +22,6 @@ const Index = () => {
   return (
     <div className="smooth-scroll overflow-x-hidden">
       <ImmersiveBackground />
-      <ScrollFloatingElement />
       <Navbar />
       <FloatingWhatsApp />
       <div className="fixed bottom-5 right-[5.25rem] z-40 hidden md:block">

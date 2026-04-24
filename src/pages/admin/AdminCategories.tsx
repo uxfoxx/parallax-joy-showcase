@@ -9,12 +9,24 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { toast } from "sonner";
+import XlsxSyncBar from "@/components/admin/XlsxSyncBar";
+import type { SheetColumn } from "@/lib/xlsxSheet";
+import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
+
+type CategoryRow = { name: string; description: string };
+
+const categoryColumns: SheetColumn<keyof CategoryRow & string>[] = [
+  { key: "name",        header: "Name",        sample: "Oil" },
+  { key: "description", header: "Description", sample: "Cooking and finishing oils." },
+];
 
 const AdminCategories = () => {
   const { data: categories, isLoading } = useCategories();
   const createCategory = useCreateCategory();
   const updateCategory = useUpdateCategory();
   const deleteCategory = useDeleteCategory();
+  const qc = useQueryClient();
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Category | null>(null);
@@ -67,6 +79,43 @@ const AdminCategories = () => {
           </DialogContent>
         </Dialog>
       </div>
+
+      <XlsxSyncBar
+        templateFilename="categories.xlsx"
+        columns={categoryColumns}
+        currentRows={(categories ?? []).map((c) => ({ name: c.name, description: c.description ?? "" }))}
+        downloadLabel={categories && categories.length > 0 ? "Download categories" : "Download sample"}
+        description="Rows match by Name — unknown names create new categories, existing ones get their description updated."
+        onUpload={async (rows) => {
+          const existing = new Map<string, string>();
+          (categories ?? []).forEach((c) => existing.set(c.name.trim().toLowerCase(), c.id));
+          let created = 0; let updated = 0; let skipped = 0;
+          const errors: string[] = [];
+          for (let i = 0; i < rows.length; i++) {
+            const r = rows[i] as Partial<CategoryRow>;
+            const name = String(r.name ?? "").trim();
+            if (!name) { skipped++; errors.push(`Row ${i + 2}: missing Name — skipped.`); continue; }
+            const description = r.description ? String(r.description) : null;
+            const id = existing.get(name.toLowerCase());
+            try {
+              if (id) {
+                const { error } = await supabase.from("categories").update({ name, description }).eq("id", id);
+                if (error) throw error;
+                updated++;
+              } else {
+                const { error } = await supabase.from("categories").insert({ name, description });
+                if (error) throw error;
+                created++;
+              }
+            } catch (err: any) {
+              skipped++;
+              errors.push(`Row ${i + 2} (${name}): ${err.message ?? "save failed"}`);
+            }
+          }
+          qc.invalidateQueries({ queryKey: ["categories"] });
+          return { created, updated, skipped, errors };
+        }}
+      />
 
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />

@@ -22,6 +22,7 @@ import AdminProducts from "./pages/admin/AdminProducts.tsx";
 import AdminCategories from "./pages/admin/AdminCategories.tsx";
 import AdminFeatured from "./pages/admin/AdminFeatured.tsx";
 import AdminSubmissions from "./pages/admin/AdminSubmissions.tsx";
+import AdminPartners from "./pages/admin/AdminPartners.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
 
@@ -61,6 +62,7 @@ const AppRoutes = () => {
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="brands" element={<AdminBrands />} />
+              <Route path="partners" element={<AdminPartners />} />
               <Route path="products" element={<AdminProducts />} />
               <Route path="categories" element={<AdminCategories />} />
               <Route path="featured" element={<AdminFeatured />} />
