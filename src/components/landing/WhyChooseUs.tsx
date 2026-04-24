@@ -50,10 +50,31 @@ const FeatureCard = ({ feature: f, index: i }: { feature: typeof features[0]; in
       transitionSpeed={900}
     >
       <div className="group relative p-6 rounded-xl border-l-2 border-l-primary-foreground/15 hover:border-l-accent border border-primary-foreground/8 hover:border-primary-foreground/15 bg-primary-foreground/[0.04] hover:bg-primary-foreground/[0.07] transition-all duration-300 cursor-default overflow-hidden">
-        {/* Background number decoration */}
-        <span className="absolute -top-4 -right-2 font-display text-8xl font-black text-primary-foreground/[0.04] select-none pointer-events-none leading-none">
-          {f.number}
-        </span>
+        {/* Decorative corner pattern — concentric arcs + dots, hand-drawn
+            feel matching CategoryArt/FeatureArt. Lifts to gold on hover. */}
+        <svg
+          viewBox="0 0 140 140"
+          aria-hidden
+          className="absolute -top-6 -right-6 w-36 h-36 text-primary-foreground/[0.07] group-hover:text-accent/25 transition-colors duration-500 select-none pointer-events-none"
+          style={{ transform: `rotate(${i * 12}deg)` }}
+        >
+          <g fill="none" stroke="currentColor" strokeWidth="1">
+            {/* Quarter-arcs anchored to the top-right corner */}
+            <path d="M 140 40 A 100 100 0 0 0 40 140" />
+            <path d="M 140 70 A 70 70 0 0 0 70 140" />
+            <path d="M 140 100 A 40 40 0 0 0 100 140" />
+          </g>
+          <g fill="currentColor">
+            {/* Scattered dots along/between the arcs */}
+            <circle cx="124" cy="56" r="1.4" />
+            <circle cx="108" cy="88" r="1.4" />
+            <circle cx="82" cy="118" r="1.4" />
+            <circle cx="58" cy="124" r="1.2" />
+            <circle cx="118" cy="118" r="1.2" />
+            <circle cx="96" cy="46" r="1" />
+            <circle cx="132" cy="92" r="1" />
+          </g>
+        </svg>
 
         {/* Number + art row */}
         <div className="flex items-center gap-4 mb-5">
