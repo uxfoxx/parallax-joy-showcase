@@ -2,6 +2,16 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import logoSvg from "@/assets/olive-foods-logo.svg";
+import { EASE_OUT_EXPO } from "@/lib/motion";
+
+const columnVariants = {
+  hidden: { opacity: 0, y: 28 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.1, ease: EASE_OUT_EXPO },
+  }),
+};
 
 const quickLinks = [
   { label: "About", href: "/about" },
@@ -31,14 +41,13 @@ const Footer = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-10%" }}
           className="grid md:grid-cols-[1.5fr_1fr_1fr] gap-16 items-start"
         >
           {/* Brand */}
-          <div className="space-y-5">
+          <motion.div custom={0} variants={columnVariants} className="space-y-5">
             <div className="flex items-center gap-3">
               <img
                 src={logoSvg}
@@ -65,10 +74,10 @@ const Footer = () => {
                 +94 11 207 1717
               </a>
             </p>
-          </div>
+          </motion.div>
 
           {/* Quick Links */}
-          <div>
+          <motion.div custom={1} variants={columnVariants}>
             <h4 className="font-body text-sm font-semibold text-primary-foreground mb-5 tracking-widest uppercase">
               Quick Links
             </h4>
@@ -87,10 +96,10 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Follow */}
-          <div>
+          <motion.div custom={2} variants={columnVariants}>
             <h4 className="font-body text-sm font-semibold text-primary-foreground mb-5 tracking-widest uppercase">
               Follow
             </h4>
@@ -109,7 +118,7 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
         </motion.div>
 
         <motion.div

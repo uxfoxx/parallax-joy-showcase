@@ -1,17 +1,36 @@
+import { motion, useScroll, useTransform } from "framer-motion";
+
 const ImmersiveBackground = () => {
+  const { scrollYProgress } = useScroll();
+  // Scroll-linked hue/opacity shift so dark→light section swaps feel continuous
+  const hueOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 0.35, 0.35, 0]);
+  const hueY = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
+
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
       <div
         className="absolute inset-0"
         style={{
-          background: `linear-gradient(180deg, 
-            hsl(150 40% 6%) 0%, 
-            hsl(150 40% 8%) 20%, 
-            hsl(140 50% 10%) 40%, 
-            hsl(150 40% 8%) 60%, 
-            hsl(150 40% 6%) 80%, 
+          background: `linear-gradient(180deg,
+            hsl(150 40% 6%) 0%,
+            hsl(150 40% 8%) 20%,
+            hsl(140 50% 10%) 40%,
+            hsl(150 40% 8%) 60%,
+            hsl(150 40% 6%) 80%,
             hsl(150 40% 5%) 100%
           )`,
+        }}
+      />
+
+      {/* Scroll-linked gold bloom column — fades in mid-scroll for continuity */}
+      <motion.div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-[140vh] mix-blend-screen"
+        style={{
+          opacity: hueOpacity,
+          y: hueY,
+          background:
+            "radial-gradient(ellipse 60% 40% at 50% 50%, hsl(75 42% 45% / 0.14), transparent 70%)",
         }}
       />
 

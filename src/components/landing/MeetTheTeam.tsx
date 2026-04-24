@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import SplitText from "@/components/motion/SplitText";
 
 const teamSlides = [
   {
@@ -90,7 +91,7 @@ const MeetTheTeam = () => {
             Our People
           </span>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight tracking-tight">
-            Meet the Team
+            <SplitText text="Meet the Team" by="word" stagger={0.05} as="span" />
           </h2>
           <p className="text-muted-foreground font-body text-lg leading-relaxed">
             Dedicated departments working together to deliver seamless supply chain solutions across Sri Lanka.

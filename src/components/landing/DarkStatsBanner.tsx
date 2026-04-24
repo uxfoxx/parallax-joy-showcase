@@ -1,6 +1,6 @@
-import { useInView } from "@/hooks/useInView";
-import { useCountUp } from "@/hooks/useCountUp";
 import { motion } from "framer-motion";
+import CountUp from "@/components/motion/CountUp";
+import Parallax from "@/components/motion/Parallax";
 
 const bannerStats = [
   { value: 500, suffix: "+", label: "Products Distributed" },
@@ -10,20 +10,25 @@ const bannerStats = [
 ];
 
 const DarkStatsBanner = () => {
-  const { ref: inViewRef, isInView } = useInView();
-
   return (
     <section
-      ref={inViewRef as React.RefObject<HTMLElement>}
       className="relative bg-background py-24 border-y border-border overflow-hidden"
     >
       {/* Animated gradient background */}
       <div className="absolute inset-0 animate-gradient-shift opacity-[0.07]" style={{ background: "linear-gradient(135deg, hsl(150 40% 8%), hsl(140 55% 20%), hsl(80 50% 22%), hsl(75 42% 28%), hsl(80 50% 18%), hsl(140 50% 15%), hsl(150 40% 8%))", backgroundSize: "400% 400%" }} />
 
+      {/* Parallax decorative orbs for depth */}
+      <Parallax strength={60} className="absolute -top-24 -right-16 w-[360px] h-[360px] rounded-full opacity-[0.06] pointer-events-none">
+        <div className="w-full h-full rounded-full" style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)" }} />
+      </Parallax>
+      <Parallax strength={90} reverse className="absolute -bottom-20 -left-10 w-[300px] h-[300px] rounded-full opacity-[0.05] pointer-events-none">
+        <div className="w-full h-full rounded-full" style={{ background: "radial-gradient(circle, hsl(140 50% 19%), transparent 70%)" }} />
+      </Parallax>
+
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-4">
           {bannerStats.map((stat, i) => (
-            <BannerStat key={stat.label} stat={stat} isInView={isInView} index={i} isLast={i === bannerStats.length - 1} />
+            <BannerStat key={stat.label} stat={stat} index={i} />
           ))}
         </div>
       </div>
@@ -33,9 +38,7 @@ const DarkStatsBanner = () => {
 
 type StatType = typeof bannerStats[0];
 
-const BannerStat = ({ stat, isInView, index, isLast }: { stat: StatType; isInView: boolean; index: number; isLast: boolean }) => {
-  const count = useCountUp(stat.value, isInView, 2500);
-
+const BannerStat = ({ stat, index }: { stat: StatType; index: number }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -64,7 +67,7 @@ const BannerStat = ({ stat, isInView, index, isLast }: { stat: StatType; isInVie
         className="w-8 h-[2px] bg-accent rounded-full mb-3 mx-auto sm:mx-0 origin-left"
       />
       <div className="font-display text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-none">
-        {stat.isText ? stat.displayText : <>{count}{stat.suffix}</>}
+        {stat.isText ? stat.displayText : <CountUp to={stat.value} suffix={stat.suffix} duration={2.5} />}
       </div>
       <p className="text-muted-foreground font-body text-xs mt-3 tracking-[0.15em] uppercase">{stat.label}</p>
     </motion.div>

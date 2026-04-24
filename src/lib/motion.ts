@@ -1,4 +1,5 @@
-import type { Variants, Transition } from "framer-motion";
+import { useScroll, useTransform, type Variants, type Transition, type MotionValue } from "framer-motion";
+import { type RefObject } from "react";
 
 export const EASE_OUT_EXPO: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -41,3 +42,48 @@ export const pathDrawTransition: Transition = {
   duration: 1.2,
   ease: EASE_OUT_EXPO,
 };
+
+/**
+ * Curtain reveal (motion.dev "Image Reveal"): clip-path opens top → bottom.
+ * Pair with `whileInView="show"` + `viewport={{ once: true }}`.
+ */
+export const curtainRevealVariants: Variants = {
+  hidden: { clipPath: "inset(0 0 100% 0)", scale: 1.08 },
+  show: {
+    clipPath: "inset(0 0 0% 0)",
+    scale: 1,
+    transition: { duration: 1.1, ease: EASE_OUT_EXPO },
+  },
+};
+
+/** Cursor-spotlight radial overlay — fades/scales in on mount. */
+export const cursorSpotlightVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 1.2, ease: EASE_OUT_EXPO },
+  },
+};
+
+/** Double-chevron scroll cue morph loop. */
+export const chevronLoop: Transition = {
+  duration: 1.8,
+  repeat: Infinity,
+  ease: "easeInOut",
+};
+
+/**
+ * useParallaxRange — wraps `useScroll` + `useTransform` so sections don't
+ * respell the pattern. Returns a `MotionValue<number>` in px.
+ *
+ * offset defaults to ["start end", "end start"] (enter → leave viewport).
+ */
+export function useParallaxRange(
+  ref: RefObject<HTMLElement>,
+  range: [number, number] = [-80, 80],
+  offset: ["start end" | "start start", "end start" | "end end"] = ["start end", "end start"]
+): MotionValue<number> {
+  const { scrollYProgress } = useScroll({ target: ref, offset });
+  return useTransform(scrollYProgress, [0, 1], range);
+}

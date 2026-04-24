@@ -5,6 +5,8 @@ import { useCategories } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
+import SplitText from "@/components/motion/SplitText";
+import MagneticButton from "@/components/motion/MagneticButton";
 
 const iconMap: Record<string, LucideIcon> = {
   frozen:    Snowflake,
@@ -217,9 +219,10 @@ const CategoriesSection = () => {
             Product Categories
           </span>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-5 leading-tight tracking-tight">
-            Everything Your
-            <br />
-            <span className="text-gradient-gold">Business Needs</span>
+            <SplitText text="Everything Your" by="word" stagger={0.05} as="span" className="block" />
+            <span className="text-gradient-gold block">
+              <SplitText text="Business Needs" by="word" stagger={0.05} delay={0.15} as="span" />
+            </span>
           </h2>
           <p className="text-muted-foreground font-body text-lg leading-relaxed">
             We import and distribute across all major food categories — quality and variety for every business need.
@@ -250,12 +253,14 @@ const CategoriesSection = () => {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="mt-12"
         >
-          <Link to="/products">
-            <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body font-semibold rounded-lg px-8 h-12 text-base transition-all duration-300 group">
-              View All Products
-              <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </Button>
-          </Link>
+          <MagneticButton>
+            <Link to="/products">
+              <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body font-semibold rounded-lg px-8 h-12 text-base transition-all duration-300 group">
+                View All Products
+                <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          </MagneticButton>
         </motion.div>
       </div>
     </section>

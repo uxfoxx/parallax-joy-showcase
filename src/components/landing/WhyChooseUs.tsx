@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import Tilt from "react-parallax-tilt";
 import { Package, Warehouse, Thermometer, Truck } from "lucide-react";
 import { staggerGrid, EASE_OUT_EXPO } from "@/lib/motion";
+import SplitText from "@/components/motion/SplitText";
+import Parallax from "@/components/motion/Parallax";
 
 const features = [
   {
@@ -94,6 +96,20 @@ const WhyChooseUs = () => {
       <div className="absolute w-[300px] h-[300px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.04] pointer-events-none animate-orb"
         style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)", animationDelay: "13s" }} />
 
+      {/* Parallax SVG arc for depth */}
+      <Parallax strength={80} className="absolute inset-x-0 top-0 pointer-events-none">
+        <svg viewBox="0 0 1200 300" className="w-full h-auto opacity-[0.06]" aria-hidden>
+          <defs>
+            <linearGradient id="arcGrad" x1="0" x2="1">
+              <stop offset="0%" stopColor="hsl(75 40% 60%)" stopOpacity="0" />
+              <stop offset="50%" stopColor="hsl(75 40% 60%)" stopOpacity="1" />
+              <stop offset="100%" stopColor="hsl(75 40% 60%)" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <path d="M 0 250 Q 600 0 1200 250" stroke="url(#arcGrad)" strokeWidth="2" fill="none" />
+        </svg>
+      </Parallax>
+
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
         {/* Header */}
         <motion.div
@@ -107,9 +123,8 @@ const WhyChooseUs = () => {
             Why Choose Us
           </span>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
-            Your Complete FMCG
-            <br />
-            Distribution Partner
+            <SplitText text="Your Complete FMCG" by="word" stagger={0.05} as="span" className="block" />
+            <SplitText text="Distribution Partner" by="word" stagger={0.05} delay={0.18} as="span" className="block" />
           </h2>
           <p className="text-primary-foreground/70 font-body text-lg leading-relaxed">
             Three decades of experience in import, warehousing, and distribution — built on strong global supplier relationships.

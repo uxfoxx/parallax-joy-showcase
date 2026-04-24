@@ -6,6 +6,7 @@ import { ArrowRight, Calendar, Handshake, Globe, GitBranch } from "lucide-react"
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useCallback, useRef, useState } from "react";
+import MagneticButton from "@/components/motion/MagneticButton";
 
 const stats = [
   { value: 30, suffix: "+", label: "Years of Experience", icon: Calendar, featured: true },
@@ -104,14 +105,14 @@ const StatsSection = () => {
             <p className="text-primary-foreground/60 font-body text-lg leading-relaxed max-w-lg">
               Over 30 years of importing excellence, connecting global suppliers with Sri Lankan businesses. Sourcing from Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China.
             </p>
-            <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}>
+            <MagneticButton>
               <Link to="/products">
                 <Button className="bg-white/10 backdrop-blur-sm text-primary-foreground hover:bg-white/20 font-body font-semibold rounded-lg px-8 h-12 text-base transition-all duration-300 border border-white/10 hover:border-white/20 group">
                   View Products
                   <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-2" />
                 </Button>
               </Link>
-            </motion.div>
+            </MagneticButton>
           </motion.div>
 
           {/* Right — Bento Grid */}

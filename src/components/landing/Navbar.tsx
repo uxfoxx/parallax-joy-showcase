@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 import logoSvg from "@/assets/olive-foods-logo.svg";
 
 const links = [
@@ -18,6 +18,10 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const location = useLocation();
+
+  const { scrollY } = useScroll();
+  const blurPx = useTransform(scrollY, [0, 120], [6, 16]);
+  const backdrop = useMotionTemplate`blur(${blurPx}px) saturate(140%)`;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -55,8 +59,8 @@ const Navbar = () => {
   const isDark = theme === "dark";
 
   const barBg = isDark
-    ? `bg-forest-deep/85 backdrop-blur-xl border border-primary-foreground/10 ${scrolled ? "shadow-xl shadow-black/20" : ""}`
-    : `bg-background/90 backdrop-blur-xl border border-border/50 ${scrolled ? "shadow-lg shadow-black/8" : "shadow-md"}`;
+    ? `bg-forest-deep/85 border border-primary-foreground/10 ${scrolled ? "shadow-xl shadow-black/20" : ""}`
+    : `bg-background/90 border border-border/50 ${scrolled ? "shadow-lg shadow-black/8" : "shadow-md"}`;
 
   return (
     <>
@@ -72,6 +76,7 @@ const Navbar = () => {
             paddingBottom: scrolled ? 8 : 12,
           }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          style={{ backdropFilter: backdrop, WebkitBackdropFilter: backdrop as unknown as string }}
           className={`flex items-center justify-between px-5 rounded-lg transition-all duration-500 ${barBg}`}
         >
           <Link to="/" className="flex items-center shrink-0 group">

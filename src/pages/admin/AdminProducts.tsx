@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useProducts, useBrands, useCategories, useCreateProduct, useUpdateProduct, useDeleteProduct, useProductImages, useAddProductImage, useDeleteProductImage, type Product } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,8 +10,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, Search, ImagePlus, X } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, ImagePlus, X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import ImageUploadField from "@/components/admin/ImageUploadField";
+import { uploadImage } from "@/lib/upload";
 
 const emptyForm = { name: "", slug: "", brand_id: "", category: "", description: "", featured: false, our_product: false, premium: false, tags: "" as string, origin: "", sku: "", image_url: "" };
 
@@ -20,8 +22,10 @@ const ProductImagesManager = ({ productId }: { productId: string }) => {
   const addImage = useAddProductImage();
   const deleteImage = useDeleteProductImage();
   const [newUrl, setNewUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
-  const handleAdd = async () => {
+  const handleAddUrl = async () => {
     if (!newUrl.trim()) return;
     try {
       await addImage.mutateAsync({ product_id: productId, image_url: newUrl.trim(), sort_order: images.length });
@@ -29,6 +33,23 @@ const ProductImagesManager = ({ productId }: { productId: string }) => {
       toast.success("Image added");
     } catch (err: any) {
       toast.error(err.message);
+    }
+  };
+
+  const handlePickFiles = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    try {
+      let sort = images.length;
+      for (const file of Array.from(files)) {
+        const url = await uploadImage(file, `product-gallery/${productId}`);
+        await addImage.mutateAsync({ product_id: productId, image_url: url, sort_order: sort++ });
+      }
+      toast.success(files.length === 1 ? "Image added" : `${files.length} images added`);
+    } catch (err: any) {
+      toast.error(err.message ?? "Upload failed");
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -44,12 +65,45 @@ const ProductImagesManager = ({ productId }: { productId: string }) => {
   return (
     <div className="space-y-3">
       <Label className="font-body">Additional Images</Label>
-      <div className="flex gap-2">
-        <Input value={newUrl} onChange={(e) => setNewUrl(e.target.value)} placeholder="https://..." className="font-body flex-1" />
-        <Button type="button" size="sm" onClick={handleAdd} className="gap-1 shrink-0">
-          <ImagePlus className="w-4 h-4" /> Add
+      <p className="font-body text-xs text-muted-foreground -mt-1">
+        Shown in the product-detail gallery. Upload multiple at once.
+      </p>
+
+      <input
+        ref={fileRef}
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        multiple
+        onChange={(e) => {
+          handlePickFiles(e.target.files);
+          e.target.value = "";
+        }}
+        className="hidden"
+      />
+      <div className="flex flex-wrap gap-2">
+        <Button
+          type="button"
+          size="sm"
+          onClick={() => fileRef.current?.click()}
+          disabled={uploading}
+          className="gap-1 shrink-0"
+        >
+          {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImagePlus className="w-4 h-4" />}
+          {uploading ? "Uploading…" : "Upload files"}
         </Button>
+        <div className="flex gap-2 flex-1 min-w-[240px]">
+          <Input
+            value={newUrl}
+            onChange={(e) => setNewUrl(e.target.value)}
+            placeholder="…or paste an external URL"
+            className="font-body flex-1"
+          />
+          <Button type="button" size="sm" variant="outline" onClick={handleAddUrl} className="shrink-0">
+            Add URL
+          </Button>
+        </div>
       </div>
+
       {images.length > 0 && (
         <div className="grid grid-cols-4 gap-2">
           {images.map((img) => (
@@ -160,9 +214,14 @@ const AdminProducts = () => {
                 <div><Label className="font-body">Origin</Label><Input value={form.origin} onChange={(e) => setForm({ ...form, origin: e.target.value })} className="font-body" /></div>
                 <div><Label className="font-body">SKU</Label><Input value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })} className="font-body" /></div>
               </div>
-              <div><Label className="font-body">Main Image URL</Label><Input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} className="font-body" placeholder="https://..." />
-                {form.image_url && <img src={form.image_url} alt="Preview" className="mt-2 h-20 w-20 object-cover rounded-lg border border-border" />}
-              </div>
+              <ImageUploadField
+                label="Main Image"
+                hint="Primary image shown in product listings, cards, and the product detail hero."
+                value={form.image_url}
+                onChange={(url) => setForm({ ...form, image_url: url })}
+                folder="product-images"
+                previewClassName="h-20 w-20"
+              />
               
               {/* Multi-image manager only shown when editing */}
               {editing && <ProductImagesManager productId={editing.id} />}
@@ -178,10 +237,10 @@ const AdminProducts = () => {
               </div>
               <div className="flex items-center gap-3">
                 <Switch checked={form.premium} onCheckedChange={(v) => setForm({ ...form, premium: v })} />
-                <Label className="font-body">Premium (gourmet / imported — concierge)</Label>
+                <Label className="font-body">Premium (appears on the /premium page)</Label>
               </div>
               <p className="text-xs text-muted-foreground font-body -mt-2 ml-11">
-                Tip: add tag "seasonal" to feature in the Seasonal Rail (e.g. Christmas turkey).
+                Premium products show on the dedicated Premium page AND in the main Products catalogue. Add tag "seasonal" to also feature in the Seasonal Rail.
               </p>
               <Button onClick={handleSave} className="w-full font-body">{editing ? "Update" : "Create"}</Button>
             </div>

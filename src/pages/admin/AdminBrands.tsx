@@ -9,6 +9,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { toast } from "sonner";
+import ImageUploadField from "@/components/admin/ImageUploadField";
 
 const emptyBrand = { name: "", slug: "", description: "", origin: "", established: undefined as number | undefined, image_url: "" };
 
@@ -64,9 +65,14 @@ const AdminBrands = () => {
             <div className="space-y-4">
               <div><Label className="font-body">Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="font-body" /></div>
               <div><Label className="font-body">Slug</Label><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="auto-generated" className="font-body" /></div>
-              <div><Label className="font-body">Image URL</Label><Input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} className="font-body" placeholder="https://..." />
-                {form.image_url && <img src={form.image_url} alt="Preview" className="mt-2 h-20 w-20 object-cover rounded-lg border border-border" />}
-              </div>
+              <ImageUploadField
+                label="Brand Logo"
+                hint="Shown in the landing page 'Our Brand Partners' marquee and on the Brands page card."
+                value={form.image_url}
+                onChange={(url) => setForm({ ...form, image_url: url })}
+                folder="brand-logos"
+                previewClassName="h-20 w-20"
+              />
               <div><Label className="font-body">Description</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="font-body" /></div>
               <div className="grid grid-cols-2 gap-4">
                 <div><Label className="font-body">Origin</Label><Input value={form.origin} onChange={(e) => setForm({ ...form, origin: e.target.value })} className="font-body" /></div>

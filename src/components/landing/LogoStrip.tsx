@@ -1,64 +1,57 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { Link } from "react-router-dom";
+import SplitText from "@/components/motion/SplitText";
+import MarqueeRow from "@/components/motion/MarqueeRow";
+import { useBrands } from "@/lib/api";
 
-const logos = ["AZIZAA", "Hungritos", "Fletcher", "Granoro", "Daily Dairy", "Snorre Foods", "Wai Wai", "Royal Arm"];
-
+/**
+ * "Our Brand Partners" — velocity-reactive marquee of real brand logos.
+ * Logos are unified with `brightness-0 invert opacity-70` so disparate
+ * colored marks read as a coherent set against the dark forest background.
+ */
 const LogoStrip = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll();
-  const { scrollYProgress: sectionProgress } = useScroll();
-
-  const splitGap = useTransform(scrollYProgress, [0.08, 0.17, 0.27], [0, 250, 0]);
-  const leftShift = useTransform(scrollYProgress, [0.08, 0.17, 0.27], [0, -60, 0]);
-  const rightShift = useTransform(scrollYProgress, [0.08, 0.17, 0.27], [0, 60, 0]);
-  const verticalBounce = useTransform(scrollYProgress, [0.08, 0.14, 0.20, 0.27], [0, -8, 8, 0]);
-
-  const allLogos = [...logos, ...logos, ...logos, ...logos];
-  const half = Math.floor(allLogos.length / 2);
-  const leftLogos = allLogos.slice(0, half);
-  const rightLogos = allLogos.slice(half);
+  const { data: brands = [] } = useBrands();
 
   return (
-    <section ref={sectionRef} className="relative py-16 overflow-hidden">
+    <section className="relative py-16 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+        <SplitText
+          text="Our Brand Partners"
+          by="letter"
+          stagger={0.025}
+          as="p"
           className="text-center text-primary-foreground/40 font-body text-sm uppercase tracking-[0.25em] mb-10"
-        >
-          Our Brand Partners
-        </motion.p>
+        />
       </div>
 
       <div className="relative">
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-forest-deep/80 to-transparent z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-forest-deep/80 to-transparent z-10" />
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-forest-deep/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-forest-deep/80 to-transparent z-10 pointer-events-none" />
 
-        <motion.div className="flex items-center justify-center" style={{ y: verticalBounce }}>
-          <motion.div className="flex animate-marquee" style={{ x: leftShift }}>
-            {leftLogos.map((logo, i) => (
-              <div key={`l-${i}`} className="flex-shrink-0 mx-10 flex items-center justify-center h-12 px-8">
-                <span className="font-display text-xl font-bold text-primary-foreground/20 hover:text-primary-foreground/50 transition-colors duration-300 whitespace-nowrap">
-                  {logo}
-                </span>
-              </div>
+        {brands.length > 0 && (
+          <MarqueeRow baseVelocity={30} direction={-1} repeat={3}>
+            {brands.map((brand) => (
+              <Link
+                key={brand.id}
+                to={`/brands/${brand.slug}`}
+                aria-label={brand.name}
+                className="group flex-shrink-0 flex items-center justify-center h-16 md:h-20 px-8 md:px-10"
+              >
+                {brand.image_url ? (
+                  <img
+                    src={brand.image_url}
+                    alt={`${brand.name} logo`}
+                    loading="lazy"
+                    className="h-full w-auto max-w-[180px] object-contain filter brightness-0 invert opacity-70 group-hover:opacity-100 transition-all duration-500 group-hover:scale-[1.04]"
+                  />
+                ) : (
+                  <span className="font-display text-xl font-bold text-primary-foreground/30 group-hover:text-primary-foreground/80 transition-colors duration-300 whitespace-nowrap">
+                    {brand.name}
+                  </span>
+                )}
+              </Link>
             ))}
-          </motion.div>
-
-          <motion.div className="hidden md:block flex-shrink-0" style={{ width: splitGap }} />
-
-          <motion.div className="flex animate-marquee" style={{ x: rightShift }}>
-            {rightLogos.map((logo, i) => (
-              <div key={`r-${i}`} className="flex-shrink-0 mx-10 flex items-center justify-center h-12 px-8">
-                <span className="font-display text-xl font-bold text-primary-foreground/20 hover:text-primary-foreground/50 transition-colors duration-300 whitespace-nowrap">
-                  {logo}
-                </span>
-              </div>
-            ))}
-          </motion.div>
-        </motion.div>
+          </MarqueeRow>
+        )}
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import GoldHairline from "@/components/GoldHairline";
+import SplitText from "@/components/motion/SplitText";
 
 const faqs = [
   { q: "What types of food products do you import?", a: "We import across five core categories: Frozen foods, Dairy products, Grocery & Staples, Edible Oils, and Specialty Imports — sourced from leading producers in Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China." },
@@ -58,9 +59,8 @@ const FAQSection = () => {
               </span>
               <GoldHairline width={56} delay={0.15} className="mb-6 block" />
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight tracking-tight">
-                Frequently
-                <br />
-                Asked Questions
+                <SplitText text="Frequently" by="word" stagger={0.04} as="span" className="block" />
+                <SplitText text="Asked Questions" by="word" stagger={0.04} delay={0.15} as="span" className="block" />
               </h2>
               <p className="text-muted-foreground font-body text-base leading-relaxed max-w-sm">
                 Everything you need to know about our food import services, from
@@ -74,10 +74,10 @@ const FAQSection = () => {
             {faqs.map((faq, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, x: -24 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-10%" }}
+                transition={{ duration: 0.5, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
                 className={`border-b transition-colors duration-300 ${
                   openIndex === i ? "border-accent/30" : "border-border"
                 }`}

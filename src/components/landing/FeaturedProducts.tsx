@@ -21,6 +21,7 @@ import {
   CarouselNext,
 } from "@/components/ui/carousel";
 import type { UseEmblaCarouselType } from "embla-carousel-react";
+import MagneticButton from "@/components/motion/MagneticButton";
 
 type CarouselApi = UseEmblaCarouselType[1];
 
@@ -198,12 +199,14 @@ const FeaturedProducts = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-center mt-12"
         >
-          <Link to="/products">
-            <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body rounded-lg px-8 h-12 text-base transition-all duration-300 border border-forest-deep/20 hover:shadow-lg group">
-              Browse Products
-              <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </Button>
-          </Link>
+          <MagneticButton>
+            <Link to="/products">
+              <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body rounded-lg px-8 h-12 text-base transition-all duration-300 border border-forest-deep/20 hover:shadow-lg group">
+                Browse Products
+                <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          </MagneticButton>
         </motion.div>
       </div>
 

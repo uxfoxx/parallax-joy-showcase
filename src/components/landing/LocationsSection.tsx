@@ -1,6 +1,8 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useRef } from "react";
+import Parallax from "@/components/motion/Parallax";
+import SplitText from "@/components/motion/SplitText";
 
 const contactItems = [
   { icon: MapPin, title: "Address", value: "Olive Foods (Pvt) Ltd\nColombo, Sri Lanka" },
@@ -63,7 +65,7 @@ const LocationsSection = () => {
             Our Location
           </span>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
-            Where to Find Us
+            <SplitText text="Where to Find Us" by="word" stagger={0.05} as="span" />
           </h2>
         </motion.div>
 

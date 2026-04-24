@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { useTextScramble } from "@/hooks/useTextScramble";
 import { useInView } from "@/hooks/useInView";
+import SplitText from "@/components/motion/SplitText";
 
 const TeamSection = () => {
   const [videoError, setVideoError] = useState(false);
@@ -103,9 +104,12 @@ const TeamSection = () => {
           transition={{ duration: 0.6, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-white/75 font-body text-base lg:text-lg leading-relaxed max-w-lg mx-auto"
         >
-          For over three decades, Olive Foods has been Sri Lanka's bridge between
-          global food producers and local businesses — building partnerships that
-          stand the test of time.
+          <SplitText
+            text="For over three decades, Olive Foods has been Sri Lanka's bridge between global food producers and local businesses — building partnerships that stand the test of time."
+            by="word"
+            stagger={0.015}
+            as="span"
+          />
         </motion.p>
       </div>
     </section>

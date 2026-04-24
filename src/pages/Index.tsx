@@ -6,7 +6,7 @@ import FeaturedProducts from "@/components/landing/FeaturedProducts";
 import OurProductsSection from "@/components/landing/OurProductsSection";
 import WhyChooseUs from "@/components/landing/WhyChooseUs";
 import CategoriesSection from "@/components/landing/CategoriesSection";
-import PremiumTeaser from "@/components/landing/PremiumTeaser";
+import WhatsAppOrderSection from "@/components/landing/WhatsAppOrderSection";
 import StatsSection from "@/components/landing/StatsSection";
 import DarkStatsBanner from "@/components/landing/DarkStatsBanner";
 import TeamSection from "@/components/landing/TeamSection";
@@ -17,6 +17,7 @@ import Footer from "@/components/landing/Footer";
 import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
 import SectionTransition from "@/components/landing/SectionTransition";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import ScrollProgressRing from "@/components/motion/ScrollProgressRing";
 
 const Index = () => {
   return (
@@ -25,6 +26,9 @@ const Index = () => {
       <ScrollFloatingElement />
       <Navbar />
       <FloatingWhatsApp />
+      <div className="fixed bottom-5 right-[5.25rem] z-40 hidden md:block">
+        <ScrollProgressRing size={48} strokeWidth={2.5} />
+      </div>
 
       <div data-navbar-theme="dark">
         <HeroSection />
@@ -51,7 +55,7 @@ const Index = () => {
       </div>
       <SectionTransition />
       <div data-navbar-theme="dark">
-        <PremiumTeaser />
+        <WhatsAppOrderSection />
       </div>
       <SectionTransition />
       <div data-navbar-theme="dark">

@@ -1,9 +1,12 @@
-import { motion, useScroll, useTransform, useInView, useMotionValue, animate } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { useEffect, useRef } from "react";
-import { lineRevealVariants, softFadeUp, EASE_OUT_EXPO } from "@/lib/motion";
+import { useRef } from "react";
+import { lineRevealVariants, softFadeUp, chevronLoop, EASE_OUT_EXPO } from "@/lib/motion";
+import CountUp from "@/components/motion/CountUp";
+import MagneticButton from "@/components/motion/MagneticButton";
+import CursorSpotlight from "@/components/motion/CursorSpotlight";
 
 const headlineLines: { text: string; gold?: boolean }[] = [
   { text: "Sri Lanka's" },
@@ -11,30 +14,8 @@ const headlineLines: { text: string; gold?: boolean }[] = [
   { text: "Distribution Partner" },
 ];
 
-// Editorial background photograph — single cinematic shot, not a carousel.
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1920&h=1080&fit=crop&q=75";
-
-/** Counter-roll — motion.dev "Number trend" pattern. */
-const CountUp = ({ to, suffix = "", duration = 1.6 }: { to: number; suffix?: string; duration?: number }) => {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-20%" });
-  const value = useMotionValue(0);
-
-  useEffect(() => {
-    if (!inView) return;
-    const controls = animate(value, to, {
-      duration,
-      ease: EASE_OUT_EXPO,
-      onUpdate: (v) => {
-        if (ref.current) ref.current.textContent = Math.round(v).toLocaleString() + suffix;
-      },
-    });
-    return () => controls.stop();
-  }, [inView, to, suffix, duration, value]);
-
-  return <span ref={ref}>0{suffix}</span>;
-};
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -48,6 +29,12 @@ const HeroSection = () => {
   const imageOpacity = useTransform(scrollYProgress, [0, 0.9], [1, 0.55]);
   const contentY = useTransform(scrollYProgress, [0, 1], [0, 80]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  // Ghost-text marquee band drifts faster than content for parallax depth.
+  const ghostX = useTransform(scrollYProgress, [0, 1], ["0%", "-28%"]);
+  // Foreground chip drifts counter to scroll (motion.dev foreground parallax).
+  const chipY = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  // Depth layer behind the photo — subtle gold arc.
+  const arcY = useTransform(scrollYProgress, [0, 1], [0, 120]);
 
   return (
     <section
@@ -56,7 +43,22 @@ const HeroSection = () => {
       className="relative min-h-screen overflow-hidden"
       style={{ backgroundColor: "hsl(150 40% 6%)" }}
     >
-      {/* ── Cinematic background image (scroll-zoom) ─────────── */}
+      {/* Deep depth layer — gold arc parallax behind the photo */}
+      <motion.div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-[140vh] pointer-events-none"
+        style={{ y: arcY }}
+      >
+        <div
+          className="absolute left-1/2 top-[60%] -translate-x-1/2 w-[140vw] h-[140vw] rounded-full"
+          style={{
+            background: "radial-gradient(circle at 50% 50%, hsl(75 40% 60% / 0.14), transparent 55%)",
+            filter: "blur(40px)",
+          }}
+        />
+      </motion.div>
+
+      {/* Cinematic background image (scroll-zoom) */}
       <motion.div
         className="absolute inset-0"
         style={{ scale: imageScale, opacity: imageOpacity }}
@@ -89,16 +91,21 @@ const HeroSection = () => {
         </svg>
       </div>
 
-      {/* Gold radial glow — corner flourish for continuity with /premium surfaces */}
-      <div
-        className="absolute -top-40 -right-40 w-[640px] h-[640px] rounded-full pointer-events-none opacity-20"
-        style={{
-          background: "radial-gradient(circle, hsl(75 40% 60%), transparent 65%)",
-          filter: "blur(110px)",
-        }}
-      />
+      {/* Cursor spotlight — motion.dev "cursor highlight" */}
+      <CursorSpotlight color="hsl(75 40% 60% / 0.28)" size={600} blendMode="screen" />
 
-      {/* ── Content layer ─────────────────────────────────────── */}
+      {/* Scroll-linked ghost text band (motion.dev "scroll-linked marquee") */}
+      <motion.div
+        aria-hidden
+        className="absolute left-0 right-0 bottom-[18%] pointer-events-none select-none whitespace-nowrap"
+        style={{ x: ghostX }}
+      >
+        <div className="font-display text-white/[0.04] text-[22vw] font-bold leading-none tracking-tight">
+          IMPORT · DISTRIBUTE · DELIVER · IMPORT · DISTRIBUTE · DELIVER
+        </div>
+      </motion.div>
+
+      {/* Content layer */}
       <motion.div
         className="relative z-10 min-h-screen flex flex-col justify-center items-start max-w-6xl mx-auto px-6 lg:px-10 pt-28 pb-24"
         style={{ y: contentY, opacity: contentOpacity }}
@@ -116,7 +123,7 @@ const HeroSection = () => {
           </span>
         </motion.div>
 
-        {/* Headline — line-by-line clip-path mask reveal */}
+        {/* Headline — line-by-line clip-path reveal */}
         <motion.h1
           initial="hidden"
           animate="show"
@@ -146,7 +153,7 @@ const HeroSection = () => {
           Connecting global producers with Sri Lankan businesses across 8+ countries — bonded warehousing, cold-chain logistics, and island-wide distribution.
         </motion.p>
 
-        {/* CTAs */}
+        {/* CTAs — motion.dev "magnetic" */}
         <motion.div
           initial="hidden"
           animate="show"
@@ -154,23 +161,27 @@ const HeroSection = () => {
           variants={softFadeUp}
           className="flex flex-wrap gap-3 mb-14"
         >
-          <Link to="/products">
-            <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-full h-12 px-7 text-sm md:text-base transition-all duration-300 shadow-xl shadow-accent/25 group border border-white/10">
-              Explore Products
-              <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </Button>
-          </Link>
-          <Link to="/about">
-            <Button
-              variant="outline"
-              className="border-white/25 bg-white/5 text-white hover:bg-white/15 font-body font-semibold rounded-full h-12 px-7 text-sm md:text-base transition-all duration-300 backdrop-blur-sm"
-            >
-              Our Story
-            </Button>
-          </Link>
+          <MagneticButton>
+            <Link to="/products">
+              <Button className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-full h-12 px-7 text-sm md:text-base transition-all duration-300 shadow-xl shadow-accent/25 group border border-white/10">
+                Explore Products
+                <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          </MagneticButton>
+          <MagneticButton>
+            <Link to="/about">
+              <Button
+                variant="outline"
+                className="border-white/25 bg-white/5 text-white hover:bg-white/15 font-body font-semibold rounded-full h-12 px-7 text-sm md:text-base transition-all duration-300 backdrop-blur-sm"
+              >
+                Our Story
+              </Button>
+            </Link>
+          </MagneticButton>
         </motion.div>
 
-        {/* Stats — counter-roll (motion.dev "Number trend") */}
+        {/* Stats — shared CountUp primitive */}
         <motion.div
           initial="hidden"
           animate="show"
@@ -198,7 +209,26 @@ const HeroSection = () => {
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* Foreground chip — drifts counter to scroll */}
+      <motion.div
+        aria-hidden
+        className="absolute right-6 bottom-28 md:right-12 md:bottom-36 z-10 hidden sm:block"
+        style={{ y: chipY }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.7, ease: EASE_OUT_EXPO }}
+          className="rounded-full border border-white/20 bg-white/[0.06] backdrop-blur-md px-4 py-2 flex items-center gap-2"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+          <span className="font-body text-[10px] text-white/70 tracking-[0.3em] uppercase">
+            Est. 1994
+          </span>
+        </motion.div>
+      </motion.div>
+
+      {/* Scroll cue — double-chevron morph loop (motion.dev) */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -206,11 +236,22 @@ const HeroSection = () => {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none"
       >
         <span className="font-body text-[10px] text-white/45 tracking-[0.3em] uppercase">Scroll</span>
-        <motion.span
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-px h-8 bg-gradient-to-b from-white/45 to-transparent"
-        />
+        <div className="relative h-6 w-6">
+          <motion.div
+            animate={{ y: [0, 6, 0], opacity: [0.9, 0.4, 0.9] }}
+            transition={chevronLoop}
+            className="absolute inset-x-0 top-0 flex justify-center"
+          >
+            <ChevronDown className="w-4 h-4 text-white/70" strokeWidth={1.5} />
+          </motion.div>
+          <motion.div
+            animate={{ y: [4, 10, 4], opacity: [0.4, 0.9, 0.4] }}
+            transition={chevronLoop}
+            className="absolute inset-x-0 top-0 flex justify-center"
+          >
+            <ChevronDown className="w-4 h-4 text-white/45" strokeWidth={1.5} />
+          </motion.div>
+        </div>
       </motion.div>
     </section>
   );

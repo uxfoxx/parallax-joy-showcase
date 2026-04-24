@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import Marquee from "react-fast-marquee";
 import { ArrowRight } from "lucide-react";
+import MarqueeRow from "@/components/motion/MarqueeRow";
+import MagneticButton from "@/components/motion/MagneticButton";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useOurProducts } from "@/lib/api";
@@ -106,9 +107,9 @@ const OurProductsSection = () => {
           </div>
         </motion.div>
 
-        {/* Marquee strip — doubled rows, counter-directional for parallax-carousel feel */}
+        {/* Scroll-velocity marquee — motion.dev pattern, speeds up with scroll */}
         <div className="relative mb-10 bg-accent/5 border-y border-accent/10">
-          <Marquee speed={36} gradient gradientColor="hsl(var(--background))" gradientWidth={60} pauseOnHover className="py-2.5">
+          <MarqueeRow baseVelocity={60} direction={-1} className="py-2.5">
             {MARQUEE_ITEMS.map((item, i) => (
               <span
                 key={`r1-${i}`}
@@ -118,9 +119,9 @@ const OurProductsSection = () => {
                 <span className="w-1 h-1 rounded-full bg-accent/30 inline-block" />
               </span>
             ))}
-          </Marquee>
+          </MarqueeRow>
           <div className="h-px bg-accent/10" />
-          <Marquee speed={22} direction="right" gradient gradientColor="hsl(var(--background))" gradientWidth={60} pauseOnHover className="py-2.5">
+          <MarqueeRow baseVelocity={40} direction={1} className="py-2.5">
             {MARQUEE_ITEMS.map((item, i) => (
               <span
                 key={`r2-${i}`}
@@ -130,7 +131,7 @@ const OurProductsSection = () => {
                 {item}
               </span>
             ))}
-          </Marquee>
+          </MarqueeRow>
         </div>
 
         {/* Carousel — px-10 md:px-14 wrapper provides clearance for absolute arrow buttons */}
@@ -175,12 +176,14 @@ const OurProductsSection = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-center mt-12"
         >
-          <Link to="/products?our=true">
-            <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body rounded-lg px-8 h-12 text-base transition-all duration-300 border border-forest-deep/20 hover:shadow-lg group">
-              View Our Products
-              <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </Button>
-          </Link>
+          <MagneticButton>
+            <Link to="/products?our=true">
+              <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body rounded-lg px-8 h-12 text-base transition-all duration-300 border border-forest-deep/20 hover:shadow-lg group">
+                View Our Products
+                <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          </MagneticButton>
         </motion.div>
       </div>
 
