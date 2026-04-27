@@ -3,6 +3,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import SplitText from "@/components/motion/SplitText";
+import Eyebrow from "@/components/ui/eyebrow";
 
 const teamSlides = [
   {
@@ -66,7 +67,7 @@ const MeetTheTeam = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-28 lg:py-36 bg-background"
+      className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background"
     >
       {/* Subtle light orbs */}
       <div
@@ -87,9 +88,9 @@ const MeetTheTeam = () => {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto mb-16"
         >
-          <span className="inline-block px-5 py-2 rounded-full bg-primary/10 text-primary font-body text-sm font-medium border border-primary/15 mb-8 tracking-widest uppercase">
+          <Eyebrow variant="pill" tone="primary" className="mb-8 text-primary border-primary/20 bg-primary/10">
             Our People
-          </span>
+          </Eyebrow>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight tracking-tight">
             <SplitText text="Meet the Team" by="word" stagger={0.05} as="span" />
           </h2>

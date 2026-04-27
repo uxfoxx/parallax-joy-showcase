@@ -15,12 +15,26 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        // ── Landing CTA system ──
+        // Primary CTA — gold on dark/photo backdrops.
+        hero: "bg-accent text-white hover:bg-gold-deep border border-white/10 shadow-cta-glow hover:shadow-cta-glow-deep transition-[background,box-shadow] duration-300",
+        // Secondary CTA on dark/photo backdrops.
+        heroOutline:
+          "border border-white/25 bg-white/[0.06] text-white hover:bg-white/[0.14] backdrop-blur-md transition-colors duration-300",
+        // Primary CTA on light forest backgrounds.
+        brand: "bg-accent text-white hover:bg-gold-deep shadow-cta-glow hover:shadow-cta-glow-deep transition-[background,box-shadow] duration-300",
+        // Secondary CTA on light backgrounds.
+        brandOutline:
+          "border border-foreground/15 bg-background text-foreground hover:bg-foreground/[0.04] hover:border-foreground/30 transition-colors duration-300",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
+        // ── Landing CTA size ──
+        pill: "h-12 rounded-full px-7 text-[15px] font-semibold",
+        "pill-sm": "h-10 rounded-full px-5 text-[13px] font-semibold",
       },
     },
     defaultVariants: {

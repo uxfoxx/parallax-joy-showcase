@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { useTextScramble } from "@/hooks/useTextScramble";
 import { useInView } from "@/hooks/useInView";
 import SplitText from "@/components/motion/SplitText";
+import Eyebrow from "@/components/ui/eyebrow";
 
 const TeamSection = () => {
   const [videoError, setVideoError] = useState(false);
@@ -59,17 +60,19 @@ const TeamSection = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center py-28 lg:py-36">
+      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center py-section-base lg:py-section-base-lg">
         {/* Label badge */}
-        <motion.span
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="inline-block px-5 py-2 rounded-full bg-white/10 text-white font-body text-sm font-medium border border-white/20 mb-10 tracking-[0.2em] uppercase"
+          className="mb-10"
         >
-          Our Heritage
-        </motion.span>
+          <Eyebrow variant="pill" tone="white">
+            Our Heritage
+          </Eyebrow>
+        </motion.div>
 
         {/* Scramble heading */}
         <div className="mb-8">

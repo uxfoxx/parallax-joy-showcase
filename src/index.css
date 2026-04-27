@@ -42,6 +42,7 @@
     --cream: 42 50% 96%;
     --gold: 75 38% 45%;
     --gold-light: 75 40% 60%;
+    --gold-deep: 75 50% 32%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -206,10 +207,7 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
+  /* `marquee` keyframe lives in tailwind.config.ts (single source of truth). */
 
   @keyframes pulse-glow {
     0%, 100% { box-shadow: 0 0 0 0 hsl(75 38% 45% / 0.3); }

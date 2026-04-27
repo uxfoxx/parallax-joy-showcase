@@ -4,6 +4,7 @@ import { staggerGrid, EASE_OUT_EXPO } from "@/lib/motion";
 import SplitText from "@/components/motion/SplitText";
 import Parallax from "@/components/motion/Parallax";
 import FeatureArt, { type FeatureArtKey } from "@/components/art/FeatureArt";
+import Eyebrow from "@/components/ui/eyebrow";
 
 const features: Array<{ art: FeatureArtKey; number: string; title: string; desc: string }> = [
   {
@@ -100,7 +101,7 @@ const WhyChooseUs = () => {
   return (
     <section
       id="about"
-      className="relative overflow-hidden py-28 lg:py-36"
+      className="relative overflow-hidden py-section-base lg:py-section-base-lg"
       style={{
         background: `
           radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
@@ -141,9 +142,9 @@ const WhyChooseUs = () => {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto mb-20"
         >
-          <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
+          <Eyebrow variant="pill" tone="white" className="mb-8">
             Why Choose Us
-          </span>
+          </Eyebrow>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
             <SplitText text="Your Complete FMCG" by="word" stagger={0.05} as="span" className="block" />
             <SplitText text="Distribution Partner" by="word" stagger={0.05} delay={0.18} as="span" className="block" />

@@ -59,7 +59,7 @@ const Footer = () => {
               Your trusted import, bonded warehousing & FMCG distribution partner — delivering
               quality and reliability across Sri Lanka for over 30 years.
             </p>
-            <p className="text-primary-foreground/30 font-body text-xs">
+            <p className="text-primary-foreground/55 font-body text-xs">
               <a
                 href="mailto:info@olivefoods.lk"
                 className="hover:text-primary-foreground/60 transition-colors duration-300"
@@ -128,7 +128,7 @@ const Footer = () => {
           transition={{ delay: 0.3, duration: 0.5 }}
           className="mt-16 pt-8 border-t border-primary-foreground/10 text-center"
         >
-          <p className="text-primary-foreground/25 font-body text-sm tracking-wide">
+          <p className="text-primary-foreground/55 font-body text-sm tracking-wide">
             ©2026 Olive Foods (Pvt) Ltd. All rights reserved.
           </p>
         </motion.div>

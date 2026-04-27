@@ -3,6 +3,7 @@ import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { MessageCircle, Check, CheckCheck, Sparkles } from "lucide-react";
 import MagneticButton from "@/components/motion/MagneticButton";
 import SplitText from "@/components/motion/SplitText";
+import Eyebrow from "@/components/ui/eyebrow";
 import { waLink, ENQUIRE_MSG } from "@/components/premium/premiumConstants";
 
 /**
@@ -168,7 +169,7 @@ const PhoneMockup = () => {
 
           {/* Composer */}
           <div className="relative z-10 flex items-center gap-2 px-3 py-2.5 bg-[#0b141a] border-t border-white/5">
-            <div className="flex-1 h-8 rounded-full bg-[#1f2c33] flex items-center px-4 font-body text-[11px] text-white/30">
+            <div className="flex-1 h-8 rounded-full bg-[#1f2c33] flex items-center px-4 font-body text-[11px] text-white/55">
               Message
             </div>
             <div className="w-8 h-8 rounded-full bg-[#25D366] flex items-center justify-center">
@@ -213,7 +214,7 @@ const WhatsAppOrderSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden py-24 md:py-32"
+      className="relative overflow-hidden py-section-base lg:py-section-base-lg"
       style={{
         background:
           "radial-gradient(ellipse at top left, hsl(150 40% 12%), hsl(150 40% 5%) 60%, hsl(150 45% 3%))",
@@ -240,12 +241,11 @@ const WhatsAppOrderSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6 backdrop-blur-sm"
+            className="mb-6"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse" />
-            <span className="font-body text-[11px] font-medium text-white/70 tracking-[0.24em] uppercase">
+            <Eyebrow variant="pill" tone="white" withDot>
               Order on WhatsApp · Open 7 days
-            </span>
+            </Eyebrow>
           </motion.div>
           <SplitText
             text="Order premium in four taps."
@@ -316,7 +316,7 @@ const WhatsAppOrderSection = () => {
                   <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </a>
               </MagneticButton>
-              <p className="font-body text-xs text-white/40 mt-3 ml-1">
+              <p className="font-body text-xs text-white/55 mt-3 ml-1">
                 Tap to open WhatsApp · +94 11 207 1717
               </p>
             </motion.div>

@@ -60,6 +60,7 @@ export default {
         gold: {
           DEFAULT: "hsl(var(--gold))",
           light: "hsl(var(--gold-light))",
+          deep: "hsl(var(--gold-deep))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -76,6 +77,21 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      spacing: {
+        // Section vertical rhythm — single source of truth.
+        // Use via the <Section size="..."> wrapper, not directly.
+        "section-tight": "4rem",      // py-16
+        "section-tight-lg": "5rem",   // lg:py-20
+        "section-base": "6rem",       // py-24
+        "section-base-lg": "8rem",    // lg:py-32
+      },
+      boxShadow: {
+        // Editorial shadow scale — replaces ad-hoc shadow-xl/2xl across components.
+        card: "0 4px 24px -6px hsl(150 40% 6% / 0.10), 0 2px 6px -2px hsl(150 40% 6% / 0.06)",
+        float: "0 20px 40px -16px hsl(150 40% 6% / 0.30), 0 8px 16px -8px hsl(150 40% 6% / 0.20)",
+        "cta-glow": "0 18px 40px -10px hsl(75 38% 45% / 0.35), 0 4px 12px -4px hsl(75 38% 45% / 0.25)",
+        "cta-glow-deep": "0 22px 60px -12px hsl(75 50% 35% / 0.45)",
       },
       keyframes: {
         "accordion-down": {

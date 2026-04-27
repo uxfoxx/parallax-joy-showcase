@@ -105,7 +105,7 @@ const StatsSection = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden py-28 lg:py-40">
+    <section ref={sectionRef} className="relative overflow-hidden py-section-base lg:py-section-base-lg">
       {/* Base gradient */}
       <div
         className="absolute inset-0"
@@ -151,7 +151,7 @@ const StatsSection = () => {
           >
             Global origins
           </motion.p>
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-[64px] font-bold text-primary-foreground leading-[1.02] tracking-tight">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-5xl lg:text-[64px] font-bold text-primary-foreground leading-[1.02] tracking-tight">
             <SplitText text="Sourced where" by="word" stagger={0.05} as="span" className="block" />
             <span className="text-gradient-gold block">
               <SplitText text="it grows best" by="word" stagger={0.05} delay={0.2} as="span" />
@@ -184,7 +184,7 @@ const StatsSection = () => {
             <svg
               aria-hidden
               viewBox="0 0 120 120"
-              className="absolute -top-6 -right-2 w-16 h-16 opacity-25 text-accent pointer-events-none"
+              className="absolute -top-6 -right-2 w-16 h-16 opacity-25 text-primary-foreground/45 pointer-events-none"
             >
               <g fill="none" stroke="currentColor" strokeWidth="1">
                 <circle cx="60" cy="60" r="40" />
@@ -219,10 +219,10 @@ const StatsSection = () => {
                     cx={HUB.x}
                     cy={HUB.y}
                     fill="none"
-                    stroke="hsl(var(--accent))"
+                    stroke="hsl(var(--primary-foreground))"
                     strokeWidth="0.6"
                     initial={{ r: 8, opacity: 0 }}
-                    animate={{ r: [8, 160], opacity: [0.3, 0] }}
+                    animate={{ r: [8, 160], opacity: [0.18, 0] }}
                     transition={{
                       duration: 4,
                       delay: i * 1.3,

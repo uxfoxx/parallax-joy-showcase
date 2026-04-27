@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import GoldHairline from "@/components/GoldHairline";
 import SplitText from "@/components/motion/SplitText";
+import Eyebrow from "@/components/ui/eyebrow";
 
 const faqs = [
   { q: "What types of food products do you import?", a: "We import across five core categories: Frozen foods, Dairy products, Grocery & Staples, Edible Oils, and Specialty Imports — sourced from leading producers in Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China." },
@@ -21,7 +22,7 @@ const FAQSection = () => {
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden py-28 lg:py-36 bg-background">
+    <section ref={sectionRef} className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background">
       {/* Dot grid pattern */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.4]"
@@ -54,9 +55,9 @@ const FAQSection = () => {
               FAQ
             </span>
             <div className="relative">
-              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-4 tracking-widest uppercase">
+              <Eyebrow variant="pill" tone="accent" className="mb-4">
                 FAQs
-              </span>
+              </Eyebrow>
               <GoldHairline width={56} delay={0.15} className="mb-6 block" />
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight tracking-tight">
                 <SplitText text="Frequently" by="word" stagger={0.04} as="span" className="block" />

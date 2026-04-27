@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import SplitText from "@/components/motion/SplitText";
 import MagneticButton from "@/components/motion/MagneticButton";
 import CategoryArt from "@/components/art/CategoryArt";
+import Eyebrow from "@/components/ui/eyebrow";
 
 const CategoryRow = ({
   name,
@@ -129,7 +130,7 @@ const CategoriesSection = () => {
     <section
       ref={sectionRef}
       id="categories"
-      className="relative overflow-hidden py-28 lg:py-36 bg-background"
+      className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background"
       onMouseMove={handleMouseMove}
     >
       {/* Mouse + scroll parallax watermark */}
@@ -161,9 +162,9 @@ const CategoriesSection = () => {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-2xl mb-16"
         >
-          <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
+          <Eyebrow variant="pill" tone="accent" className="mb-8">
             Product Categories
-          </span>
+          </Eyebrow>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-5 leading-tight tracking-tight">
             <SplitText text="Everything Your" by="word" stagger={0.05} as="span" className="block" />
             <span className="text-gradient-gold block">
@@ -197,7 +198,7 @@ const CategoriesSection = () => {
         >
           <MagneticButton>
             <Link to="/products">
-              <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body font-semibold rounded-lg px-8 h-12 text-base transition-all duration-300 group">
+              <Button variant="brand" size="pill" className="font-body group">
                 View All Products
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>

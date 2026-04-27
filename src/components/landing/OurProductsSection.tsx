@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import MarqueeRow from "@/components/motion/MarqueeRow";
 import MagneticButton from "@/components/motion/MagneticButton";
+import Eyebrow from "@/components/ui/eyebrow";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useOurProducts } from "@/lib/api";
@@ -49,7 +50,7 @@ const OurProductsSection = () => {
   if (products.length === 0) return null;
 
   return (
-    <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
+    <section className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background">
       {/* Dot-grid background — fades in on section entry */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -73,9 +74,9 @@ const OurProductsSection = () => {
           className="mb-10"
         >
           {/* Badge — primary/forest palette, distinct from FeaturedProducts' accent badge */}
-          <span className="inline-block px-5 py-2 rounded-full bg-primary/10 text-primary font-body text-sm font-medium border border-primary/15 mb-8 tracking-widest uppercase">
+          <Eyebrow variant="pill" tone="primary" className="mb-8 text-primary border-primary/20 bg-primary/10">
             Our Products
-          </span>
+          </Eyebrow>
 
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
@@ -178,7 +179,7 @@ const OurProductsSection = () => {
         >
           <MagneticButton>
             <Link to="/products?our=true">
-              <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body rounded-lg px-8 h-12 text-base transition-all duration-300 border border-forest-deep/20 hover:shadow-lg group">
+              <Button variant="brand" size="pill" className="font-body group">
                 View Our Products
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>

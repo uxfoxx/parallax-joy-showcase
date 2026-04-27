@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/carousel";
 import type { UseEmblaCarouselType } from "embla-carousel-react";
 import MagneticButton from "@/components/motion/MagneticButton";
+import Eyebrow from "@/components/ui/eyebrow";
 
 type CarouselApi = UseEmblaCarouselType[1];
 
@@ -71,7 +72,7 @@ const FeaturedProducts = () => {
     <section
       ref={sectionRef}
       id="products"
-      className="relative overflow-hidden py-28 lg:py-36 bg-background"
+      className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background"
       onMouseMove={handleMouseMove}
     >
       {/* Orbs — white-background compatible, 3-5% opacity */}
@@ -116,9 +117,9 @@ const FeaturedProducts = () => {
           className="mb-16"
         >
           {/* Badge */}
-          <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
+          <Eyebrow variant="pill" tone="accent" className="mb-8">
             Featured Products
-          </span>
+          </Eyebrow>
 
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight">
@@ -201,7 +202,7 @@ const FeaturedProducts = () => {
         >
           <MagneticButton>
             <Link to="/products">
-              <Button className="bg-forest-deep text-white hover:bg-forest-deep/90 font-body rounded-lg px-8 h-12 text-base transition-all duration-300 border border-forest-deep/20 hover:shadow-lg group">
+              <Button variant="brand" size="pill" className="font-body group">
                 Browse Products
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
