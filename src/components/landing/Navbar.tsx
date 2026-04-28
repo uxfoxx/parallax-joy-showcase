@@ -59,8 +59,8 @@ const Navbar = () => {
   const isDark = theme === "dark";
 
   const barBg = isDark
-    ? `bg-forest-deep/85 border border-primary-foreground/10 ${scrolled ? "shadow-xl shadow-black/20" : ""}`
-    : `bg-background/90 border border-border/50 ${scrolled ? "shadow-lg shadow-black/8" : "shadow-md"}`;
+    ? `bg-forest-deep/90 border border-primary-foreground/10 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55),0_8px_20px_-6px_rgba(0,0,0,0.35)] ${scrolled ? "shadow-[0_28px_70px_-12px_rgba(0,0,0,0.65),0_10px_24px_-6px_rgba(0,0,0,0.4)]" : ""}`
+    : `bg-background/95 border border-border/60 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.18),0_8px_20px_-6px_rgba(0,0,0,0.12)] ${scrolled ? "shadow-[0_28px_70px_-12px_rgba(0,0,0,0.22)]" : ""}`;
 
   return (
     <>
@@ -77,7 +77,7 @@ const Navbar = () => {
           }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           style={{ backdropFilter: backdrop, WebkitBackdropFilter: backdrop as unknown as string }}
-          className={`flex items-center justify-between px-5 rounded-lg transition-all duration-500 ${barBg}`}
+          className={`flex items-center justify-between pl-6 pr-3 rounded-full transition-all duration-500 ${barBg}`}
         >
           <Link to="/" className="flex items-center shrink-0 group">
             <motion.div
@@ -148,7 +148,7 @@ const Navbar = () => {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link to="/contact">
                   <Button
-                    className="shine-sweep font-body font-semibold rounded-lg h-10 px-6 text-sm bg-accent text-white hover:bg-accent/90 shadow-lg shadow-accent/20 border border-white/10 transition-all duration-300"
+                    className="font-body font-semibold rounded-full h-10 px-6 text-sm bg-transparent text-accent border border-accent hover:bg-accent/10 hover:text-accent shadow-none transition-all duration-300"
                   >
                     Contact Us
                   </Button>
@@ -159,7 +159,7 @@ const Navbar = () => {
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setMobileOpen(!mobileOpen)}
-              className={`md:hidden w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-500 ${isDark ? "bg-primary-foreground/10 text-primary-foreground" : "bg-forest-deep/10 text-foreground"}`}
+              className={`md:hidden w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-500 ${isDark ? "bg-primary-foreground/10 text-primary-foreground" : "bg-forest-deep/10 text-foreground"}`}
             >
               {mobileOpen ? <X size={18} /> : <Menu size={18} />}
             </motion.button>
@@ -200,7 +200,7 @@ const Navbar = () => {
               className="mt-8"
             >
               <Link to="/contact" onClick={() => setMobileOpen(false)}>
-                <Button className="bg-accent/90 text-white hover:bg-accent/80 font-body font-semibold rounded-lg px-10 py-6 text-lg backdrop-blur-sm border border-white/15">
+                <Button className="bg-transparent text-accent hover:bg-accent/10 hover:text-accent font-body font-semibold rounded-full px-10 py-6 text-lg border border-accent">
                   Contact Us
                 </Button>
               </Link>
