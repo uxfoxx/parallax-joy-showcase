@@ -88,8 +88,8 @@ const MediaCard = ({
               </div>
             )}
 
-            {/* Bottom scrim for text legibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            {/* Bottom scrim for text legibility — hidden until hover */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
             {/* Shine sweep */}
             <div
@@ -107,8 +107,8 @@ const MediaCard = ({
               </span>
             </div>
 
-            {/* Text overlay */}
-            <div className="absolute inset-x-0 bottom-0 p-5 z-10">
+            {/* Text overlay — hidden until hover */}
+            <div className="absolute inset-x-0 bottom-0 p-5 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-[opacity,transform] duration-500 ease-out">
               <h3 className="font-display text-base md:text-lg font-semibold leading-snug text-white drop-shadow-sm line-clamp-2">
                 {title}
               </h3>
