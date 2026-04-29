@@ -77,7 +77,7 @@ const Navbar = () => {
           }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           style={{ backdropFilter: backdrop, WebkitBackdropFilter: backdrop as unknown as string }}
-          className={`flex items-center justify-between pl-6 pr-3 rounded-full transition-all duration-500 ${barBg}`}
+          className={`flex items-center justify-between pl-6 pr-3 rounded-[16px] transition-all duration-500 ${barBg}`}
         >
           <Link to="/" className="flex items-center shrink-0 group">
             <motion.div
