@@ -4,8 +4,6 @@ import {
   AnimatePresence,
   useInView,
   useReducedMotion,
-  useScroll,
-  useTransform,
 } from "framer-motion";
 import SplitText from "@/components/motion/SplitText";
 
@@ -90,14 +88,6 @@ const StatsSection = () => {
     return () => window.clearInterval(id);
   }, [userInteracted, reduced]);
 
-  // Subtle parallax on a backdrop watermark.
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const watermarkX = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
-  const watermarkY = useTransform(scrollYProgress, [0, 1], [30, -30]);
-
   const current = origins[active];
   const pick = (i: number) => {
     setActive(i);
@@ -105,36 +95,27 @@ const StatsSection = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden py-section-base lg:py-section-base-lg">
-      {/* Base gradient */}
+    <section ref={sectionRef} className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background">
+      {/* Subtle dot grid for editorial texture on white */}
       <div
-        className="absolute inset-0"
+        aria-hidden
+        className="absolute inset-0 pointer-events-none opacity-[0.5]"
         style={{
-          background:
-            "linear-gradient(180deg, hsl(150 40% 8%), hsl(140 50% 16%), hsl(150 40% 9%))",
+          backgroundImage:
+            "radial-gradient(circle, hsl(var(--forest-mid) / 0.10) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
         }}
       />
 
-      {/* Parallaxed ATLAS watermark */}
-      <motion.div
-        aria-hidden
-        style={{ x: reduced ? 0 : watermarkX, y: reduced ? 0 : watermarkY }}
-        className="absolute inset-x-0 top-[38%] -translate-y-1/2 pointer-events-none select-none text-center"
-      >
-        <span className="font-display font-black text-[22vw] leading-none tracking-[-0.05em] text-primary-foreground/[0.03] whitespace-nowrap">
-          ATLAS
-        </span>
-      </motion.div>
-
-      {/* Orbs */}
+      {/* Tinted accent orbs — gentler on white than the dark version. */}
       <div
-        className="absolute w-[520px] h-[520px] -top-24 -left-24 rounded-full opacity-[0.08] pointer-events-none animate-orb"
+        className="absolute w-[520px] h-[520px] -top-24 -left-24 rounded-full opacity-[0.05] pointer-events-none animate-orb"
         style={{ background: "radial-gradient(circle, hsl(140 55% 25%), transparent 70%)" }}
       />
       <div
-        className="absolute w-[360px] h-[360px] bottom-10 right-0 rounded-full opacity-[0.06] pointer-events-none animate-orb"
+        className="absolute w-[360px] h-[360px] bottom-10 right-0 rounded-full opacity-[0.04] pointer-events-none animate-orb"
         style={{
-          background: "radial-gradient(circle, hsl(80 50% 28%), transparent 70%)",
+          background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
           animationDelay: "7s",
         }}
       />
@@ -151,7 +132,7 @@ const StatsSection = () => {
           >
             Global origins
           </motion.p>
-          <h2 className="font-display text-4xl sm:text-5xl md:text-5xl lg:text-[64px] font-bold text-primary-foreground leading-[1.02] tracking-tight">
+          <h2 className="font-display text-4xl sm:text-5xl md:text-5xl lg:text-[64px] font-bold text-foreground leading-[1.02] tracking-tight">
             <SplitText text="Sourced where" by="word" stagger={0.05} as="span" className="block" />
             <span className="text-gradient-gold block">
               <SplitText text="it grows best" by="word" stagger={0.05} delay={0.2} as="span" />
@@ -162,7 +143,7 @@ const StatsSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="font-body text-[17px] leading-relaxed text-primary-foreground/65 max-w-xl mt-8"
+            className="font-body text-[17px] leading-relaxed text-muted-foreground max-w-xl mt-8"
           >
             Trace the path from farm, press, and port to the Sri Lankan shelf —
             hover or tap any origin to follow its line home.
@@ -184,7 +165,7 @@ const StatsSection = () => {
             <svg
               aria-hidden
               viewBox="0 0 120 120"
-              className="absolute -top-6 -right-2 w-16 h-16 opacity-25 text-primary-foreground/45 pointer-events-none"
+              className="absolute -top-6 -right-2 w-16 h-16 opacity-25 text-foreground/40 pointer-events-none"
             >
               <g fill="none" stroke="currentColor" strokeWidth="1">
                 <circle cx="60" cy="60" r="40" />
@@ -202,7 +183,7 @@ const StatsSection = () => {
               aria-label="Global sourcing map: eight origin countries connected to Sri Lanka"
             >
               {/* Faint grid — latitude/longitude scaffold */}
-              <g stroke="hsl(var(--primary-foreground) / 0.07)" strokeWidth="0.5" fill="none">
+              <g stroke="hsl(var(--foreground) / 0.08)" strokeWidth="0.5" fill="none">
                 {[100, 150, 200, 250, 300, 350].map((y) => (
                   <line key={`h${y}`} x1="300" x2="1000" y1={y} y2={y} />
                 ))}
@@ -219,10 +200,10 @@ const StatsSection = () => {
                     cx={HUB.x}
                     cy={HUB.y}
                     fill="none"
-                    stroke="hsl(var(--primary-foreground))"
+                    stroke="hsl(var(--forest-mid))"
                     strokeWidth="0.6"
                     initial={{ r: 8, opacity: 0 }}
-                    animate={{ r: [8, 160], opacity: [0.18, 0] }}
+                    animate={{ r: [8, 160], opacity: [0.25, 0] }}
                     transition={{
                       duration: 4,
                       delay: i * 1.3,
@@ -240,7 +221,7 @@ const StatsSection = () => {
                     key={`arc-${o.key}`}
                     d={arcPath(o.pos, HUB)}
                     fill="none"
-                    stroke="hsl(var(--primary-foreground) / 0.28)"
+                    stroke="hsl(var(--forest-mid) / 0.55)"
                     strokeWidth="0.8"
                     strokeDasharray="2 3"
                     strokeLinecap="round"
@@ -327,7 +308,7 @@ const StatsSection = () => {
                       fill={
                         isActive
                           ? "hsl(var(--accent))"
-                          : "hsl(var(--primary-foreground) / 0.85)"
+                          : "hsl(var(--forest-deep) / 0.85)"
                       }
                     />
 
@@ -342,7 +323,7 @@ const StatsSection = () => {
                         fontWeight: isActive ? 600 : 400,
                         fill: isActive
                           ? "hsl(var(--accent))"
-                          : "hsl(var(--primary-foreground) / 0.6)",
+                          : "hsl(var(--forest-mid) / 0.85)",
                         transition: "fill 0.3s, font-weight 0.3s",
                       }}
                     >
@@ -356,7 +337,7 @@ const StatsSection = () => {
               <g>
                 <circle cx={HUB.x} cy={HUB.y} r="10" fill="hsl(var(--accent) / 0.18)" />
                 <circle cx={HUB.x} cy={HUB.y} r="5" fill="hsl(var(--accent))" />
-                <circle cx={HUB.x} cy={HUB.y} r="2" fill="hsl(150 40% 8%)" />
+                <circle cx={HUB.x} cy={HUB.y} r="2" fill="hsl(var(--background))" />
                 <text
                   x={HUB.x}
                   y={HUB.y + 24}
@@ -376,7 +357,7 @@ const StatsSection = () => {
             </svg>
 
             {/* Footer caption under the map */}
-            <p className="mt-6 font-body text-[11px] tracking-[0.25em] uppercase text-primary-foreground/40">
+            <p className="mt-6 font-body text-[11px] tracking-[0.25em] uppercase text-muted-foreground">
               {origins.length} origins · one cold-chain · one bonded warehouse
             </p>
           </motion.div>
@@ -392,7 +373,7 @@ const StatsSection = () => {
                   exit={{ opacity: 0, y: -18, filter: "blur(6px)" }}
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <p className="font-body text-[11px] tracking-[0.3em] uppercase text-primary-foreground/45 mb-4">
+                  <p className="font-body text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-4">
                     {current.region}
                   </p>
                   <h3 className="font-display text-4xl lg:text-5xl font-bold leading-[0.95] tracking-tight mb-6">
@@ -406,10 +387,10 @@ const StatsSection = () => {
                     style={{ transformOrigin: "left" }}
                     className="h-px w-20 bg-accent mb-6"
                   />
-                  <p className="font-body text-[15px] text-primary-foreground/70 leading-relaxed mb-8">
+                  <p className="font-body text-[15px] text-foreground/75 leading-relaxed mb-8">
                     {current.specialty}
                   </p>
-                  <p className="font-body text-[12px] tracking-[0.2em] uppercase text-primary-foreground/45 tabular-nums">
+                  <p className="font-body text-[12px] tracking-[0.2em] uppercase text-muted-foreground tabular-nums">
                     /{String(active + 1).padStart(2, "0")} &nbsp;·&nbsp; of {origins.length}
                   </p>
                 </motion.div>
@@ -428,7 +409,7 @@ const StatsSection = () => {
                   className={`px-3 py-1.5 rounded-full font-body text-[11px] tracking-[0.15em] uppercase border transition-all duration-300 ${
                     i === active
                       ? "bg-accent/15 text-accent border-accent/45"
-                      : "text-primary-foreground/55 border-primary-foreground/15 hover:text-primary-foreground/90 hover:border-primary-foreground/30"
+                      : "text-muted-foreground border-border hover:text-foreground hover:border-foreground/30"
                   }`}
                 >
                   {o.country}
