@@ -15,17 +15,17 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        // ── Landing CTA system ──
-        // Primary CTA — gold on dark/photo backdrops.
-        hero: "bg-accent text-white hover:bg-gold-deep border border-white/10 shadow-cta-glow hover:shadow-cta-glow-deep transition-[background,box-shadow] duration-300",
-        // Secondary CTA on dark/photo backdrops.
+        // ── Landing CTA system — single dark-green palette ──
+        // Filled: dark-green pill, white text. Same look on dark and light bgs.
+        hero: "bg-primary text-primary-foreground hover:bg-primary/85 transition-colors duration-300",
+        brand: "bg-primary text-primary-foreground hover:bg-primary/85 transition-colors duration-300",
+        // Stroke: dark-green border + dark-green text on light bgs;
+        // on dark bgs, white border + white text reads better. Hero contexts
+        // use heroOutline (white-on-dark), light contexts use brandOutline.
         heroOutline:
-          "border border-white/25 bg-white/[0.06] text-white hover:bg-white/[0.14] backdrop-blur-md transition-colors duration-300",
-        // Primary CTA on light forest backgrounds.
-        brand: "bg-accent text-white hover:bg-gold-deep shadow-cta-glow hover:shadow-cta-glow-deep transition-[background,box-shadow] duration-300",
-        // Secondary CTA on light backgrounds.
+          "border-2 border-white/70 bg-transparent text-white hover:bg-white/10 transition-colors duration-300",
         brandOutline:
-          "border border-foreground/15 bg-background text-foreground hover:bg-foreground/[0.04] hover:border-foreground/30 transition-colors duration-300",
+          "border-2 border-primary bg-transparent text-primary hover:bg-primary/[0.06] transition-colors duration-300",
       },
       size: {
         default: "h-10 px-4 py-2",

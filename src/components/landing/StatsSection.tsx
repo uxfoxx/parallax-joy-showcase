@@ -6,45 +6,112 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import SplitText from "@/components/motion/SplitText";
+import CountUp from "@/components/motion/CountUp";
+import Eyebrow from "@/components/ui/eyebrow";
 
 /**
- * "Global Origins" — an interactive sourcing map.
+ * Global Origins — combined sourcing-map + headline stats.
  *
- * A stylized equirectangular canvas with 8 origin countries, each
- * connected to the Sri Lankan hub by an arc that draws itself in on
- * scroll. Hovering (or tapping) a point selects it: the arc lifts to
- * gold, a radar ping fires, and the right-hand info panel crossfades
- * to that country's details. If the user doesn't interact, the
- * selection auto-cycles every 3.2s so the section breathes.
+ * Three zones in one composition:
+ *   1. Header — H2 + sub-copy on the left, four headline stats on the
+ *      right (folded in from the deleted DarkStatsBanner).
+ *   2. Map + info panel — bigger map, dotted-continent backdrop,
+ *      richer right-rail with region, specialty, lead time, and
+ *      the brand tags shipped from that country.
+ *   3. Country strip — eight numbered chips along the bottom acting
+ *      as both navigation and table-of-contents.
  *
- * File name kept as StatsSection.tsx so Index.tsx's import doesn't
- * churn — the component renders a fully different section.
+ * File name kept as StatsSection.tsx so Index.tsx imports don't churn.
  */
 
 type Origin = {
   key: string;
   country: string;
+  flag: string;
   region: string;
   specialty: string;
+  brands: string[];
+  leadTimeDays: string;
   pos: { x: number; y: number };
 };
 
-// Equirectangular-ish positions in the SVG's 1000×500 space.
-const HUB = { x: 725, y: 231 }; // Sri Lanka
+const HUB = { x: 725, y: 231 };
 
 const origins: Origin[] = [
-  { key: "netherlands", country: "Netherlands", region: "Northern Europe", specialty: "Butter · Dairy · Confectionery", pos: { x: 514, y: 106 } },
-  { key: "italy",       country: "Italy",       region: "Southern Europe", specialty: "Olive oil · Pasta · Aged cheese", pos: { x: 534, y: 133 } },
-  { key: "uae",         country: "UAE",         region: "Middle East",     specialty: "Dates · Confectionery",           pos: { x: 650, y: 183 } },
-  { key: "india",       country: "India",       region: "South Asia",      specialty: "Spices · Grains · Pulses",        pos: { x: 717, y: 189 } },
-  { key: "china",       country: "China",       region: "East Asia",       specialty: "Seafood · Noodles · Staples",     pos: { x: 792, y: 153 } },
-  { key: "thailand",    country: "Thailand",    region: "South-East Asia", specialty: "Fragrant rice · Frozen seafood",  pos: { x: 778, y: 208 } },
-  { key: "singapore",   country: "Singapore",   region: "South-East Asia", specialty: "Sauces · Processed staples",      pos: { x: 786, y: 247 } },
-  { key: "australia",   country: "Australia",   region: "Oceania",         specialty: "Premium meat · Dairy · Grain",    pos: { x: 875, y: 319 } },
+  {
+    key: "netherlands", country: "Netherlands", flag: "🇳🇱",
+    region: "Northern Europe",
+    specialty: "Butter, dairy, and confectionery from generations-old creameries.",
+    brands: ["Remia", "Daily Dairy", "Snorre Foods"],
+    leadTimeDays: "32–38",
+    pos: { x: 514, y: 106 },
+  },
+  {
+    key: "italy", country: "Italy", flag: "🇮🇹",
+    region: "Southern Europe",
+    specialty: "Cold-pressed olive oil, durum pasta, and aged regional cheese.",
+    brands: ["Granoro", "Donna Chiara", "Mizkan"],
+    leadTimeDays: "34–40",
+    pos: { x: 534, y: 133 },
+  },
+  {
+    key: "uae", country: "UAE", flag: "🇦🇪",
+    region: "Middle East",
+    specialty: "Premium dates, foil, and confectionery from Gulf trade hubs.",
+    brands: ["Falcon", "Royal Arm", "Super Chef"],
+    leadTimeDays: "8–12",
+    pos: { x: 650, y: 183 },
+  },
+  {
+    key: "india", country: "India", flag: "🇮🇳",
+    region: "South Asia",
+    specialty: "Spices, basmati rice, and pulses from regional smallholders.",
+    brands: ["AZIZAA"],
+    leadTimeDays: "6–10",
+    pos: { x: 717, y: 189 },
+  },
+  {
+    key: "china", country: "China", flag: "🇨🇳",
+    region: "East Asia",
+    specialty: "Frozen seafood, instant noodles, and shelf staples at scale.",
+    brands: ["Wai Wai", "Fletcher"],
+    leadTimeDays: "16–22",
+    pos: { x: 792, y: 153 },
+  },
+  {
+    key: "thailand", country: "Thailand", flag: "🇹🇭",
+    region: "South-East Asia",
+    specialty: "Fragrant jasmine rice and frozen seafood, port to port in days.",
+    brands: ["Hungritos"],
+    leadTimeDays: "10–14",
+    pos: { x: 778, y: 208 },
+  },
+  {
+    key: "singapore", country: "Singapore", flag: "🇸🇬",
+    region: "South-East Asia",
+    specialty: "Sauces, processed staples, and re-export specialty imports.",
+    brands: ["BON VEGATO", "ABC"],
+    leadTimeDays: "9–13",
+    pos: { x: 786, y: 247 },
+  },
+  {
+    key: "australia", country: "Australia", flag: "🇦🇺",
+    region: "Oceania",
+    specialty: "Premium beef, lamb cuts, dairy, and grain — cold-chain certified.",
+    brands: ["WAGU"],
+    leadTimeDays: "18–24",
+    pos: { x: 875, y: 319 },
+  },
 ];
 
-/** Quadratic curve from `from` to `to`, lifted perpendicular to the line
- *  so the arc always bows "up" (toward negative y). */
+const HEADLINE_STATS = [
+  { value: 8, suffix: "", label: "Source countries" },
+  { value: 500, suffix: "+", label: "Products distributed" },
+  { value: 1000, suffix: "+", label: "Active retail partners" },
+  { value: 24, suffix: "/7", label: "Cold-chain monitoring" },
+];
+
+/** Quadratic curve from `from` to `to`, lifted perpendicular so it bows up. */
 function arcPath(from: { x: number; y: number }, to: { x: number; y: number }) {
   const mid = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
   const dx = to.x - from.x;
@@ -52,22 +119,71 @@ function arcPath(from: { x: number; y: number }, to: { x: number; y: number }) {
   const len = Math.hypot(dx, dy) || 1;
   let nx = -dy / len;
   let ny = dx / len;
-  if (ny > 0) { nx = -nx; ny = -ny; } // force upward bow
+  if (ny > 0) { nx = -nx; ny = -ny; }
   const lift = len * 0.22;
   const cp = { x: mid.x + nx * lift, y: mid.y + ny * lift };
   return `M ${from.x} ${from.y} Q ${cp.x} ${cp.y} ${to.x} ${to.y}`;
 }
 
-/** Simple label offset so text doesn't sit on top of the dot. */
 function labelAnchor(o: Origin): { x: number; y: number; anchor: "start" | "end" } {
-  // Countries on the right half anchor right-of-dot, left half left-of-dot.
   const anchor = o.pos.x > 780 ? "end" : "start";
   return {
-    x: anchor === "end" ? o.pos.x - 10 : o.pos.x + 10,
-    y: o.pos.y - 8,
+    x: anchor === "end" ? o.pos.x - 12 : o.pos.x + 12,
+    y: o.pos.y - 10,
     anchor,
   };
 }
+
+/** Stippled "world" backdrop — pseudo-continents drawn as dot densities.
+ *  Not real cartography; gives the map a sense of land vs ocean. The
+ *  dots cluster around continent centroids that line up with the eight
+ *  origin positions, so the visual ties to the data. */
+const CONTINENT_BLOBS = [
+  // Europe
+  { cx: 524, cy: 120, r: 65, density: 0.65 },
+  // Middle East / N. Africa
+  { cx: 600, cy: 200, r: 55, density: 0.45 },
+  // South Asia
+  { cx: 715, cy: 195, r: 50, density: 0.55 },
+  // East Asia
+  { cx: 800, cy: 165, r: 70, density: 0.6 },
+  // SE Asia
+  { cx: 785, cy: 230, r: 45, density: 0.5 },
+  // Oceania
+  { cx: 870, cy: 320, r: 55, density: 0.45 },
+];
+
+const Stipple = () => {
+  const dots: { x: number; y: number; r: number }[] = [];
+  // Deterministic random with a seeded LCG so SSR/CSR match.
+  let seed = 1337;
+  const rand = () => {
+    seed = (seed * 1664525 + 1013904223) % 4294967296;
+    return seed / 4294967296;
+  };
+
+  for (const blob of CONTINENT_BLOBS) {
+    const count = Math.round(blob.r * blob.density * 2.2);
+    for (let i = 0; i < count; i++) {
+      // Polar sample biased toward center for a soft falloff.
+      const angle = rand() * Math.PI * 2;
+      const dist = Math.pow(rand(), 0.6) * blob.r;
+      dots.push({
+        x: blob.cx + Math.cos(angle) * dist,
+        y: blob.cy + Math.sin(angle) * dist,
+        r: 0.6 + rand() * 0.6,
+      });
+    }
+  }
+
+  return (
+    <g fill="hsl(var(--forest-mid) / 0.32)">
+      {dots.map((d, i) => (
+        <circle key={i} cx={d.x} cy={d.y} r={d.r} />
+      ))}
+    </g>
+  );
+};
 
 const StatsSection = () => {
   const reduced = useReducedMotion();
@@ -75,15 +191,14 @@ const StatsSection = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const inView = useInView(mapRef, { once: true, margin: "-80px" });
 
-  const [active, setActive] = useState(3); // start on India — closest neighbour
+  const [active, setActive] = useState(3);
   const [userInteracted, setUserInteracted] = useState(false);
 
-  // Auto-cycle selection every ~3.2s until the user touches the map.
   useEffect(() => {
     if (userInteracted || reduced) return;
     const id = window.setInterval(
       () => setActive((i) => (i + 1) % origins.length),
-      3200,
+      4200,
     );
     return () => window.clearInterval(id);
   }, [userInteracted, reduced]);
@@ -95,24 +210,27 @@ const StatsSection = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background">
-      {/* Subtle dot grid for editorial texture on white */}
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background"
+    >
+      {/* Editorial dot-grid texture */}
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none opacity-[0.5]"
+        className="absolute inset-0 pointer-events-none opacity-[0.45]"
         style={{
           backgroundImage:
             "radial-gradient(circle, hsl(var(--forest-mid) / 0.10) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
-
-      {/* Tinted accent orbs — gentler on white than the dark version. */}
       <div
+        aria-hidden
         className="absolute w-[520px] h-[520px] -top-24 -left-24 rounded-full opacity-[0.05] pointer-events-none animate-orb"
         style={{ background: "radial-gradient(circle, hsl(140 55% 25%), transparent 70%)" }}
       />
       <div
+        aria-hidden
         className="absolute w-[360px] h-[360px] bottom-10 right-0 rounded-full opacity-[0.04] pointer-events-none animate-orb"
         style={{
           background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
@@ -121,38 +239,72 @@ const StatsSection = () => {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
-        {/* Header */}
-        <div className="max-w-3xl mb-16 lg:mb-20">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="font-body text-sm tracking-[0.3em] uppercase text-accent mb-6"
-          >
-            Global origins
-          </motion.p>
-          <h2 className="font-display text-4xl sm:text-5xl md:text-5xl lg:text-[64px] font-bold text-foreground leading-[1.02] tracking-tight">
-            <SplitText text="Sourced where" by="word" stagger={0.05} as="span" className="block" />
-            <span className="text-gradient-gold block">
-              <SplitText text="it grows best" by="word" stagger={0.05} delay={0.2} as="span" />
-            </span>
-          </h2>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="font-body text-[17px] leading-relaxed text-muted-foreground max-w-xl mt-8"
-          >
-            Trace the path from farm, press, and port to the Sri Lankan shelf —
-            hover or tap any origin to follow its line home.
-          </motion.p>
+        {/* ── Zone 1: Header + headline stats ── */}
+        <div className="grid lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 items-end mb-14 lg:mb-20">
+          <div>
+            <Eyebrow variant="pill" tone="accent" className="mb-7">
+              Global Origins
+            </Eyebrow>
+            <h2 className="font-display text-4xl sm:text-5xl md:text-5xl lg:text-[64px] font-bold text-foreground leading-[1.02] tracking-tight">
+              <SplitText text="Sourced where" by="word" stagger={0.05} as="span" className="block" />
+              <span className="text-gradient-gold block">
+                <SplitText text="it grows best" by="word" stagger={0.05} delay={0.2} as="span" />
+              </span>
+            </h2>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="font-body text-[17px] leading-relaxed text-muted-foreground max-w-xl mt-7"
+            >
+              Eight origins, one cold-chain, one bonded warehouse — and a
+              distribution network that closes the loop in Sri Lanka.
+            </motion.p>
+          </div>
+
+          {/* Headline stats — 2×2 grid that absorbs the old DarkStatsBanner. */}
+          <div className="grid grid-cols-2 gap-x-6 gap-y-7 lg:gap-y-9 lg:pl-8 lg:border-l lg:border-border">
+            {HEADLINE_STATS.map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.1 + i * 0.08,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="relative"
+              >
+                <span
+                  aria-hidden
+                  className="block w-7 h-[2px] bg-accent rounded-full mb-3"
+                />
+                <div className="font-display text-[44px] lg:text-[56px] font-bold text-foreground leading-none tracking-tight tabular-nums">
+                  <CountUp to={s.value} suffix={s.suffix} duration={2.5} />
+                </div>
+                <p className="font-body text-[11px] tracking-[0.22em] uppercase text-muted-foreground mt-3">
+                  {s.label}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-        {/* Map + panel */}
-        <div className="grid lg:grid-cols-[1.5fr_1fr] gap-10 lg:gap-16 items-center">
-          {/* ── Interactive map ── */}
+        {/* Hairline rule between header and map */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+          style={{ transformOrigin: "left" }}
+          className="h-px w-full bg-gradient-to-r from-border via-border/60 to-transparent mb-12 lg:mb-16"
+        />
+
+        {/* ── Zone 2: Map + info panel ── */}
+        <div className="grid lg:grid-cols-[1.55fr_1fr] gap-10 lg:gap-14 items-start">
           <motion.div
             ref={mapRef}
             initial={{ opacity: 0 }}
@@ -161,11 +313,16 @@ const StatsSection = () => {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            {/* Compass-rose corner mark (kept from prior design, smaller) */}
+            {/* Top-left coordinate label — adds editorial detail. */}
+            <div className="absolute -top-2 left-0 font-body text-[10px] tracking-[0.3em] uppercase text-muted-foreground/70 select-none pointer-events-none">
+              06°55′N · 79°51′E · Colombo
+            </div>
+
+            {/* Compass-rose corner mark */}
             <svg
               aria-hidden
               viewBox="0 0 120 120"
-              className="absolute -top-6 -right-2 w-16 h-16 opacity-25 text-foreground/40 pointer-events-none"
+              className="absolute -top-4 -right-2 w-14 h-14 opacity-30 text-foreground/40 pointer-events-none"
             >
               <g fill="none" stroke="currentColor" strokeWidth="1">
                 <circle cx="60" cy="60" r="40" />
@@ -177,22 +334,36 @@ const StatsSection = () => {
             </svg>
 
             <svg
-              viewBox="300 50 700 350"
-              className="w-full h-auto"
+              viewBox="430 70 510 290"
+              className="w-full h-auto mt-6"
               role="img"
               aria-label="Global sourcing map: eight origin countries connected to Sri Lanka"
             >
-              {/* Faint grid — latitude/longitude scaffold */}
-              <g stroke="hsl(var(--foreground) / 0.08)" strokeWidth="0.5" fill="none">
+              <defs>
+                {/* Gold glow for the active arc */}
+                <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="1.2" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              {/* Stippled continent backdrop */}
+              <Stipple />
+
+              {/* Faint lat/long scaffold */}
+              <g stroke="hsl(var(--foreground) / 0.06)" strokeWidth="0.5" fill="none">
                 {[100, 150, 200, 250, 300, 350].map((y) => (
-                  <line key={`h${y}`} x1="300" x2="1000" y1={y} y2={y} />
+                  <line key={`h${y}`} x1="430" x2="940" y1={y} y2={y} />
                 ))}
-                {[400, 500, 600, 700, 800, 900].map((x) => (
-                  <line key={`v${x}`} y1="50" y2="400" x1={x} x2={x} />
+                {[500, 600, 700, 800, 900].map((x) => (
+                  <line key={`v${x}`} y1="70" y2="360" x1={x} x2={x} />
                 ))}
               </g>
 
-              {/* Concentric radar rings around Sri Lanka — gentle pulse */}
+              {/* Concentric radar rings around hub */}
               {!reduced &&
                 [0, 1, 2].map((i) => (
                   <motion.circle
@@ -200,10 +371,10 @@ const StatsSection = () => {
                     cx={HUB.x}
                     cy={HUB.y}
                     fill="none"
-                    stroke="hsl(var(--forest-mid))"
-                    strokeWidth="0.6"
+                    stroke="hsl(var(--accent))"
+                    strokeWidth="0.5"
                     initial={{ r: 8, opacity: 0 }}
-                    animate={{ r: [8, 160], opacity: [0.25, 0] }}
+                    animate={{ r: [8, 90], opacity: [0.35, 0] }}
                     transition={{
                       duration: 4,
                       delay: i * 1.3,
@@ -213,7 +384,7 @@ const StatsSection = () => {
                   />
                 ))}
 
-              {/* Non-active arcs (dashed, faint) */}
+              {/* Non-active arcs */}
               {origins.map((o, i) => {
                 if (i === active) return null;
                 return (
@@ -221,8 +392,8 @@ const StatsSection = () => {
                     key={`arc-${o.key}`}
                     d={arcPath(o.pos, HUB)}
                     fill="none"
-                    stroke="hsl(var(--forest-mid) / 0.55)"
-                    strokeWidth="0.8"
+                    stroke="hsl(var(--forest-mid) / 0.5)"
+                    strokeWidth="0.7"
                     strokeDasharray="2 3"
                     strokeLinecap="round"
                     initial={{ pathLength: 0, opacity: 0 }}
@@ -236,20 +407,21 @@ const StatsSection = () => {
                 );
               })}
 
-              {/* Active arc (gold, solid, drawn on top) */}
+              {/* Active arc — gold + glow */}
               <motion.path
                 key={`active-arc-${current.key}`}
                 d={arcPath(current.pos, HUB)}
                 fill="none"
                 stroke="hsl(var(--accent))"
-                strokeWidth="1.8"
+                strokeWidth="1.6"
                 strokeLinecap="round"
+                filter="url(#goldGlow)"
                 initial={{ pathLength: 0, opacity: 0 }}
                 animate={{ pathLength: 1, opacity: 1 }}
                 transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               />
 
-              {/* Travelling gold packet along the active arc */}
+              {/* Travelling gold packet */}
               {!reduced && (
                 <motion.circle
                   key={`packet-${current.key}`}
@@ -283,10 +455,8 @@ const StatsSection = () => {
                     role="button"
                     aria-label={`${o.country} — ${o.specialty}`}
                   >
-                    {/* Generous invisible hit area */}
                     <circle cx={o.pos.x} cy={o.pos.y} r={14} fill="transparent" />
 
-                    {/* Radar ping on the active dot */}
                     {isActive && !reduced && (
                       <motion.circle
                         cx={o.pos.x}
@@ -318,12 +488,12 @@ const StatsSection = () => {
                       textAnchor={lbl.anchor}
                       className="font-body select-none"
                       style={{
-                        fontSize: 11,
+                        fontSize: 10.5,
                         letterSpacing: "0.05em",
                         fontWeight: isActive ? 600 : 400,
                         fill: isActive
                           ? "hsl(var(--accent))"
-                          : "hsl(var(--forest-mid) / 0.85)",
+                          : "hsl(var(--forest-mid) / 0.9)",
                         transition: "fill 0.3s, font-weight 0.3s",
                       }}
                     >
@@ -335,17 +505,17 @@ const StatsSection = () => {
 
               {/* Hub — Sri Lanka */}
               <g>
-                <circle cx={HUB.x} cy={HUB.y} r="10" fill="hsl(var(--accent) / 0.18)" />
-                <circle cx={HUB.x} cy={HUB.y} r="5" fill="hsl(var(--accent))" />
+                <circle cx={HUB.x} cy={HUB.y} r="11" fill="hsl(var(--accent) / 0.18)" />
+                <circle cx={HUB.x} cy={HUB.y} r="5.5" fill="hsl(var(--accent))" />
                 <circle cx={HUB.x} cy={HUB.y} r="2" fill="hsl(var(--background))" />
                 <text
                   x={HUB.x}
-                  y={HUB.y + 24}
+                  y={HUB.y + 22}
                   textAnchor="middle"
                   className="font-body select-none"
                   style={{
-                    fontSize: 9.5,
-                    letterSpacing: "0.3em",
+                    fontSize: 9,
+                    letterSpacing: "0.32em",
                     textTransform: "uppercase",
                     fill: "hsl(var(--accent))",
                     fontWeight: 600,
@@ -355,67 +525,113 @@ const StatsSection = () => {
                 </text>
               </g>
             </svg>
-
-            {/* Footer caption under the map */}
-            <p className="mt-6 font-body text-[11px] tracking-[0.25em] uppercase text-muted-foreground">
-              {origins.length} origins · one cold-chain · one bonded warehouse
-            </p>
           </motion.div>
 
-          {/* ── Info panel ── */}
+          {/* Info panel — richer card */}
           <div className="relative">
-            <div className="relative min-h-[260px]">
+            <div className="relative rounded-2xl border border-border bg-card/40 backdrop-blur-sm p-7 lg:p-8 shadow-card min-h-[360px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current.key}
-                  initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
+                  initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, y: -18, filter: "blur(6px)" }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  exit={{ opacity: 0, y: -14, filter: "blur(6px)" }}
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <p className="font-body text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-4">
-                    {current.region}
-                  </p>
-                  <h3 className="font-display text-4xl lg:text-5xl font-bold leading-[0.95] tracking-tight mb-6">
-                    <span className="text-gradient-gold">{current.country}</span>
-                  </h3>
+                  {/* Region + index */}
+                  <div className="flex items-center justify-between mb-4">
+                    <p className="font-body text-[10px] tracking-[0.32em] uppercase text-muted-foreground">
+                      {current.region}
+                    </p>
+                    <p className="font-body text-[10px] tracking-[0.22em] uppercase text-muted-foreground tabular-nums">
+                      {String(active + 1).padStart(2, "0")} / {String(origins.length).padStart(2, "0")}
+                    </p>
+                  </div>
+
+                  {/* Country + flag */}
+                  <div className="flex items-center gap-3 mb-5">
+                    <span className="text-3xl" aria-hidden>{current.flag}</span>
+                    <h3 className="font-display text-3xl lg:text-4xl font-bold leading-[0.95] tracking-tight text-gradient-gold">
+                      {current.country}
+                    </h3>
+                  </div>
+
                   <motion.div
                     key={`rule-${current.key}`}
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
-                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     style={{ transformOrigin: "left" }}
-                    className="h-px w-20 bg-accent mb-6"
+                    className="h-px w-16 bg-accent mb-5"
                   />
-                  <p className="font-body text-[15px] text-foreground/75 leading-relaxed mb-8">
+
+                  <p className="font-body text-[14.5px] text-foreground/80 leading-relaxed mb-7">
                     {current.specialty}
                   </p>
-                  <p className="font-body text-[12px] tracking-[0.2em] uppercase text-muted-foreground tabular-nums">
-                    /{String(active + 1).padStart(2, "0")} &nbsp;·&nbsp; of {origins.length}
-                  </p>
+
+                  {/* Lead time + brands as a small spec table */}
+                  <div className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-3.5 text-[12.5px] font-body">
+                    <span className="text-muted-foreground tracking-wider uppercase text-[10.5px]">
+                      Lead time
+                    </span>
+                    <span className="text-foreground tabular-nums">
+                      {current.leadTimeDays} days <span className="text-muted-foreground">port to port</span>
+                    </span>
+                    <span className="text-muted-foreground tracking-wider uppercase text-[10.5px]">
+                      Brands
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {current.brands.map((b) => (
+                        <span
+                          key={b}
+                          className="px-2 py-0.5 rounded-md border border-border bg-background text-foreground/85 text-[11.5px]"
+                        >
+                          {b}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </motion.div>
               </AnimatePresence>
             </div>
+          </div>
+        </div>
 
-            {/* Chip navigation */}
-            <div className="flex flex-wrap gap-2 mt-10">
-              {origins.map((o, i) => (
+        {/* ── Zone 3: Numbered country strip ── */}
+        <div className="mt-12 lg:mt-16 border-t border-border pt-6">
+          <div className="flex flex-wrap gap-x-1 gap-y-2">
+            {origins.map((o, i) => {
+              const isActive = i === active;
+              return (
                 <button
                   key={o.key}
                   type="button"
                   onClick={() => pick(i)}
                   onMouseEnter={() => pick(i)}
-                  aria-pressed={i === active}
-                  className={`px-3 py-1.5 rounded-full font-body text-[11px] tracking-[0.15em] uppercase border transition-all duration-300 ${
-                    i === active
-                      ? "bg-accent/15 text-accent border-accent/45"
-                      : "text-muted-foreground border-border hover:text-foreground hover:border-foreground/30"
+                  aria-pressed={isActive}
+                  className={`group relative flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-300 ${
+                    isActive
+                      ? "bg-accent/10 text-accent"
+                      : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.03]"
                   }`}
                 >
-                  {o.country}
+                  <span className="font-display text-[11px] font-semibold tracking-[0.18em] tabular-nums">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span aria-hidden className="text-base">{o.flag}</span>
+                  <span className="font-body text-[12.5px] font-medium tracking-wide">
+                    {o.country}
+                  </span>
+                  {isActive && (
+                    <motion.span
+                      layoutId="origin-active-bar"
+                      className="absolute left-2 right-2 -bottom-0.5 h-[2px] rounded-full bg-accent"
+                      transition={{ type: "spring", stiffness: 500, damping: 36 }}
+                    />
+                  )}
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>

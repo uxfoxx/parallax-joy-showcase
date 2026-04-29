@@ -148,7 +148,11 @@ const Navbar = () => {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link to="/contact">
                   <Button
-                    className="font-body font-semibold rounded-full h-10 px-6 text-sm bg-transparent text-accent border border-accent hover:bg-accent/10 hover:text-accent shadow-none transition-all duration-300"
+                    className={`font-body font-semibold rounded-full h-10 px-6 text-sm bg-transparent border-2 transition-colors duration-300 shadow-none ${
+                      isDark
+                        ? "border-white/70 text-white hover:bg-white/10"
+                        : "border-primary text-primary hover:bg-primary/[0.06]"
+                    }`}
                   >
                     Contact Us
                   </Button>
@@ -200,7 +204,7 @@ const Navbar = () => {
               className="mt-8"
             >
               <Link to="/contact" onClick={() => setMobileOpen(false)}>
-                <Button className="bg-transparent text-accent hover:bg-accent/10 hover:text-accent font-body font-semibold rounded-full px-10 py-6 text-lg border border-accent">
+                <Button className="bg-transparent text-white hover:bg-white/10 font-body font-semibold rounded-full px-10 py-6 text-lg border-2 border-white/70">
                   Contact Us
                 </Button>
               </Link>
