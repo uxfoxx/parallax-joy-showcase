@@ -17,8 +17,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
 } from "@/components/ui/carousel";
 import type { UseEmblaCarouselType } from "embla-carousel-react";
 import MagneticButton from "@/components/motion/MagneticButton";
@@ -33,6 +31,8 @@ const FeaturedProducts = () => {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [hovered, setHovered] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
 
   const onSelect = useCallback(() => {
     if (!api) return;
@@ -46,6 +46,21 @@ const FeaturedProducts = () => {
     api.on("select", onSelect);
     return () => { api.off("select", onSelect); };
   }, [api, onSelect]);
+
+  // Autoplay — pauses on hover or once the user interacts.
+  useEffect(() => {
+    if (!api || hovered || userInteracted) return;
+    const id = window.setInterval(() => api.scrollNext(), 5000);
+    return () => window.clearInterval(id);
+  }, [api, hovered, userInteracted]);
+
+  // Embla pointer-down event = user dragging — stop autoplay permanently.
+  useEffect(() => {
+    if (!api) return;
+    const onPointerDown = () => setUserInteracted(true);
+    api.on("pointerDown", onPointerDown);
+    return () => { api.off("pointerDown", onPointerDown); };
+  }, [api]);
 
   // Mouse parallax — same pattern as CategoriesSection
   const rawMouseX = useMotionValue(0);
@@ -75,6 +90,17 @@ const FeaturedProducts = () => {
       className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background"
       onMouseMove={handleMouseMove}
     >
+      {/* Unified dot-grid backdrop — matches all white sections */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, hsl(var(--forest-mid) / 0.10) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+
       {/* Orbs — white-background compatible, 3-5% opacity */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
