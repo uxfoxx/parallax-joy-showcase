@@ -133,6 +133,17 @@ const CategoriesSection = () => {
       className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background"
       onMouseMove={handleMouseMove}
     >
+      {/* Unified dot-grid backdrop — matches all white sections */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, hsl(var(--forest-mid) / 0.10) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+
       {/* Mouse + scroll parallax watermark */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none"

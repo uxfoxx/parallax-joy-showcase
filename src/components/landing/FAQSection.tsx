@@ -27,7 +27,7 @@ const FAQSection = () => {
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.4]"
         style={{
-          backgroundImage: `radial-gradient(circle, hsl(var(--forest-mid) / 0.15) 1px, transparent 1px)`,
+          backgroundImage: `radial-gradient(circle, hsl(var(--forest-mid) / 0.10) 1px, transparent 1px)`,
           backgroundSize: "28px 28px",
         }}
       />

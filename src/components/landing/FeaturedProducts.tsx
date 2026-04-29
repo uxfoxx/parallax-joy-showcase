@@ -183,12 +183,27 @@ const FeaturedProducts = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="relative px-10 "
+          className="relative"
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
         >
+          {/* Counter chip — top-right of carousel */}
+          {count > 1 && (
+            <div className="absolute -top-9 right-0 font-body text-[11px] tracking-[0.22em] uppercase tabular-nums z-10">
+              <span className="text-foreground font-semibold">
+                {String(current + 1).padStart(2, "0")}
+              </span>
+              <span className="mx-2 text-muted-foreground/40">/</span>
+              <span className="text-muted-foreground">
+                {String(count).padStart(2, "0")}
+              </span>
+            </div>
+          )}
+
           <Carousel
             setApi={setApi}
             opts={{ align: "start", loop: true }}
-            className="w-full"
+            className="w-full cursor-grab active:cursor-grabbing"
           >
             <CarouselContent className="-ml-5">
               {products.map((product) => (
@@ -197,24 +212,41 @@ const FeaturedProducts = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="-left-2 md:-left-6 h-10 w-10 rounded-full bg-white/80 backdrop-blur-sm border border-border text-foreground hover:bg-accent hover:text-white hover:border-accent hover:scale-110 transition-all duration-200" />
-            <CarouselNext className="-right-2 md:-right-6 h-10 w-10 rounded-full bg-white/80 backdrop-blur-sm border border-border text-foreground hover:bg-accent hover:text-white hover:border-accent hover:scale-110 transition-all duration-200" />
           </Carousel>
         </motion.div>
 
-        {/* Dot indicators — replaces bare "X/Y" text */}
+        {/* Progress strip — per-slide track, active fills 0→100% over autoplay. */}
         {count > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-6">
-            {Array.from({ length: count }).map((_, i) => (
-              <button
-                key={i}
-                onClick={() => api?.scrollTo(i)}
-                aria-label={`Go to slide ${i + 1}`}
-                className={`rounded-full transition-all duration-300 ${
-                  i === current ? "w-5 h-1.5 bg-accent" : "w-1.5 h-1.5 bg-border hover:bg-accent/40"
-                }`}
-              />
-            ))}
+          <div className="flex items-center justify-center gap-2 mt-8">
+            {Array.from({ length: count }).map((_, i) => {
+              const isActive = i === current;
+              const isAutoplaying = isActive && !hovered && !userInteracted;
+              return (
+                <button
+                  key={i}
+                  onClick={() => {
+                    api?.scrollTo(i);
+                    setUserInteracted(true);
+                  }}
+                  aria-label={`Go to slide ${i + 1}`}
+                  className={`relative h-[3px] rounded-full overflow-hidden transition-all duration-300 ${
+                    isActive
+                      ? "w-12 bg-border"
+                      : "w-6 bg-border/70 hover:bg-foreground/30"
+                  }`}
+                >
+                  {isActive && (
+                    <span
+                      key={`fill-${current}-${userInteracted}`}
+                      className={`absolute inset-0 bg-primary rounded-full ${
+                        isAutoplaying ? "animate-progress-bar" : ""
+                      }`}
+                      style={{ transformOrigin: "left" }}
+                    />
+                  )}
+                </button>
+              );
+            })}
           </div>
         )}
 

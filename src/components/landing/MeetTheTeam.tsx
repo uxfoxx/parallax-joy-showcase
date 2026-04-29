@@ -69,6 +69,17 @@ const MeetTheTeam = () => {
       ref={sectionRef}
       className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background"
     >
+      {/* Unified dot-grid backdrop — matches all white sections */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, hsl(var(--forest-mid) / 0.10) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+
       {/* Subtle light orbs */}
       <div
         className="absolute w-[500px] h-[500px] -top-32 right-0 rounded-full opacity-[0.04] pointer-events-none animate-orb"
