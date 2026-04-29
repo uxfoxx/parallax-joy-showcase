@@ -23,9 +23,7 @@ const Index = () => {
       <ImmersiveBackground />
       <Navbar />
       <FloatingWhatsApp />
-      <div className="fixed bottom-5 right-[5.25rem] z-40 hidden md:block">
-        <ScrollProgressRing size={48} strokeWidth={2.5} />
-      </div>
+     
 
       <div data-navbar-theme="dark">
         <HeroSection />
