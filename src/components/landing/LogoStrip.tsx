@@ -11,7 +11,7 @@ const LogoStrip = () => {
   const { data: logos = [] } = usePartnerLogos({ onlyActive: true });
 
   return (
-    <section className="relative py-16 overflow-hidden">
+    <section className="relative py-16 overflow-hidden bg-forest-deep">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <SplitText
           text="Our Brand Partners"

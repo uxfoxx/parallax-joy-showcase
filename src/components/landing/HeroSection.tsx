@@ -33,7 +33,7 @@ const HeroSection = () => {
   return (
     <section
       data-navbar-theme="dark"
-      className="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+      className="relative min-h-screen w-full overflow-hidden flex items-center justify-center pt-28 pb-24 md:pt-32 md:pb-28"
     >
       {/* 1 — Brand gradient backdrop (always rendered) */}
       <div

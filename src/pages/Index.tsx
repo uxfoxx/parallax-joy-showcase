@@ -29,7 +29,7 @@ const Index = () => {
         <HeroSection />
       </div>
       <SectionTransition />
-      <div data-navbar-theme="light">
+      <div data-navbar-theme="dark">
         <LogoStrip />
       </div>
       <SectionTransition />
@@ -41,7 +41,7 @@ const Index = () => {
         <OurProductsSection />
       </div>
       <SectionTransition />
-      <div data-navbar-theme="light">
+      <div data-navbar-theme="dark">
         <WhyChooseUs />
       </div>
       <SectionTransition />
