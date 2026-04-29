@@ -91,14 +91,14 @@ const HeroSection = () => {
           className="mb-8 flex justify-center"
         >
           <Eyebrow variant="pill" tone="white" withDot>
-            Sri Lanka · Since 1994
+            Sri Lanka
           </Eyebrow>
         </motion.div>
 
         <h1 className="font-display text-[44px] sm:text-6xl lg:text-7xl xl:text-[88px] font-bold leading-[1.02] tracking-[-0.025em] text-white mb-7">
           <span className="block overflow-hidden">
             <SplitText
-              text="Sri Lanka's"
+              text="Sri Lanka's Premium Food Exporters"
               by="word"
               stagger={0.06}
               delay={0.15}
