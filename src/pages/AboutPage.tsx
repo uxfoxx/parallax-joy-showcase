@@ -1,4 +1,5 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { useEffect, useState } from "react";
 import { Globe, Users, Package, Warehouse, Thermometer, Truck, ShoppingBag, Hotel, UtensilsCrossed, Target, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -21,14 +22,159 @@ const businessActivities = [
 ];
 
 const clientSegments = [
-  { icon: Hotel, label: "Hotels & Resorts" },
-  { icon: UtensilsCrossed, label: "Restaurants & Cafes" },
-  { icon: Users, label: "Catering Companies" },
-  { icon: ShoppingBag, label: "Supermarket Chains" },
+  {
+    icon: Hotel,
+    label: "Hotels & Resorts",
+    description:
+      "Five-star kitchens and resort F&B teams rely on our cold-chain for premium meats, dairy, and specialty imports — delivered on schedule, every week.",
+    examples: ["Premium beef cuts", "Aged dairy & cheese", "Specialty ingredients"],
+  },
+  {
+    icon: UtensilsCrossed,
+    label: "Restaurants & Cafes",
+    description:
+      "From flagship restaurants to neighbourhood cafes, we keep menus consistent with reliable supply of frozen staples, sauces, and finishing items.",
+    examples: ["Frozen seafood", "Pastas & sauces", "Bakery essentials"],
+  },
+  {
+    icon: Users,
+    label: "Catering Companies",
+    description:
+      "Volume-focused catering operations get scaled procurement, bulk packs, and the kind of lead-time predictability event work demands.",
+    examples: ["Bulk packs", "Multi-channel logistics", "Tailored credit terms"],
+  },
+  {
+    icon: ShoppingBag,
+    label: "Supermarket Chains",
+    description:
+      "Modern Trade and General Trade partners stock our brands across the island with shelf-ready packaging and dedicated category support.",
+    examples: ["Shelf-ready packaging", "Trade marketing support", "Island-wide replenishment"],
+  },
 ];
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
+
+const WhoWeServe = () => {
+  const [active, setActive] = useState(0);
+  const [userInteracted, setUserInteracted] = useState(false);
+
+  // Auto-cycle every 5s until user picks a tab.
+  useEffect(() => {
+    if (userInteracted) return;
+    const id = window.setInterval(
+      () => setActive((i) => (i + 1) % clientSegments.length),
+      5000,
+    );
+    return () => window.clearInterval(id);
+  }, [userInteracted]);
+
+  const current = clientSegments[active];
+  const Icon = current.icon;
+
+  return (
+    <div className="grid lg:grid-cols-[1fr_1.4fr] gap-10 lg:gap-14 items-start">
+      {/* Tab strip */}
+      <div className="relative">
+        <ul className="flex flex-col gap-1">
+          {clientSegments.map((s, i) => {
+            const isActive = i === active;
+            return (
+              <li key={s.label}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActive(i);
+                    setUserInteracted(true);
+                  }}
+                  onMouseEnter={() => {
+                    setActive(i);
+                    setUserInteracted(true);
+                  }}
+                  className={`relative w-full flex items-center justify-between gap-4 px-4 py-4 rounded-lg transition-colors duration-300 group ${
+                    isActive
+                      ? "bg-primary/[0.06] text-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.03]"
+                  }`}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="serve-active"
+                      className="absolute left-0 top-2.5 bottom-2.5 w-[3px] rounded-r-full bg-primary"
+                      transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                    />
+                  )}
+                  <span className="flex items-center gap-3">
+                    <span className="font-display text-[11px] tabular-nums tracking-[0.22em] text-muted-foreground/70">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="font-body text-[15px] font-medium tracking-tight">
+                      {s.label}
+                    </span>
+                  </span>
+                  <s.icon
+                    className={`w-4 h-4 transition-colors ${
+                      isActive ? "text-primary" : "text-muted-foreground/60 group-hover:text-foreground"
+                    }`}
+                    strokeWidth={1.7}
+                  />
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      {/* Preview panel */}
+      <div className="relative rounded-2xl border border-border bg-card p-7 lg:p-8 min-h-[300px] shadow-card overflow-hidden">
+        {/* Soft corner accent */}
+        <span
+          aria-hidden
+          className="absolute top-0 right-0 w-32 h-32 rounded-bl-[5rem] bg-primary/5 pointer-events-none"
+        />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current.label}
+            initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -14, filter: "blur(6px)" }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            className="relative"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <span className="font-display text-[44px] lg:text-[56px] font-black leading-none text-primary/15 tabular-nums">
+                {String(active + 1).padStart(2, "0")}
+              </span>
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <Icon className="w-5 h-5 text-primary" strokeWidth={1.7} />
+              </div>
+            </div>
+
+            <h3 className="font-display text-2xl lg:text-3xl font-bold text-foreground tracking-tight leading-snug mb-3">
+              {current.label}
+            </h3>
+            <span className="block w-12 h-[2px] rounded-full bg-primary mb-5" />
+            <p className="font-body text-[14.5px] text-foreground/80 leading-relaxed mb-6 max-w-prose">
+              {current.description}
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {current.examples.map((ex) => (
+                <span
+                  key={ex}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-background text-foreground/85 font-body text-[12px]"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                  {ex}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
 
 const AboutPage = () => {
   const { ref: mouseRef, gradientStyle } = useMouseGradient();
@@ -189,16 +335,7 @@ const AboutPage = () => {
               </p>
             </motion.div>
 
-            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 sm:grid-cols-4 gap-5">
-              {clientSegments.map((s) => (
-                <motion.div key={s.label} variants={item} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="flex flex-col items-center gap-4 p-6 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
-                  <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
-                    <s.icon className="w-6 h-6 text-accent" />
-                  </motion.div>
-                  <span className="font-body text-sm font-medium text-foreground text-center">{s.label}</span>
-                </motion.div>
-              ))}
-            </motion.div>
+            <WhoWeServe />
           </div>
         </section>
       </div>

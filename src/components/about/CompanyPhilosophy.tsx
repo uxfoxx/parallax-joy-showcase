@@ -1,11 +1,24 @@
 import { motion } from "framer-motion";
-import { Heart, Users, RefreshCw, Shield } from "lucide-react";
+import { Heart, Users, RefreshCw, Shield, ArrowUpRight } from "lucide-react";
+import { useState } from "react";
 
-const approachItems = [
-  "Consistent and dependable supply",
-  "Professional service and communication",
-  "Structured systems that ensure reliability",
-  "Credit support and flexibility where it matters",
+const approachItems: { title: string; body: string }[] = [
+  {
+    title: "Consistent and dependable supply",
+    body: "Inventory we can stake our name on — bonded warehousing means stock is on the shelf, not stuck at port.",
+  },
+  {
+    title: "Professional service and communication",
+    body: "One concierge desk, one accountable team. No call-trees, no surprises, replies within the hour.",
+  },
+  {
+    title: "Structured systems that ensure reliability",
+    body: "Cold-chain SOPs, audited workflows, and a centralised structure so every client gets the same standard.",
+  },
+  {
+    title: "Credit support and flexibility where it matters",
+    body: "Tailored payment terms for partners we trust — we invest in the businesses we serve.",
+  },
 ];
 
 const coreValues = [
@@ -39,6 +52,71 @@ const titleWords = [
   { text: "by", accent: true },
   { text: "Growth.", accent: true },
 ];
+
+type Value = (typeof coreValues)[number];
+
+const FlipCard = ({ value, index }: { value: Value; index: number }) => {
+  const [flipped, setFlipped] = useState(false);
+  const Icon = value.icon;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.55, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      onMouseEnter={() => setFlipped(true)}
+      onMouseLeave={() => setFlipped(false)}
+      onClick={() => setFlipped((f) => !f)}
+      className="relative h-44 sm:h-48 cursor-pointer select-none"
+    >
+      <motion.div
+        animate={{ rotateY: flipped ? 180 : 0 }}
+        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        style={{ transformStyle: "preserve-3d" }}
+        className="relative w-full h-full"
+      >
+        {/* Front */}
+        <div
+          style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
+          className="absolute inset-0 rounded-xl border border-border bg-card p-6 flex flex-col justify-between overflow-hidden shadow-card"
+        >
+          <span
+            aria-hidden
+            className="absolute top-0 right-0 w-16 h-16 rounded-bl-[3rem] bg-primary/5 pointer-events-none"
+          />
+          <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Icon className="w-5 h-5 text-primary" strokeWidth={1.7} />
+          </div>
+          <div>
+            <h4 className="font-display text-base lg:text-lg font-bold text-foreground tracking-tight leading-snug">
+              {value.title}
+            </h4>
+            <span className="block w-8 h-[2px] rounded-full bg-primary mt-3" />
+          </div>
+        </div>
+
+        {/* Back */}
+        <div
+          style={{
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+          }}
+          className="absolute inset-0 rounded-xl bg-primary text-primary-foreground p-6 flex flex-col justify-between overflow-hidden shadow-card"
+        >
+          <p className="font-body text-[14px] leading-relaxed">{value.desc}</p>
+          <div className="flex items-center justify-between">
+            <span className="font-body text-[10.5px] tracking-[0.28em] uppercase text-primary-foreground/70">
+              {String(index + 1).padStart(2, "0")} / {String(coreValues.length).padStart(2, "0")}
+            </span>
+            <ArrowUpRight className="w-4 h-4 text-primary-foreground/80" />
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const CompanyPhilosophy = () => {
   return (
@@ -143,7 +221,7 @@ const CompanyPhilosophy = () => {
           </p>
         </motion.div>
 
-        {/* Our Approach */}
+        {/* Our Approach — vertical step rail */}
         <div className="mb-14">
           <motion.h3
             initial={{ opacity: 0, y: 20 }}
@@ -154,25 +232,63 @@ const CompanyPhilosophy = () => {
           >
             Our Approach
           </motion.h3>
-          <div className="space-y-5">
-            {approachItems.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -24 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="flex items-start gap-4 group"
-              >
-                {/* Animated number */}
-                <div className="flex-shrink-0 w-9 h-9 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center group-hover:bg-accent/20 transition-colors duration-300 mt-0.5">
-                  <span className="font-display text-xs font-bold text-accent">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </div>
-                <p className="font-body text-foreground text-base leading-relaxed pt-1.5">{item}</p>
-              </motion.div>
-            ))}
+
+          <div className="relative pl-2">
+            {/* Connecting rail — draws in as user scrolls into view */}
+            <motion.span
+              aria-hidden
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              style={{ transformOrigin: "top" }}
+              className="absolute left-[18px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-primary via-primary/60 to-primary/10 rounded-full"
+            />
+
+            <ol className="space-y-7">
+              {approachItems.map((item, i) => (
+                <motion.li
+                  key={i}
+                  initial={{ opacity: 0, x: -24 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{
+                    duration: 0.55,
+                    delay: 0.2 + i * 0.12,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="relative flex items-start gap-5 group"
+                >
+                  {/* Numbered marker on the rail */}
+                  <div className="relative z-10 shrink-0 w-9 h-9 rounded-full bg-primary text-primary-foreground border-2 border-background flex items-center justify-center shadow-card">
+                    <span className="font-display text-[11px] font-bold tabular-nums">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <motion.span
+                      aria-hidden
+                      className="absolute inset-0 rounded-full bg-primary"
+                      initial={{ scale: 1, opacity: 0 }}
+                      whileInView={{ scale: [1, 1.5], opacity: [0.4, 0] }}
+                      viewport={{ once: true }}
+                      transition={{
+                        duration: 1.4,
+                        delay: 0.6 + i * 0.15,
+                        ease: "easeOut",
+                      }}
+                    />
+                  </div>
+
+                  <div className="flex-1 pt-0.5">
+                    <h4 className="font-display text-base lg:text-lg font-semibold text-foreground tracking-tight leading-snug">
+                      {item.title}
+                    </h4>
+                    <p className="font-body text-[14px] text-muted-foreground leading-relaxed mt-1.5 max-w-prose">
+                      {item.body}
+                    </p>
+                  </div>
+                </motion.li>
+              ))}
+            </ol>
           </div>
         </div>
 
@@ -202,7 +318,7 @@ const CompanyPhilosophy = () => {
           We are a partner you can rely on — not just a supplier you order from.
         </motion.p>
 
-        {/* Core Values */}
+        {/* Core Values — 3-D flip cards */}
         <div className="mb-14">
           <motion.h3
             initial={{ opacity: 0, y: 20 }}
@@ -213,37 +329,9 @@ const CompanyPhilosophy = () => {
           >
             Our Team Values
           </motion.h3>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 gap-4" style={{ perspective: "1400px" }}>
             {coreValues.map((value, i) => (
-              <motion.div
-                key={value.title}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -4, transition: { duration: 0.3 } }}
-                className="group relative p-6 rounded-lg border border-border bg-card hover:border-accent/30 hover:shadow-lg transition-all duration-500 overflow-hidden"
-              >
-                {/* Corner accent */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
-                  className="absolute top-0 right-0 w-16 h-16 rounded-bl-[3rem] bg-accent/5 group-hover:bg-accent/10 transition-colors duration-500 pointer-events-none"
-                />
-                <motion.div
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4"
-                >
-                  <value.icon className="w-5 h-5 text-accent" />
-                </motion.div>
-                <h4 className="font-display text-base font-bold text-foreground mb-2 tracking-tight">
-                  {value.title}
-                </h4>
-                <p className="font-body text-muted-foreground text-sm leading-relaxed">{value.desc}</p>
-              </motion.div>
+              <FlipCard key={value.title} value={value} index={i} />
             ))}
           </div>
         </div>

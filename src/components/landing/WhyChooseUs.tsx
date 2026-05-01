@@ -102,14 +102,30 @@ const WhyChooseUs = () => {
     <section
       id="about"
       className="relative overflow-hidden py-section-base lg:py-section-base-lg"
-      style={{
-        background: `
-          radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 50%),
-          radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 50%),
-          linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 14%), hsl(150 40% 10%))
-        `,
-      }}
     >
+      {/* Background photo — cold-chain warehouse, sets the visual tone */}
+      <img
+        src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=2400&q=80"
+        alt=""
+        aria-hidden
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      />
+      {/* Forest tint — sits over the photo so the rest of the section reads
+          on the same dark palette as before. ~92 % opacity keeps the photo
+          legible in shadows + highlights. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.65) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.55) 0%, transparent 50%),
+            linear-gradient(180deg, hsl(150 40% 6% / 0.92), hsl(140 50% 14% / 0.92), hsl(150 40% 10% / 0.92))
+          `,
+        }}
+      />
+
       {/* Decorative orbs — animated */}
       <div className="absolute w-[500px] h-[500px] -top-32 -left-32 rounded-full opacity-[0.08] pointer-events-none animate-orb"
         style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />

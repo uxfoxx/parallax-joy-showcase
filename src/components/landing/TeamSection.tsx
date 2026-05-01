@@ -1,41 +1,38 @@
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
 import { useTextScramble } from "@/hooks/useTextScramble";
 import { useInView } from "@/hooks/useInView";
 import SplitText from "@/components/motion/SplitText";
 import Eyebrow from "@/components/ui/eyebrow";
 
+const HERITAGE_IMAGE =
+  "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=2000&q=80";
+
 const TeamSection = () => {
-  const [videoError, setVideoError] = useState(false);
   const { ref: inViewRef, inView } = useInView();
-  const { displayText, isComplete } = useTextScramble("Three Decades of Trust", inView, {
+  const { displayText } = useTextScramble("Three Decades of Trust", inView, {
     speed: 35,
     scrambleDuration: 400,
   });
 
   return (
-    <section ref={inViewRef as React.RefObject<HTMLElement>} className="relative min-h-[70vh] overflow-hidden flex items-center justify-center">
-      {/* Video background */}
-      <div
-        className="absolute inset-0 overflow-hidden bg-cover bg-center"
-        style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&q=80')",
-        }}
-      >
-        {!videoError && (
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&q=80"
-            className="absolute inset-0 w-full h-full object-cover"
-            onError={() => setVideoError(true)}
-          >
-            <source src="/videos/team-bg.mp4" type="video/mp4" />
-          </video>
-        )}
-        {/* Dark overlay */}
+    <section
+      ref={inViewRef as React.RefObject<HTMLElement>}
+      className="relative min-h-[70vh] overflow-hidden flex items-center justify-center"
+    >
+      {/* Background image */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.img
+          src={HERITAGE_IMAGE}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          initial={{ scale: 1.06 }}
+          whileInView={{ scale: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Dark overlay for legibility */}
         <div className="absolute inset-0 bg-black/60" />
         {/* Green tint overlay for visual distinction from other sections */}
         <div

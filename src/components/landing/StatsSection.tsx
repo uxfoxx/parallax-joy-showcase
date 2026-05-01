@@ -29,7 +29,6 @@ type Origin = {
   country: string;
   flag: string;
   region: string;
-  specialty: string;
   brands: string[];
   leadTimeDays: string;
   pos: { x: number; y: number };
@@ -41,23 +40,27 @@ const origins: Origin[] = [
   {
     key: "netherlands", country: "Netherlands", flag: "🇳🇱",
     region: "Northern Europe",
-    specialty: "Butter, dairy, and confectionery from generations-old creameries.",
     brands: ["Remia", "Daily Dairy", "Snorre Foods"],
     leadTimeDays: "32–38",
     pos: { x: 514, y: 106 },
   },
   {
+    key: "belgium", country: "Belgium", flag: "🇧🇪",
+    region: "Western Europe",
+    brands: ["BON VEGATO", "HUNGRITOS"],
+    leadTimeDays: "30–36",
+    pos: { x: 524, y: 118 },
+  },
+  {
     key: "italy", country: "Italy", flag: "🇮🇹",
     region: "Southern Europe",
-    specialty: "Cold-pressed olive oil, durum pasta, and aged regional cheese.",
     brands: ["Granoro", "Donna Chiara", "Mizkan"],
     leadTimeDays: "34–40",
-    pos: { x: 534, y: 133 },
+    pos: { x: 544, y: 138 },
   },
   {
     key: "uae", country: "UAE", flag: "🇦🇪",
     region: "Middle East",
-    specialty: "Premium dates, foil, and confectionery from Gulf trade hubs.",
     brands: ["Falcon", "Royal Arm", "Super Chef"],
     leadTimeDays: "8–12",
     pos: { x: 650, y: 183 },
@@ -65,7 +68,6 @@ const origins: Origin[] = [
   {
     key: "india", country: "India", flag: "🇮🇳",
     region: "South Asia",
-    specialty: "Spices, basmati rice, and pulses from regional smallholders.",
     brands: ["AZIZAA"],
     leadTimeDays: "6–10",
     pos: { x: 717, y: 189 },
@@ -73,7 +75,6 @@ const origins: Origin[] = [
   {
     key: "china", country: "China", flag: "🇨🇳",
     region: "East Asia",
-    specialty: "Frozen seafood, instant noodles, and shelf staples at scale.",
     brands: ["Wai Wai", "Fletcher"],
     leadTimeDays: "16–22",
     pos: { x: 792, y: 153 },
@@ -81,7 +82,6 @@ const origins: Origin[] = [
   {
     key: "thailand", country: "Thailand", flag: "🇹🇭",
     region: "South-East Asia",
-    specialty: "Fragrant jasmine rice and frozen seafood, port to port in days.",
     brands: ["Hungritos"],
     leadTimeDays: "10–14",
     pos: { x: 778, y: 208 },
@@ -89,7 +89,6 @@ const origins: Origin[] = [
   {
     key: "singapore", country: "Singapore", flag: "🇸🇬",
     region: "South-East Asia",
-    specialty: "Sauces, processed staples, and re-export specialty imports.",
     brands: ["BON VEGATO", "ABC"],
     leadTimeDays: "9–13",
     pos: { x: 786, y: 247 },
@@ -97,15 +96,21 @@ const origins: Origin[] = [
   {
     key: "australia", country: "Australia", flag: "🇦🇺",
     region: "Oceania",
-    specialty: "Premium beef, lamb cuts, dairy, and grain — cold-chain certified.",
     brands: ["WAGU"],
     leadTimeDays: "18–24",
     pos: { x: 875, y: 319 },
   },
+  {
+    key: "brazil", country: "Brazil", flag: "🇧🇷",
+    region: "South America",
+    brands: ["Imported"],
+    leadTimeDays: "36–42",
+    pos: { x: 470, y: 248 },
+  },
 ];
 
 const HEADLINE_STATS = [
-  { value: 8, suffix: "", label: "Source countries" },
+  { value: 10, suffix: "", label: "Source countries" },
   { value: 500, suffix: "+", label: "Products distributed" },
   { value: 1000, suffix: "+", label: "Active retail partners" },
   { value: 24, suffix: "/7", label: "Cold-chain monitoring" },
@@ -151,6 +156,8 @@ const CONTINENT_BLOBS = [
   { cx: 785, cy: 230, r: 45, density: 0.5 },
   // Oceania
   { cx: 870, cy: 320, r: 55, density: 0.45 },
+  // South America
+  { cx: 470, cy: 250, r: 60, density: 0.5 },
 ];
 
 const Stipple = () => {
@@ -334,7 +341,7 @@ const StatsSection = () => {
             </svg>
 
             <svg
-              viewBox="430 70 510 290"
+              viewBox="430 70 510 320"
               className="w-full h-auto mt-6"
               role="img"
               aria-label="Global sourcing map: eight origin countries connected to Sri Lanka"
@@ -453,7 +460,7 @@ const StatsSection = () => {
                     onClick={() => pick(i)}
                     tabIndex={0}
                     role="button"
-                    aria-label={`${o.country} — ${o.specialty}`}
+                    aria-label={`${o.country} — ${o.region}`}
                   >
                     <circle cx={o.pos.x} cy={o.pos.y} r={14} fill="transparent" />
 
@@ -562,12 +569,8 @@ const StatsSection = () => {
                     animate={{ scaleX: 1 }}
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     style={{ transformOrigin: "left" }}
-                    className="h-px w-16 bg-accent mb-5"
+                    className="h-px w-16 bg-accent mb-7"
                   />
-
-                  <p className="font-body text-[14.5px] text-foreground/80 leading-relaxed mb-7">
-                    {current.specialty}
-                  </p>
 
                   {/* Lead time + brands as a small spec table */}
                   <div className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-3.5 text-[12.5px] font-body">
