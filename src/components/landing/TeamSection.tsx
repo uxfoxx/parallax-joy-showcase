@@ -105,7 +105,7 @@ const TeamSection = () => {
           className="text-white/75 font-body text-base lg:text-lg leading-relaxed max-w-lg mx-auto"
         >
           <SplitText
-            text="For over three decades, Olive Foods has been Sri Lanka's bridge between global food producers and local businesses — building partnerships that stand the test of time."
+            text="Olive Foods is Sri Lanka’s fastest-growing food distributors, connecting global food producers with local businesses while building partnerships that stand the test of time."
             by="word"
             stagger={0.015}
             as="span"
