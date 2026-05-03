@@ -264,7 +264,7 @@ const HeroSection = () => {
             style={{ y: reduced ? 0 : line3Y }}
           >
             <SplitText
-              text="Distribution Partner."
+              text="Import Partner."
               by="word"
               stagger={0.06}
               delay={0.42}
