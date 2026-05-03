@@ -179,7 +179,7 @@ const CategoriesSection = () => {
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-5 leading-tight tracking-tight">
             <SplitText text="Everything Your" by="word" stagger={0.05} as="span" className="block" />
             <span className="text-gradient-gold block">
-              <SplitText text="Business Needs" by="word" stagger={0.05} delay={0.15} as="span" />
+              <SplitText text="Business Needs" by="word" stagger={0.05} delay={0.15} as="span"  className="block" />
             </span>
           </h2>
           <p className="text-muted-foreground font-body text-lg leading-relaxed">
