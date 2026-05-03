@@ -105,7 +105,7 @@ const WhyChooseUs = () => {
     >
       {/* Background photo — cold-chain warehouse, sets the visual tone */}
       <img
-        src="https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/public/olive-uploads/Backgrounds/Adobe%20Express%20-%204294436-uhd_3840_2160_25fps.gif"
+        src="https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/public/olive-uploads/Backgrounds/pexels-freestocks-1366594.jpg"
         alt=""
         aria-hidden
         loading="lazy"
