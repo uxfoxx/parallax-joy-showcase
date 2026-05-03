@@ -117,8 +117,7 @@ const Navbar = () => {
                             }
                           : undefined
                       }
-                    > 
-                      
+                    
                     </span>
                     {/* Animated underline indicator */}
                     {isActive && (
