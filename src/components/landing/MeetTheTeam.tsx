@@ -169,7 +169,7 @@ const MeetTheTeam = () => {
           {/* Desktop: Grid layout | Mobile: Stacked */}
           <div className="grid lg:grid-cols-2 min-h-[520px]">
             {/* Left: Info section */}
-            <div className="p-8 lg:p-12 flex flex-col justify-between order-2 lg:order-1 border-r border-border/50 hidden lg:flex">
+            <div className="p-8 lg:p-12 flex-col justify-between order-2 lg:order-1 border-r border-border/50 hidden lg:flex">
               <div className="space-y-8">
                 {/* Department header */}
                 <div>
