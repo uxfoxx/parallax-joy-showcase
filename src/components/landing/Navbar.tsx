@@ -117,14 +117,8 @@ const Navbar = () => {
                             }
                           : undefined
                       }
-                    >
-                      {link.label}
-                      {link.premium && (
-                        <span className="relative flex h-1.5 w-1.5">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
-                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent" />
-                        </span>
-                      )}
+                    > 
+                      
                     </span>
                     {/* Animated underline indicator */}
                     {isActive && (
