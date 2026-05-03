@@ -119,8 +119,10 @@ const WhyChooseUs = () => {
         className="absolute inset-0 pointer-events-none"
         style={{
           background: `
-            black / 0.70,
-          `,
+  radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.8) 0%, transparent 50%),
+  radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.8) 0%, transparent 50%),
+  linear-gradient(180deg, hsl(150 40% 6% / 0.8), hsl(140 50% 14% / 0.8), hsl(150 40% 10% / 0.8))
+`
         }}
       />
 
