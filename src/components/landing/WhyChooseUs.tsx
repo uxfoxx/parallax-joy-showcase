@@ -118,6 +118,7 @@ const WhyChooseUs = () => {
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
+          opacity: 0.84,
           background: `
   radial-gradient(ellipse at 30% 20%, hsl(0 0% 14%) 0%, transparent 55%),
   radial-gradient(ellipse at 70% 80%, hsl(0 0% 6%) 0%, transparent 55%),
