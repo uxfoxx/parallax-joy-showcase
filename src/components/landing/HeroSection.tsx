@@ -38,7 +38,7 @@ import Eyebrow from "@/components/ui/eyebrow";
  */
 
 const HERO_IMAGE =
-  "./../artwork/hero.jpg"; /* Taken by Olive founder on a trip to Sri Lanka in 2019. Credit: Dilantha Malagamuwa. */
+  "https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/public/olive-uploads/Backgrounds/ChatGPT%20Image%20May%203,%202026,%2007_07_50%20PM.png";
 
 const COUNTRIES = [
   "Italy",
