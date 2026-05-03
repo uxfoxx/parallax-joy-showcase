@@ -367,10 +367,10 @@ const AdminProducts = () => {
               </div>
               <div className="flex items-center gap-3">
                 <Switch checked={form.premium} onCheckedChange={(v) => setForm({ ...form, premium: v })} />
-                <Label className="font-body">Premium (appears on the /premium page)</Label>
+                <Label className="font-body">Premium (product attribute)</Label>
               </div>
               <p className="text-xs text-muted-foreground font-body -mt-2 ml-11">
-                Premium products show on the dedicated Premium page AND in the main Products catalogue. Add tag "seasonal" to also feature in the Seasonal Rail.
+                Mark products as premium for internal tracking. Add tag "seasonal" to feature in the Seasonal Rail.
               </p>
               <Button onClick={handleSave} className="w-full font-body">{editing ? "Update" : "Create"}</Button>
             </div>

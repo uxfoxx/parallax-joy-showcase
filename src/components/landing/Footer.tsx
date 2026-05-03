@@ -4,6 +4,11 @@ import { ArrowRight } from "lucide-react";
 import logoSvg from "@/assets/olive-foods-logo.svg";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 
+const containerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+};
+
 const columnVariants = {
   hidden: { opacity: 0, y: 28 },
   show: (i: number) => ({
@@ -18,8 +23,6 @@ const quickLinks = [
   { label: "Brands", href: "/brands" },
   { label: "Products", href: "/products" },
   { label: "Our Products", href: "/products?our=true" },
-  { label: "Premium", href: "/premium" },
-  { label: "The Selection", href: "/premium/selection" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -44,6 +47,7 @@ const Footer = () => {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-10%" }}
+          variants={containerVariants}
           className="grid md:grid-cols-[1.5fr_1fr_1fr] gap-16 items-start"
         >
           {/* Brand */}

@@ -12,8 +12,7 @@ import BrandsPage from "./pages/BrandsPage.tsx";
 import BrandDetailPage from "./pages/BrandDetailPage.tsx";
 import ProductsPage from "./pages/ProductsPage.tsx";
 import ProductDetailPage from "./pages/ProductDetailPage.tsx";
-import PremiumPage from "./pages/PremiumPage.tsx";
-import PremiumSelectionPage from "./pages/PremiumSelectionPage.tsx";
+
 import AdminLogin from "./pages/admin/AdminLogin.tsx";
 import AdminLayout from "./pages/admin/AdminLayout.tsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
@@ -55,8 +54,6 @@ const AppRoutes = () => {
             <Route path="/brands/:slug" element={<BrandDetailPage />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/products/:slug" element={<ProductDetailPage />} />
-            <Route path="/premium" element={<PremiumPage />} />
-            <Route path="/premium/selection" element={<PremiumSelectionPage />} />
 
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>

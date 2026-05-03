@@ -16,6 +16,11 @@ type SplitTextProps = {
   as?: ElementType;
 };
 
+const containerVariants: Variants = {
+  hidden: {},
+  show: {},
+};
+
 const tokenVariants: Variants = {
   hidden: { opacity: 0, y: "0.5em", filter: "blur(6px)" },
   show: (i: number) => ({
@@ -60,6 +65,7 @@ const SplitText = ({
       className={className}
       style={style}
       aria-label={text}
+      variants={containerVariants}
       initial="hidden"
       whileInView="show"
       viewport={{ once: !retrigger, margin: "-10% 0px -10% 0px" }}
