@@ -30,7 +30,7 @@ const LogoStrip = () => {
           <MarqueeRow baseVelocity={30} direction={-1} repeat={3}>
             {logos.map((logo) => {
               const tileClass =
-                "group flex-shrink-0 flex items-center justify-center h-16 md:h-20 px-8 md:px-10";
+                "group flex-shrink-0 flex items-center justify-center h-16 md:h-[80px] px-8 md:px-10";
               const inner = (
                 <img
                   src={logo.image_url}
