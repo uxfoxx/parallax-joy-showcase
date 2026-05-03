@@ -36,7 +36,7 @@ const LogoStrip = () => {
                   src={logo.image_url}
                   alt={`${logo.name} logo`}
                   loading="lazy"
-                  className="h-full w-auto max-w-[180px] object-contain filter brightness-0 invert opacity-70 group-hover:opacity-100 transition-all duration-500 group-hover:scale-[1.04]"
+                  className="h-[120px] w-auto max-w-[180px] object-contain filter brightness-0 invert opacity-70 group-hover:opacity-100 transition-all duration-500 group-hover:scale-[1.04]"
                 />
               );
               return logo.link_url ? (
