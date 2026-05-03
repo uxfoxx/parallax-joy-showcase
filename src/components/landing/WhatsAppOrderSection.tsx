@@ -4,7 +4,12 @@ import { MessageCircle, Check, CheckCheck, Sparkles } from "lucide-react";
 import MagneticButton from "@/components/motion/MagneticButton";
 import SplitText from "@/components/motion/SplitText";
 import Eyebrow from "@/components/ui/eyebrow";
-import { waLink, ENQUIRE_MSG } from "@/components/premium/premiumConstants";
+
+// WhatsApp constants
+const PHONE = "94112071717";
+const ENQUIRE_MSG = "Hi Olive Foods — I'm interested in your premium selections.";
+const waLink = (msg: string) =>
+  `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
 
 /**
  * "How to order via WhatsApp" — creative animated landing section.

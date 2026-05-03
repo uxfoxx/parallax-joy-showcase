@@ -8,8 +8,8 @@ const HERITAGE_IMAGE =
   "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=2000&q=80";
 
 const TeamSection = () => {
-  const { ref: inViewRef, inView } = useInView();
-  const { displayText } = useTextScramble("Three Decades of Trust", inView, {
+  const { ref: inViewRef, isInView } = useInView();
+  const { displayText } = useTextScramble("Three Decades of Trust", isInView, {
     speed: 35,
     scrambleDuration: 400,
   });

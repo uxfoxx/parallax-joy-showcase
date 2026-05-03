@@ -1,8 +1,7 @@
 import { motion } from "framer-motion";
-import Tilt from "react-parallax-tilt";
+import { ArrowRight } from "lucide-react";
 import { staggerGrid, EASE_OUT_EXPO } from "@/lib/motion";
 import SplitText from "@/components/motion/SplitText";
-import Parallax from "@/components/motion/Parallax";
 import FeatureArt, { type FeatureArtKey } from "@/components/art/FeatureArt";
 import Eyebrow from "@/components/ui/eyebrow";
 
@@ -35,65 +34,58 @@ const features: Array<{ art: FeatureArtKey; number: string; title: string; desc:
 
 const FeatureCard = ({ feature: f, index: i }: { feature: typeof features[0]; index: number }) => (
   <motion.div
-    initial={{ opacity: 0, y: 40, filter: "blur(6px)" }}
+    initial={{ opacity: 0, y: 32, filter: "blur(6px)" }}
     whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
     viewport={{ once: true, margin: "-80px" }}
     transition={{ duration: 0.65, delay: staggerGrid(i, 2), ease: EASE_OUT_EXPO }}
+    className="group"
   >
-    <Tilt
-      tiltMaxAngleX={4}
-      tiltMaxAngleY={4}
-      perspective={1400}
-      glareEnable
-      glareMaxOpacity={0.1}
-      glareColor="#e6c96b"
-      glareBorderRadius="12px"
-      transitionSpeed={900}
-    >
-      <div className="group relative p-6 rounded-xl border-l-2 border-l-primary-foreground/15 hover:border-l-accent border border-primary-foreground/8 hover:border-primary-foreground/15 bg-primary-foreground/[0.04] hover:bg-primary-foreground/[0.07] transition-all duration-300 cursor-default overflow-hidden">
-        {/* Decorative corner pattern — concentric arcs + dots, hand-drawn
-            feel matching CategoryArt/FeatureArt. Lifts to gold on hover. */}
-        <svg
-          viewBox="0 0 140 140"
-          aria-hidden
-          className="absolute -top-6 -right-6 w-36 h-36 text-primary-foreground/[0.07] group-hover:text-accent/25 transition-colors duration-500 select-none pointer-events-none"
-          style={{ transform: `rotate(${i * 12}deg)` }}
-        >
-          <g fill="none" stroke="currentColor" strokeWidth="1">
-            {/* Quarter-arcs anchored to the top-right corner */}
-            <path d="M 140 40 A 100 100 0 0 0 40 140" />
-            <path d="M 140 70 A 70 70 0 0 0 70 140" />
-            <path d="M 140 100 A 40 40 0 0 0 100 140" />
-          </g>
-          <g fill="currentColor">
-            {/* Scattered dots along/between the arcs */}
-            <circle cx="124" cy="56" r="1.4" />
-            <circle cx="108" cy="88" r="1.4" />
-            <circle cx="82" cy="118" r="1.4" />
-            <circle cx="58" cy="124" r="1.2" />
-            <circle cx="118" cy="118" r="1.2" />
-            <circle cx="96" cy="46" r="1" />
-            <circle cx="132" cy="92" r="1" />
-          </g>
-        </svg>
+    <div className="relative h-full p-8 rounded-2xl bg-white/95 backdrop-blur-sm border border-white/20 hover:border-accent/40 shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden">
+      {/* Accent line on left */}
+      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-accent via-accent/50 to-transparent" />
+      
+      {/* Top accent — appears on hover */}
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-accent to-transparent"
+        initial={{ scaleX: 0 }}
+        whileHover={{ scaleX: 1 }}
+        transition={{ duration: 0.3 }}
+      />
 
-        {/* Number + art row */}
-        <div className="flex items-center gap-4 mb-5">
-          <span className="font-display text-xs font-bold text-accent tracking-widest">{f.number}</span>
+      {/* Number + Icon row */}
+      <div className="flex items-start justify-between mb-6">
+        <span className="font-display text-5xl font-black text-foreground/8">
+          {f.number}
+        </span>
+        <motion.div
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          transition={{ type: "spring", stiffness: 240, damping: 18 }}
+          className="transition-colors duration-300"
+        >
           <FeatureArt
             kind={f.art}
-            className="w-14 h-14 text-primary-foreground/75 group-hover:text-accent transition-colors duration-300"
+            className="w-16 h-16 text-accent"
           />
-        </div>
-
-        <h3 className="font-display text-lg font-semibold text-primary-foreground mb-3 leading-snug tracking-tight">
-          {f.title}
-        </h3>
-        <p className="text-primary-foreground/70 font-body leading-relaxed text-sm">
-          {f.desc}
-        </p>
+        </motion.div>
       </div>
-    </Tilt>
+
+      {/* Content */}
+      <h3 className="font-display text-xl font-bold text-foreground mb-3 leading-snug tracking-tight">
+        {f.title}
+      </h3>
+      <p className="text-foreground/65 font-body leading-relaxed text-sm mb-5">
+        {f.desc}
+      </p>
+
+      {/* Learn more link */}
+      <motion.div
+        className="flex items-center gap-2 text-accent font-body text-sm font-semibold cursor-pointer"
+        whileHover={{ x: 4 }}
+      >
+        <span>Learn more</span>
+        <ArrowRight className="w-4 h-4" />
+      </motion.div>
+    </div>
   </motion.div>
 );
 
@@ -103,7 +95,7 @@ const WhyChooseUs = () => {
       id="about"
       className="relative overflow-hidden py-section-base lg:py-section-base-lg"
     >
-      {/* Background photo — cold-chain warehouse, sets the visual tone */}
+      {/* Background image with optimized overlay */}
       <img
         src="https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/public/olive-uploads/Backgrounds/pexels-freestocks-1366594.jpg"
         alt=""
@@ -111,68 +103,44 @@ const WhyChooseUs = () => {
         loading="lazy"
         className="absolute inset-0 w-full h-full object-cover pointer-events-none"
       />
-      {/* Forest tint — sits over the photo so the rest of the section reads
-          on the same dark palette as before. ~92 % opacity keeps the photo
-          legible in shadows + highlights. */}
+      
+      {/* Sophisticated overlay — lets image breathe while maintaining readability */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
-          opacity: 0.84,
           background: `
-  radial-gradient(ellipse at 30% 20%, hsl(0 0% 14%) 0%, transparent 55%),
-  radial-gradient(ellipse at 70% 80%, hsl(0 0% 6%) 0%, transparent 55%),
-  linear-gradient(180deg, hsl(0 0% 3%), hsl(0 0% 9%), hsl(0 0% 5%))
-`
+            radial-gradient(ellipse 1200px 600px at 50% 0%, rgba(255,255,255,0.08), transparent 40%),
+            linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.5), rgba(0,0,0,0.6))
+          `
         }}
       />
 
-      {/* Decorative orbs — animated */}
-      <div className="absolute w-[500px] h-[500px] -top-32 -left-32 rounded-full opacity-[0.08] pointer-events-none animate-orb"
-        style={{ background: "radial-gradient(circle, hsl(80 50% 31%), transparent 70%)" }} />
-      <div className="absolute w-[350px] h-[350px] bottom-0 right-10 rounded-full opacity-[0.06] pointer-events-none animate-orb"
-        style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)", animationDelay: "7s" }} />
-      {/* Gold accent orb — center */}
-      <div className="absolute w-[300px] h-[300px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.04] pointer-events-none animate-orb"
-        style={{ background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)", animationDelay: "13s" }} />
-
-      {/* Parallax SVG arc for depth */}
-      <Parallax strength={80} className="absolute inset-x-0 top-0 pointer-events-none">
-        <svg viewBox="0 0 1200 300" className="w-full h-auto opacity-[0.06]" aria-hidden>
-          <defs>
-            <linearGradient id="arcGrad" x1="0" x2="1">
-              <stop offset="0%" stopColor="hsl(75 40% 60%)" stopOpacity="0" />
-              <stop offset="50%" stopColor="hsl(75 40% 60%)" stopOpacity="1" />
-              <stop offset="100%" stopColor="hsl(75 40% 60%)" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          <path d="M 0 250 Q 600 0 1200 250" stroke="url(#arcGrad)" strokeWidth="2" fill="none" />
-        </svg>
-      </Parallax>
-
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
-        {/* Header */}
+        {/* Header — more prominent with better visual hierarchy */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center max-w-3xl mx-auto mb-20"
+          transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
+          className="max-w-4xl mb-20"
         >
-          <Eyebrow variant="pill" tone="white" className="mb-8">
-            Why Choose Us
+          <Eyebrow variant="pill" tone="white" className="mb-6">
+            Why Choose Olive Foods
           </Eyebrow>
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
+          <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight tracking-tight">
             <SplitText text="Your Complete FMCG" by="word" stagger={0.05} as="span" className="block" />
-            <SplitText text="Distribution Partner" by="word" stagger={0.05} delay={0.18} as="span" className="block" />
+            <span className="text-gradient-gold block">
+              <SplitText text="Distribution Partner" by="word" stagger={0.05} delay={0.15} as="span" className="block" />
+            </span>
           </h2>
-          <p className="text-primary-foreground/70 font-body text-lg leading-relaxed">
-            Three decades of experience in import, warehousing, and distribution — built on strong global supplier relationships.
+          <p className="text-white/80 font-body text-lg leading-relaxed max-w-2xl">
+            Three decades of experience in import, warehousing, and distribution — built on strong global supplier relationships and a commitment to excellence.
           </p>
         </motion.div>
 
-        {/* Feature cards — 2×2 grid */}
-        <div className="grid md:grid-cols-2 gap-5">
+        {/* Feature cards — full-width responsive grid with better spacing */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((f, i) => (
             <FeatureCard key={f.title} feature={f} index={i} />
           ))}

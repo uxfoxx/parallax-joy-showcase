@@ -65,7 +65,7 @@ const useSmooth = (
   output: [number | string, number | string],
 ) => {
   const t = useTransform(mv, input, output);
-  return useSpring(t, { stiffness: 110, damping: 24, mass: 0.4 });
+  return useSpring(t as MotionValue<number>, { stiffness: 110, damping: 24, mass: 0.4 });
 };
 
 const HeroSection = () => {
