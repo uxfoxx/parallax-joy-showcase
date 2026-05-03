@@ -349,30 +349,7 @@ const HeroSection = () => {
       </motion.div>
 
       {/* 8 — Country marquee band (above bottom edge) */}
-      <motion.div
-        aria-hidden
-        className="absolute left-0 right-0 bottom-[112px] md:bottom-[124px] z-[5] pointer-events-none"
-        style={{ y: reduced ? 0 : marqueeY }}
-      >
-        <div className="relative">
-          {/* Top + bottom hairlines frame the band */}
-          <span className="absolute inset-x-0 top-0 h-px bg-white/10" />
-          <span className="absolute inset-x-0 bottom-0 h-px bg-white/10" />
-          <MarqueeRow baseVelocity={28} direction={-1} className="py-4">
-            <span className="font-display text-[40px] md:text-[64px] font-bold leading-none tracking-tight text-white/[0.08] whitespace-nowrap mr-10 md:mr-16">
-              {COUNTRIES.map((c, i) => (
-                <span key={c}>
-                  {c}
-                  {i < COUNTRIES.length - 1 && (
-                    <span className="mx-6 md:mx-10 text-white/15">·</span>
-                  )}
-                </span>
-              ))}
-              <span className="mx-6 md:mx-10 text-white/15">·</span>
-            </span>
-          </MarqueeRow>
-        </div>
-      </motion.div>
+      
 
       {/* 9 — Floating glass stat-pill cluster (right) */}
       <motion.div
