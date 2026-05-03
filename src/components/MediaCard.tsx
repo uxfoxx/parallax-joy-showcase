@@ -65,7 +65,7 @@ const MediaCard = ({
         >
           <div
             className={`relative aspect-[4/5] overflow-hidden rounded-2xl shadow-sm group-hover:shadow-2xl group-hover:shadow-black/25 transition-shadow duration-500 border ${
-              isDark ? "border-white/10 bg-forest-deep/40" : "border-border/70 bg-muted"
+              isDark ? "border-white/10 bg-forest-deep/40" : "border-border/70  "
             }`}
           >
             {image ? (
