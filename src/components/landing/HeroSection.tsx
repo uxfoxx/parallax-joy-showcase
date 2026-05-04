@@ -206,7 +206,7 @@ const HeroSection = () => {
           className="font-body text-[11px] md:text-[10px] tracking-[0.5em] uppercase text-white/60 whitespace-nowrap"
           style={{ writingMode: "vertical-rl" }}
         >
-          Est · 1994 · Colombo
+          
         </span>
       </motion.div>
 
@@ -223,7 +223,7 @@ const HeroSection = () => {
           className="mb-9"
         >
           <Eyebrow variant="pill" tone="white" withDot>
-            Sri Lanka · Since 1994
+            Sri Lanka 
           </Eyebrow>
         </motion.div>
 
