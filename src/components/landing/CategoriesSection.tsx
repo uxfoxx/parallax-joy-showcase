@@ -178,9 +178,15 @@ const CategoriesSection = () => {
           </Eyebrow>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-5 leading-tight tracking-tight">
             <SplitText text="Everything Your" by="word" stagger={0.05} as="span" className="block" />
-            <span className="text-gradient-gold block">
-              <SplitText text="Business Needs" by="word" stagger={0.05} delay={0.15} as="span"  className="block" />
-            </span>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="block text-gradient-gold"
+            >
+              <span className="block">Business Needs</span>
+            </motion.div>
           </h2>
           <p className="text-muted-foreground font-body text-lg leading-relaxed">
             We import and distribute across all major food categories — quality and variety for every business need.
