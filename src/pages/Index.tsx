@@ -61,9 +61,9 @@ const Index = () => {
         <TeamSection />
       </div>
       <SectionTransition />
-      <div data-navbar-theme="light">
+      {/* <div data-navbar-theme="light">
         <MeetTheTeam />
-      </div>
+      </div> */}
       <SectionTransition />
       <div data-navbar-theme="dark">
         <LocationsSection />
