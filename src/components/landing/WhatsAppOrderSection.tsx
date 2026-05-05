@@ -222,7 +222,7 @@ const WhatsAppOrderSection = () => {
       className="relative overflow-hidden py-section-base lg:py-section-base-lg"
       style={{
         background:
-          "background: rgb(8, 18, 13)"
+          "background: black "
       }}
     >
       {/* Green orb */}
