@@ -254,7 +254,7 @@ const HeroSection = () => {
               stagger={0.06}
               delay={0.1}
               duration={0.9}
-              className="block text-white italic"
+              className="block text-gradient-gold italic"
               as="span"
             />
           </motion.span>
