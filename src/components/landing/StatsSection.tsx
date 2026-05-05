@@ -572,71 +572,12 @@ const StatsSection = () => {
                     className="h-px w-16 bg-accent mb-7"
                   />
 
-                  {/* Lead time + brands as a small spec table */}
-                  <div className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-3.5 text-[12.5px] font-body">
-                    <span className="text-muted-foreground tracking-wider uppercase text-[10.5px]">
-                      Lead time
-                    </span>
-                    <span className="text-foreground tabular-nums">
-                      {current.leadTimeDays} days <span className="text-muted-foreground">port to port</span>
-                    </span>
-                    <span className="text-muted-foreground tracking-wider uppercase text-[10.5px]">
-                      Brands
-                    </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {current.brands.map((b) => (
-                        <span
-                          key={b}
-                          className="px-2 py-0.5 rounded-md border border-border bg-background text-foreground/85 text-[11.5px]"
-                        >
-                          {b}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
                 </motion.div>
               </AnimatePresence>
             </div>
           </div>
         </div>
 
-        {/* ── Zone 3: Numbered country strip ── */}
-        <div className="mt-12 lg:mt-16 border-t border-border pt-6">
-          <div className="flex flex-wrap gap-x-1 gap-y-2">
-            {origins.map((o, i) => {
-              const isActive = i === active;
-              return (
-                <button
-                  key={o.key}
-                  type="button"
-                  onClick={() => pick(i)}
-                  onMouseEnter={() => pick(i)}
-                  aria-pressed={isActive}
-                  className={`group relative flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-300 ${
-                    isActive
-                      ? "bg-accent/10 text-accent"
-                      : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.03]"
-                  }`}
-                >
-                  <span className="font-display text-[11px] font-semibold tracking-[0.18em] tabular-nums">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span aria-hidden className="text-base">{o.flag}</span>
-                  <span className="font-body text-[12.5px] font-medium tracking-wide">
-                    {o.country}
-                  </span>
-                  {isActive && (
-                    <motion.span
-                      layoutId="origin-active-bar"
-                      className="absolute left-2 right-2 -bottom-0.5 h-[2px] rounded-full bg-accent"
-                      transition={{ type: "spring", stiffness: 500, damping: 36 }}
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
       </div>
     </section>
   );
