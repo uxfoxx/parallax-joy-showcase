@@ -2,8 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Package, MessageCircle, Share2, MapPin, Tag, Building2,
-  ChevronLeft, ChevronRight, Sparkles, Box, X, ArrowUpRight,
+  Package, Building2, ChevronLeft, ChevronRight, X, ArrowUpRight,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
@@ -117,23 +116,6 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
               )}
             </AnimatePresence>
 
-            {/* Badges */}
-            <div className="absolute top-3 left-3 right-3 flex items-start justify-between pointer-events-none">
-              {product.featured && (
-                <Badge className="bg-accent text-white font-body text-[10px] shadow-md border-0">
-                  Featured
-                </Badge>
-              )}
-              {product.category && (
-                <Badge
-                  variant="outline"
-                  className="bg-background/90 backdrop-blur-sm font-body text-[10px] text-foreground border-border shadow-sm ml-auto"
-                >
-                  {product.category}
-                </Badge>
-              )}
-            </div>
-
             {allImages.length > 0 && (
               <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-foreground/50 backdrop-blur-md text-background text-[10px] font-body opacity-0 group-hover:opacity-100 transition-opacity">
                 Zoom
@@ -198,25 +180,6 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
               />
             </motion.div>
 
-            {/* Category / origin / featured pills */}
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-2">
-              {product.category && (
-                <Badge variant="outline" className="font-body text-xs px-3 py-1.5">
-                  <Tag className="w-3 h-3 mr-1.5" />{product.category}
-                </Badge>
-              )}
-              {product.origin && (
-                <Badge variant="outline" className="font-body text-xs px-3 py-1.5">
-                  <MapPin className="w-3 h-3 mr-1.5" />{product.origin}
-                </Badge>
-              )}
-              {product.featured && (
-                <Badge className="font-body text-xs px-3 py-1.5 bg-accent/10 text-accent border-accent/20">
-                  <Sparkles className="w-3 h-3 mr-1.5" />Featured
-                </Badge>
-              )}
-            </motion.div>
-
             {/* Description */}
             {plainDesc && (
               <motion.div variants={fadeUp}>
@@ -228,84 +191,6 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
                 </p>
               </motion.div>
             )}
-
-            {/* Quick details — two-column grid */}
-            {(product.category || product.origin || brandName) && (
-              <motion.div variants={fadeUp}>
-                <Separator className="mb-4" />
-                <div className="grid grid-cols-2 gap-2.5">
-                  {product.category && (
-                    <div className="rounded-lg bg-muted/50 px-4 py-3">
-                      <p className="font-body text-[10px] uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1.5">
-                        <Tag className="w-3 h-3" /> Category
-                      </p>
-                      <p className="font-body text-sm font-semibold text-foreground truncate">{product.category}</p>
-                    </div>
-                  )}
-                  {product.origin && (
-                    <div className="rounded-lg bg-muted/50 px-4 py-3">
-                      <p className="font-body text-[10px] uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1.5">
-                        <MapPin className="w-3 h-3" /> Origin
-                      </p>
-                      <p className="font-body text-sm font-semibold text-foreground truncate">{product.origin}</p>
-                    </div>
-                  )}
-                  {brandName && (
-                    <div className="rounded-lg bg-muted/50 px-4 py-3">
-                      <p className="font-body text-[10px] uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1.5">
-                        <Building2 className="w-3 h-3" /> Brand
-                      </p>
-                      <Link
-                        to={`/brands/${brandSlug}`}
-                        onClick={onClose}
-                        className="font-body text-sm font-semibold text-foreground hover:text-accent transition-colors truncate block"
-                      >
-                        {brandName}
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            )}
-
-            {/* Tags */}
-            {(product.tags ?? []).length > 0 && (
-              <motion.div variants={fadeUp} className="flex flex-wrap gap-2">
-                {(product.tags ?? []).map((tag) => (
-                  <Badge key={tag} variant="secondary" className="font-body text-xs px-3 py-1.5">
-                    {tag}
-                  </Badge>
-                ))}
-              </motion.div>
-            )}
-
-            {/* CTA */}
-            <motion.div variants={fadeUp}>
-              <Separator className="mb-4" />
-              <div className="rounded-xl border border-accent/20 bg-accent/5 p-5 space-y-3 relative overflow-hidden">
-                <div className="absolute -top-12 -right-12 w-28 h-28 rounded-full bg-accent/10 blur-2xl pointer-events-none" />
-                <p className="font-body text-sm text-muted-foreground relative z-10">
-                  Interested? Get in touch for pricing and availability.
-                </p>
-                <div className="flex flex-wrap gap-3 relative z-10">
-                  <Link
-                    to={`/contact?subject=Product+Inquiry&product=${encodeURIComponent(product.name)}`}
-                    onClick={onClose}
-                    className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-5 h-10 text-sm font-body font-semibold hover:bg-accent/90 transition-all hover:shadow-lg hover:shadow-accent/20"
-                  >
-                    <MessageCircle className="w-4 h-4" /> Inquire Now
-                  </Link>
-                  <button
-                    onClick={() =>
-                      navigator.clipboard.writeText(`${window.location.origin}/products/${product.slug}`)
-                    }
-                    className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/50 px-4 h-10 text-sm font-body text-muted-foreground hover:text-foreground hover:border-accent/50 transition-all"
-                  >
-                    <Share2 className="w-4 h-4" /> Share
-                  </button>
-                </div>
-              </div>
-            </motion.div>
 
             {/* More from brand */}
             {relatedProducts.length > 0 && (
