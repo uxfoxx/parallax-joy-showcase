@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Package, MessageCircle, Share2, MapPin, Tag, Building2,
-  ChevronLeft, ChevronRight, Sparkles, Box, Globe, Hash, X, ArrowUpRight,
+  ChevronLeft, ChevronRight, Sparkles, Box, X, ArrowUpRight,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { useProduct, useProducts, useProductImages } from "@/lib/api";
 import { useProductModal } from "@/lib/productModal";
@@ -89,13 +88,6 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
   const plainDesc = isHtml
     ? new DOMParser().parseFromString(product.description, "text/html").body.textContent || ""
     : product.description;
-
-  const specs = [
-    { icon: Tag, label: "Category", value: product.category },
-    { icon: Globe, label: "Origin", value: product.origin },
-    { icon: Hash, label: "SKU", value: product.sku },
-    { icon: Building2, label: "Brand", value: brandName, link: `/brands/${brandSlug}` },
-  ].filter((s) => s.value);
 
   return (
     <>
@@ -234,29 +226,41 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
               </p>
             </motion.div>
 
-            {/* Specs */}
-            {specs.length > 0 && (
+            {/* Quick details grid */}
+            {(product.category || product.origin || brandName) && (
               <motion.div variants={fadeUp}>
                 <Separator className="mb-4" />
-                <EyebrowLabel>Specifications</EyebrowLabel>
-                <div className="rounded-xl border border-border overflow-hidden">
-                  {specs.map((d, i) => (
-                    <div
-                      key={d.label}
-                      className={`flex items-center justify-between px-4 py-3 ${i % 2 === 0 ? "bg-muted/30" : "bg-background"}`}
-                    >
-                      <span className="font-body text-xs uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                        <d.icon className="w-3.5 h-3.5" />{d.label}
-                      </span>
-                      {d.link ? (
-                        <Link to={d.link} onClick={onClose} className="font-body text-sm text-foreground hover:text-accent transition-colors font-medium">
-                          {d.value}
-                        </Link>
-                      ) : (
-                        <span className="font-body text-sm text-foreground font-medium">{d.value}</span>
-                      )}
+                <div className="grid grid-cols-2 gap-3">
+                  {product.category && (
+                    <div className="rounded-lg bg-muted/40 px-4 py-3">
+                      <p className="font-body text-[10px] uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1.5">
+                        <Tag className="w-3 h-3" /> Category
+                      </p>
+                      <p className="font-body text-sm font-semibold text-foreground">{product.category}</p>
                     </div>
-                  ))}
+                  )}
+                  {product.origin && (
+                    <div className="rounded-lg bg-muted/40 px-4 py-3">
+                      <p className="font-body text-[10px] uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1.5">
+                        <MapPin className="w-3 h-3" /> Origin
+                      </p>
+                      <p className="font-body text-sm font-semibold text-foreground">{product.origin}</p>
+                    </div>
+                  )}
+                  {brandName && (
+                    <div className="rounded-lg bg-muted/40 px-4 py-3">
+                      <p className="font-body text-[10px] uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1.5">
+                        <Building2 className="w-3 h-3" /> Brand
+                      </p>
+                      <Link
+                        to={`/brands/${brandSlug}`}
+                        onClick={onClose}
+                        className="font-body text-sm font-semibold text-foreground hover:text-accent transition-colors"
+                      >
+                        {brandName}
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             )}
@@ -318,7 +322,7 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
                 View All <ArrowUpRight className="w-3 h-3" />
               </Link>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               {relatedProducts.map((p) => (
                 <button
                   key={p.id}
