@@ -249,15 +249,14 @@ const HeroSection = () => {
             style={{ y: reduced ? 0 : line2Y }}
           >
             <SplitText
-             text="Premier Food"
-             
+              text="Premier Food"
               by="word"
               stagger={0.06}
-              delay={0.25}
+              delay={0.1}
               duration={0.9}
-              className="block text-gradient-gold italic"
-              
-            > Premier Food </SplitText>
+              className="block text-white italic"
+              as="span"
+            />
           </motion.span>
 
           <motion.span
