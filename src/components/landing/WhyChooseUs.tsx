@@ -1,255 +1,261 @@
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { EASE_OUT_EXPO } from "@/lib/motion";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useScroll,
+  useInView,
+} from "framer-motion";
+import { useRef } from "react";
+import { ArrowUpRight } from "lucide-react";
+import { EASE_OUT_EXPO, softFadeUp } from "@/lib/motion";
 import SplitText from "@/components/motion/SplitText";
 import FeatureArt, { type FeatureArtKey } from "@/components/art/FeatureArt";
 import Eyebrow from "@/components/ui/eyebrow";
-import { useRef, useState } from "react";
 
-const features: Array<{ art: FeatureArtKey; number: string; title: string; desc: string }> = [
+const features: Array<{
+  art: FeatureArtKey;
+  number: string;
+  title: string;
+  tag: string;
+  desc: string;
+}> = [
   {
     art: "import",
     number: "01",
+    tag: "Sourcing · Customs · Brand Rep",
     title: "Integrated Import-to-Distribution",
-    desc: "End-to-end import and brand representation services — from sourcing and customs clearance to shelf-ready distribution across Sri Lanka.",
+    desc: "End-to-end import and brand representation — from sourcing and customs clearance to shelf-ready distribution across Sri Lanka.",
   },
   {
     art: "warehouse",
     number: "02",
+    tag: "Bonded · Duty-Optimised · Secure",
     title: "Bonded Warehousing",
-    desc: "Customs-approved bonded warehouse facilities enabling duty optimization, secure storage, and streamlined import processing.",
+    desc: "Customs-approved bonded facilities enabling duty optimisation, secure storage, and streamlined import processing.",
   },
   {
     art: "cold",
     number: "03",
+    tag: "Frozen · Chilled · -18°C",
     title: "Cold-Chain Logistics",
-    desc: "Temperature-controlled storage and transport at -18°C for frozen and chilled products, ensuring quality from port to point of sale.",
+    desc: "Temperature-controlled storage and transport for frozen and chilled products, ensuring quality from port to point of sale.",
   },
   {
     art: "distribution",
     number: "04",
+    tag: "HoReCa · Modern Trade · General Trade",
     title: "Island-Wide Distribution",
-    desc: "Comprehensive distribution network serving HoReCa, Modern Trade, and General Trade channels across Sri Lanka with reliable, on-time delivery.",
+    desc: "Comprehensive distribution network serving all trade channels across Sri Lanka with reliable, on-time delivery.",
   },
 ];
 
-const FeatureCard = ({ feature: f, index: i }: { feature: typeof features[0]; index: number }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  
-  // Mouse position tracking for parallax effect
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  
-  // Spring smooth the mouse movement
-  const springX = useSpring(mouseX, { damping: 20, stiffness: 100 });
-  const springY = useSpring(mouseY, { damping: 20, stiffness: 100 });
-  
-  // Transform mouse movement to rotation
-  const rotateX = useTransform(springY, [-100, 100], [10, -10]);
-  const rotateY = useTransform(springX, [-100, 100], [-10, 10]);
-  
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    mouseX.set(e.clientX - rect.left - centerX);
-    mouseY.set(e.clientY - rect.top - centerY);
-  };
-  
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    mouseX.set(0);
-    mouseY.set(0);
-  };
+/* ─── Per-row feature strip ─────────────────────────────────────────── */
 
-  // Card layout varies by index for visual interest
-  const isWide = i === 0 || i === 3;
-  const isTall = i === 1;
+const FeatureStrip = ({
+  feature: f,
+  index: i,
+  isLast,
+}: {
+  feature: (typeof features)[0];
+  index: number;
+  isLast: boolean;
+}) => {
+  const rowRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(rowRef, { once: true, margin: "-80px" });
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ 
-        duration: 0.7, 
-        delay: i * 0.12,
-        ease: [0.25, 0.46, 0.45, 0.94] 
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        perspective: 1200,
-        rotateX: isHovered ? rotateX : 0,
-        rotateY: isHovered ? rotateY : 0,
-      }}
-      className={`group cursor-pointer ${isWide ? 'lg:col-span-2' : ''} ${isTall ? 'lg:row-span-2' : ''}`}
-    >
-      {/* Card container with layered depth */}
+    <div ref={rowRef} className="relative group">
+      {/* Animated wipe divider line */}
+      <div className="relative h-px w-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
+        <motion.div
+          className="absolute inset-y-0 left-0"
+          initial={{ scaleX: 0 }}
+          animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+          transition={{ duration: 1.1, ease: EASE_OUT_EXPO, delay: i * 0.08 }}
+          style={{
+            originX: 0,
+            width: "100%",
+            background: "linear-gradient(to right, hsl(var(--accent)/0.7), hsl(var(--accent)/0.25), transparent)",
+          }}
+        />
+      </div>
+
+      {/* Hover row glow */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+        style={{ background: "linear-gradient(90deg, hsl(var(--accent)/0.04) 0%, transparent 60%)" }}
+      />
+
+      {/* Strip layout */}
       <motion.div
-        className="relative h-full overflow-hidden rounded-2xl bg-gradient-to-br from-white/[0.95] via-white/90 to-white/85 backdrop-blur-xl border border-white/30 shadow-2xl"
-        animate={{
-          boxShadow: isHovered 
-            ? '0 20px 60px rgba(0,0,0,0.3), 0 0 60px rgba(80, 200, 120, 0.2)'
-            : '0 10px 30px rgba(0,0,0,0.15)'
-        }}
-        transition={{ duration: 0.4 }}
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.5, delay: i * 0.08 + 0.1 }}
+        className="grid items-center gap-x-6 lg:gap-x-10 py-8 md:py-10"
+        style={{ gridTemplateColumns: "5rem 1fr" }}
       >
-        {/* Animated gradient background on hover */}
-        <motion.div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          initial={{ backgroundPosition: '0% 0%' }}
-          animate={isHovered ? { backgroundPosition: '100% 100%' } : { backgroundPosition: '0% 0%' }}
-          transition={{ duration: 3, repeat: isHovered ? Infinity : 0 }}
-          style={{
-            backgroundImage: 'linear-gradient(45deg, rgba(80,200,120,0.05), rgba(80,200,120,0.02))',
-            backgroundSize: '200% 200%'
-          }}
-        />
+        {/* Number */}
+        <motion.span
+          initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
+          animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+          transition={{ duration: 0.8, ease: EASE_OUT_EXPO, delay: i * 0.08 + 0.05 }}
+          className="font-display text-5xl md:text-6xl lg:text-7xl font-black leading-none select-none transition-colors duration-500"
+          style={{ color: "rgba(255,255,255,0.08)" }}
+        >
+          {f.number}
+        </motion.span>
 
-        {/* Glow effect on hover */}
-        <motion.div
-          className="absolute -top-1/2 -right-1/2 w-full h-full bg-radial opacity-0 group-hover:opacity-30 transition-opacity duration-500 pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle, rgba(80,200,120,0.3) 0%, transparent 70%)',
-          }}
-        />
-
-        {/* Content wrapper */}
-        <div className={`relative z-10 h-full p-8 lg:p-10 flex flex-col ${isTall ? 'justify-between' : ''}`}>
-          
-          {/* Header with number and icon */}
-          <div>
-            {/* Animated number background */}
-            <motion.div
-              className="absolute -top-8 -right-8 text-white/5 font-display text-9xl font-black pointer-events-none"
-              animate={isHovered ? { scale: 1.2, opacity: 0.1 } : { scale: 1, opacity: 0.05 }}
-              transition={{ duration: 0.5 }}
+        {/* Right content — three-column on md+ */}
+        <div className="grid md:grid-cols-[1.2fr_1fr] lg:grid-cols-[1.2fr_1fr_9rem] items-center gap-x-8 lg:gap-x-12 gap-y-3">
+          {/* Title + tag */}
+          <div className="flex flex-col gap-1.5">
+            <motion.span
+              initial={{ opacity: 0, x: -8 }}
+              animate={isInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.5, ease: EASE_OUT_EXPO, delay: i * 0.08 + 0.2 }}
+              className="font-body text-[10px] tracking-[0.32em] uppercase"
+              style={{ color: "hsl(var(--accent)/0.65)" }}
             >
-              {f.number}
-            </motion.div>
+              {f.tag}
+            </motion.span>
 
-            {/* Icon with complex animation */}
-            <motion.div
-              className="mb-8 inline-block"
-              initial={{ opacity: 0, scale: 0.8, rotate: -20 }}
-              whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-              viewport={{ once: true }}
-              transition={{ 
-                duration: 0.6, 
-                delay: i * 0.12 + 0.1,
-                ease: "easeOut"
-              }}
-              whileHover={{ 
-                scale: 1.15,
-                rotate: 10,
-              }}
-            >
-              <motion.div
-                animate={isHovered ? { 
-                  boxShadow: '0 0 30px rgba(80,200,120,0.4)'
-                } : { 
-                  boxShadow: '0 0 0px rgba(80,200,120,0)'
-                }}
-                transition={{ duration: 0.4 }}
-                className="p-3 rounded-xl bg-accent/10 border border-accent/20"
-              >
-                <FeatureArt
-                  kind={f.art}
-                  className="w-12 h-12 text-accent"
-                />
-              </motion.div>
-            </motion.div>
-
-            {/* Title with staggered letter animation */}
-            <motion.h3 
-              className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4 leading-tight tracking-tight"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.12 + 0.15 }}
-            >
-              <motion.span
-                animate={isHovered ? { color: '#50C878' } : { color: 'currentColor' }}
-                transition={{ duration: 0.3 }}
-                className="block"
+            <div className="overflow-hidden">
+              <motion.h3
+                initial={{ y: "108%" }}
+                animate={isInView ? { y: "0%" } : {}}
+                transition={{ duration: 0.8, ease: EASE_OUT_EXPO, delay: i * 0.08 + 0.13 }}
+                className="font-display text-xl md:text-2xl lg:text-[1.75rem] font-bold text-white leading-tight group-hover:text-accent transition-colors duration-500"
               >
                 {f.title}
-              </motion.span>
-            </motion.h3>
-
-            {/* Decorative line */}
-            <motion.div
-              className="w-12 h-1 bg-gradient-to-r from-accent to-accent/50 rounded-full mb-6"
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.12 + 0.2, ease: "easeOut" }}
-              style={{ originX: 0 }}
-            />
-
-            {/* Description with reveal animation */}
-            <motion.p 
-              className="text-foreground/70 font-body leading-relaxed text-base"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.12 + 0.2 }}
-            >
-              {f.desc}
-            </motion.p>
+              </motion.h3>
+            </div>
           </div>
 
-          {/* CTA with sophisticated animation */}
-          <motion.div
-            className="flex items-center gap-3 text-accent font-body text-base font-semibold cursor-pointer mt-8 pt-6 border-t border-foreground/5"
-            initial={{ opacity: 0, x: -10 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.12 + 0.25 }}
-            whileHover={{ x: 6 }}
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, x: 16 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay: i * 0.08 + 0.24 }}
+            className="hidden md:block font-body text-sm lg:text-base leading-relaxed"
+            style={{ color: "rgba(255,255,255,0.5)" }}
           >
-            <motion.span
-              animate={isHovered ? { x: 4 } : { x: 0 }}
-              transition={{ duration: 0.3 }}
+            {f.desc}
+          </motion.p>
+
+          {/* Icon */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.65, rotate: -12 }}
+            animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
+            transition={{ duration: 0.75, ease: [0.34, 1.56, 0.64, 1], delay: i * 0.08 + 0.17 }}
+            className="hidden lg:flex items-center justify-end"
+          >
+            <div
+              className="p-3 rounded-2xl transition-all duration-500"
+              style={{
+                border: "1px solid rgba(255,255,255,0.1)",
+                background: "rgba(255,255,255,0.04)",
+              }}
             >
-              Learn more
-            </motion.span>
-            <motion.div
-              animate={isHovered ? { x: 4, rotate: 45 } : { x: 0, rotate: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <ArrowRight className="w-5 h-5" strokeWidth={2.5} />
-            </motion.div>
+              <FeatureArt
+                kind={f.art}
+                className="w-11 h-11 transition-colors duration-300"
+                style={{ color: "hsl(var(--accent)/0.75)" } as React.CSSProperties}
+              />
+            </div>
           </motion.div>
         </div>
-
-        {/* Border gradient animation */}
-        <motion.div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
-          animate={isHovered ? {
-            boxShadow: 'inset 0 0 20px rgba(80,200,120,0.2)'
-          } : {
-            boxShadow: 'inset 0 0 0px rgba(80,200,120,0)'
-          }}
-          transition={{ duration: 0.4 }}
-        />
       </motion.div>
-    </motion.div>
+
+      {/* Mobile description */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={isInView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.5, delay: i * 0.08 + 0.3 }}
+        className="md:hidden font-body text-sm leading-relaxed pb-6 pl-[5.5rem]"
+        style={{ color: "rgba(255,255,255,0.45)" }}
+      >
+        {f.desc}
+      </motion.p>
+
+      {/* Closing wipe line on last item */}
+      {isLast && (
+        <div className="relative h-px w-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
+          <motion.div
+            className="absolute inset-y-0 left-0"
+            initial={{ scaleX: 0 }}
+            animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+            transition={{ duration: 1.1, ease: EASE_OUT_EXPO, delay: i * 0.08 + 0.45 }}
+            style={{
+              originX: 0,
+              width: "100%",
+              background: "linear-gradient(to right, hsl(var(--accent)/0.7), hsl(var(--accent)/0.25), transparent)",
+            }}
+          />
+        </div>
+      )}
+    </div>
   );
 };
 
+/* ─── Scroll progress spine ─────────────────────────────────────────── */
+
+const ScrollSpine = ({ sectionRef }: { sectionRef: React.RefObject<HTMLElement> }) => {
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start center", "end center"],
+  });
+  const scaleY = useSpring(scrollYProgress, { stiffness: 80, damping: 22 });
+
+  return (
+    <div className="absolute left-6 lg:left-8 top-0 bottom-0 items-center pointer-events-none z-20 hidden lg:flex flex-col">
+      <div className="relative flex-1 my-20 overflow-hidden rounded-full" style={{ width: 1, background: "rgba(255,255,255,0.08)" }}>
+        <motion.div
+          className="absolute top-0 left-0 right-0 rounded-full"
+          style={{
+            scaleY,
+            height: "100%",
+            transformOrigin: "top",
+            background: "linear-gradient(to bottom, hsl(var(--accent)), hsl(var(--accent)/0.4), transparent)",
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+/* ─── Mouse spotlight hook ──────────────────────────────────────────── */
+
+function useMouseSpotlight() {
+  const rawX = useMotionValue(0.5);
+  const rawY = useMotionValue(0.5);
+  const springX = useSpring(rawX, { stiffness: 45, damping: 18 });
+  const springY = useSpring(rawY, { stiffness: 45, damping: 18 });
+  const pctX = useTransform(springX, (v) => `${v * 100}%`);
+  const pctY = useTransform(springY, (v) => `${v * 100}%`);
+
+  const onMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    rawX.set((e.clientX - r.left) / r.width);
+    rawY.set((e.clientY - r.top) / r.height);
+  };
+
+  return { pctX, pctY, onMouseMove };
+}
+
+/* ─── Main section ──────────────────────────────────────────────────── */
+
 const WhyChooseUs = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { pctX, pctY, onMouseMove } = useMouseSpotlight();
+
   return (
     <section
       id="about"
+      ref={sectionRef}
       className="relative overflow-hidden py-section-base lg:py-section-base-lg"
+      onMouseMove={onMouseMove as React.MouseEventHandler<HTMLElement>}
     >
-      {/* Background image with sophisticated overlay */}
+      {/* Background image */}
       <img
         src="https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/public/olive-uploads/Backgrounds/pexels-freestocks-1366594.jpg"
         alt=""
@@ -257,128 +263,171 @@ const WhyChooseUs = () => {
         loading="lazy"
         className="absolute inset-0 w-full h-full object-cover pointer-events-none"
       />
-      
-      {/* Multi-layered overlay with depth */}
+
+      {/* Dark base overlay */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `
-            radial-gradient(ellipse 1400px 700px at 50% 0%, rgba(255,255,255,0.12), transparent 50%),
-            linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.45), rgba(0,0,0,0.65))
-          `
+          background: "linear-gradient(180deg, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.74) 50%, rgba(0,0,0,0.64) 100%)",
         }}
       />
 
-      {/* Animated gradient orbs for ambiance */}
+      {/* Mouse-tracking spotlight */}
       <motion.div
-        className="absolute top-1/4 left-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none"
-        animate={{
-          y: [0, 50, 0],
-          opacity: [0.3, 0.5, 0.3]
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse 55% 45% at var(--sx) var(--sy), rgba(80,200,120,0.08) 0%, transparent 70%)",
+          "--sx": pctX,
+          "--sy": pctY,
+        } as React.CSSProperties}
       />
-      <motion.div
-        className="absolute bottom-1/3 right-20 w-80 h-80 bg-accent/5 rounded-full blur-3xl pointer-events-none"
-        animate={{
-          y: [0, -40, 0],
-          opacity: [0.2, 0.4, 0.2]
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut"
+
+      {/* Grain texture */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          opacity: 0.035,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "128px 128px",
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
-        {/* Header section with enhanced animations */}
+      {/* Ambient orbs */}
+      <motion.div
+        aria-hidden
+        className="absolute rounded-full blur-[120px] pointer-events-none"
+        style={{
+          top: "20%", left: "15%", width: 560, height: 560,
+          background: "hsl(var(--accent)/0.07)",
+        }}
+        animate={{ x: [0, 70, 0], y: [0, 45, 0], opacity: [0.4, 0.65, 0.4] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        aria-hidden
+        className="absolute rounded-full blur-[100px] pointer-events-none"
+        style={{
+          bottom: "20%", right: "20%", width: 480, height: 480,
+          background: "hsl(var(--accent)/0.05)",
+        }}
+        animate={{ x: [0, -50, 0], y: [0, -60, 0], opacity: [0.3, 0.55, 0.3] }}
+        transition={{ duration: 19, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        aria-hidden
+        className="absolute rounded-full blur-[80px] pointer-events-none"
+        style={{
+          top: "60%", left: "55%", width: 380, height: 380,
+          background: "rgba(255,255,255,0.025)",
+        }}
+        animate={{ x: [0, 90, -30, 0], y: [0, -35, 25, 0], opacity: [0.2, 0.38, 0.2] }}
+        transition={{ duration: 23, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* One-time scan-line sweep on load */}
+      <motion.div
+        aria-hidden
+        className="absolute left-0 right-0 h-px pointer-events-none"
+        style={{ background: "linear-gradient(to right, transparent, hsl(var(--accent)/0.45), transparent)" }}
+        initial={{ top: "0%", opacity: 1 }}
+        animate={{ top: "102%", opacity: 0 }}
+        transition={{ duration: 2.0, ease: "easeInOut", delay: 0.3 }}
+      />
+
+      {/* Scroll progress spine */}
+      <ScrollSpine sectionRef={sectionRef as React.RefObject<HTMLElement>} />
+
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-16 w-full">
+
+        {/* Section header */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: EASE_OUT_EXPO }}
-          className="max-w-4xl mb-20"
+          variants={softFadeUp}
+          initial="hidden"
+          whileInView="show"
+          custom={0}
+          viewport={{ once: true, margin: "-80px" }}
+          className="max-w-4xl mb-16 lg:mb-20"
         >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            <Eyebrow variant="pill" tone="white" className="mb-6">
-              Why Choose Olive Foods
-            </Eyebrow>
-          </motion.div>
+          <Eyebrow variant="pill" tone="white" className="mb-6">
+            Why Choose Olive Foods
+          </Eyebrow>
 
-          <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight tracking-tight">
+          <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
             <SplitText text="Your Complete FMCG" by="word" stagger={0.05} as="span" className="block" />
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-gradient-gold block"
-            >
-              <SplitText text="Distribution Partner" by="word" stagger={0.05} delay={0.15} as="span" className="block" />
-            </motion.div>
+            <span className="block">
+              <SplitText
+                text="Distribution Partner"
+                by="word"
+                stagger={0.05}
+                delay={0.2}
+                as="span"
+                className="text-gradient-gold"
+              />
+            </span>
           </h2>
 
-          <motion.p 
-            className="text-white/80 font-body text-lg leading-relaxed max-w-2xl"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+          <motion.p
+            variants={softFadeUp}
+            initial="hidden"
+            whileInView="show"
+            custom={0.35}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.25 }}
+            className="font-body text-lg leading-relaxed max-w-2xl"
+            style={{ color: "rgba(255,255,255,0.58)" }}
           >
-            Three decades of experience in import, warehousing, and distribution — built on strong global supplier relationships and a commitment to excellence.
+            Three decades of experience in import, warehousing, and distribution — built on strong global supplier relationships and an unwavering commitment to excellence.
           </motion.p>
         </motion.div>
 
-        {/* Dynamic grid layout with masonry effect */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 auto-rows-max">
-          {/* First card — spans 3 columns, taller */}
-          <div className="lg:col-span-3 lg:row-span-2">
-            <FeatureCard feature={features[0]} index={0} />
-          </div>
-
-          {/* Second and third cards — stack on right */}
-          <div className="lg:col-span-3">
-            <FeatureCard feature={features[1]} index={1} />
-          </div>
-          <div className="lg:col-span-3">
-            <FeatureCard feature={features[2]} index={2} />
-          </div>
-
-          {/* Fourth card — spans full width on bottom */}
-          <div className="lg:col-span-6">
-            <FeatureCard feature={features[3]} index={3} />
-          </div>
+        {/* Feature strips */}
+        <div>
+          {features.map((f, i) => (
+            <FeatureStrip
+              key={f.number}
+              feature={f}
+              index={i}
+              isLast={i === features.length - 1}
+            />
+          ))}
         </div>
 
-        {/* Bottom CTA with animation */}
+        {/* Bottom CTA */}
         <motion.div
-          className="mt-20 pt-12 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.7, delay: 0.4 }}
+          variants={softFadeUp}
+          initial="hidden"
+          whileInView="show"
+          custom={0.2}
+          viewport={{ once: true, margin: "-40px" }}
+          className="mt-16 lg:mt-20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
         >
           <div>
-            <h3 className="text-white text-xl font-bold mb-2">Ready to partner with Olive?</h3>
-            <p className="text-white/60 font-body">Discover how we can streamline your FMCG distribution.</p>
+            <h3 className="text-white text-xl font-bold font-display mb-1">
+              Ready to partner with Olive?
+            </h3>
+            <p className="font-body text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
+              Discover how we can streamline your FMCG distribution.
+            </p>
           </div>
+
           <motion.button
-            className="px-8 py-3 bg-gradient-to-r from-accent to-accent/80 text-foreground rounded-full font-semibold whitespace-nowrap shadow-lg hover:shadow-xl transition-shadow duration-300"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            className="group inline-flex items-center gap-2 px-7 py-3 rounded-full font-semibold text-sm shadow-lg whitespace-nowrap transition-shadow duration-300"
+            style={{ background: "hsl(var(--accent))", color: "hsl(var(--foreground))" }}
           >
             Get in Touch
+            <motion.span
+              className="inline-block"
+              animate={{ x: [0, 2, 0], y: [0, -2, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <ArrowUpRight className="w-4 h-4" strokeWidth={2.5} />
+            </motion.span>
           </motion.button>
         </motion.div>
       </div>
