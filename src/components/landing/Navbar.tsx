@@ -8,7 +8,6 @@ import logoSvg from "@/assets/olive-foods-logo.svg";
 const links = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
-  { label: "Brands", href: "/brands" },
   { label: "Products", href: "/products" },
 ];
 

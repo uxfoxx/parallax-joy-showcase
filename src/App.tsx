@@ -24,13 +24,14 @@ import AdminSubmissions from "./pages/admin/AdminSubmissions.tsx";
 import AdminPartners from "./pages/admin/AdminPartners.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
+import { ProductModalProvider } from "@/lib/productModal";
+import ProductDetailModal from "@/components/ProductDetailModal";
 
 const queryClient = new QueryClient();
 
 const AppRoutes = () => {
   const location = useLocation();
 
-  // Scroll to top on every navigation
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
@@ -38,6 +39,7 @@ const AppRoutes = () => {
   return (
     <>
       <ScrollProgressBar />
+      <ProductDetailModal />
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={location.pathname}
@@ -79,7 +81,9 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AppRoutes />
+        <ProductModalProvider>
+          <AppRoutes />
+        </ProductModalProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

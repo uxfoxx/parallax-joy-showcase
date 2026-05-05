@@ -2,29 +2,25 @@ import { Badge } from "@/components/ui/badge";
 import { Package } from "lucide-react";
 import type { Product } from "@/lib/api";
 import MediaCard from "@/components/MediaCard";
+import { useProductModal } from "@/lib/productModal";
 
 interface ProductCardProps {
   product: Product;
-  /** Legacy prop — no longer used, kept for API compat. */
   large?: boolean;
   variant?: "dark" | "light";
   index?: number;
   columns?: number;
-  /** Legacy prop — no longer used, kept for API compat. */
   onQuickView?: () => void;
 }
 
-/**
- * Product card — adapter over `MediaCard`. Shares the exact same visual
- * language as `BrandCard` so the two read as siblings.
- */
 const ProductCard = ({ product, variant = "light", index = 0, columns = 3 }: ProductCardProps) => {
+  const { openProductModal } = useProductModal();
   const brandName = product.brands?.name ?? "";
   const meta = brandName || product.category;
 
   return (
     <MediaCard
-      to={`/products/${product.slug}`}
+      onClick={() => openProductModal(product.slug)}
       image={product.image_url ?? null}
       title={product.name}
       meta={meta}
