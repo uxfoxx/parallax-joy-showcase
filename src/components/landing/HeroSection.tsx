@@ -292,7 +292,7 @@ const HeroSection = () => {
         >
           Connecting global producers with Sri Lankan businesses across eight
           countries — bonded warehousing, cold-chain logistics, and island-wide
-          distribution from a single, vertically integrated partner.
+          distribution from a single, vertically integrated partner..
         </motion.p>
 
         {/* CTAs — magnetic with gold halo on primary */}
