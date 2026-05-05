@@ -8,23 +8,16 @@ import {
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { useProduct, useProducts, useProductImages } from "@/lib/api";
 import { useProductModal } from "@/lib/productModal";
 
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
-const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.07 } } };
+const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.06 } } };
 const fadeUp = {
-  hidden: { opacity: 0, y: 20, filter: "blur(6px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.5, ease: EASE } },
+  hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
+  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.45, ease: EASE } },
 };
-
-const EyebrowLabel = ({ children }: { children: React.ReactNode }) => (
-  <span className="inline-block font-body text-[10px] font-semibold tracking-[0.25em] uppercase text-accent/80 mb-3 border-b border-accent/30 pb-1">
-    {children}
-  </span>
-);
 
 /* Inner content — rendered only when slug is known so hooks are stable */
 const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) => {
@@ -36,7 +29,6 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
   const [activeImage, setActiveImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
-  // Reset image index when product changes
   useEffect(() => { setActiveImage(0); }, [slug]);
 
   const allImages = product
@@ -46,9 +38,11 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
       ]
     : [];
 
-  const navigateLightbox = useCallback((dir: 1 | -1) => {
-    setActiveImage((prev) => (prev + dir + allImages.length) % allImages.length);
-  }, [allImages.length]);
+  const navigateLightbox = useCallback(
+    (dir: 1 | -1) =>
+      setActiveImage((prev) => (prev + dir + allImages.length) % allImages.length),
+    [allImages.length]
+  );
 
   useEffect(() => {
     if (!lightboxOpen) return;
@@ -67,7 +61,7 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex items-center justify-center h-full min-h-[420px]">
         <div className="w-8 h-8 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
       </div>
     );
@@ -75,7 +69,7 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
 
   if (!product) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 gap-4">
+      <div className="flex flex-col items-center justify-center h-full min-h-[420px] gap-4">
         <Package className="w-12 h-12 text-muted-foreground/30" />
         <p className="font-body text-muted-foreground">Product not found.</p>
       </div>
@@ -84,97 +78,105 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
 
   const brandName = product.brands?.name ?? "";
   const brandSlug = product.brands?.slug ?? "";
-  const isHtml = product.description.includes("<");
+  const isHtml = product.description?.includes("<") ?? false;
   const plainDesc = isHtml
     ? new DOMParser().parseFromString(product.description, "text/html").body.textContent || ""
     : product.description;
 
   return (
     <>
-      <motion.div variants={stagger} initial="hidden" animate="show">
-        <div className="grid grid-cols-1 lg:grid-cols-[48%_52%] gap-0">
-          {/* ── Left: gallery ── */}
-          <div className="p-5 lg:p-6 space-y-3 lg:border-r border-border">
-            {/* Main image */}
-            <motion.div
-              variants={fadeUp}
-              className="relative aspect-square rounded-xl overflow-hidden bg-muted/50 group cursor-zoom-in border border-border/50"
-              onClick={() => allImages.length > 0 && setLightboxOpen(true)}
-            >
-              <AnimatePresence mode="wait">
-                {allImages.length > 0 ? (
-                  <motion.img
-                    key={activeImage}
-                    src={allImages[activeImage]}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-[1.06]"
-                    initial={{ opacity: 0, scale: 1.04 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.35 }}
-                  />
-                ) : (
-                  <motion.div
-                    className="w-full h-full flex items-center justify-center bg-gradient-to-br from-forest-deep/20 via-forest-mid/10 to-accent/10"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                  >
-                    <Package className="w-20 h-20 text-muted-foreground/20" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              {allImages.length > 0 && (
-                <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-foreground/60 backdrop-blur-md text-background text-[10px] font-body opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  Click to zoom
+      {/* ── True two-column layout, both sides fill modal height ── */}
+      <div className="flex flex-col sm:flex-row h-full">
+
+        {/* ── LEFT: image panel ── */}
+        <div className="sm:w-[46%] flex-shrink-0 bg-muted/20 flex flex-col border-b sm:border-b-0 sm:border-r border-border">
+          {/* Main image */}
+          <motion.div
+            className="relative flex-1 min-h-[260px] sm:min-h-0 cursor-zoom-in group overflow-hidden"
+            onClick={() => allImages.length > 0 && setLightboxOpen(true)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+          >
+            <AnimatePresence mode="wait">
+              {allImages.length > 0 ? (
+                <motion.img
+                  key={activeImage}
+                  src={allImages[activeImage]}
+                  alt={product.name}
+                  className="w-full h-full object-contain p-6 group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+                  initial={{ opacity: 0, scale: 1.03 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Package className="w-20 h-20 text-muted-foreground/20" />
                 </div>
               )}
-              {/* Badges */}
-              <div className="absolute top-3 left-3 right-3 flex items-start justify-between">
-                {product.featured && (
-                  <Badge className="bg-accent text-white font-body text-xs shadow-md border-0">Featured</Badge>
-                )}
-                {product.category && (
-                  <Badge variant="outline" className="bg-background/90 backdrop-blur-sm font-body text-xs text-foreground border-border shadow-sm ml-auto">
-                    {product.category}
-                  </Badge>
-                )}
+            </AnimatePresence>
+
+            {/* Badges */}
+            <div className="absolute top-3 left-3 right-3 flex items-start justify-between pointer-events-none">
+              {product.featured && (
+                <Badge className="bg-accent text-white font-body text-[10px] shadow-md border-0">
+                  Featured
+                </Badge>
+              )}
+              {product.category && (
+                <Badge
+                  variant="outline"
+                  className="bg-background/90 backdrop-blur-sm font-body text-[10px] text-foreground border-border shadow-sm ml-auto"
+                >
+                  {product.category}
+                </Badge>
+              )}
+            </div>
+
+            {allImages.length > 0 && (
+              <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-foreground/50 backdrop-blur-md text-background text-[10px] font-body opacity-0 group-hover:opacity-100 transition-opacity">
+                Zoom
               </div>
-            </motion.div>
-
-            {/* Thumbnails */}
-            {allImages.length > 1 && (
-              <motion.div variants={fadeUp} className="px-4 sm:px-6">
-                <Carousel opts={{ align: "start", dragFree: true }} className="w-full">
-                  <CarouselContent className="-ml-2">
-                    {allImages.map((img, i) => (
-                      <CarouselItem key={i} className="pl-2 basis-1/4 sm:basis-1/5">
-                        <button
-                          onClick={() => setActiveImage(i)}
-                          className={`w-full aspect-square rounded-lg overflow-hidden border-2 transition-all duration-300 ${
-                            i === activeImage
-                              ? "border-accent ring-2 ring-accent/30 scale-105"
-                              : "border-border hover:border-accent/50 opacity-60 hover:opacity-100"
-                          }`}
-                        >
-                          <img src={img} alt="" className="w-full h-full object-cover" />
-                        </button>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <CarouselPrevious className="bg-background/80 backdrop-blur-sm border-border" />
-                  <CarouselNext className="bg-background/80 backdrop-blur-sm border-border" />
-                </Carousel>
-              </motion.div>
             )}
-          </div>
+          </motion.div>
 
-          {/* ── Right: details ── */}
-          <div className="p-5 lg:p-6 overflow-y-auto max-h-[75vh] lg:max-h-none flex flex-col gap-5">
-            {/* Brand badge */}
+          {/* Thumbnails */}
+          {allImages.length > 1 && (
+            <div className="flex gap-2 px-4 py-3 border-t border-border overflow-x-auto scrollbar-none">
+              {allImages.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveImage(i)}
+                  className={`w-14 h-14 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all duration-200 ${
+                    i === activeImage
+                      ? "border-accent ring-2 ring-accent/25 scale-105"
+                      : "border-border hover:border-accent/50 opacity-55 hover:opacity-100"
+                  }`}
+                >
+                  <img src={img} alt="" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* ── RIGHT: details panel (scrolls independently) ── */}
+        <div className="flex-1 overflow-y-auto">
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            animate="show"
+            className="p-6 flex flex-col gap-5"
+          >
+            {/* Brand */}
             {brandName && (
               <motion.div variants={fadeUp}>
                 <Link to={`/brands/${brandSlug}`} onClick={onClose}>
-                  <Badge variant="secondary" className="font-body text-xs px-3 py-1.5 hover:bg-secondary/80 transition-colors inline-flex items-center gap-1.5">
+                  <Badge
+                    variant="secondary"
+                    className="font-body text-xs px-3 py-1.5 hover:bg-secondary/80 transition-colors inline-flex items-center gap-1.5"
+                  >
                     <Building2 className="w-3 h-3" />
                     {brandName}
                   </Badge>
@@ -188,14 +190,15 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
                 {product.name}
               </h2>
               <motion.div
-                className="mt-3 h-1 w-14 rounded-full bg-accent"
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 56, opacity: 1 }}
-                transition={{ duration: 0.55, delay: 0.25, ease: EASE }}
+                className="mt-3 h-[3px] w-12 rounded-full bg-accent"
+                initial={{ scaleX: 0, opacity: 0 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                style={{ transformOrigin: "left" }}
+                transition={{ duration: 0.5, delay: 0.2, ease: EASE }}
               />
             </motion.div>
 
-            {/* Pills */}
+            {/* Category / origin / featured pills */}
             <motion.div variants={fadeUp} className="flex flex-wrap gap-2">
               {product.category && (
                 <Badge variant="outline" className="font-body text-xs px-3 py-1.5">
@@ -215,47 +218,47 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
             </motion.div>
 
             {/* Description */}
-            <motion.div variants={fadeUp}>
-              <EyebrowLabel>Description</EyebrowLabel>
-              <h3 className="font-display text-base font-semibold text-foreground mb-2 flex items-center gap-2">
-                <Box className="w-4 h-4 text-accent" />
-                About this product
-              </h3>
-              <p className="font-body text-sm text-muted-foreground leading-relaxed line-clamp-4">
-                {plainDesc}
-              </p>
-            </motion.div>
+            {plainDesc && (
+              <motion.div variants={fadeUp}>
+                <p className="font-body text-[10px] font-semibold tracking-[0.22em] uppercase text-accent/70 mb-2">
+                  About this product
+                </p>
+                <p className="font-body text-sm text-muted-foreground leading-relaxed">
+                  {plainDesc}
+                </p>
+              </motion.div>
+            )}
 
-            {/* Quick details grid */}
+            {/* Quick details — two-column grid */}
             {(product.category || product.origin || brandName) && (
               <motion.div variants={fadeUp}>
                 <Separator className="mb-4" />
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2.5">
                   {product.category && (
-                    <div className="rounded-lg bg-muted/40 px-4 py-3">
+                    <div className="rounded-lg bg-muted/50 px-4 py-3">
                       <p className="font-body text-[10px] uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1.5">
                         <Tag className="w-3 h-3" /> Category
                       </p>
-                      <p className="font-body text-sm font-semibold text-foreground">{product.category}</p>
+                      <p className="font-body text-sm font-semibold text-foreground truncate">{product.category}</p>
                     </div>
                   )}
                   {product.origin && (
-                    <div className="rounded-lg bg-muted/40 px-4 py-3">
+                    <div className="rounded-lg bg-muted/50 px-4 py-3">
                       <p className="font-body text-[10px] uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1.5">
                         <MapPin className="w-3 h-3" /> Origin
                       </p>
-                      <p className="font-body text-sm font-semibold text-foreground">{product.origin}</p>
+                      <p className="font-body text-sm font-semibold text-foreground truncate">{product.origin}</p>
                     </div>
                   )}
                   {brandName && (
-                    <div className="rounded-lg bg-muted/40 px-4 py-3">
+                    <div className="rounded-lg bg-muted/50 px-4 py-3">
                       <p className="font-body text-[10px] uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1.5">
                         <Building2 className="w-3 h-3" /> Brand
                       </p>
                       <Link
                         to={`/brands/${brandSlug}`}
                         onClick={onClose}
-                        className="font-body text-sm font-semibold text-foreground hover:text-accent transition-colors"
+                        className="font-body text-sm font-semibold text-foreground hover:text-accent transition-colors truncate block"
                       >
                         {brandName}
                       </Link>
@@ -280,9 +283,9 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
             <motion.div variants={fadeUp}>
               <Separator className="mb-4" />
               <div className="rounded-xl border border-accent/20 bg-accent/5 p-5 space-y-3 relative overflow-hidden">
-                <div className="absolute -top-16 -right-16 w-32 h-32 rounded-full bg-accent/10 blur-2xl pointer-events-none" />
+                <div className="absolute -top-12 -right-12 w-28 h-28 rounded-full bg-accent/10 blur-2xl pointer-events-none" />
                 <p className="font-body text-sm text-muted-foreground relative z-10">
-                  Interested in this product? Get in touch with our team for pricing and availability.
+                  Interested? Get in touch for pricing and availability.
                 </p>
                 <div className="flex flex-wrap gap-3 relative z-10">
                   <Link
@@ -293,7 +296,9 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
                     <MessageCircle className="w-4 h-4" /> Inquire Now
                   </Link>
                   <button
-                    onClick={() => navigator.clipboard.writeText(`${window.location.origin}/products/${product.slug}`)}
+                    onClick={() =>
+                      navigator.clipboard.writeText(`${window.location.origin}/products/${product.slug}`)
+                    }
                     className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/50 px-4 h-10 text-sm font-body text-muted-foreground hover:text-foreground hover:border-accent/50 transition-all"
                   >
                     <Share2 className="w-4 h-4" /> Share
@@ -301,58 +306,54 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
                 </div>
               </div>
             </motion.div>
-          </div>
-        </div>
 
-        {/* ── Related products ── */}
-        {relatedProducts.length > 0 && (
-          <motion.div
-            variants={fadeUp}
-            className="border-t border-border px-5 lg:px-6 py-5"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-display text-base font-bold text-foreground">
-                More from {brandName}
-              </h3>
-              <Link
-                to={`/brands/${brandSlug}`}
-                onClick={onClose}
-                className="text-xs font-body text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
-              >
-                View All <ArrowUpRight className="w-3 h-3" />
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {relatedProducts.map((p) => (
-                <button
-                  key={p.id}
-                  onClick={() => openProductModal(p.slug)}
-                  className="group text-left rounded-xl overflow-hidden border border-border hover:border-accent/40 transition-all duration-300 hover:shadow-md"
-                >
-                  <div className="aspect-square bg-muted/50 overflow-hidden">
-                    {p.image_url ? (
-                      <img
-                        src={p.image_url}
-                        alt={p.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-forest-deep/10 to-accent/5">
-                        <Package className="w-8 h-8 text-muted-foreground/25" />
+            {/* More from brand */}
+            {relatedProducts.length > 0 && (
+              <motion.div variants={fadeUp}>
+                <Separator className="mb-4" />
+                <div className="flex items-center justify-between mb-3">
+                  <p className="font-display text-sm font-bold text-foreground">More from {brandName}</p>
+                  <Link
+                    to={`/brands/${brandSlug}`}
+                    onClick={onClose}
+                    className="text-xs font-body text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                  >
+                    View All <ArrowUpRight className="w-3 h-3" />
+                  </Link>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {relatedProducts.map((p) => (
+                    <button
+                      key={p.id}
+                      onClick={() => openProductModal(p.slug)}
+                      className="group text-left rounded-xl overflow-hidden border border-border hover:border-accent/40 transition-all duration-300 hover:shadow-md"
+                    >
+                      <div className="aspect-square bg-muted/50 overflow-hidden">
+                        {p.image_url ? (
+                          <img
+                            src={p.image_url}
+                            alt={p.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-forest-deep/10 to-accent/5">
+                            <Package className="w-8 h-8 text-muted-foreground/25" />
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <div className="p-2.5">
-                    <p className="font-body text-xs font-semibold text-foreground line-clamp-2 leading-snug">
-                      {p.name}
-                    </p>
-                  </div>
-                </button>
-              ))}
-            </div>
+                      <div className="p-2.5">
+                        <p className="font-body text-xs font-semibold text-foreground line-clamp-2 leading-snug">
+                          {p.name}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </motion.div>
-        )}
-      </motion.div>
+        </div>
+      </div>
 
       {/* ── Lightbox ── */}
       <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
@@ -420,20 +421,25 @@ const ProductDetailModal = () => {
   const { activeSlug, closeProductModal } = useProductModal();
 
   return (
-    <Dialog open={!!activeSlug} onOpenChange={(open) => { if (!open) closeProductModal(); }}>
-      <DialogContent className="max-w-5xl w-full p-0 overflow-hidden rounded-2xl border-border bg-background gap-0 max-h-[92vh] overflow-y-auto">
-        {/* Custom close button */}
+    <Dialog
+      open={!!activeSlug}
+      onOpenChange={(open) => { if (!open) closeProductModal(); }}
+    >
+      <DialogContent className="max-w-4xl w-full p-0 overflow-hidden rounded-2xl border-border bg-background gap-0 h-[88vh] max-h-[88vh] flex flex-col [&>button]:hidden">
+        {/* Close button */}
         <button
           onClick={closeProductModal}
-          className="absolute top-4 right-4 z-50 w-8 h-8 rounded-full bg-muted/80 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          className="absolute top-3 right-3 z-50 w-8 h-8 rounded-full bg-muted/80 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           aria-label="Close"
         >
           <X className="w-4 h-4" />
         </button>
 
-        {activeSlug && (
-          <ModalInner slug={activeSlug} onClose={closeProductModal} />
-        )}
+        <div className="flex-1 min-h-0 overflow-hidden">
+          {activeSlug && (
+            <ModalInner slug={activeSlug} onClose={closeProductModal} />
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
