@@ -60,8 +60,8 @@ const Index = () => {
       <div data-navbar-theme="dark">
         <TeamSection />
       </div>
-      <SectionTransition />
-      {/* <div data-navbar-theme="light">
+      {/* <SectionTransition />
+      <div data-navbar-theme="light">
         <MeetTheTeam />
       </div> */}
       <SectionTransition />
