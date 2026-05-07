@@ -169,6 +169,7 @@ const AdminProducts = () => {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
   const [form, setForm] = useState(emptyForm);
+  const [imagePopupUrl, setImagePopupUrl] = useState<string | null>(null);
 
   const filtered = products?.filter((p) => p.name.toLowerCase().includes(search.toLowerCase())) ?? [];
 
@@ -414,7 +415,18 @@ const AdminProducts = () => {
             ) : (
               filtered.map((p) => (
                 <TableRow key={p.id}>
-                  <TableCell>{p.image_url ? <img src={p.image_url} alt={p.name} className="h-10 w-10 rounded-md object-cover" /> : <div className="h-10 w-10 rounded-md bg-muted" />}</TableCell>
+                  <TableCell>
+                    {p.image_url ? (
+                      <button
+                        onClick={() => setImagePopupUrl(p.image_url)}
+                        className="h-10 w-10 rounded-md object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                      >
+                        <img src={p.image_url} alt={p.name} className="h-10 w-10 rounded-md object-cover" />
+                      </button>
+                    ) : (
+                      <div className="h-10 w-10 rounded-md bg-muted" />
+                    )}
+                  </TableCell>
                   <TableCell className="font-body font-medium">{p.name}</TableCell>
                   <TableCell className="font-body text-muted-foreground">{p.brands?.name ?? "—"}</TableCell>
                   <TableCell><Badge variant="outline" className="font-body text-xs">{p.category}</Badge></TableCell>
@@ -439,6 +451,21 @@ const AdminProducts = () => {
           </TableBody>
         </Table>
       </div>
+
+      <Dialog open={!!imagePopupUrl} onOpenChange={(open) => !open && setImagePopupUrl(null)}>
+        <DialogContent className="max-w-3xl max-h-[90vh] p-0 border-0">
+          <button
+            onClick={() => setImagePopupUrl(null)}
+            className="absolute top-3 right-3 z-50 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+            aria-label="Close image"
+          >
+            <X className="w-4 h-4" />
+          </button>
+          {imagePopupUrl && (
+            <img src={imagePopupUrl} alt="Product" className="w-full h-full object-contain rounded-lg" />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
