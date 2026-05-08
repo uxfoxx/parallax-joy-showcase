@@ -183,27 +183,10 @@ const OurPartnersHexagon = () => {
                 >
                   {/* Gradient background */}
                   <div
-                    className="absolute inset-0 bg-gradient-to-br from-forest-deep/80 via-forest-deep to-forest-deep/90 border"
+                    className="absolute inset-0 bg-white border"
                     style={{
                       borderColor: "rgba(140, 155, 100, 0.3)",
                     }}
-                  />
-
-                  {/* Hover glow background */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-accent/20 to-accent/10"
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
-
-                  {/* Shine effect */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    initial={{ x: "-100%" }}
-                    whileHover={{ x: "100%" }}
-                    transition={{ duration: 0.7 }}
-                    style={{ pointerEvents: "none" }}
                   />
 
                   {/* Logo container */}
@@ -212,22 +195,9 @@ const OurPartnersHexagon = () => {
                       src={logo.displayUrl}
                       alt={`${logo.name} logo`}
                       loading="lazy"
-                      className="max-w-[70%] max-h-[70%] object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300 filter brightness-0 invert"
+                      className="max-w-[70%] max-h-[70%] object-contain opacity-85 group-hover:opacity-100 transition-opacity duration-300"
                     />
                   </div>
-
-                  {/* Border highlight on hover */}
-                  <motion.div
-                    className="absolute inset-0 pointer-events-none border-2"
-                    style={{
-                      clipPath:
-                        "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
-                      borderColor: "hsl(var(--accent))",
-                    }}
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  />
                 </motion.div>
 
                 {/* Logo name on hover */}
