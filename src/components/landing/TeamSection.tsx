@@ -100,8 +100,8 @@ const TeamSection = () => {
         <motion.div
           className="mx-auto mb-10 h-[2px] rounded-full"
           style={{
-            background:
-              "linear-gradient(90deg, transparent, hsl(var(--accent)), transparent)",
+            backgroundImage:"https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/ChatGPT%20Image%20May%208,%202026,%2011_42_10%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9DaGF0R1BUIEltYWdlIE1heSA4LCAyMDI2LCAxMV80Ml8xMCBQTS5wbmciLCJpYXQiOjE3NzgyNjQ1ODAsImV4cCI6MTgwOTgwMDU4MH0.ZAzI8DJAuhkYHx3k7XMr1I583_6QzIMv8nIDg8ACZ08",
+              
             maxWidth: 120,
           }}
           initial={{ scaleX: 0, opacity: 0 }}
