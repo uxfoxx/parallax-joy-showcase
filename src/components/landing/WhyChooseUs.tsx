@@ -491,9 +491,7 @@ const WhyChooseUs = () => {
 
           <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-5 leading-tight tracking-tight">
             <SplitText text="Your Complete Import And Distribution Partner" by="word" stagger={0.05} as="span" className="block" />
-            <span className="block">
-              <SplitText text="Distribution Partner" by="word" stagger={0.05} delay={0.2} as="span" className="text-gradient-gold" />
-            </span>
+            
           </h2>
 
           <motion.p
