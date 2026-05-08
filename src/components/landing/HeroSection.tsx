@@ -288,7 +288,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7, ease: EASE_OUT_EXPO }}
-          className="font-body text-[15px] md:text-[17px] text-white/70 leading-relaxed mb-11 max-w-xl"
+          className="font-body text-[15px] md:text-[17px] text-white/70 leading-relaxed mb-11 max-w-xl font-body "
         >
           Connecting global producers with Sri Lankan businesses across eight
           countries — bonded warehousing, cold-chain logistics, and island-wide
