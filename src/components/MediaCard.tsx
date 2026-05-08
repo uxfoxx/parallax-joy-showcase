@@ -69,7 +69,7 @@ const MediaCard = ({
               src={image}
               alt={title}
               onLoad={() => setImgLoaded(true)}
-              className={`absolute inset-0 w-full h-full object-scale-down transition-transform duration-[900ms] ease-out group-hover:scale-[1.06] ${
+              className={`absolute inset-0 w-[70%] h-auto object-scale-down transition-transform duration-[900ms] ease-out group-hover:scale-[1.06] ${
                 imgLoaded ? "opacity-100" : "opacity-0"
               }`}
             />
