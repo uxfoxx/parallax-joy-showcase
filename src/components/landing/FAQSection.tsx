@@ -51,9 +51,7 @@ const FAQSection = () => {
             className="relative"
           >
             {/* Large decorative FAQ text */}
-            <span className="absolute -top-6 -left-2 font-display text-[8rem] font-black text-foreground/[0.04] leading-none select-none pointer-events-none">
-              FAQ
-            </span>
+            
             <div className="relative">
               <Eyebrow variant="pill" tone="accent" className="mb-4">
                 FAQs
