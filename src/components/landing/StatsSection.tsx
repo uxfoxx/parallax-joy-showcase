@@ -572,7 +572,7 @@ const StatsSection = () => {
                     className="h-px w-16 bg-accent mb-7"
                   />
 
-                  <span className="text-[100px] md:text-[300px]" aria-hidden>{current.flag}</span>
+                  <span className="text-[100px] md:text-[100px]" aria-hidden>{current.flag}</span>
 
 
                 </motion.div>
