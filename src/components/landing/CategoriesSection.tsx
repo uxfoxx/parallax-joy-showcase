@@ -84,7 +84,7 @@ const CategoryRow = ({
               transition={{ type: "spring", stiffness: 240, damping: 18 }}
               className="shrink-0"
             >
-              <CategoryArt name={name} className="w-12 h-12 md:w-14 md:h-14" />
+              
             </motion.div>
             <motion.div
               animate={{ x: hovered ? 6 : 0, opacity: hovered ? 1 : 0.3 }}
@@ -145,14 +145,7 @@ const CategoriesSection = () => {
       />
 
       {/* Mouse + scroll parallax watermark */}
-      <motion.div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none"
-        style={{ x: wmarkX, y: wmarkScrollY }}
-      >
-        <span className="font-display font-black text-[15vw] text-foreground/[0.025] leading-none whitespace-nowrap tracking-tight">
-          CATEGORIES
-        </span>
-      </motion.div>
+      
 
       {/* Subtle accent orb */}
       <div
