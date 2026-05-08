@@ -2,13 +2,16 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { useInView } from "@/hooks/useInView";
 import SplitText from "@/components/motion/SplitText";
-import { usePartnerLogos } from "@/lib/api";
+import { useBrands } from "@/lib/api";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 
 const OurPartnersHexagon = () => {
   const reduced = useReducedMotion();
   const { ref: inViewRef, isInView } = useInView({ threshold: 0.15 });
-  const { data: logos = [] } = usePartnerLogos({ onlyActive: true });
+  const { data: allBrands = [] } = useBrands();
+  
+  // Filter brands to only show those with logos
+  const logos = allBrands.filter((brand) => brand.logo_url);
 
   // Container animation
   const containerVariants = {
@@ -135,15 +138,17 @@ const OurPartnersHexagon = () => {
           </motion.p>
         </motion.div>
 
-        {/* Hexagon grid */}
+        {/* Octagon grid - 2 rows */}
         {logos.length > 0 && (
           <motion.div
             className="relative mx-auto"
             style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
+              display: "grid",
+              gridTemplateColumns: `repeat(4, minmax(140px, 1fr))`,
+              maxWidth: "700px",
               gap: "1.5rem",
+              justifyContent: "center",
+              justifyItems: "center",
             }}
             variants={containerVariants}
             initial="hidden"
@@ -161,10 +166,11 @@ const OurPartnersHexagon = () => {
               >
                 {/* Hexagon background with clip-path */}
                 <motion.div
-                  className="absolute inset-0 rounded-lg overflow-hidden"
+                  className="absolute inset-0 rounded-lg overflow-hidden border-2"
                   style={{
                     clipPath:
-                      "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
+                      "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
+                    borderColor: "hsl(var(--forest-deep))",
                   }}
                   variants={hexHoverVariants}
                   initial="rest"
@@ -174,15 +180,15 @@ const OurPartnersHexagon = () => {
                 >
                   {/* Gradient background */}
                   <div
-                    className="absolute inset-0 bg-gradient-to-br from-white via-white to-white/80 border"
+                    className="absolute inset-0 bg-gradient-to-br from-forest-deep/80 via-forest-deep to-forest-deep/90 border"
                     style={{
-                      borderColor: "rgba(140, 155, 100, 0.15)",
+                      borderColor: "rgba(140, 155, 100, 0.3)",
                     }}
                   />
 
                   {/* Hover glow background */}
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-accent/15 to-accent/5"
+                    className="absolute inset-0 bg-gradient-to-br from-accent/20 to-accent/10"
                     initial={{ opacity: 0 }}
                     whileHover={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
@@ -190,7 +196,7 @@ const OurPartnersHexagon = () => {
 
                   {/* Shine effect */}
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
                     initial={{ x: "-100%" }}
                     whileHover={{ x: "100%" }}
                     transition={{ duration: 0.7 }}
@@ -199,41 +205,21 @@ const OurPartnersHexagon = () => {
 
                   {/* Logo container */}
                   <div className="absolute inset-0 flex items-center justify-center p-4">
-                    {logo.link_url ? (
-                      <a
-                        href={logo.link_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={logo.name}
-                        className="w-full h-full flex items-center justify-center"
-                      >
-                        <img
-                          src={logo.image_url}
-                          alt={`${logo.name} logo`}
-                          loading="lazy"
-                          className="max-w-[70%] max-h-[70%] object-contain opacity-75 group-hover:opacity-100 transition-opacity duration-300"
-                        />
-                      </a>
-                    ) : (
-                      <img
-                        src={logo.image_url}
-                        alt={`${logo.name} logo`}
-                        loading="lazy"
-                        className="max-w-[70%] max-h-[70%] object-contain opacity-75 group-hover:opacity-100 transition-opacity duration-300"
-                      />
-                    )}
+                    <img
+                      src={logo.logo_url}
+                      alt={`${logo.name} logo`}
+                      loading="lazy"
+                      className="max-w-[70%] max-h-[70%] object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300 filter brightness-0 invert"
+                    />
                   </div>
 
                   {/* Border highlight on hover */}
                   <motion.div
-                    className="absolute inset-0 pointer-events-none"
+                    className="absolute inset-0 pointer-events-none border-2"
                     style={{
                       clipPath:
-                        "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
-                      borderWidth: 2,
-                      borderStyle: "solid",
-                      borderColor: "transparent",
-                      borderImage: "linear-gradient(135deg, hsl(var(--accent)), transparent) 1",
+                        "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
+                      borderColor: "hsl(var(--accent))",
                     }}
                     initial={{ opacity: 0 }}
                     whileHover={{ opacity: 1 }}
@@ -248,7 +234,7 @@ const OurPartnersHexagon = () => {
                   whileHover={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <p className="font-body text-xs text-forest-deep/60 whitespace-nowrap font-medium">
+                  <p className="font-body text-xs text-forest-deep font-medium">
                     {logo.name}
                   </p>
                 </motion.div>
@@ -266,7 +252,7 @@ const OurPartnersHexagon = () => {
             transition={{ delay: 0.3 }}
           >
             <p className="text-forest-deep/50 font-body text-lg">
-              Partner logos coming soon
+              Brands coming soon
             </p>
           </motion.div>
         )}
