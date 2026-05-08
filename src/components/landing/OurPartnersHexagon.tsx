@@ -147,9 +147,9 @@ const OurPartnersHexagon = () => {
             className="relative mx-auto"
             style={{
               display: "grid",
-              gridTemplateColumns: `repeat(4, minmax(140px, 1fr))`,
-              maxWidth: "700px",
-              gap: "1.5rem",
+              gridTemplateColumns: `repeat(4, minmax(120px, 1fr))`,
+              maxWidth: "600px",
+              gap: "0.75rem",
               justifyContent: "center",
               justifyItems: "center",
             }}
@@ -164,15 +164,13 @@ const OurPartnersHexagon = () => {
                 className="relative group"
                 style={{
                   width: 120,
-                  height: 140,
+                  height: 120,
                 }}
               >
-                {/* Hexagon background with clip-path */}
+                {/* Square background with border */}
                 <motion.div
-                  className="absolute inset-0 rounded-lg overflow-hidden border-2"
+                  className="absolute inset-0 overflow-hidden rounded border-2"
                   style={{
-                    clipPath:
-                      "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
                     borderColor: "hsl(var(--forest-deep))",
                   }}
                   variants={hexHoverVariants}
@@ -181,9 +179,9 @@ const OurPartnersHexagon = () => {
                   whileTap={{ scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 >
-                  {/* Gradient background */}
+                  {/* Background */}
                   <div
-                    className="absolute inset-0 bg-white border"
+                    className="absolute inset-0 bg-white"
                     style={{
                       borderColor: "rgba(140, 155, 100, 0.3)",
                     }}
@@ -202,12 +200,12 @@ const OurPartnersHexagon = () => {
 
                 {/* Logo name on hover */}
                 <motion.div
-                  className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-center pointer-events-none"
+                  className="absolute -bottom-7 left-1/2 transform -translate-x-1/2 text-center pointer-events-none"
                   initial={{ opacity: 0, y: -5 }}
                   whileHover={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <p className="font-body text-xs text-forest-deep font-medium">
+                  <p className="font-body text-xs text-forest-deep font-medium whitespace-nowrap">
                     {logo.name}
                   </p>
                 </motion.div>
