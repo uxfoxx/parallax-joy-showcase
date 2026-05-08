@@ -292,11 +292,7 @@ const LocationsSection = () => {
         aria-hidden
         className="absolute inset-0"
         style={{
-          background: `
-            radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.5) 0%, transparent 55%),
-            radial-gradient(ellipse at 75% 80%, hsl(150 40% 14% / 0.4) 0%, transparent 55%),
-            linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 13%), hsl(150 40% 9%))
-          `,
+          background: "hsl(150 40% 5%)",
         }}
       />
 

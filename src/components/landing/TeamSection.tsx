@@ -23,7 +23,7 @@ const TeamSection = () => {
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundColor: "black",
+          background: "hsl(150 40% 5%)",
           backgroundSize: "32px 32px",
         }}
       />
