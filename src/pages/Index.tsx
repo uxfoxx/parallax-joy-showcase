@@ -8,6 +8,7 @@ import CategoriesSection from "@/components/landing/CategoriesSection";
 import WhatsAppOrderSection from "@/components/landing/WhatsAppOrderSection";
 import StatsSection from "@/components/landing/StatsSection";
 import TeamSection from "@/components/landing/TeamSection";
+import OurBrandsCollection from "@/components/landing/OurBrandsCollection";
 import MeetTheTeam from "@/components/landing/MeetTheTeam";
 import LocationsSection from "@/components/landing/LocationsSection";
 import FAQSection from "@/components/landing/FAQSection";
@@ -59,6 +60,10 @@ const Index = () => {
       <SectionTransition />
       <div data-navbar-theme="dark">
         <TeamSection />
+      </div>
+      <SectionTransition />
+      <div data-navbar-theme="dark">
+        <OurBrandsCollection />
       </div>
       {/* <SectionTransition />
       <div data-navbar-theme="light">
