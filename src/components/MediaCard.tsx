@@ -93,7 +93,7 @@ const MediaCard = ({
         {badge && <div className="absolute top-3 right-3 z-20">{badge}</div>}
 
         {/* Always-visible product name overlay — bottom left */}
-        <div className="absolute inset-x-0 bottom-0 z-15 bg-gradient-to-t from-black/70 to-transparent p-3">
+        <div className="absolute inset-x-0 bottom-0 z-15 bg-gradient-to-t from-black/70  p-3">
           <h3 className="font-body text-xs md:text-sm font-semibold leading-snug text-white drop-shadow-sm line-clamp-2">
             {title}
           </h3>
