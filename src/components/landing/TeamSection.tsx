@@ -14,8 +14,8 @@ const TeamSection = () => {
       data-navbar-theme="dark"
       className="relative min-h-[70vh] flex items-center justify-center overflow-hidden"
       style={{
-        background:
-          "linear-gradient(135deg, hsl(140 50% 8%) 0%, hsl(150 45% 14%) 50%, hsl(140 50% 10%) 100%)",
+        backgroundImage: "https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/ChatGPT%20Image%20May%208,%202026,%2011_42_10%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9DaGF0R1BUIEltYWdlIE1heSA4LCAyMDI2LCAxMV80Ml8xMCBQTS5wbmciLCJpYXQiOjE3NzgyNjQwNTYsImV4cCI6MTgwOTgwMDA1Nn0._GqDZIAlwv3As6csDlgZxN85Cq0_dbjEBzcwT89MsNs",
+          
       }}
     >
       {/* Dot grid */}
