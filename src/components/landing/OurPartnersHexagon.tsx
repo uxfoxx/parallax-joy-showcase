@@ -170,9 +170,7 @@ const OurPartnersHexagon = () => {
                 {/* Square background with border */}
                 <motion.div
                   className="absolute inset-0 overflow-hidden rounded border-2"
-                  style={{
-                    borderColor: "hsl(var(--forest-deep))",
-                  }}
+                  
                   variants={hexHoverVariants}
                   initial="rest"
                   whileHover="hover"
