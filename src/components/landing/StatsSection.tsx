@@ -536,7 +536,7 @@ const StatsSection = () => {
 
           {/* Info panel — richer card */}
           <div className="relative">
-            <div className="relative rounded-2xl border border-border bg-card/40 backdrop-blur-sm p-7 lg:p-8 shadow-card min-h-[360px]">
+            <div className="relative rounded-2xl border border-border bg-card/40 backdrop-blur-sm p-7 lg:p-8 shadow-card h-auto">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current.key}
@@ -557,7 +557,7 @@ const StatsSection = () => {
 
                   {/* Country + flag */}
                   <div className="flex items-center gap-3 mb-5">
-                    
+                    <span className="text-3xl" aria-hidden>{current.flag}</span>
                     <h3 className="font-display text-3xl lg:text-4xl font-bold leading-[0.95] tracking-tight text-gradient-gold">
                       {current.country}
                     </h3>
@@ -571,9 +571,6 @@ const StatsSection = () => {
                     style={{ transformOrigin: "left" }}
                     className="h-px w-16 bg-accent mb-7"
                   />
-
-                  <span className="text-[100px] md:text-[100px]" aria-hidden>{current.flag}</span>
-
 
                 </motion.div>
               </AnimatePresence>
