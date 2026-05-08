@@ -473,7 +473,7 @@ const ProductsPage = () => {
 
             {/* ── Product Grid ── */}
             {isLoading ? (
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
+              <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-2">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="rounded-xl bg-muted animate-pulse aspect-[4/5]" />
                 ))}
@@ -485,7 +485,7 @@ const ProductsPage = () => {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  className="grid sm:grid-cols-2 md:grid-cols-3 gap-5"
+                  className="grid sm:grid-cols-2 md:grid-cols-4 gap-2"
                 >
                   {paginatedItems.map((product, i) => (
                     <ProductCard
