@@ -23,8 +23,7 @@ const TeamSection = () => {
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)",
+          backgroundColor: "black",
           backgroundSize: "32px 32px",
         }}
       />
