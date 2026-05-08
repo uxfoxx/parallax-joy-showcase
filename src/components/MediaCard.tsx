@@ -92,6 +92,13 @@ const MediaCard = ({
         {/* Top-right badge slot */}
         {badge && <div className="absolute top-3 right-3 z-20">{badge}</div>}
 
+        {/* Always-visible product name overlay — bottom left */}
+        <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/70 to-transparent p-3">
+          <h3 className="font-body text-xs md:text-sm font-semibold leading-snug text-white drop-shadow-sm line-clamp-2">
+            {title}
+          </h3>
+        </div>
+
         {/* Arrow chip — appears on hover */}
         <div className="absolute top-3 left-3 z-20 opacity-0 group-hover:opacity-100 translate-y-[-4px] group-hover:translate-y-0 transition-all duration-300">
           <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/15 backdrop-blur-md border border-white/25">
@@ -99,13 +106,10 @@ const MediaCard = ({
           </span>
         </div>
 
-        {/* Text overlay — hidden until hover */}
-        <div className="absolute inset-x-0 bottom-0 p-5 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-[opacity,transform] duration-500 ease-out">
-          <h3 className="font-display text-base md:text-lg font-semibold leading-snug text-white drop-shadow-sm line-clamp-2">
-            {title}
-          </h3>
+        {/* Text overlay — additional info on hover */}
+        <div className="absolute inset-x-0 bottom-0 p-5 z-20 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-[opacity,transform] duration-500 ease-out">
           {(meta || origin) && (
-            <div className="flex items-center justify-between gap-3 mt-2 font-body text-xs text-white/70">
+            <div className="flex items-center justify-between gap-3 font-body text-xs text-white/70">
               {meta && <span className="truncate">{meta}</span>}
               {origin && (
                 <span className="flex items-center gap-1 shrink-0 text-white/65">
