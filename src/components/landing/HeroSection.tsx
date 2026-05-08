@@ -171,7 +171,7 @@ const HeroSection = () => {
 
       {/* 4 — Editorial dark gradient + film grain */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none opacity-50 "
         style={{
           background:
             "linear-gradient(180deg, hsl(150 40% 4% / 0.40) 0%, hsl(150 40% 4% / 0.62) 50%, hsl(150 40% 4% / 0.95) 100%)",
