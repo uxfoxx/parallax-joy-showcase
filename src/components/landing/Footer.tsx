@@ -60,7 +60,7 @@ const Footer = () => {
               />
             </div>
             <p className="text-primary-foreground/45 font-body text-sm leading-relaxed max-w-xs">
-              Your trusted import, bonded warehousing & FMCG distribution partner — delivering
+              Your trusted import, bonded warehousing & distribution partner — delivering
               quality and reliability across Sri Lanka for over 30 years.
             </p>
             <p className="text-primary-foreground/55 font-body text-xs">

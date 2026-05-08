@@ -16,7 +16,7 @@ import PageHero from "@/components/PageHero";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
 
 const businessActivities = [
-  { icon: Package, title: "Import & Brand Representation", desc: "Exclusive brand agency and import operations for leading international FMCG brands." },
+  { icon: Package, title: "Import & Brand Representation", desc: "Exclusive brand agency and import operations for leading international brands." },
   { icon: Warehouse, title: "Bonded Warehousing", desc: "Customs-approved bonded warehouse facilities enabling duty optimization and secure storage." },
   { icon: Thermometer, title: "Cold-Chain Logistics", desc: "Temperature-controlled storage and transport at -18°C for frozen and chilled product lines." },
   { icon: Truck, title: "HoReCa Distribution", desc: "Direct supply to hotels, restaurants, and catering companies across Sri Lanka." },
@@ -278,7 +278,7 @@ const AboutPage = () => {
       <PageHero
         eyebrow="Olive Foods / About"
         title={<>Sri Lanka's <span className="text-gradient-gold italic">trusted</span> import partner.</>}
-        subtitle="Import, bonded warehousing & FMCG distribution — built on three decades of relationships with global suppliers and island-wide retail."
+        subtitle="Import, bonded warehousing &  distribution — built on three decades of relationships with global suppliers and island-wide retail."
       />
 
       <SectionTransition />
@@ -295,7 +295,7 @@ const AboutPage = () => {
               </span>
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight tracking-tight">Who We Are</h2>
               <div className="space-y-5 font-body text-muted-foreground leading-relaxed text-lg">
-                <p>Olive Foods (Pvt) Ltd is a trusted import, bonded warehousing, and FMCG distribution company based in Sri Lanka. With over three decades of industry experience, we have built strong relationships with global suppliers and established ourselves as a reliable partner for businesses across the island.</p>
+                <p>Olive Foods (Pvt) Ltd is a trusted import, bonded warehousing, and distribution company based in Sri Lanka. With over three decades of industry experience, we have built strong relationships with global suppliers and established ourselves as a reliable partner for businesses across the island.</p>
                 <p>We specialise in importing and distributing a wide range of food products — from frozen goods and dairy to grocery staples, edible oils, and specialty imports — sourced from leading producers in Australia, Italy, the Netherlands, Thailand, Singapore, UAE, India, and China.</p>
                 <p>Our integrated model covers every step of the supply chain: from international sourcing and customs clearance through our bonded warehouse facilities, to cold-chain logistics and island-wide distribution across HoReCa, Modern Trade, and General Trade channels.</p>
               </div>
@@ -401,7 +401,7 @@ const AboutPage = () => {
                   <Eye className="w-6 h-6 text-accent" />
                 </motion.div>
                 <h3 className="font-display text-2xl font-bold text-foreground mb-4 tracking-tight">Our Vision</h3>
-                <p className="font-body text-muted-foreground leading-relaxed">To be Sri Lanka's most trusted and progressive FMCG distribution partner, connecting world-class brands with businesses and households through reliability, innovation and operational excellence.</p>
+                <p className="font-body text-muted-foreground leading-relaxed">To be Sri Lanka's most trusted and progressive distribution partner, connecting world-class brands with businesses and households through reliability, innovation and operational excellence.</p>
               </motion.div>
             </div>
           </div>

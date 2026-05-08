@@ -11,7 +11,7 @@ const teamSlides = [
     label: "Leadership Team",
     dept: "01",
     icon: "chart",
-    desc: "Setting the vision and direction for over three decades of FMCG excellence.",
+    desc: "Setting the vision and direction for over three decades of  excellence.",
     stats: [
       { label: "Years of Experience", value: 30, suffix: "+" },
       { label: "Brand Partnerships", value: 150, suffix: "+" },
