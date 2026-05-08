@@ -147,7 +147,7 @@ const OurPartnersHexagon = () => {
             className="relative mx-auto"
             style={{
               display: "grid",
-              gridTemplateColumns: `repeat(4, minmax(120px, 1fr))`,
+              gridTemplateColumns: `repeat(8, minmax(120px, 1fr))`,
               maxWidth: "600px",
               gap: "0.75rem",
               justifyContent: "center",
