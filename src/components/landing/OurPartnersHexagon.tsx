@@ -10,8 +10,11 @@ const OurPartnersHexagon = () => {
   const { ref: inViewRef, isInView } = useInView({ threshold: 0.15 });
   const { data: allBrands = [] } = useBrands();
   
-  // Filter brands to only show those with logos
-  const logos = allBrands.filter((brand) => brand.logo_url);
+  // Show all brands, use logo_url if available, otherwise image_url
+  const logos = allBrands.map((brand) => ({
+    ...brand,
+    displayUrl: brand.logo_url || brand.image_url,
+  })).filter((brand) => brand.displayUrl);
 
   // Container animation
   const containerVariants = {
@@ -206,7 +209,7 @@ const OurPartnersHexagon = () => {
                   {/* Logo container */}
                   <div className="absolute inset-0 flex items-center justify-center p-4">
                     <img
-                      src={logo.logo_url}
+                      src={logo.displayUrl}
                       alt={`${logo.name} logo`}
                       loading="lazy"
                       className="max-w-[70%] max-h-[70%] object-contain opacity-90 group-hover:opacity-100 transition-opacity duration-300 filter brightness-0 invert"
@@ -252,7 +255,7 @@ const OurPartnersHexagon = () => {
             transition={{ delay: 0.3 }}
           >
             <p className="text-forest-deep/50 font-body text-lg">
-              Brands coming soon
+              No brands available
             </p>
           </motion.div>
         )}
