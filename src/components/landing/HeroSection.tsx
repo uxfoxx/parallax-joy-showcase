@@ -38,7 +38,7 @@ import Eyebrow from "@/components/ui/eyebrow";
  */
 
 const HERO_IMAGE =
-  "https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/ChatGPT%20Image%20May%208,%202026,%2011_22_03%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9DaGF0R1BUIEltYWdlIE1heSA4LCAyMDI2LCAxMV8yMl8wMyBQTS5wbmciLCJpYXQiOjE3NzgyNjI4MDUsImV4cCI6MTgwOTc5ODgwNX0.PqIJ4F50wqHQneq2tHVyy-i9iT5h_Hb78Jso7vq3r0A";
+  "https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/back.PNG?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9iYWNrLlBORyIsImlhdCI6MTc3ODU2Mjk3MSwiZXhwIjoxODEwMDk4OTcxfQ.zpR_pcmo0irtRSiD5IDd66ewJ6h-GHR0S9fnVHD3NTc";
 
 const COUNTRIES = [
   "Italy",
