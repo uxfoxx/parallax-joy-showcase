@@ -26,7 +26,7 @@ const Index = () => {
       <FloatingWhatsApp />
      
 
-      <div data-navbar-theme="light">
+      <div data-navbar-theme="dark">
         <HeroSection />
       </div>
       <SectionTransition />
