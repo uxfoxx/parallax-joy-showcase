@@ -18,15 +18,18 @@ const CurtainImage = ({
   wrapperStyle,
   retrigger = false,
   className,
+  alt,
   ...imgProps
 }: CurtainImageProps) => {
   const reduced = useReducedMotion();
+  // Default to an empty string so the image is treated as decorative
+  // when the caller forgets to set one — keeps the markup a11y-clean.
+  const a11yAlt = alt ?? "";
 
   if (reduced) {
     return (
       <div className={wrapperClassName} style={wrapperStyle}>
-        {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <img className={className} {...imgProps} />
+        <img className={className} alt={a11yAlt} {...imgProps} />
       </div>
     );
   }
@@ -40,8 +43,7 @@ const CurtainImage = ({
       viewport={{ once: !retrigger, margin: "-10%" }}
       variants={curtainRevealVariants}
     >
-      {/* eslint-disable-next-line jsx-a11y/alt-text */}
-      <img className={className} {...imgProps} />
+      <img className={className} alt={a11yAlt} {...imgProps} />
     </motion.div>
   );
 };
