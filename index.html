@@ -23,9 +23,143 @@
   <meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/439d60af-89a4-455d-98dc-fac83719dd68/id-preview-80f772b5--983ba6cb-f211-46c8-80ae-98f3e622293d.lovable.app-1774965653907.png">
   <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/439d60af-89a4-455d-98dc-fac83719dd68/id-preview-80f772b5--983ba6cb-f211-46c8-80ae-98f3e622293d.lovable.app-1774965653907.png">
   <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Preload the hero background photo so the browser starts fetching
+       it before the JS bundle parses + React mounts the hero. Without
+       this the signed-URL request only fires after first render and the
+       hero appears blank until the user hard-reloads (HTTP cache hit). -->
+  <link
+    rel="preload"
+    as="image"
+    href="https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/back.PNG?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9iYWNrLlBORyIsImlhdCI6MTc3ODU2Mjk3MSwiZXhwIjoxODEwMDk4OTcxfQ.zpR_pcmo0irtRSiD5IDd66ewJ6h-GHR0S9fnVHD3NTc"
+    fetchpriority="high"
+  />
 </head>
 
   <body>
+    <!-- Brand-matched first-paint splash. Lives outside #root so React's
+         createRoot doesn't wipe it. Removed by the inline script once
+         window.load has fired and a minimum display time has elapsed. -->
+    <style>
+      @keyframes olive-splash-pulse {
+        0%, 100% { transform: scale(1); opacity: 0.95; }
+        50%      { transform: scale(1.025); opacity: 1; }
+      }
+      @keyframes olive-splash-shimmer {
+        0%   { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+      @keyframes olive-splash-fill {
+        from { transform: scaleX(0); }
+        to   { transform: scaleX(1); }
+      }
+      @keyframes olive-splash-fadein {
+        from { opacity: 0; transform: translateY(6px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      #boot-splash {
+        position: fixed; inset: 0; z-index: 99999;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        background:
+          radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.55) 0%, transparent 50%),
+          radial-gradient(ellipse at 70% 80%, hsl(150 40% 14% / 0.45) 0%, transparent 50%),
+          linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 14%), hsl(150 40% 8%));
+        font-family: 'Sora', system-ui, -apple-system, sans-serif;
+        transition: opacity 700ms cubic-bezier(0.22,1,0.36,1), transform 700ms cubic-bezier(0.22,1,0.36,1);
+        will-change: opacity, transform;
+      }
+      #boot-splash[data-leaving="true"] { opacity: 0; transform: translateY(-6%); pointer-events: none; }
+      #boot-splash::before {
+        content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.18;
+        background-image: radial-gradient(circle, hsl(0 0% 100% / 0.06) 1px, transparent 1px);
+        background-size: 32px 32px;
+      }
+      #boot-splash__inner {
+        position: relative; display: flex; flex-direction: column; align-items: center;
+        animation: olive-splash-fadein 0.7s cubic-bezier(0.22,1,0.36,1) both;
+      }
+      #boot-splash__logo {
+        position: relative;
+        width: 180px; height: auto;
+        filter: brightness(0) invert(1);
+        animation: olive-splash-pulse 6s ease-in-out infinite;
+      }
+      #boot-splash__halo {
+        position: absolute; inset: -2.5rem; pointer-events: none;
+        background: radial-gradient(circle, hsl(75 38% 45% / 0.45), transparent 65%);
+        filter: blur(28px); opacity: 0.4;
+      }
+      #boot-splash__shimmer {
+        position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+      }
+      #boot-splash__shimmer::after {
+        content: ""; position: absolute; inset: 0;
+        background: linear-gradient(115deg, transparent 35%, hsl(75 60% 70% / 0.45) 50%, transparent 65%);
+        mix-blend-mode: overlay;
+        animation: olive-splash-shimmer 2.4s ease-in-out infinite;
+        animation-delay: 1.2s;
+      }
+      #boot-splash__wordmark {
+        margin-top: 1.75rem;
+        font-weight: 700; font-size: clamp(1.5rem, 4vw, 2.25rem);
+        letter-spacing: 0.18em; color: #fff;
+      }
+      #boot-splash__eyebrow {
+        margin-top: 0.75rem;
+        font-size: 10px; letter-spacing: 0.5em; text-transform: uppercase;
+        color: rgba(255,255,255,0.55);
+      }
+      #boot-splash__bar {
+        position: absolute; left: 0; right: 0; bottom: 0;
+        height: 2px; background: hsl(0 0% 100% / 0.08); overflow: hidden;
+      }
+      #boot-splash__bar::after {
+        content: ""; display: block; height: 100%; transform-origin: left; transform: scaleX(0);
+        background: linear-gradient(90deg, transparent, hsl(75 38% 55%) 35%, hsl(75 50% 65%) 50%, hsl(75 38% 55%) 65%, transparent);
+        animation: olive-splash-fill 4s ease-out forwards;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #boot-splash__logo, #boot-splash__shimmer::after, #boot-splash__inner { animation: none; }
+        #boot-splash__bar::after { animation-duration: 0.5s; }
+      }
+    </style>
+    <div id="boot-splash" role="status" aria-label="Loading Olive Foods">
+      <div id="boot-splash__inner">
+        <div style="position:relative">
+          <span id="boot-splash__halo"></span>
+          <img id="boot-splash__logo" src="/olive-foods-hero-logo.svg" alt="Olive Foods" />
+          <span id="boot-splash__shimmer"></span>
+        </div>
+        <div id="boot-splash__wordmark">OLIVE FOODS</div>
+        <div id="boot-splash__eyebrow">Premium Food Importers &middot; Sri Lanka</div>
+      </div>
+      <div id="boot-splash__bar"></div>
+    </div>
+    <script>
+      (function () {
+        var splash = document.getElementById('boot-splash');
+        if (!splash) return;
+        var mountedAt = performance.now();
+        var MIN_MS = 900;
+        var HARD_MS = 4500;
+        var done = false;
+        function dismiss() {
+          if (done) return;
+          done = true;
+          var elapsed = performance.now() - mountedAt;
+          var wait = Math.max(0, MIN_MS - elapsed);
+          setTimeout(function () {
+            splash.setAttribute('data-leaving', 'true');
+            setTimeout(function () {
+              if (splash.parentNode) splash.parentNode.removeChild(splash);
+            }, 750);
+          }, wait);
+        }
+        if (document.readyState === 'complete') dismiss();
+        else window.addEventListener('load', dismiss, { once: true });
+        setTimeout(dismiss, HARD_MS);
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

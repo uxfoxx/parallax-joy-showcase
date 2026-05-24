@@ -14,18 +14,17 @@ const TeamSection = () => {
       data-navbar-theme="dark"
       className="relative min-h-[70vh] flex items-center justify-center overflow-hidden"
       style={{
-        backgroundImage: "https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/ChatGPT%20Image%20May%208,%202026,%2011_42_10%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9DaGF0R1BUIEltYWdlIE1heSA4LCAyMDI2LCAxMV80Ml8xMCBQTS5wbmciLCJpYXQiOjE3NzgyNjQwNTYsImV4cCI6MTgwOTgwMDA1Nn0._GqDZIAlwv3As6csDlgZxN85Cq0_dbjEBzcwT89MsNs",
-          
+        backgroundImage:
+          "url('https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/ChatGPT%20Image%20May%208,%202026,%2011_42_10%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9DaGF0R1BUIEltYWdlIE1heSA4LCAyMDI2LCAxMV80Ml8xMCBQTS5wbmciLCJpYXQiOjE3NzgyNjQwNTYsImV4cCI6MTgwOTgwMDA1Nn0._GqDZIAlwv3As6csDlgZxN85Cq0_dbjEBzcwT89MsNs')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
-      {/* Dot grid */}
+      {/* Dark scrim — keeps headings legible over the bg photo */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "hsl(150 40% 5%)",
-          backgroundSize: "32px 32px",
-        }}
+        style={{ background: "hsl(150 40% 5% / 0.7)" }}
       />
 
       {/* Ambient orbs */}
@@ -99,8 +98,8 @@ const TeamSection = () => {
         <motion.div
           className="mx-auto mb-10 h-[2px] rounded-full"
           style={{
-            backgroundImage:"https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/ChatGPT%20Image%20May%208,%202026,%2011_42_10%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9DaGF0R1BUIEltYWdlIE1heSA4LCAyMDI2LCAxMV80Ml8xMCBQTS5wbmciLCJpYXQiOjE3NzgyNjQ1ODAsImV4cCI6MTgwOTgwMDU4MH0.ZAzI8DJAuhkYHx3k7XMr1I583_6QzIMv8nIDg8ACZ08",
-              
+            background:
+              "linear-gradient(90deg, transparent, hsl(75 38% 45%), transparent)",
             maxWidth: 120,
           }}
           initial={{ scaleX: 0, opacity: 0 }}

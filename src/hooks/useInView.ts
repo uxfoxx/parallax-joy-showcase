@@ -15,7 +15,7 @@ export function useInView(options?: IntersectionObserverInit) {
           observer.unobserve(el);
         }
       },
-      { threshold: 0.15, ...options }
+      { threshold: 0.05, ...options }
     );
 
     observer.observe(el);

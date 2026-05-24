@@ -68,7 +68,7 @@ const SplitText = ({
       variants={containerVariants}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: !retrigger, margin: "-10% 0px -10% 0px" }}
+      viewport={{ once: !retrigger, margin: "0px" }}
     >
       {tokens.map((token, i) => {
         if (/^\s+$/.test(token)) {
