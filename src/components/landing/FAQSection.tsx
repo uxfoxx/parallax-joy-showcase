@@ -5,12 +5,34 @@ import SplitText from "@/components/motion/SplitText";
 import Eyebrow from "@/components/ui/eyebrow";
 
 const faqs = [
-  { q: "What types of food products do you import?", a: "We import across five core categories: Frozen foods, Dairy products, Grocery & Staples, Edible Oils, and Specialty Imports — sourced from leading producers in Australia, Italy, Netherlands, Thailand, Singapore, UAE, India, and China." },
-  { q: "Who do you supply to?", a: "We distribute across three key channels: HoReCa (Hotels, Restaurants & Catering), Modern Trade (supermarket chains), and General Trade (retail outlets and distributors) — covering businesses island-wide across Sri Lanka." },
-  { q: "Are your products certified and safe?", a: "Every product undergoes rigorous quality checks including laboratory testing, certification verification, and compliance with local food safety regulations before distribution. We maintain cold-chain integrity at -18°C for frozen products." },
-  { q: "Can I request specific products for import?", a: "Absolutely! If you're looking for a specific product or brand not in our catalogue, our sourcing team can locate and import it through our extensive network of global suppliers across 8+ countries." },
-  { q: "What are your delivery timelines?", a: "We provide island-wide delivery coverage. Domestic deliveries are handled through our own logistics fleet, ensuring timely and temperature-controlled transport for all product categories." },
-  { q: "What brands do you represent?", a: "We are the exclusive Sri Lankan representatives for leading international brands including AZIZAA, Hungritos, Fletcher, Granoro, Daily Dairy, Snorre Foods, Wai Wai, and Royal Arm, among others." },
+  {
+    q: "What types of food products do you import?",
+    a: "Multiple categories — with a particular focus on frozen lines (french fries, meat, seafood, frozen fruits and vegetables), alongside dairy, grocery staples, edible oils, and specialty imports. Vegan, gluten-free, and organic ranges round out the catalogue. Suppliers across Europe, Asia, and the Middle East — and growing.",
+  },
+  {
+    q: "Who do you supply to?",
+    a: "Sri Lanka's hospitality and retail trade — five-star hotel chains, restaurants, cafés, catering operations, and major supermarkets. From a single venue to a national chain, we deliver island-wide.",
+  },
+  {
+    q: "Are your products certified and safe?",
+    a: "Every product is verified for certification and compliance with local food safety regulations before distribution. Frozen lines stay at −18 °C from origin port to delivery.",
+  },
+  {
+    q: "Can I request specific products for import?",
+    a: "Yes — if you need a brand or product line we don't currently carry, our sourcing team can locate and import it through our supplier network. Tell us what you need.",
+  },
+  {
+    q: "What are your delivery timelines?",
+    a: "Island-wide delivery in our own temperature-controlled fleet — timing stays predictable from Colombo to the regions. Lead times for new imports depend on origin; we'll scope timing during the order conversation.",
+  },
+  {
+    q: "What brands do you represent?",
+    a: "We're the exclusive Sri Lankan representatives for a roster of international brands — AZIZAA, Hungritos, Fletcher, Granoro, Daily Dairy, Snorre Foods, Wai Wai, Royal Arm, and more, growing as the catalogue expands.",
+  },
+  {
+    q: "Do you handle seasonal or one-off requests?",
+    a: "Yes — inventory rotates with the seasons (turkey and Dutch specialties around December, fresh imports as demand patterns shift). Happy to source one-off products for events or specific menus.",
+  },
 ];
 
 const FAQSection = () => {
@@ -62,8 +84,7 @@ const FAQSection = () => {
                 <SplitText text="Asked Questions" by="word" stagger={0.04} delay={0.15} as="span" className="block" />
               </h2>
               <p className="text-muted-foreground font-body text-base leading-relaxed max-w-sm">
-                Everything you need to know about our food import services, from
-                sourcing to delivery.
+                How sourcing, supply, and delivery work at Olive Foods.
               </p>
             </div>
           </motion.div>

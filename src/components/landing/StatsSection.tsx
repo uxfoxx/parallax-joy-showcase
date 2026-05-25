@@ -109,11 +109,25 @@ const origins: Origin[] = [
   },
 ];
 
-const HEADLINE_STATS = [
+type HeadlineStat = {
+  value: number;
+  suffix: string;
+  label: string;
+  isText?: boolean;
+  displayText?: string;
+};
+
+const HEADLINE_STATS: HeadlineStat[] = [
   { value: 10, suffix: "", label: "Source countries" },
-  { value: 500, suffix: "+", label: "Products distributed" },
-  { value: 1000, suffix: "+", label: "Active retail partners" },
-  { value: 24, suffix: "/7", label: "Cold-chain monitoring" },
+  { value: 4, suffix: "+", label: "Trade channels" },
+  {
+    value: 0, suffix: "", label: "Delivery coverage",
+    isText: true, displayText: "Island-wide",
+  },
+  {
+    value: 0, suffix: "", label: "Cold-chain certified",
+    isText: true, displayText: "−18 °C",
+  },
 ];
 
 /** Quadratic curve from `from` to `to`, lifted perpendicular so it bows up. */
