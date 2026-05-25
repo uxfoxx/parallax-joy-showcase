@@ -293,8 +293,14 @@ const StatsSection = () => {
                   aria-hidden
                   className="block w-7 h-[2px] bg-accent rounded-full mb-3"
                 />
-                <div className="font-display text-[44px] lg:text-[56px] font-bold text-foreground leading-none tracking-tight tabular-nums">
-                  <CountUp to={s.value} suffix={s.suffix} duration={2.5} />
+                <div className={`font-display font-bold text-foreground leading-none tracking-tight ${
+                  s.isText ? "text-[28px] lg:text-[36px]" : "text-[44px] lg:text-[56px] tabular-nums"
+                }`}>
+                  {s.isText ? (
+                    <span>{s.displayText}</span>
+                  ) : (
+                    <CountUp to={s.value} suffix={s.suffix} duration={2.5} />
+                  )}
                 </div>
                 <p className="font-body text-[11px] tracking-[0.22em] uppercase text-muted-foreground mt-3">
                   {s.label}
