@@ -30,7 +30,6 @@ type Origin = {
   flag: string;
   region: string;
   brands: string[];
-  leadTimeDays: string;
   pos: { x: number; y: number };
 };
 
@@ -41,70 +40,60 @@ const origins: Origin[] = [
     key: "netherlands", country: "Netherlands", flag: "🇳🇱",
     region: "Northern Europe",
     brands: ["Remia", "Daily Dairy", "Snorre Foods"],
-    leadTimeDays: "32–38",
     pos: { x: 514, y: 106 },
   },
   {
     key: "belgium", country: "Belgium", flag: "🇧🇪",
     region: "Western Europe",
     brands: ["BON VEGATO", "HUNGRITOS"],
-    leadTimeDays: "30–36",
     pos: { x: 524, y: 118 },
   },
   {
     key: "italy", country: "Italy", flag: "🇮🇹",
     region: "Southern Europe",
     brands: ["Granoro", "Donna Chiara", "Mizkan"],
-    leadTimeDays: "34–40",
     pos: { x: 544, y: 138 },
   },
   {
     key: "uae", country: "UAE", flag: "🇦🇪",
     region: "Middle East",
     brands: ["Falcon", "Royal Arm", "Super Chef"],
-    leadTimeDays: "8–12",
     pos: { x: 650, y: 183 },
   },
   {
     key: "india", country: "India", flag: "🇮🇳",
     region: "South Asia",
     brands: ["AZIZAA"],
-    leadTimeDays: "6–10",
     pos: { x: 717, y: 189 },
   },
   {
     key: "china", country: "China", flag: "🇨🇳",
     region: "East Asia",
     brands: ["Wai Wai", "Fletcher"],
-    leadTimeDays: "16–22",
     pos: { x: 792, y: 153 },
   },
   {
     key: "thailand", country: "Thailand", flag: "🇹🇭",
     region: "South-East Asia",
     brands: ["Hungritos"],
-    leadTimeDays: "10–14",
     pos: { x: 778, y: 208 },
   },
   {
     key: "singapore", country: "Singapore", flag: "🇸🇬",
     region: "South-East Asia",
     brands: ["BON VEGATO", "ABC"],
-    leadTimeDays: "9–13",
     pos: { x: 786, y: 247 },
   },
   {
     key: "australia", country: "Australia", flag: "🇦🇺",
     region: "Oceania",
     brands: ["WAGU"],
-    leadTimeDays: "18–24",
     pos: { x: 875, y: 319 },
   },
   {
     key: "brazil", country: "Brazil", flag: "🇧🇷",
     region: "South America",
     brands: ["Imported"],
-    leadTimeDays: "36–42",
     pos: { x: 470, y: 248 },
   },
 ];
@@ -279,8 +268,9 @@ const StatsSection = () => {
               transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="font-body text-[17px] leading-relaxed text-muted-foreground max-w-xl mt-7"
             >
-              Eight origins, one cold-chain, one bonded warehouse — and a
-              distribution network that closes the loop in Sri Lanka.
+              Every origin is a relationship — built over thirty-plus
+              years between our team and the producers we source from.
+              Hover any country to see what we bring in.
             </motion.p>
           </div>
 

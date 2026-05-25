@@ -129,7 +129,7 @@ const RouteMapPanel = () => {
   );
 };
 
-/* ─── Panel 2 — 30 years stat + warehouse grid ───────────────────────── */
+/* ─── Panel 2 — 30+ years stat + warehouse grid ──────────────────────── */
 
 const WarehousePanel = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -193,7 +193,7 @@ const WarehousePanel = () => {
         </p>
         <h3 className="font-display text-xl font-bold text-white leading-snug">Bonded Warehousing</h3>
         <p className="font-body text-sm mt-2 leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
-          Customs-approved bonded facilities enabling duty optimisation, secure storage, and streamlined import processing.
+          Customs-approved bonded warehouse facilities for duty efficiency, secure storage, and a streamlined import workflow.
         </p>
       </div>
     </motion.div>
@@ -337,7 +337,7 @@ const SriLankaMapPanel = () => {
           </p>
           {/* Mini stats */}
           <div className="flex gap-7">
-            {[["25+", "Districts"], ["500+", "Outlets"], ["3", "Trade Channels"]].map(([val, lbl]) => (
+            {[["25", "Districts"], ["Island-wide", "Coverage"], ["3", "Trade Channels"]].map(([val, lbl]) => (
               <div key={lbl}>
                 <p className="font-display text-2xl font-black text-white">{val}</p>
                 <p className="font-body text-[11px] mt-0.5" style={{ color: "rgba(255,255,255,0.35)" }}>{lbl}</p>
@@ -503,7 +503,7 @@ const WhyChooseUs = () => {
             className="font-body text-lg leading-relaxed max-w-2xl"
             style={{ color: "rgba(255,255,255,0.52)" }}
           >
-            Three decades of experience in import, warehousing, and distribution — built on strong global supplier relationships and an unwavering commitment to excellence.
+            Thirty-plus years of food-industry experience, and the supplier relationships that come with it. Olive Foods exists to bring them to Sri Lanka's hospitality and retail trade.
           </motion.p>
         </motion.div>
 

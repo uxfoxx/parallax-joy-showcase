@@ -11,20 +11,20 @@ const teamSlides = [
     label: "Leadership Team",
     dept: "01",
     icon: "chart",
-    desc: "Setting the vision and direction for over three decades of  excellence.",
+    desc: "Thirty-plus years of food-industry experience setting the direction.",
     stats: [
       { label: "Years of Experience", value: 30, suffix: "+" },
-      { label: "Brand Partnerships", value: 150, suffix: "+" },
+      { label: "Trade Channels", value: 3, suffix: "" },
     ],
   },
   {
     label: "Sales & Distribution",
     dept: "02",
     icon: "trending",
-    desc: "Connecting world-class brands to retail partners across the island.",
+    desc: "Connecting world-class brands to Sri Lanka's hospitality and retail partners.",
     stats: [
-      { label: "Active Retailers", value: 5000, suffix: "+" },
-      { label: "Deliveries/Month", value: 8000, suffix: "+" },
+      { label: "Districts Covered", value: 25, suffix: "" },
+      { label: "Trade Channels", value: 3, suffix: "" },
     ],
   },
   {
@@ -33,28 +33,28 @@ const teamSlides = [
     icon: "warehouse",
     desc: "Managing cold-chain and bonded storage with zero-compromise standards.",
     stats: [
-      { label: "Storage Capacity", value: 2500, suffix: "MT" },
-      { label: "Cold Units", value: 12, suffix: "+" },
+      { label: "Years of Experience", value: 30, suffix: "+" },
+      { label: "Cold-chain", value: -18, suffix: " °C" },
     ],
   },
   {
     label: "Quality Assurance",
     dept: "04",
     icon: "shield",
-    desc: "Ensuring every product meets the highest international benchmarks.",
+    desc: "Verifying certification and food-safety compliance on every product before distribution.",
     stats: [
-      { label: "Certifications", value: 8, suffix: "+" },
-      { label: "Tests/Batch", value: 15, suffix: "+" },
+      { label: "Years of Experience", value: 30, suffix: "+" },
+      { label: "Cold-chain", value: -18, suffix: " °C" },
     ],
   },
   {
     label: "Logistics & Supply",
     dept: "05",
     icon: "truck",
-    desc: "On-time island-wide delivery through an optimised logistics network.",
+    desc: "Island-wide delivery in our own temperature-controlled fleet.",
     stats: [
-      { label: "On-Time Rate", value: 99.2, suffix: "%" },
-      { label: "Fleet Vehicles", value: 45, suffix: "+" },
+      { label: "Districts Covered", value: 25, suffix: "" },
+      { label: "Cold-chain", value: -18, suffix: " °C" },
     ],
   },
 ];
