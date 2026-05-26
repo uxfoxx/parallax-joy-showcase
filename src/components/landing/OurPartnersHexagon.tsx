@@ -149,17 +149,17 @@ const OurPartnersHexagon = () => {
             }}
           />
 
-          <MarqueeRow baseVelocity={9} direction={-1} repeat={6}>
+          <MarqueeRow baseVelocity={5} direction={-1} repeat={6}>
             {logos.map((logo) => (
               <LogoTile key={`r1-${logo.id}`} logo={logo} />
             ))}
           </MarqueeRow>
-          <MarqueeRow baseVelocity={7} direction={1} repeat={6}>
+          <MarqueeRow baseVelocity={4} direction={1} repeat={6}>
             {logos.map((logo) => (
               <LogoTile key={`r2-${logo.id}`} logo={logo} />
             ))}
           </MarqueeRow>
-          <MarqueeRow baseVelocity={11} direction={-1} repeat={6}>
+          <MarqueeRow baseVelocity={6} direction={-1} repeat={6}>
             {logos.map((logo) => (
               <LogoTile key={`r3-${logo.id}`} logo={logo} />
             ))}
