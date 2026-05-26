@@ -1,230 +1,201 @@
-import { motion, useReducedMotion } from "framer-motion";
-import { useRef } from "react";
-import { useInView } from "@/hooks/useInView";
+import { motion } from "framer-motion";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import Eyebrow from "@/components/ui/eyebrow";
 import SplitText from "@/components/motion/SplitText";
-import { useBrands } from "@/lib/api";
+import MarqueeRow from "@/components/motion/MarqueeRow";
+import { usePartnerLogos } from "@/lib/api";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 
+/**
+ * "Brands we partner with." — three-row sliding logo marquee on white.
+ *
+ * Borderless tiles float through three rows at alternating directions
+ * and slightly different baseline speeds. Each row picks up scroll
+ * velocity via `MarqueeRow` for a subtle "alive" feel. Hover any tile
+ * to bring the logo to full opacity + saturation, lift it slightly,
+ * and reveal an outbound link badge.
+ *
+ * File name kept (`OurPartnersHexagon.tsx`) so Index.tsx imports stay
+ * stable — purely a cosmetic mismatch with the file name now.
+ */
+
+type Logo = {
+  id: string;
+  name: string;
+  image_url: string;
+  link_url?: string | null;
+};
+
+const LogoTile = ({ logo }: { logo: Logo }) => {
+  const inner = (
+    <>
+      <img
+        src={logo.image_url}
+        alt={logo.name}
+        loading="lazy"
+        className="max-h-[60%] max-w-[78%] object-contain opacity-70 saturate-[0.85] group-hover:opacity-100 group-hover:saturate-100 transition duration-300"
+      />
+      <ArrowUpRight
+        aria-hidden
+        className="absolute top-3 right-3 w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+      />
+    </>
+  );
+
+  const cls =
+    "group relative flex items-center justify-center w-[180px] md:w-[200px] h-[100px] md:h-[110px] mx-3 rounded-2xl hover:shadow-[0_18px_36px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-300";
+
+  return logo.link_url ? (
+    <a
+      href={logo.link_url}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={logo.name}
+      className={cls}
+    >
+      {inner}
+    </a>
+  ) : (
+    <span aria-label={logo.name} className={cls}>
+      {inner}
+    </span>
+  );
+};
+
 const OurPartnersHexagon = () => {
-  const reduced = useReducedMotion();
-  const { ref: inViewRef, isInView } = useInView({ threshold: 0.15 });
-  const { data: allBrands = [] } = useBrands();
-  
-  // Show all brands, use logo_url if available, otherwise image_url
-  const logos = allBrands.map((brand) => ({
-    ...brand,
-    displayUrl: brand.logo_url || brand.image_url,
-  })).filter((brand) => brand.displayUrl);
+  const { data: logos = [] } = usePartnerLogos({ onlyActive: true });
 
-  // Container animation
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.06,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  // Individual hex animation
-  const hexVariants = {
-    hidden: { opacity: 0, scale: 0.5, rotateZ: -20 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      rotateZ: 0,
-      transition: { duration: 0.6, ease: EASE_OUT_EXPO },
-    },
-  };
-
-  // Hex hover animation
-  const hexHoverVariants = {
-    rest: { scale: 1, rotateZ: 0, y: 0 },
-    hover: {
-      scale: 1.12,
-      rotateZ: 3,
-      y: -6,
-      transition: { duration: 0.3, ease: "easeOut" },
-    },
-  };
-
-  // Create grid positions for hexagon pattern (honeycomb layout)
-  // Using a simplified hex grid layout
-  const hexPositions = logos.map((_, idx) => {
-    const itemsPerRow = 4;
-    const row = Math.floor(idx / itemsPerRow);
-    const col = idx % itemsPerRow;
-    const isOddRow = row % 2 === 1;
-    const offsetX = isOddRow ? 60 : 0;
-
-    return {
-      x: col * 120 + offsetX,
-      y: row * 105,
-    };
-  });
+  if (logos.length === 0) return null;
 
   return (
-    <section
-      ref={inViewRef as React.RefObject<HTMLDivElement>}
-      className="relative py-24 lg:py-32 overflow-hidden bg-white"
-    >
-      {/* Subtle gradient overlay */}
+    <section className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background">
+      {/* Editorial dot-grid backdrop — matches every other white section */}
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none opacity-[0.45]"
         style={{
-          background:
-            "linear-gradient(135deg, rgba(245, 247, 250, 0.4) 0%, rgba(240, 250, 245, 0.2) 100%)",
+          backgroundImage:
+            "radial-gradient(circle, hsl(var(--forest-mid) / 0.10) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+      {/* Soft accent orbs */}
+      <div
+        aria-hidden
+        className="absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full opacity-[0.05] pointer-events-none animate-orb"
+        style={{ background: "radial-gradient(circle, hsl(140 55% 25%), transparent 70%)" }}
+      />
+      <div
+        aria-hidden
+        className="absolute -bottom-24 -left-24 w-[360px] h-[360px] rounded-full opacity-[0.04] pointer-events-none animate-orb"
+        style={{
+          background: "radial-gradient(circle, hsl(75 38% 45%), transparent 70%)",
+          animationDelay: "9s",
         }}
       />
 
-      {/* Decorative elements */}
-      <div
-        aria-hidden
-        className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(140, 155, 100, 0.08) 0%, transparent 70%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute bottom-0 left-0 w-96 h-96 rounded-full blur-3xl pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(180, 150, 100, 0.06) 0%, transparent 70%)",
-        }}
-      />
-
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Heading section */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
+        {/* Header */}
         <motion.div
-          className="text-center mb-20 lg:mb-24"
-          initial={reduced ? {} : { opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
+          className="max-w-2xl mx-auto text-center mb-14 lg:mb-20"
         >
-          <p className="text-forest-deep/50 font-body text-xs uppercase tracking-[0.25em] mb-3">
+          <Eyebrow variant="pill" tone="primary" className="mb-7">
+            Our Partnerships
+          </Eyebrow>
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-[56px] font-bold text-foreground leading-[1.04] tracking-tight">
             <SplitText
-              text="Our Partnerships"
-              by="letter"
-              stagger={0.025}
-              as="span"
-            />
-          </p>
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-forest-deep leading-tight tracking-tight mb-6">
-            <SplitText
-              text="Brands We Partner"
+              text="Brands we"
               by="word"
-              stagger={0.08}
+              stagger={0.05}
               as="span"
+              className="inline-block mr-[0.25em]"
             />
-            <span className="block text-accent">
-              <SplitText
-                text="With"
-                by="word"
-                stagger={0.08}
-                delay={0.24}
-                as="span"
-              />
-            </span>
+            <SplitText
+              text="partner with."
+              by="word"
+              stagger={0.05}
+              delay={0.16}
+              as="span"
+              className="inline-block text-gradient-gold italic"
+            />
           </h2>
           <motion.p
-            className="font-body text-lg text-forest-deep/60 leading-relaxed max-w-2xl mx-auto"
-            initial={reduced ? {} : { opacity: 0, y: 15 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay: 0.15 }}
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.3, ease: EASE_OUT_EXPO }}
+            className="font-body text-[15.5px] md:text-[17px] text-muted-foreground leading-relaxed mt-7"
           >
-            We collaborate with leading brands globally, bringing premium products and
-            trusted solutions to the Sri Lankan market.
+            We don't just import — we represent. Long-term relationships with
+            growers, producers, and brand owners across Europe, Asia, and the
+            Middle East.
           </motion.p>
         </motion.div>
 
-        {/* Octagon grid - 2 rows */}
-        {logos.length > 0 && (
-          <motion.div
-            className="relative mx-auto"
+        {/* Marquee stack — three rows, alternating directions */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.9, delay: 0.2 }}
+          className="relative space-y-5"
+        >
+          {/* Edge fades — white → transparent */}
+          <div
+            aria-hidden
+            className="absolute inset-y-0 left-0 w-24 md:w-32 z-10 pointer-events-none"
             style={{
-              display: "grid",
-              gridTemplateColumns: `repeat(8, minmax(120px, 1fr))`,
-              maxWidth: "600px",
-              gap: "0.75rem",
-              justifyContent: "center",
-              justifyItems: "center",
+              background:
+                "linear-gradient(90deg, hsl(var(--background)) 10%, hsl(var(--background) / 0.7) 50%, transparent 100%)",
             }}
-            variants={containerVariants}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-          >
-            {logos.map((logo, idx) => (
-              <motion.div
-                key={logo.id}
-                variants={hexVariants}
-                className="relative group"
-                style={{
-                  width: 120,
-                  height: 120,
-                }}
-              >
-                {/* Square background with border */}
-                <motion.div
-                  className="absolute inset-0 overflow-hidden rounded border-2"
-                  
-                  variants={hexHoverVariants}
-                  initial="rest"
-                  whileHover="hover"
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                >
-                  {/* Background */}
-                  <div
-                    className="absolute inset-0 bg-white"
-                    style={{
-                      borderColor: "rgba(140, 155, 100, 0.3)",
-                    }}
-                  />
+          />
+          <div
+            aria-hidden
+            className="absolute inset-y-0 right-0 w-24 md:w-32 z-10 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(270deg, hsl(var(--background)) 10%, hsl(var(--background) / 0.7) 50%, transparent 100%)",
+            }}
+          />
 
-                  {/* Logo container */}
-                  <div className="absolute inset-0 flex items-center justify-center p-4">
-                    <img
-                      src={logo.displayUrl}
-                      alt={`${logo.name} logo`}
-                      loading="lazy"
-                      className="max-w-[70%] max-h-[70%] object-contain opacity-85 group-hover:opacity-100 transition-opacity duration-300"
-                    />
-                  </div>
-                </motion.div>
-
-                {/* Logo name on hover */}
-                <motion.div
-                  className="absolute -bottom-7 left-1/2 transform -translate-x-1/2 text-center pointer-events-none"
-                  initial={{ opacity: 0, y: -5 }}
-                  whileHover={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <p className="font-body text-xs text-forest-deep font-medium whitespace-nowrap">
-                    {logo.name}
-                  </p>
-                </motion.div>
-              </motion.div>
+          <MarqueeRow baseVelocity={18} direction={-1}>
+            {logos.map((logo) => (
+              <LogoTile key={`r1-${logo.id}`} logo={logo as Logo} />
             ))}
-          </motion.div>
-        )}
+          </MarqueeRow>
+          <MarqueeRow baseVelocity={14} direction={1}>
+            {logos.map((logo) => (
+              <LogoTile key={`r2-${logo.id}`} logo={logo as Logo} />
+            ))}
+          </MarqueeRow>
+          <MarqueeRow baseVelocity={22} direction={-1}>
+            {logos.map((logo) => (
+              <LogoTile key={`r3-${logo.id}`} logo={logo as Logo} />
+            ))}
+          </MarqueeRow>
+        </motion.div>
 
-        {/* Empty state */}
-        {logos.length === 0 && (
-          <motion.div
-            className="text-center py-16"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            <p className="text-forest-deep/50 font-body text-lg">
-              No brands available
-            </p>
-          </motion.div>
-        )}
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.35, ease: EASE_OUT_EXPO }}
+          className="flex justify-center mt-14"
+        >
+          <Link to="/contact" className="inline-block group">
+            <Button variant="brandOutline" size="pill" className="font-body">
+              Become a partner
+              <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </Button>
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
