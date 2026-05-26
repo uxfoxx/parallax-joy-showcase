@@ -48,7 +48,12 @@ const MarqueeRow = ({
     clamp: false,
   });
 
-  const x = useTransform(baseX, (v) => `${wrap(-25, 0, v)}%`);
+  // Wrap interval = one copy's worth of total content width. Hardcoding
+  // -25 only worked when repeat=4; for any other repeat value the wrap
+  // fires before/after one full copy has scrolled past, producing a
+  // visible snap. Computing from `repeat` keeps the loop seamless for
+  // any repeat >= 2.
+  const x = useTransform(baseX, (v) => `${wrap(-100 / repeat, 0, v)}%`);
 
   const directionFactor = useRef<number>(direction);
   useAnimationFrame((_t, delta) => {
