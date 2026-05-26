@@ -71,7 +71,17 @@ const MarqueeRow = ({
     <div className={className} style={{ overflow: "hidden", width: "100%" }}>
       <motion.div
         className={rowClassName}
-        style={{ x, display: "flex", willChange: "transform", whiteSpace: "nowrap" }}
+        style={{
+          x,
+          display: "flex",
+          // Must size to content (not to its 100%-width parent) so that
+          // translateX(<percentage>) resolves against total content width.
+          // Without this, the wrap interval is a fraction of the *viewport*
+          // and never lines up with a copy stride → visible snap.
+          width: "max-content",
+          willChange: "transform",
+          whiteSpace: "nowrap",
+        }}
       >
         {tracks.map((_, i) => (
           <div
