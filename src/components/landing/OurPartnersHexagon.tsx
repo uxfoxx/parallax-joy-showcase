@@ -189,12 +189,12 @@ const OurPartnersHexagon = () => {
           transition={{ duration: 0.6, delay: 0.35, ease: EASE_OUT_EXPO }}
           className="flex justify-center mt-14"
         >
-          <Link to="/contact" className="inline-block group">
-            <Button variant="brandOutline" size="pill" className="font-body">
+          <Button asChild variant="brandOutline" size="pill" className="font-body group">
+            <Link to="/contact">
               Become a partner
               <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </motion.div>
       </div>
     </section>
