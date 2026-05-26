@@ -135,7 +135,7 @@ const Navbar = () => {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link to="/contact">
                   <Button
-                    className={`font-body font-semibold rounded-full h-10 px-6 text-sm bg-transparent border-2 transition-colors duration-300 shadow-none ${
+                    className={`font-body font-semibold rounded-[12px] h-10 px-6 text-sm bg-transparent border-2 transition-colors duration-300 shadow-none ${
                       isDark
                         ? "border-white/70 text-white hover:bg-white/10"
                         : "border-primary text-primary hover:bg-primary/[0.06]"
