@@ -32,7 +32,7 @@ import Eyebrow from "@/components/ui/eyebrow";
  */
 
 const HERO_SPREAD_IMAGE =
-  "https://images.unsplash.com/photo-1543353071-873f17a7a088?w=2400&q=85&auto=format&fit=crop";
+  "https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/ChatGPT%20Image%20May%208,%202026,%2011_42_10%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9DaGF0R1BUIEltYWdlIE1heSA4LCAyMDI2LCAxMV80Ml8xMCBQTS5wbmciLCJpYXQiOjE3Nzk4MTcwMTQsImV4cCI6MTgxMTM1MzAxNH0.JmilXSRRFQ_w4I9XmmBPPZdNcbQwNLQs8uwjg6mzp84";
 
 /** Tiny olive-sprig SVG — sits in the photo's negative-space margins. */
 const Sprig = ({ rotate = 0, scale = 1 }: { rotate?: number; scale?: number }) => (
