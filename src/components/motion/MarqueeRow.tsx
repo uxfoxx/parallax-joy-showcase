@@ -2,10 +2,7 @@ import {
   motion,
   useAnimationFrame,
   useMotionValue,
-  useScroll,
-  useSpring,
   useTransform,
-  useVelocity,
   useReducedMotion,
   wrap,
 } from "framer-motion";
@@ -24,9 +21,17 @@ type MarqueeRowProps = {
 };
 
 /**
- * motion.dev "Scroll Velocity Marquee".
- * Marquee whose speed bumps with scroll velocity; slows back to baseVelocity
- * on idle. Children are repeated `repeat` times for seamless wrap.
+ * Smooth, seamless, constant-velocity marquee.
+ *
+ * The outer flex has `gap: 0` and each track carries its own
+ * trailing `paddingRight: 2rem` instead — that way the total content
+ * width is exactly `repeat × trackStride`, so a `-100/repeat %`
+ * translate shifts by exactly one stride and the wrap is invisible.
+ *
+ * Scroll-velocity reactivity was removed because the spring it relied
+ * on caused visible speed flicker and short direction-flip glitches
+ * while the page was being scrolled. Pure constant velocity reads as
+ * "smooth seamless" the way the design calls for.
  */
 const MarqueeRow = ({
   children,
@@ -38,32 +43,15 @@ const MarqueeRow = ({
 }: MarqueeRowProps) => {
   const reduced = useReducedMotion();
   const baseX = useMotionValue(0);
-  const { scrollY } = useScroll();
-  const scrollVelocity = useVelocity(scrollY);
-  const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 50,
-    stiffness: 400,
-  });
-  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 4], {
-    clamp: false,
-  });
+  const directionRef = useRef(direction);
+  directionRef.current = direction;
 
-  // Wrap interval = one copy's worth of total content width. Hardcoding
-  // -25 only worked when repeat=4; for any other repeat value the wrap
-  // fires before/after one full copy has scrolled past, producing a
-  // visible snap. Computing from `repeat` keeps the loop seamless for
-  // any repeat >= 2.
+  // Wrap interval equals one copy's stride (1/repeat of total width).
   const x = useTransform(baseX, (v) => `${wrap(-100 / repeat, 0, v)}%`);
 
-  const directionFactor = useRef<number>(direction);
   useAnimationFrame((_t, delta) => {
     if (reduced) return;
-    let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
-    // Invert direction on fast opposite scroll for a pleasing rubber-band effect.
-    const vf = velocityFactor.get();
-    if (vf < 0) directionFactor.current = -1;
-    else if (vf > 0) directionFactor.current = 1;
-    moveBy += directionFactor.current * moveBy * vf;
+    const moveBy = directionRef.current * baseVelocity * (delta / 1000);
     baseX.set(baseX.get() + moveBy);
   });
 
@@ -83,10 +71,19 @@ const MarqueeRow = ({
     <div className={className} style={{ overflow: "hidden", width: "100%" }}>
       <motion.div
         className={rowClassName}
-        style={{ x, display: "flex", willChange: "transform", gap: "2rem", whiteSpace: "nowrap" }}
+        style={{ x, display: "flex", willChange: "transform", whiteSpace: "nowrap" }}
       >
         {tracks.map((_, i) => (
-          <div key={i} style={{ display: "flex", flexShrink: 0, gap: "2rem" }} aria-hidden={i > 0}>
+          <div
+            key={i}
+            style={{
+              display: "flex",
+              flexShrink: 0,
+              gap: "2rem",
+              paddingRight: "2rem",
+            }}
+            aria-hidden={i > 0}
+          >
             {children}
           </div>
         ))}
