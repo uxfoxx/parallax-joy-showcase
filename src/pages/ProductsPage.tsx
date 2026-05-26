@@ -227,10 +227,13 @@ const FilterPanel = ({
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
   const showOurProducts = searchParams.get("our") === "true";
+  const initialBrandSlug = searchParams.get("brand");
 
   const [query, setQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(
+    initialBrandSlug ? [initialBrandSlug] : []
+  );
   const [featuredOnly, setFeaturedOnly] = useState(false);
   const [sortBy, setSortBy] = useState<SortBy>("featured");
   const [filterOpen, setFilterOpen] = useState(false);
