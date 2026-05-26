@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import Eyebrow from "@/components/ui/eyebrow";
 import SplitText from "@/components/motion/SplitText";
 import MarqueeRow from "@/components/motion/MarqueeRow";
-import { usePartnerLogos } from "@/lib/api";
+import { useBrands } from "@/lib/api";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 
 /**
@@ -24,13 +24,16 @@ import { EASE_OUT_EXPO } from "@/lib/motion";
 type Logo = {
   id: string;
   name: string;
+  slug: string;
   image_url: string;
-  link_url?: string | null;
 };
 
 const LogoTile = ({ logo }: { logo: Logo }) => {
-  const inner = (
-    <>
+  const cls =
+    "group relative flex items-center justify-center w-[180px] md:w-[200px] h-[100px] md:h-[110px] mx-3 rounded-2xl hover:shadow-[0_18px_36px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-300";
+
+  return (
+    <Link to={`/products?brand=${logo.slug}`} aria-label={logo.name} className={cls}>
       <img
         src={logo.image_url}
         alt={logo.name}
@@ -41,31 +44,13 @@ const LogoTile = ({ logo }: { logo: Logo }) => {
         aria-hidden
         className="absolute top-3 right-3 w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300"
       />
-    </>
-  );
-
-  const cls =
-    "group relative flex items-center justify-center w-[180px] md:w-[200px] h-[100px] md:h-[110px] mx-3 rounded-2xl hover:shadow-[0_18px_36px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-300";
-
-  return logo.link_url ? (
-    <a
-      href={logo.link_url}
-      target="_blank"
-      rel="noreferrer"
-      aria-label={logo.name}
-      className={cls}
-    >
-      {inner}
-    </a>
-  ) : (
-    <span aria-label={logo.name} className={cls}>
-      {inner}
-    </span>
+    </Link>
   );
 };
 
 const OurPartnersHexagon = () => {
-  const { data: logos = [] } = usePartnerLogos({ onlyActive: true });
+  const { data: brands = [] } = useBrands();
+  const logos = brands.filter((b): b is typeof b & { image_url: string } => !!b.image_url);
 
   if (logos.length === 0) return null;
 
@@ -166,17 +151,17 @@ const OurPartnersHexagon = () => {
 
           <MarqueeRow baseVelocity={18} direction={-1}>
             {logos.map((logo) => (
-              <LogoTile key={`r1-${logo.id}`} logo={logo as Logo} />
+              <LogoTile key={`r1-${logo.id}`} logo={logo} />
             ))}
           </MarqueeRow>
           <MarqueeRow baseVelocity={14} direction={1}>
             {logos.map((logo) => (
-              <LogoTile key={`r2-${logo.id}`} logo={logo as Logo} />
+              <LogoTile key={`r2-${logo.id}`} logo={logo} />
             ))}
           </MarqueeRow>
           <MarqueeRow baseVelocity={22} direction={-1}>
             {logos.map((logo) => (
-              <LogoTile key={`r3-${logo.id}`} logo={logo as Logo} />
+              <LogoTile key={`r3-${logo.id}`} logo={logo} />
             ))}
           </MarqueeRow>
         </motion.div>
