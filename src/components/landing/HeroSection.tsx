@@ -201,7 +201,7 @@ const HeroSection = () => {
           className="mb-7 flex justify-center"
         >
           <Eyebrow variant="pill" tone="primary" withDot>
-            Premium Imports · Since 1994
+            Premium Food Distribution · Sri Lanka
           </Eyebrow>
         </motion.div>
 
@@ -255,9 +255,9 @@ const HeroSection = () => {
           transition={{ duration: 0.7, delay: 0.85, ease: EASE_OUT_EXPO }}
           className="font-body text-[15px] md:text-[17px] text-foreground/75 leading-relaxed mb-10 max-w-2xl mx-auto"
         >
-          Three decades sourcing premium FMCG for Sri Lanka — bonded
-          warehousing, cold-chain logistics, and island-wide distribution
-          from one vertically integrated partner.
+          Connecting Sri Lanka's hotels, restaurants and supermarkets
+          with globally sourced food brands — through trusted
+          relationships, not transactions.
         </motion.p>
 
         <motion.div

@@ -4,20 +4,20 @@ import { useState } from "react";
 
 const approachItems: { title: string; body: string }[] = [
   {
-    title: "Consistent and dependable supply",
-    body: "Inventory we can stake our name on — bonded warehousing means stock is on the shelf, not stuck at port.",
+    title: "Consistent, dependable supply",
+    body: "Stock you can plan against — we don't run out at the wrong moment.",
   },
   {
-    title: "Professional service and communication",
-    body: "One concierge desk, one accountable team. No call-trees, no surprises, replies within the hour.",
+    title: "Professional, personal service",
+    body: "One concierge desk per account. Replies within the hour; no call-trees.",
   },
   {
-    title: "Structured systems that ensure reliability",
-    body: "Cold-chain SOPs, audited workflows, and a centralised structure so every client gets the same standard.",
+    title: "Structured systems for reliability",
+    body: "SOPs across cold-chain and bonded storage so every order ships to the same standard.",
   },
   {
-    title: "Credit support and flexibility where it matters",
-    body: "Tailored payment terms for partners we trust — we invest in the businesses we serve.",
+    title: "Flexible terms for trusted partners",
+    body: "Credit and timing flexibility for partners we trust — not as a sales lever, as a relationship.",
   },
 ];
 

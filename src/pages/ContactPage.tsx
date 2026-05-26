@@ -95,7 +95,7 @@ const ContactPage = () => {
       <PageHero
         eyebrow="Olive Foods / Contact"
         title={<>Get in <span className="text-gradient-gold italic">touch.</span></>}
-        subtitle="Questions about our products, brands, or partnership opportunities? We'd love to hear from you."
+        subtitle="Hotel, restaurant, supermarket — or sourcing a hard-to-find product? Drop us a line. We treat first conversations like first relationships."
       />
 
       <SectionTransition />

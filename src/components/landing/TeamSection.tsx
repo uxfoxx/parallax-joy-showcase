@@ -120,9 +120,11 @@ const TeamSection = () => {
           }
           transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay: 0.45 }}
         >
-          Olive Foods is Sri Lanka's fastest-growing food distributor, connecting
-          global food producers with local businesses while building partnerships
-          that stand the test of time.
+          Olive Foods exists because of relationships — thirty-plus years
+          of them, between our team and the suppliers, hoteliers, and
+          retailers who shape Sri Lanka's food trade. We value
+          relationships more than transactions; consistency more than
+          sales; trust more than speed.
         </motion.p>
       </div>
     </section>
