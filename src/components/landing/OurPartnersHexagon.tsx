@@ -30,7 +30,7 @@ type Logo = {
 
 const LogoTile = ({ logo }: { logo: Logo }) => {
   const cls =
-    "group relative flex items-center justify-center w-[180px] md:w-[200px] h-[100px] md:h-[110px] mx-3 rounded-2xl hover:shadow-[0_18px_36px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-300";
+    "group relative flex items-center justify-center w-[140px] md:w-[160px] h-[78px] md:h-[88px] mx-2 rounded-2xl hover:shadow-[0_18px_36px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-300";
 
   return (
     <Link to={`/products?brand=${logo.slug}`} aria-label={logo.name} className={cls}>
@@ -42,7 +42,7 @@ const LogoTile = ({ logo }: { logo: Logo }) => {
       />
       <ArrowUpRight
         aria-hidden
-        className="absolute top-3 right-3 w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        className="absolute top-2 right-2 w-3 h-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300"
       />
     </Link>
   );
@@ -129,7 +129,7 @@ const OurPartnersHexagon = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.9, delay: 0.2 }}
-          className="relative space-y-5"
+          className="relative space-y-3"
         >
           {/* Edge fades — white → transparent */}
           <div
@@ -149,17 +149,17 @@ const OurPartnersHexagon = () => {
             }}
           />
 
-          <MarqueeRow baseVelocity={18} direction={-1}>
+          <MarqueeRow baseVelocity={9} direction={-1} repeat={6}>
             {logos.map((logo) => (
               <LogoTile key={`r1-${logo.id}`} logo={logo} />
             ))}
           </MarqueeRow>
-          <MarqueeRow baseVelocity={14} direction={1}>
+          <MarqueeRow baseVelocity={7} direction={1} repeat={6}>
             {logos.map((logo) => (
               <LogoTile key={`r2-${logo.id}`} logo={logo} />
             ))}
           </MarqueeRow>
-          <MarqueeRow baseVelocity={22} direction={-1}>
+          <MarqueeRow baseVelocity={11} direction={-1} repeat={6}>
             {logos.map((logo) => (
               <LogoTile key={`r3-${logo.id}`} logo={logo} />
             ))}

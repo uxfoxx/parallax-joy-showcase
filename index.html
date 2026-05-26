@@ -31,7 +31,7 @@
   <link
     rel="preload"
     as="image"
-    href="https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/ChatGPT%20Image%20May%208,%202026,%2011_42_10%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9DaGF0R1BUIEltYWdlIE1heSA4LCAyMDI2LCAxMV80Ml8xMCBQTS5wbmciLCJpYXQiOjE3Nzk4MTcwMTQsImV4cCI6MTgxMTM1MzAxNH0.JmilXSRRFQ_w4I9XmmBPPZdNcbQwNLQs8uwjg6mzp84"
+    href="https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/ChatGPT%20Image%20May%2026,%202026,%2010_47_46%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9DaGF0R1BUIEltYWdlIE1heSAyNiwgMjAyNiwgMTBfNDdfNDYgUE0ucG5nIiwiaWF0IjoxNzc5ODE3NDAwLCJleHAiOjE4MTEzNTM0MDB9.6JLt-aWY1lK9w1OU_lp7ksmIGx7PyYCDKgwdc-LcGPk"
     fetchpriority="high"
   />
 </head>
@@ -90,7 +90,7 @@
       /* Corner vignette */
       #boot-splash::after {
         content: ""; position: absolute; inset: 0; pointer-events: none;
-        background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%);
+        background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%);
       }
       /* Stage holds the SVG circle and its glitch siblings */
       #boot-splash__stage {
@@ -118,65 +118,70 @@
         transform-origin: 50% 50%;
         animation: olive-splash-arc 7s linear infinite;
       }
-      /* Wordmark under the stage — fades in after the circle settles */
-      @keyframes olive-splash-wordmark {
-        from { opacity: 0; letter-spacing: 0.35em; }
-        to   { opacity: 0.85; letter-spacing: 0.5em; }
+      /* Sonar pulse — circles expanding outward, opacity fade */
+      @keyframes olive-splash-sonar {
+        0%   { transform: scale(0.85); opacity: 0; }
+        15%  { opacity: 0.55; }
+        100% { transform: scale(1.35); opacity: 0; }
       }
-      #boot-splash__wordmark {
-        position: absolute;
-        bottom: clamp(80px, 16vh, 140px);
-        left: 50%; transform: translateX(-50%);
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.5em;
-        font-weight: 500;
-        color: rgba(255,255,255,0.85);
-        text-indent: 0.5em; /* compensate trailing letter-spacing */
-        opacity: 0;
-        animation: olive-splash-wordmark 1.2s cubic-bezier(0.22,1,0.36,1) 0.8s both;
-      }
-      #boot-splash__tagline {
-        display: block;
-        margin-top: 10px;
-        font-size: 9.5px;
-        font-weight: 400;
-        color: rgba(255,255,255,0.45);
-        letter-spacing: 0.32em;
-        text-indent: 0.32em;
-      }
-      /* Gold progress hairline — fills over the minimum display time */
-      @keyframes olive-splash-progress {
-        from { transform: scaleX(0); }
-        to   { transform: scaleX(1); }
-      }
-      #boot-splash__progress {
-        position: absolute;
-        bottom: clamp(56px, 12vh, 100px);
-        left: 50%; transform: translateX(-50%);
-        width: clamp(160px, 28vw, 220px);
-        height: 1px;
-        background: rgba(255,255,255,0.08);
-        overflow: hidden;
-      }
-      #boot-splash__progress::after {
-        content: "";
+      .boot-splash__sonar {
         position: absolute; inset: 0;
-        transform-origin: left center;
-        background: linear-gradient(90deg,
-          rgba(212,175,55,0) 0%,
-          rgba(212,175,55,0.9) 50%,
-          rgba(212,175,55,0) 100%);
-        animation: olive-splash-progress 2700ms cubic-bezier(0.22,1,0.36,1) both;
+        transform-origin: 50% 50%;
+        animation: olive-splash-sonar 2600ms cubic-bezier(0.22, 1, 0.36, 1) infinite;
+      }
+      .boot-splash__sonar--lag { animation-delay: 1300ms; }
+      /* Inner counter-rotating dashed ring */
+      @keyframes olive-splash-counter {
+        to { transform: rotate(-360deg); }
+      }
+      .boot-splash__counter {
+        transform-origin: 50% 50%;
+        animation: olive-splash-counter 11s linear infinite;
+      }
+      /* Hour ticks — staggered breathing */
+      @keyframes olive-splash-tick {
+        0%, 70%, 100% { opacity: 0.18; }
+        20%           { opacity: 0.95; }
+      }
+      .boot-splash__tick {
+        transform-origin: 120px 120px;
+        animation: olive-splash-tick 2.4s ease-in-out infinite;
+      }
+      /* Determinate progress sweep around the logo */
+      @keyframes olive-splash-progress {
+        from { stroke-dashoffset: 754; }
+        to   { stroke-dashoffset: 0; }
+      }
+      .boot-splash__progress-arc {
+        transform-origin: 50% 50%;
+        transform: rotate(-90deg); /* start at 12 o'clock */
+        stroke-dasharray: 754 754;
+        stroke-dashoffset: 754;
+        animation: olive-splash-progress 2700ms cubic-bezier(0.65, 0, 0.35, 1) both;
+      }
+      /* Gold accent dot tracking the progress head */
+      @keyframes olive-splash-head {
+        from { transform: rotate(-90deg); }
+        to   { transform: rotate(270deg); }
+      }
+      .boot-splash__head {
+        transform-origin: 50% 50%;
+        animation: olive-splash-head 2700ms cubic-bezier(0.65, 0, 0.35, 1) both;
       }
       @media (prefers-reduced-motion: reduce) {
         #boot-splash__stage,
         .boot-splash__rgb--cyan,
         .boot-splash__rgb--magenta,
-        .boot-splash__arc { animation: none; }
+        .boot-splash__arc,
+        .boot-splash__sonar,
+        .boot-splash__counter,
+        .boot-splash__tick,
+        .boot-splash__head { animation: none; }
         .boot-splash__rgb { display: none; }
-        #boot-splash__progress::after { animation: none; transform: scaleX(1); }
-        #boot-splash__wordmark { animation: none; opacity: 0.85; }
+        .boot-splash__progress-arc {
+          animation: none;
+          stroke-dashoffset: 0;
+        }
       }
     </style>
     <div id="boot-splash" role="status" aria-label="Loading Olive Foods">
@@ -193,13 +198,43 @@
                 0 0 0 1 0" />
             </filter>
           </defs>
+          <!-- Sonar pulses — two phased copies emanating outward -->
+          <g class="boot-splash__sonar">
+            <circle cx="120" cy="120" r="110"
+              fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="1" />
+          </g>
+          <g class="boot-splash__sonar boot-splash__sonar--lag">
+            <circle cx="120" cy="120" r="110"
+              fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1" />
+          </g>
           <!-- Static frame -->
           <circle cx="120" cy="120" r="110"
             fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1" />
           <!-- Inner hairline -->
           <circle cx="120" cy="120" r="102"
             fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
-          <!-- Rotating arc — ~36% of circumference -->
+          <!-- Counter-rotating dashed inner ring -->
+          <g class="boot-splash__counter">
+            <circle cx="120" cy="120" r="88"
+              fill="none"
+              stroke="rgba(255,255,255,0.55)"
+              stroke-width="0.9"
+              stroke-dasharray="2 8" />
+          </g>
+          <!-- Determinate progress arc around the logo -->
+          <g class="boot-splash__progress-arc">
+            <circle cx="120" cy="120" r="120"
+              fill="none"
+              stroke="rgba(212,175,55,0.9)"
+              stroke-width="1.5"
+              stroke-linecap="round" />
+          </g>
+          <!-- Gold accent dot tracking the progress head -->
+          <g class="boot-splash__head">
+            <circle cx="120" cy="0" r="2.5" fill="rgba(212,175,55,1)" />
+            <circle cx="120" cy="0" r="6" fill="rgba(212,175,55,0.25)" />
+          </g>
+          <!-- Rotating cardinal arc — ~36% of circumference -->
           <g class="boot-splash__arc">
             <circle cx="120" cy="120" r="110"
               fill="none"
@@ -209,12 +244,20 @@
               stroke-dasharray="250 691"
               stroke-dashoffset="0" />
           </g>
-          <!-- Tick marks at cardinal points -->
-          <g stroke="rgba(255,255,255,0.35)" stroke-width="1">
-            <line x1="120" y1="2"   x2="120" y2="10"  />
-            <line x1="120" y1="230" x2="120" y2="238" />
-            <line x1="2"   y1="120" x2="10"  y2="120" />
-            <line x1="230" y1="120" x2="238" y2="120" />
+          <!-- 12 breathing tick marks at hour positions -->
+          <g stroke="rgba(255,255,255,0.55)" stroke-width="1" stroke-linecap="round">
+            <line class="boot-splash__tick" style="animation-delay: 0s"     transform="rotate(0 120 120)"   x1="120" y1="2"  x2="120" y2="10" />
+            <line class="boot-splash__tick" style="animation-delay: 0.2s"   transform="rotate(30 120 120)"  x1="120" y1="4"  x2="120" y2="10" />
+            <line class="boot-splash__tick" style="animation-delay: 0.4s"   transform="rotate(60 120 120)"  x1="120" y1="4"  x2="120" y2="10" />
+            <line class="boot-splash__tick" style="animation-delay: 0.6s"   transform="rotate(90 120 120)"  x1="120" y1="2"  x2="120" y2="10" />
+            <line class="boot-splash__tick" style="animation-delay: 0.8s"   transform="rotate(120 120 120)" x1="120" y1="4"  x2="120" y2="10" />
+            <line class="boot-splash__tick" style="animation-delay: 1.0s"   transform="rotate(150 120 120)" x1="120" y1="4"  x2="120" y2="10" />
+            <line class="boot-splash__tick" style="animation-delay: 1.2s"   transform="rotate(180 120 120)" x1="120" y1="2"  x2="120" y2="10" />
+            <line class="boot-splash__tick" style="animation-delay: 1.4s"   transform="rotate(210 120 120)" x1="120" y1="4"  x2="120" y2="10" />
+            <line class="boot-splash__tick" style="animation-delay: 1.6s"   transform="rotate(240 120 120)" x1="120" y1="4"  x2="120" y2="10" />
+            <line class="boot-splash__tick" style="animation-delay: 1.8s"   transform="rotate(270 120 120)" x1="120" y1="2"  x2="120" y2="10" />
+            <line class="boot-splash__tick" style="animation-delay: 2.0s"   transform="rotate(300 120 120)" x1="120" y1="4"  x2="120" y2="10" />
+            <line class="boot-splash__tick" style="animation-delay: 2.2s"   transform="rotate(330 120 120)" x1="120" y1="4"  x2="120" y2="10" />
           </g>
           <!-- The logo, white via filter -->
           <image href="/olive-foods-hero-logo.svg"
@@ -257,11 +300,6 @@
             x="80" y="68" width="80" height="104"
             filter="url(#boot-splash-magenta)" />
         </svg>
-      </div>
-      <div id="boot-splash__progress" aria-hidden="true"></div>
-      <div id="boot-splash__wordmark">
-        Olive Foods
-        <span id="boot-splash__tagline">Relationships, not transactions</span>
       </div>
     </div>
     <script>
