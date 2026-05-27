@@ -27,7 +27,7 @@ const LogoStrip = () => {
         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-forest-deep/80 to-transparent z-10 pointer-events-none" />
 
         {logos.length > 0 && (
-          <MarqueeRow baseVelocity={10} direction={-1} repeat={3}>
+          <MarqueeRow baseVelocity={5} direction={-1} repeat={3}>
             {logos.map((logo) => {
               const tileClass =
                 "group flex-shrink-0 flex items-center justify-center h-16 md:h-[80px] px-8 md:px-10";
