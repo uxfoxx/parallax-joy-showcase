@@ -56,9 +56,18 @@ const OurPartnersHexagon = () => {
 
   // Split the brand portfolio across two rows so each logo appears in one row
   // instead of three. useBrands() is already ordered by name → stable split.
+  // If we only have a single brand, both rows fall back to the same list so
+  // we still render two rows without an empty placeholder.
   const half = Math.ceil(logos.length / 2);
   const rowA = logos.slice(0, half);
-  const rowB = logos.slice(half).length > 0 ? logos.slice(half) : logos.slice(0, half);
+  const rowB = logos.length > 1 ? logos.slice(half) : logos.slice(0, half);
+
+  // Pick a per-row `repeat` so the total stride always overflows the widest
+  // typical viewports, even when a row only has 1–2 logos. One tile is ~264px
+  // wide (240 + 2×12 margin), so 16 / rowLength copies gives us roughly 4k px
+  // of stride at the minimum.
+  const repeatFor = (rowLen: number) =>
+    Math.max(6, Math.ceil(16 / Math.max(rowLen, 1)));
 
   return (
     <section className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background">
@@ -155,12 +164,12 @@ const OurPartnersHexagon = () => {
             }}
           />
 
-          <MarqueeRow baseVelocity={3} direction={-1} repeat={6}>
+          <MarqueeRow baseVelocity={3} direction={-1} repeat={repeatFor(rowA.length)}>
             {rowA.map((logo) => (
               <LogoTile key={`r1-${logo.id}`} logo={logo} />
             ))}
           </MarqueeRow>
-          <MarqueeRow baseVelocity={2.5} direction={1} repeat={6}>
+          <MarqueeRow baseVelocity={2.5} direction={1} repeat={repeatFor(rowB.length)}>
             {rowB.map((logo) => (
               <LogoTile key={`r2-${logo.id}`} logo={logo} />
             ))}
