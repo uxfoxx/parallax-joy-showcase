@@ -32,7 +32,7 @@ import Eyebrow from "@/components/ui/eyebrow";
  */
 
 const HERO_SPREAD_IMAGE =
-  "https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/ChatGPT%20Image%20May%2026,%202026,%2010_47_46%20PM.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9DaGF0R1BUIEltYWdlIE1heSAyNiwgMjAyNiwgMTBfNDdfNDYgUE0ucG5nIiwiaWF0IjoxNzc5ODE3NDAwLCJleHAiOjE4MTEzNTM0MDB9.6JLt-aWY1lK9w1OU_lp7ksmIGx7PyYCDKgwdc-LcGPk";
+  "https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/newbg.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9uZXdiZy5wbmciLCJpYXQiOjE3Nzk4ODA0NjcsImV4cCI6MTgxMTQxNjQ2N30.zVuck54ZJ_iFDjZsn0SN4eoHkfc8o9V2JTtlrrahsXY";
 
 /** Tiny olive-sprig SVG — sits in the photo's negative-space margins. */
 const Sprig = ({ rotate = 0, scale = 1 }: { rotate?: number; scale?: number }) => (
