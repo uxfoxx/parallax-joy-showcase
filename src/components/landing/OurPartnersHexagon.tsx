@@ -30,7 +30,7 @@ type Logo = {
 
 const LogoTile = ({ logo }: { logo: Logo }) => {
   const cls =
-    "group relative flex items-center justify-center w-[140px] md:w-[160px] h-[78px] md:h-[88px] mx-2 rounded-2xl hover:shadow-[0_18px_36px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-300";
+    "group relative flex items-center justify-center w-[200px] md:w-[240px] h-[110px] md:h-[130px] mx-3 rounded-2xl hover:shadow-[0_18px_36px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-300";
 
   return (
     <Link to={`/products?brand=${logo.slug}`} aria-label={logo.name} className={cls}>
@@ -42,7 +42,7 @@ const LogoTile = ({ logo }: { logo: Logo }) => {
       />
       <ArrowUpRight
         aria-hidden
-        className="absolute top-2 right-2 w-3 h-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        className="absolute top-3 right-3 w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300"
       />
     </Link>
   );
@@ -53,6 +53,12 @@ const OurPartnersHexagon = () => {
   const logos = brands.filter((b): b is typeof b & { image_url: string } => !!b.image_url);
 
   if (logos.length === 0) return null;
+
+  // Split the brand portfolio across two rows so each logo appears in one row
+  // instead of three. useBrands() is already ordered by name → stable split.
+  const half = Math.ceil(logos.length / 2);
+  const rowA = logos.slice(0, half);
+  const rowB = logos.slice(half).length > 0 ? logos.slice(half) : logos.slice(0, half);
 
   return (
     <section className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background">
@@ -149,19 +155,14 @@ const OurPartnersHexagon = () => {
             }}
           />
 
-          <MarqueeRow baseVelocity={5} direction={-1} repeat={6}>
-            {logos.map((logo) => (
+          <MarqueeRow baseVelocity={3} direction={-1} repeat={6}>
+            {rowA.map((logo) => (
               <LogoTile key={`r1-${logo.id}`} logo={logo} />
             ))}
           </MarqueeRow>
-          <MarqueeRow baseVelocity={4} direction={1} repeat={6}>
-            {logos.map((logo) => (
+          <MarqueeRow baseVelocity={2.5} direction={1} repeat={6}>
+            {rowB.map((logo) => (
               <LogoTile key={`r2-${logo.id}`} logo={logo} />
-            ))}
-          </MarqueeRow>
-          <MarqueeRow baseVelocity={6} direction={-1} repeat={6}>
-            {logos.map((logo) => (
-              <LogoTile key={`r3-${logo.id}`} logo={logo} />
             ))}
           </MarqueeRow>
         </motion.div>
