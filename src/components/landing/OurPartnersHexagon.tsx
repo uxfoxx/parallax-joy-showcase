@@ -30,7 +30,7 @@ type Logo = {
 
 const LogoTile = ({ logo }: { logo: Logo }) => {
   const cls =
-    "group relative flex items-center justify-center w-[140px] md:w-[160px] h-[78px] md:h-[88px] mx-2 rounded-2xl hover:shadow-[0_18px_36px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-300";
+    "group relative flex items-center justify-center w-[140px] md:w-[160px] h-[100px] md:h-[100px] mx-2 rounded-2xl hover:shadow-[0_18px_36px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-300";
 
   return (
     <Link to={`/products?brand=${logo.slug}`} aria-label={logo.name} className={cls}>
