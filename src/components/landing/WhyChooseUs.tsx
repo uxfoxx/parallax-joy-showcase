@@ -7,11 +7,12 @@ import Eyebrow from "@/components/ui/eyebrow";
 
 /* ─── Shared panel styles ────────────────────────────────────────────── */
 
-const PANEL_BASE = "relative overflow-hidden rounded-2xl flex flex-col group";
+const PANEL_BASE =
+  "relative overflow-hidden rounded-2xl flex flex-col group transition-transform duration-300 ease-out hover:-translate-y-1";
 const PANEL_STYLE: React.CSSProperties = {
   background: "hsl(150 38% 7%)",
   border: "1px solid rgba(255,255,255,0.07)",
-  transition: "border-color 0.4s ease, box-shadow 0.4s ease",
+  transition: "border-color 0.4s ease-out, box-shadow 0.4s ease-out",
 };
 const PANEL_HOVER_STYLE: React.CSSProperties = {
   borderColor: "rgba(255,255,255,0.13)",
