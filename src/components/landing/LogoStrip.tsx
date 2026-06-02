@@ -3,7 +3,7 @@ import MarqueeRow from "@/components/motion/MarqueeRow";
 import { usePartnerLogos } from "@/lib/api";
 
 /**
- * "Our Brand Partners" — velocity-reactive marquee of real brand logos.
+ * "Our Clients" — velocity-reactive marquee of client/partner logos.
  * Logos are unified with `brightness-0 invert opacity-70` so disparate
  * colored marks read as a coherent set against the dark forest background.
  */
@@ -14,7 +14,7 @@ const LogoStrip = () => {
     <section className="relative py-16 overflow-hidden bg-forest-deep">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <SplitText
-          text="Our Brand Partners"
+          text="Our Clients"
           by="letter"
           stagger={0.025}
           as="p"
@@ -27,7 +27,7 @@ const LogoStrip = () => {
         <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-forest-deep/80 to-transparent z-10 pointer-events-none" />
 
         {logos.length > 0 && (
-          <MarqueeRow baseVelocity={5} direction={-1} repeat={3}>
+          <MarqueeRow baseVelocity={9} direction={-1} repeat={3}>
             {logos.map((logo) => {
               const tileClass =
                 "group flex-shrink-0 flex items-center justify-center h-16 md:h-[80px] px-8 md:px-10";
