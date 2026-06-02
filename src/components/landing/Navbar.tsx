@@ -74,10 +74,9 @@ const Navbar = () => {
         >
           <Link to="/" className="flex items-center shrink-0 group">
             <motion.div
-              animate={{ scale: [1, 1.015, 1] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
               className="transition-[filter] duration-500 group-hover:drop-shadow-[0_0_12px_hsl(42_80%_55%/0.5)]"
             >
               <img

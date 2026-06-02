@@ -164,12 +164,12 @@ const OurPartnersHexagon = () => {
             }}
           />
 
-          <MarqueeRow baseVelocity={2.5} direction={-1} repeat={repeatFor(rowA.length)}>
+          <MarqueeRow baseVelocity={1.5} direction={-1} repeat={repeatFor(rowA.length)}>
             {rowA.map((logo) => (
               <LogoTile key={`r1-${logo.id}`} logo={logo} />
             ))}
           </MarqueeRow>
-          <MarqueeRow baseVelocity={2} direction={1} repeat={repeatFor(rowB.length)}>
+          <MarqueeRow baseVelocity={1.2} direction={1} repeat={repeatFor(rowB.length)}>
             {rowB.map((logo) => (
               <LogoTile key={`r2-${logo.id}`} logo={logo} />
             ))}
