@@ -27,7 +27,20 @@ import ScrollProgressBar from "@/components/ScrollProgressBar";
 import { ProductModalProvider } from "@/lib/productModal";
 import ProductDetailModal from "@/components/ProductDetailModal";
 
-const queryClient = new QueryClient();
+/* Cache responses for 5 minutes so navigating between pages doesn't refetch
+ * and flash empty/loading states (the visitor's "have to reload twice for
+ * images to show" perception was actually React Query refetching on every
+ * route mount). */
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -43,10 +56,10 @@ const AppRoutes = () => {
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={location.pathname}
-          initial={{ clipPath: "inset(0 0 100% 0)", opacity: 0.6 }}
-          animate={{ clipPath: "inset(0 0 0% 0)", opacity: 1 }}
-          exit={{ clipPath: "inset(100% 0 0 0)", opacity: 0.6 }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
         >
           <Routes location={location}>
             <Route path="/" element={<Index />} />

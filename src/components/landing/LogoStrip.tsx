@@ -18,7 +18,7 @@ const LogoStrip = () => {
           by="letter"
           stagger={0.025}
           as="p"
-          className="text-center text-primary-foreground/40 font-body text-sm uppercase tracking-[0.25em] mb-10"
+          className="text-center text-primary-foreground/75 font-body text-sm uppercase tracking-[0.25em] mb-10"
         />
       </div>
 

@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { Globe, Users, Package, Warehouse, Thermometer, Truck, ShoppingBag, Hotel, UtensilsCrossed, Target, Eye, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import BrandCard from "@/components/BrandCard";
-import { useBrands, useProducts } from "@/lib/api";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
@@ -178,91 +176,6 @@ const WhoWeServe = () => {
   );
 };
 
-const BrandsShowcase = () => {
-  const { data: brands = [], isLoading } = useBrands();
-  const { data: products = [] } = useProducts();
-  const preview = brands.slice(0, 6);
-
-  return (
-    <div data-navbar-theme="light">
-      <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
-        <div
-          className="absolute w-[400px] h-[400px] -top-20 -right-20 rounded-full pointer-events-none opacity-[0.07]"
-          style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }}
-        />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="text-center max-w-3xl mx-auto mb-16"
-          >
-            <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
-              Our Brands
-            </span>
-            <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight tracking-tight mb-5">
-              The Makers Behind Our Shelves
-            </h2>
-            <p className="font-body text-muted-foreground text-lg leading-relaxed">
-              We partner with world-class producers to bring the finest food products from around the globe.
-            </p>
-          </motion.div>
-
-          {isLoading ? (
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="rounded-2xl bg-muted animate-pulse aspect-[4/5]" />
-              ))}
-            </div>
-          ) : (
-            <motion.div
-              className="grid sm:grid-cols-2 md:grid-cols-3 gap-6"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {preview.map((brand, i) => {
-                const prodCount = products.filter((p) => p.brand_id === brand.id).length;
-                return (
-                  <BrandCard
-                    key={brand.id}
-                    brand={brand}
-                    prodCount={prodCount}
-                    index={i}
-                    columns={3}
-                  />
-                );
-              })}
-            </motion.div>
-          )}
-
-          {brands.length > 6 && (
-            <motion.div
-              className="flex justify-center mt-12"
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <Link to="/brands">
-                <Button
-                  variant="outline"
-                  className="rounded-full px-8 h-12 font-body font-semibold text-sm border-2 border-accent/40 text-accent hover:bg-accent/5 hover:border-accent transition-all duration-300 gap-2"
-                >
-                  View All Brands
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-            </motion.div>
-          )}
-        </div>
-      </section>
-    </div>
-  );
-};
-
 const AboutPage = () => {
   const { ref: mouseRef, gradientStyle } = useMouseGradient();
   const { scrollYProgress } = useScroll();
@@ -366,11 +279,6 @@ const AboutPage = () => {
           </div>
         </section>
       </div>
-
-      <SectionTransition />
-
-      {/* Brands Showcase — Light */}
-      <BrandsShowcase />
 
       <SectionTransition />
 

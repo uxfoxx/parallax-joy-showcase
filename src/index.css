@@ -129,9 +129,10 @@
 }
 
 @layer components {
-  html {
-    scroll-behavior: smooth;
-  }
+  /* Browser-driven smooth-scroll fights with framer-motion useScroll() /
+   * parallax — re-anchored scroll events arrive on different frames and
+   * the page judders. Anchor links are handled manually in components
+   * where needed. .smooth-scroll class kept available for opt-in scopes. */
   .smooth-scroll {
     scroll-behavior: smooth;
   }
