@@ -43,21 +43,6 @@
          Visuals: black void + ring around the logo + periodic RGB-split
          glitch beat. -->
     <style>
-      @keyframes olive-splash-jump {
-        0%, 88%, 100% { transform: translate(0, 0); }
-        90%           { transform: translate(2px, -1px); }
-        92%           { transform: translate(-3px, 2px); }
-        94%           { transform: translate(1px, 1px); }
-        96%           { transform: translate(-1px, -2px); }
-      }
-      @keyframes olive-splash-cyan {
-        0%, 87%, 100% { opacity: 0; transform: translate(2px, 0); }
-        90%, 94%      { opacity: 0.6; transform: translate(7px, -1px); }
-      }
-      @keyframes olive-splash-magenta {
-        0%, 87%, 100% { opacity: 0; transform: translate(-2px, 0); }
-        91%, 95%      { opacity: 0.55; transform: translate(-7px, 2px); }
-      }
       @keyframes olive-splash-arc {
         to { transform: rotate(360deg); }
       }
@@ -92,27 +77,15 @@
         content: ""; position: absolute; inset: 0; pointer-events: none;
         background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%);
       }
-      /* Stage holds the SVG circle and its glitch siblings */
+      /* Stage holds the SVG circle and its sibling layers */
       #boot-splash__stage {
         position: relative;
         width: clamp(180px, 38vw, 240px);
         height: clamp(180px, 38vw, 240px);
-        animation: olive-splash-jump 2.8s steps(1, end) infinite;
       }
       #boot-splash__svg {
         position: absolute; inset: 0; width: 100%; height: 100%;
         animation: olive-splash-fadein 0.7s ease both;
-      }
-      /* RGB-split copies stacked on top */
-      .boot-splash__rgb {
-        position: absolute; inset: 0; width: 100%; height: 100%;
-        mix-blend-mode: screen; pointer-events: none; opacity: 0;
-      }
-      .boot-splash__rgb--cyan {
-        animation: olive-splash-cyan 2.8s steps(1, end) infinite;
-      }
-      .boot-splash__rgb--magenta {
-        animation: olive-splash-magenta 2.8s steps(1, end) infinite;
       }
       .boot-splash__arc {
         transform-origin: 50% 50%;
@@ -169,15 +142,11 @@
         animation: olive-splash-head 2700ms cubic-bezier(0.65, 0, 0.35, 1) both;
       }
       @media (prefers-reduced-motion: reduce) {
-        #boot-splash__stage,
-        .boot-splash__rgb--cyan,
-        .boot-splash__rgb--magenta,
         .boot-splash__arc,
         .boot-splash__sonar,
         .boot-splash__counter,
         .boot-splash__tick,
         .boot-splash__head { animation: none; }
-        .boot-splash__rgb { display: none; }
         .boot-splash__progress-arc {
           animation: none;
           stroke-dashoffset: 0;
@@ -264,42 +233,6 @@
             x="80" y="68" width="80" height="104"
             filter="url(#boot-splash-white)" />
         </svg>
-
-        <!-- Cyan channel — offset right -->
-        <svg class="boot-splash__rgb boot-splash__rgb--cyan" viewBox="0 0 240 240" aria-hidden="true">
-          <defs>
-            <filter id="boot-splash-cyan">
-              <feColorMatrix type="matrix" values="
-                0 0 0 0 0
-                0 0 0 0 1
-                0 0 0 0 0.94
-                0 0 0 1 0" />
-            </filter>
-          </defs>
-          <circle cx="120" cy="120" r="110"
-            fill="none" stroke="rgba(0,255,240,0.9)" stroke-width="1" />
-          <image href="/olive-foods-hero-logo.svg"
-            x="80" y="68" width="80" height="104"
-            filter="url(#boot-splash-cyan)" />
-        </svg>
-
-        <!-- Magenta channel — offset left -->
-        <svg class="boot-splash__rgb boot-splash__rgb--magenta" viewBox="0 0 240 240" aria-hidden="true">
-          <defs>
-            <filter id="boot-splash-magenta">
-              <feColorMatrix type="matrix" values="
-                0 0 0 0 1
-                0 0 0 0 0
-                0 0 0 0 0.44
-                0 0 0 1 0" />
-            </filter>
-          </defs>
-          <circle cx="120" cy="120" r="110"
-            fill="none" stroke="rgba(255,0,112,0.9)" stroke-width="1" />
-          <image href="/olive-foods-hero-logo.svg"
-            x="80" y="68" width="80" height="104"
-            filter="url(#boot-splash-magenta)" />
-        </svg>
       </div>
     </div>
     <script>
@@ -307,8 +240,8 @@
         var splash = document.getElementById('boot-splash');
         if (!splash) return;
         var mountedAt = performance.now();
-        var MIN_MS = 2900;
-        var HARD_MS = 6500;
+        var MIN_MS = 900;
+        var HARD_MS = 4500;
         var done = false;
         function dismiss() {
           if (done) return;
