@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Package, ArrowRight, MessageCircle } from "lucide-react";
+import { Package, ArrowRight, MessageCircle, X } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,16 @@ const ProductQuickView = ({ product, open, onOpenChange }: ProductQuickViewProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl p-0 overflow-hidden rounded-2xl border-border bg-background gap-0">
+      <DialogContent className="max-w-2xl p-0 overflow-hidden rounded-2xl border-border bg-background gap-0 [&>button]:hidden">
+        {/* Visible close button — sits over the hero image at top-right */}
+        <button
+          type="button"
+          onClick={() => onOpenChange(false)}
+          aria-label="Close"
+          className="absolute top-3 right-3 z-50 w-9 h-9 rounded-full bg-background/85 backdrop-blur-sm border border-border/70 flex items-center justify-center text-foreground/80 hover:text-foreground hover:bg-background transition-colors shadow-sm"
+        >
+          <X className="w-4 h-4" />
+        </button>
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
