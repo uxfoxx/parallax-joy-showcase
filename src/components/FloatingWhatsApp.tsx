@@ -1,6 +1,5 @@
-const DEFAULT_MSG = encodeURIComponent(
-  "Hi Olive Foods, I'd like to ask about your products and services.",
-);
+import { useLocation, useMatch } from "react-router-dom";
+import { useProducts } from "@/lib/api";
 
 /** Official WhatsApp glyph (phone-receiver inside a speech bubble). */
 const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
@@ -9,18 +8,38 @@ const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
+const buildMessage = (productName?: string, url?: string) => {
+  if (productName) {
+    return `Hi Olive Foods, I'd like to inquire about ${productName}${url ? ` (${url})` : ""}.`;
+  }
+  return "Hi Olive Foods, I'd like to ask about your products and services.";
+};
+
 const FloatingWhatsApp = () => {
+  const location = useLocation();
+  const productMatch = useMatch("/products/:slug");
+  const { data: products = [] } = useProducts();
+  const matchedProduct = productMatch
+    ? products.find((p) => p.slug === productMatch.params.slug)
+    : undefined;
+
+  const fullUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}${location.pathname}${location.search}`
+      : undefined;
+  const message = buildMessage(matchedProduct?.name, fullUrl);
+
   return (
     <a
-      href={`https://wa.me/94112071717?text=${DEFAULT_MSG}`}
+      href={`https://wa.me/94112071717?text=${encodeURIComponent(message)}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
       className="fixed bottom-6 right-4 sm:right-6 z-[9999] group print:hidden"
     >
       <div className="relative">
-        {/* Pulse ring */}
-        <div className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-30" />
+        {/* Pulse ring — throttled: ~2s burst every 12s instead of continuous */}
+        <div className="absolute inset-0 rounded-full bg-[#25D366] animate-wa-pulse opacity-0" />
         {/* Button — official WhatsApp green with the WhatsApp glyph */}
         <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg shadow-[#25D366]/30 transition-transform duration-300 group-hover:scale-110">
           <WhatsAppIcon className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
@@ -28,7 +47,7 @@ const FloatingWhatsApp = () => {
       </div>
       {/* Tooltip */}
       <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 rounded-lg bg-foreground text-background text-xs font-body whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-        Chat with us
+        {matchedProduct ? `Ask about ${matchedProduct.name}` : "Chat with us"}
       </div>
     </a>
   );

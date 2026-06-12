@@ -23,6 +23,16 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Mobile nav: Escape closes; route change closes
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMobileOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
+
+  useEffect(() => { setMobileOpen(false); }, [location.pathname]);
+
   // IntersectionObserver to detect section theme
   useEffect(() => {
     const sections = document.querySelectorAll("[data-navbar-theme]");
@@ -163,6 +173,9 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
+            onClick={(e) => { if (e.target === e.currentTarget) setMobileOpen(false); }}
+            role="button"
+            aria-label="Close menu"
             className="fixed inset-0 z-40 bg-forest-deep/98 backdrop-blur-2xl flex flex-col items-center justify-center gap-8"
           >
             {links.map((link, i) => (
