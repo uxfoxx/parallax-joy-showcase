@@ -20,6 +20,14 @@ type MediaCardProps = {
   variant?: "dark" | "light";
   index?: number;
   columns?: number;
+  /**
+   * TEMPORARY: when true the image renders inside a padded inset so the
+   * visual footprint matches standard cards. Used by ProductCard while a
+   * subset of products has oversized source images uploaded under the
+   * featured/premium flag. Remove once images are re-uploaded at
+   * consistent dimensions.
+   */
+  imageInset?: boolean;
 };
 
 /**
@@ -40,6 +48,7 @@ const MediaCard = ({
   variant = "light",
   index = 0,
   columns = 3,
+  imageInset = false,
 }: MediaCardProps) => {
   const [imgLoaded, setImgLoaded] = useState(false);
   const isDark = variant === "dark";
@@ -64,8 +73,10 @@ const MediaCard = ({
           <>
             {!imgLoaded && <div className="absolute inset-0 bg-muted animate-pulse" />}
             <CurtainImage
-              wrapperClassName="absolute inset-0"
-              wrapperStyle={{ width: "100%", height: "100%" }}
+              wrapperClassName={
+                imageInset ? "absolute inset-6 md:inset-8" : "absolute inset-0"
+              }
+              wrapperStyle={{ width: "auto", height: "auto" }}
               src={image}
               alt={title}
               onLoad={() => setImgLoaded(true)}

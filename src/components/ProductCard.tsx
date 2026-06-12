@@ -28,6 +28,10 @@ const ProductCard = ({ product, variant = "light", index = 0, columns = 3 }: Pro
       variant={variant}
       index={index}
       columns={columns}
+      // TEMPORARY: featured products currently host oversized source
+      // images; rendering them inside an inset keeps their visual weight
+      // matched to standard cards until images are re-uploaded.
+      imageInset={!!product.featured}
       badge={
         product.featured ? (
           <Badge className="bg-accent text-white font-body text-[10px] tracking-[0.14em] uppercase shadow-md border-0">
