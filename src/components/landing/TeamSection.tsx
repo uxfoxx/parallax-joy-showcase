@@ -89,7 +89,7 @@ const TeamSection = () => {
               stagger={0.06}
               delay={0.18}
               as="span"
-              className="text-gradient-gold"
+              className="text-gradient-gold-dark"
             />
           </span>
         </h2>
