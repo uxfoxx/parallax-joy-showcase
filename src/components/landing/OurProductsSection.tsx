@@ -125,7 +125,7 @@ const OurProductsSection = () => {
 
         {/* Scroll-velocity marquee — motion.dev pattern, speeds up with scroll */}
         <div className="relative mb-10 bg-accent/5 border-y border-accent/10">
-          <MarqueeRow baseVelocity={4} direction={-1} className="py-2.5">
+          <MarqueeRow baseVelocity={1} direction={-1} className="py-2.5">
             {MARQUEE_ITEMS.map((item, i) => (
               <span
                 key={`r1-${i}`}
@@ -137,7 +137,7 @@ const OurProductsSection = () => {
             ))}
           </MarqueeRow>
           <div className="h-px bg-accent/10" />
-          <MarqueeRow baseVelocity={3} direction={1} className="py-2.5">
+          <MarqueeRow baseVelocity={1} direction={1} className="py-2.5">
             {MARQUEE_ITEMS.map((item, i) => (
               <span
                 key={`r2-${i}`}
