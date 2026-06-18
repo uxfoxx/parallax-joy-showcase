@@ -38,7 +38,7 @@ const LogoTile = ({ logo }: { logo: Logo }) => {
         src={logo.image_url}
         alt={logo.name}
         loading="lazy"
-        className="max-h-[60%] max-w-[78%] object-contain opacity-70 saturate-[0.85] group-hover:opacity-100 group-hover:saturate-100 transition duration-300"
+        className="max-h-[100%] max-w-[82%] object-contain opacity-70 saturate-[0.85] group-hover:opacity-100 group-hover:saturate-100 transition duration-300"
       />
       <ArrowUpRight
         aria-hidden
@@ -164,12 +164,12 @@ const OurPartnersHexagon = () => {
             }}
           />
 
-          <MarqueeRow baseVelocity={6} direction={-1} repeat={repeatFor(rowA.length)}>
+          <MarqueeRow baseVelocity={1.5} direction={-1} repeat={repeatFor(rowA.length)}>
             {rowA.map((logo) => (
               <LogoTile key={`r1-${logo.id}`} logo={logo} />
             ))}
           </MarqueeRow>
-          <MarqueeRow baseVelocity={6} direction={1} repeat={repeatFor(rowB.length)}>
+          <MarqueeRow baseVelocity={1.5} direction={1} repeat={repeatFor(rowB.length)}>
             {rowB.map((logo) => (
               <LogoTile key={`r2-${logo.id}`} logo={logo} />
             ))}
