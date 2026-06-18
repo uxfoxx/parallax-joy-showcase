@@ -17,7 +17,7 @@ import ScrollProgressRing from "@/components/motion/ScrollProgressRing";
 const OurProductsSection = lazy(() => import("@/components/landing/OurProductsSection"));
 const WhyChooseUs = lazy(() => import("@/components/landing/WhyChooseUs"));
 const CategoriesSection = lazy(() => import("@/components/landing/CategoriesSection"));
-const WhatsAppOrderSection = lazy(() => import("@/components/landing/WhatsAppOrderSection"));
+const BrandManifesto = lazy(() => import("@/components/landing/BrandManifesto"));
 const StatsSection = lazy(() => import("@/components/landing/StatsSection"));
 const TeamSection = lazy(() => import("@/components/landing/TeamSection"));
 const OurPartnersHexagon = lazy(() => import("@/components/landing/OurPartnersHexagon"));
@@ -57,10 +57,9 @@ const Index = () => {
           <CategoriesSection />
         </div>
         <SectionTransition />
-        {/* <div data-navbar-theme="dark">
-          <WhatsAppOrderSection />
-        </div> */}
-        
+        <div data-navbar-theme="dark">
+          <BrandManifesto />
+        </div>
         <SectionTransition />
         <div data-navbar-theme="light">
           <StatsSection />

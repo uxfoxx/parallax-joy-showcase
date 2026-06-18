@@ -352,14 +352,14 @@ const LocationsSection = () => {
         </motion.div>
 
         {/* Two-col split */}
-        <div className="grid lg:grid-cols-[5fr_7fr] gap-10 lg:gap-12 items-stretch">
+        <div className="grid lg:grid-cols-[5fr_7fr] gap-4 lg:gap-4 items-stretch">
           {/* ── LEFT: Contact card ── */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="relative rounded-3xl border border-primary-foreground/10 p-7 lg:p-9 backdrop-blur-sm"
+            className="relative rounded-xl border border-primary-foreground/10 p-7 lg:p-9 backdrop-blur-sm"
             style={{
               background:
                 "linear-gradient(155deg, hsl(140 50% 19% / 0.45), hsl(150 40% 9% / 0.6))",
@@ -482,7 +482,7 @@ const LocationsSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="relative rounded-3xl overflow-hidden border border-primary-foreground/10 shadow-2xl shadow-black/40 min-h-[460px] lg:min-h-[560px]"
+            className="relative rounded-xl overflow-hidden border border-primary-foreground/10 shadow-2xl shadow-black/40 min-h-[460px] lg:min-h-[560px]"
           >
             {/* The map iframe — slightly desaturated to feel editorial */}
             <iframe
