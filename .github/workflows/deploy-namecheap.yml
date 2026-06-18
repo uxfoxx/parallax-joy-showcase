@@ -1,0 +1,69 @@
+name: Deploy to Namecheap
+
+# Auto-deploy the production build to Namecheap shared hosting on every push
+# to main. Also runnable on-demand via the Actions tab → Run workflow.
+#
+# Required repository secrets (Settings → Secrets and variables → Actions):
+#   VITE_SUPABASE_URL              public Supabase project URL
+#   VITE_SUPABASE_PUBLISHABLE_KEY  Supabase anon key (baked into the bundle)
+#   FTP_HOST                       e.g. server404.web-hosting.com (no scheme)
+#   FTP_USERNAME                   cPanel user (or a dedicated FTP user)
+#   FTP_PASSWORD                   matching password
+#
+# Defaults assume Namecheap Stellar Plus on port 21 with FTPS. If your account
+# uses a different SFTP port or plain FTP, override FTP_PORT or FTP_PROTOCOL
+# via repo secrets/variables and edit the `with:` block below.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  # Cancel any in-flight deploy when a newer commit lands on main.
+  group: namecheap-deploy
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production bundle
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+
+      - name: Deploy dist/ to public_html
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # FTPS over port 21 — the cPanel default. If your hosting plan
+          # supports SFTP only, swap protocol to "sftp" and port to 22.
+          protocol: ftps
+          port: 21
+          local-dir: ./dist/
+          server-dir: ./public_html/
+          # Hidden files (.htaccess) must ship — they don't by default
+          # if exclude patterns omit them. The action's default already
+          # includes .htaccess, but we restate excludes for clarity.
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.DS_Store
