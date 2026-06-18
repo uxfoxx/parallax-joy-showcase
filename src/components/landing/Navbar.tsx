@@ -60,50 +60,56 @@ const Navbar = () => {
     return () => observer.disconnect();
   }, [location.pathname]);
 
-  // `isDark` tracks the section underneath the navbar. We *invert* the pill
-  // so it stands out as a floating contrast island: dark section → light
-  // pill, light section → dark pill.
+  // `isDark` tracks the section underneath the navbar. The bar *inverts*
+  // against it (dark section → light bar, light section → near-black bar) and
+  // spans edge-to-edge as a frosted glass strip — the premium directory-nav
+  // treatment (Linear / Vercel / Mercury).
   const isDark = theme === "dark";
 
+  // NB: the dark-bar colour bakes its alpha INTO the arbitrary value
+  // (`hsl(… / 0.75)`) — the `/75` opacity modifier does NOT work on an
+  // arbitrary `bg-[hsl(...)]` and silently resolves to transparent.
   const barBg = isDark
-    ? `bg-background/95 border border-border/60 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.18),0_8px_20px_-6px_rgba(0,0,0,0.12)] ${scrolled ? "shadow-[0_28px_70px_-12px_rgba(0,0,0,0.22)]" : ""}`
-    : `bg-forest-deep/90 border border-primary-foreground/10 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55),0_8px_20px_-6px_rgba(0,0,0,0.35)] ${scrolled ? "shadow-[0_28px_70px_-12px_rgba(0,0,0,0.65),0_10px_24px_-6px_rgba(0,0,0,0.4)]" : ""}`;
+    ? // dark section underneath → LIGHT frosted bar
+      `bg-background/70 border-b border-foreground/10 ${scrolled ? "bg-background/85 shadow-[0_8px_30px_-14px_rgba(0,0,0,0.25)]" : ""}`
+    : // light section underneath → near-black frosted bar (hint of forest)
+      `bg-[hsl(150_26%_6%/0.75)] border-b border-white/10 ${scrolled ? "bg-[hsl(150_26%_6%/0.92)] shadow-[0_8px_30px_-14px_rgba(0,0,0,0.6)]" : ""}`;
+
+  // Inactive link + control colours follow the bar (not the section).
+  const mutedText = isDark
+    ? "text-muted-foreground hover:text-foreground"
+    : "text-primary-foreground/55 hover:text-primary-foreground";
 
   return (
     <>
       <motion.nav
-        initial={{ y: -40, opacity: 0 }}
+        initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed top-4 left-0 right-0 z-50 mx-auto w-[calc(100%-4rem)] "
+        transition={{ duration: 0.6, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed top-0 inset-x-0 z-50 backdrop-blur-xl backdrop-saturate-150 transition-colors duration-500 ${barBg}`}
       >
-        <motion.div
-          animate={{
-            paddingTop: scrolled ? 8 : 12,
-            paddingBottom: scrolled ? 8 : 12,
-          }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className={`flex items-center justify-between pl-6 pr-3 rounded-[6px] backdrop-blur-xl backdrop-saturate-150 transition-all duration-500 ${barBg}`}
-        >
-          <Link to="/" className="flex items-center shrink-0 group">
-            <motion.div
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="transition-[filter] duration-500 group-hover:drop-shadow-[0_0_12px_hsl(42_80%_55%/0.5)]"
-            >
-              <img
-                src={logoSvg}
-                alt="Olive Foods"
-                /* Pill flipped: dark pill (over light section) needs the
-                 * white-logo treatment; light pill (over dark section)
-                 * keeps the logo in its native colours. */
-                className={`h-11 w-auto object-contain transition-all duration-500 ${!isDark ? "brightness-0 invert" : ""}`}
-              />
-            </motion.div>
-          </Link>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center h-16">
+            {/* Left — logo */}
+            <div className="flex items-center">
+              <Link to="/" className="group inline-flex items-center shrink-0">
+                <motion.img
+                  src={logoSvg}
+                  alt="Olive Foods"
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                  /* Bar inverted: near-black bar (over light section) needs the
+                   * white-logo treatment; light bar keeps native colours. */
+                  className={`h-8 w-auto object-contain transition-[filter] duration-500 group-hover:drop-shadow-[0_0_12px_hsl(42_80%_55%/0.5)] ${
+                    !isDark ? "brightness-0 invert" : ""
+                  }`}
+                />
+              </Link>
+            </div>
 
-            <div className="hidden md:flex items-center gap-1 relative">
+            {/* Center — links */}
+            <nav className="hidden md:flex items-center gap-9 justify-center">
               {links.map((link) => {
                 const isActive =
                   link.href === "/"
@@ -113,56 +119,42 @@ const Navbar = () => {
                   <Link
                     key={link.label}
                     to={link.href}
-                    className="relative px-4 py-2.5 font-body transition-colors duration-500"
+                    className={`font-body text-[12px] uppercase tracking-[0.2em] transition-colors duration-300 ${
+                      isActive ? "font-bold text-accent" : `font-medium ${mutedText}`
+                    }`}
                   >
-                    <span
-                      /* All-caps + tracked-out reads as the premium directory
-                       * style (Linear / Vercel / Mercury nav). Active stays
-                       * bold-accent gold (PR #22). Inactive colour flips with
-                       * the inverted pill — light pill needs dark text, dark
-                       * pill needs muted-white text. */
-                      className={`relative z-10 inline-flex items-center gap-1.5 text-[12px] uppercase tracking-[0.18em] transition-all duration-500 ${
-                        isActive
-                          ? "font-bold text-accent"
-                          : `font-medium ${isDark ? "text-muted-foreground hover:text-foreground" : "text-primary-foreground/55 hover:text-primary-foreground"}`
-                      }`}
-                    >
-                      {link.label}
-                    </span>
+                    {link.label}
                   </Link>
                 );
               })}
-            </div>
+            </nav>
 
-            <div className="hidden md:flex items-center gap-3">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/contact">
-                  <Button
-                    /* Pill is inverted → stroke + text colour flip too. Dark
-                     * pill (over light section) → white stroke; light pill
-                     * (over dark section) → forest-deep stroke. */
-                    className={`font-body font-semibold rounded-[4px] h-10 px-6 text-[12px] uppercase tracking-[0.18em] bg-transparent border-2 transition-colors duration-300 shadow-none ${
-                      isDark
-                        ? "border-primary text-primary hover:bg-primary/[0.06]"
-                        : "border-white/70 text-white hover:bg-white/10"
-                    }`}
-                  >
-                    Contact Us
-                  </Button>
-                </Link>
-              </motion.div>
-            </div>
+            {/* Right — contact + mobile toggle */}
+            <div className="flex items-center justify-end gap-2">
+              <Link
+                to="/contact"
+                className={`hidden md:inline-flex items-center h-9 px-4 rounded-md border font-body text-[12px] font-semibold uppercase tracking-[0.2em] transition-colors duration-300 ${
+                  isDark
+                    ? "border-foreground/15 text-foreground hover:bg-foreground/[0.06]"
+                    : "border-white/20 text-primary-foreground hover:bg-white/10"
+                }`}
+              >
+                Contact
+              </Link>
 
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setMobileOpen(!mobileOpen)}
-              /* Pill inverted: burger now sits inside the inverted pill, so
-               * its background tint + icon colour flip with it. */
-              className={`md:hidden w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-500 ${isDark ? "bg-forest-deep/10 text-foreground" : "bg-primary-foreground/10 text-primary-foreground"}`}
-            >
-              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-            </motion.button>
-        </motion.div>
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setMobileOpen(!mobileOpen)}
+                aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                className={`md:hidden w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-500 ${
+                  isDark ? "text-foreground hover:bg-foreground/[0.06]" : "text-primary-foreground hover:bg-white/10"
+                }`}
+              >
+                {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+              </motion.button>
+            </div>
+          </div>
+        </div>
       </motion.nav>
 
       <AnimatePresence>
