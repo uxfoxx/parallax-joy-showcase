@@ -60,11 +60,14 @@ const Navbar = () => {
     return () => observer.disconnect();
   }, [location.pathname]);
 
+  // `isDark` tracks the section underneath the navbar. We *invert* the pill
+  // so it stands out as a floating contrast island: dark section → light
+  // pill, light section → dark pill.
   const isDark = theme === "dark";
 
   const barBg = isDark
-    ? `bg-forest-deep/90 border border-primary-foreground/10 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55),0_8px_20px_-6px_rgba(0,0,0,0.35)] ${scrolled ? "shadow-[0_28px_70px_-12px_rgba(0,0,0,0.65),0_10px_24px_-6px_rgba(0,0,0,0.4)]" : ""}`
-    : `bg-background/95 border border-border/60 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.18),0_8px_20px_-6px_rgba(0,0,0,0.12)] ${scrolled ? "shadow-[0_28px_70px_-12px_rgba(0,0,0,0.22)]" : ""}`;
+    ? `bg-background/95 border border-border/60 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.18),0_8px_20px_-6px_rgba(0,0,0,0.12)] ${scrolled ? "shadow-[0_28px_70px_-12px_rgba(0,0,0,0.22)]" : ""}`
+    : `bg-forest-deep/90 border border-primary-foreground/10 shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55),0_8px_20px_-6px_rgba(0,0,0,0.35)] ${scrolled ? "shadow-[0_28px_70px_-12px_rgba(0,0,0,0.65),0_10px_24px_-6px_rgba(0,0,0,0.4)]" : ""}`;
 
   return (
     <>
@@ -92,7 +95,10 @@ const Navbar = () => {
               <img
                 src={logoSvg}
                 alt="Olive Foods"
-                className={`h-11 w-auto object-contain transition-all duration-500 ${isDark ? "brightness-0 invert" : ""}`}
+                /* Pill flipped: dark pill (over light section) needs the
+                 * white-logo treatment; light pill (over dark section)
+                 * keeps the logo in its native colours. */
+                className={`h-11 w-auto object-contain transition-all duration-500 ${!isDark ? "brightness-0 invert" : ""}`}
               />
             </motion.div>
           </Link>
@@ -107,13 +113,18 @@ const Navbar = () => {
                   <Link
                     key={link.label}
                     to={link.href}
-                    className="relative px-5 py-2.5 text-sm font-body transition-colors duration-500"
+                    className="relative px-4 py-2.5 font-body transition-colors duration-500"
                   >
                     <span
-                      className={`relative z-10 inline-flex items-center gap-1.5 transition-all duration-500 ${
+                      /* All-caps + tracked-out reads as the premium directory
+                       * style (Linear / Vercel / Mercury nav). Active stays
+                       * bold-accent gold (PR #22). Inactive colour flips with
+                       * the inverted pill — light pill needs dark text, dark
+                       * pill needs muted-white text. */
+                      className={`relative z-10 inline-flex items-center gap-1.5 text-[12px] uppercase tracking-[0.18em] transition-all duration-500 ${
                         isActive
                           ? "font-bold text-accent"
-                          : `font-medium ${isDark ? "text-primary-foreground/60 hover:text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`
+                          : `font-medium ${isDark ? "text-muted-foreground hover:text-foreground" : "text-primary-foreground/55 hover:text-primary-foreground"}`
                       }`}
                     >
                       {link.label}
@@ -127,10 +138,13 @@ const Navbar = () => {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link to="/contact">
                   <Button
-                    className={`font-body font-semibold rounded-[12px] h-10 px-6 text-sm bg-transparent border-2 transition-colors duration-300 shadow-none ${
+                    /* Pill is inverted → stroke + text colour flip too. Dark
+                     * pill (over light section) → white stroke; light pill
+                     * (over dark section) → forest-deep stroke. */
+                    className={`font-body font-semibold rounded-[12px] h-10 px-6 text-[12px] uppercase tracking-[0.18em] bg-transparent border-2 transition-colors duration-300 shadow-none ${
                       isDark
-                        ? "border-white/70 text-white hover:bg-white/10"
-                        : "border-primary text-primary hover:bg-primary/[0.06]"
+                        ? "border-primary text-primary hover:bg-primary/[0.06]"
+                        : "border-white/70 text-white hover:bg-white/10"
                     }`}
                   >
                     Contact Us
@@ -142,7 +156,9 @@ const Navbar = () => {
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setMobileOpen(!mobileOpen)}
-              className={`md:hidden w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-500 ${isDark ? "bg-primary-foreground/10 text-primary-foreground" : "bg-forest-deep/10 text-foreground"}`}
+              /* Pill inverted: burger now sits inside the inverted pill, so
+               * its background tint + icon colour flip with it. */
+              className={`md:hidden w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-500 ${isDark ? "bg-forest-deep/10 text-foreground" : "bg-primary-foreground/10 text-primary-foreground"}`}
             >
               {mobileOpen ? <X size={18} /> : <Menu size={18} />}
             </motion.button>
