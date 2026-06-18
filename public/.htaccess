@@ -1,0 +1,31 @@
+# Apache / LiteSpeed SPA fallback.
+#
+# React Router uses client-side paths (/about, /products/:slug, /contact, etc.).
+# On a hard-reload or deep-link of any such path, the server would otherwise
+# return 404 because there is no matching file on disk. This rewrite sends
+# every non-file, non-directory request back to /index.html so the React
+# router can resolve the path in the browser.
+#
+# This file is copied into dist/ at build time by Vite (public/ → dist/),
+# and applies on Apache- or LiteSpeed-based hosts such as Namecheap Stellar
+# Plus. On Netlify, the existing public/_redirects file handles the same job
+# and this rule is ignored.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# Make sure the static asset cache is sane for hashed Vite chunks.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2?|png|jpg|jpeg|gif|svg|webp|avif)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
