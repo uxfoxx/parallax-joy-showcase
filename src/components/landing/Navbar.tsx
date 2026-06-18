@@ -112,29 +112,12 @@ const Navbar = () => {
                     <span
                       className={`relative z-10 inline-flex items-center gap-1.5 transition-all duration-500 ${
                         isActive
-                          ? `font-bold ${isDark ? "text-primary-foreground" : "text-foreground"}`
+                          ? "font-bold text-accent"
                           : `font-medium ${isDark ? "text-primary-foreground/60 hover:text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`
                       }`}
-                      style={
-                        isActive
-                          ? {
-                              textShadow: isDark
-                                ? "0 0 8px hsl(75 38% 45% / 0.6), 0 0 20px hsl(75 38% 45% / 0.3)"
-                                : "0 0 8px hsl(75 38% 45% / 0.4), 0 0 16px hsl(75 38% 45% / 0.2)",
-                            }
-                          : undefined
-                      }
                     >
                       {link.label}
                     </span>
-                    {/* Animated underline indicator */}
-                    {isActive && (
-                      <motion.div
-                        layoutId="navbar-active-indicator"
-                        className="absolute bottom-0.5 left-3 right-3 h-0.5 rounded-full bg-accent"
-                        transition={{ type: "spring", stiffness: 500, damping: 35 }}
-                      />
-                    )}
                   </Link>
                 );
               })}
