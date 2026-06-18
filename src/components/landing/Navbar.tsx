@@ -83,7 +83,7 @@ const Navbar = () => {
             paddingBottom: scrolled ? 8 : 12,
           }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className={`flex items-center justify-between pl-6 pr-3 rounded-[16px] backdrop-blur-xl backdrop-saturate-150 transition-all duration-500 ${barBg}`}
+          className={`flex items-center justify-between pl-6 pr-3 rounded-[6px] backdrop-blur-xl backdrop-saturate-150 transition-all duration-500 ${barBg}`}
         >
           <Link to="/" className="flex items-center shrink-0 group">
             <motion.div
@@ -141,7 +141,7 @@ const Navbar = () => {
                     /* Pill is inverted → stroke + text colour flip too. Dark
                      * pill (over light section) → white stroke; light pill
                      * (over dark section) → forest-deep stroke. */
-                    className={`font-body font-semibold rounded-[12px] h-10 px-6 text-[12px] uppercase tracking-[0.18em] bg-transparent border-2 transition-colors duration-300 shadow-none ${
+                    className={`font-body font-semibold rounded-[4px] h-10 px-6 text-[12px] uppercase tracking-[0.18em] bg-transparent border-2 transition-colors duration-300 shadow-none ${
                       isDark
                         ? "border-primary text-primary hover:bg-primary/[0.06]"
                         : "border-white/70 text-white hover:bg-white/10"
