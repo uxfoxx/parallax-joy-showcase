@@ -11,14 +11,25 @@
 # Plus. On Netlify, the existing public/_redirects file handles the same job
 # and this rule is ignored.
 
+# Options +FollowSymLinks is required by some cPanel hosts (including
+# Namecheap shared plans) before the rewrite engine activates. Without it
+# RewriteEngine silently no-ops and deep-links fall through to a 404.
+Options +FollowSymLinks -MultiViews
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+  # Allow the actual index.html to pass through.
   RewriteRule ^index\.html$ - [L]
+  # Allow any real file or directory to pass through (assets, favicon, etc.).
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
+  # Everything else → /index.html so React Router can resolve client-side.
   RewriteRule . /index.html [L]
 </IfModule>
+
+# Explicit 404 fallback in case mod_rewrite is unavailable on this host.
+ErrorDocument 404 /index.html
 
 # Make sure the static asset cache is sane for hashed Vite chunks.
 <IfModule mod_headers.c>
