@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useProducts, useBrands, useCategories, useCreateProduct, useUpdateProduct, useDeleteProduct, useProductImages, useAddProductImage, useDeleteProductImage, type Product } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,7 @@ import { Plus, Pencil, Trash2, Search, ImagePlus, X, Loader2 } from "lucide-reac
 import { toast } from "sonner";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import { uploadImage } from "@/lib/upload";
+import PaginationControls from "@/components/PaginationControls";
 import XlsxSyncBar from "@/components/admin/XlsxSyncBar";
 import { parseBool, parseCommaList, type SheetColumn } from "@/lib/xlsxSheet";
 import { supabase } from "@/integrations/supabase/client";
@@ -172,6 +173,18 @@ const AdminProducts = () => {
   const [imagePopupUrl, setImagePopupUrl] = useState<string | null>(null);
 
   const filtered = products?.filter((p) => p.name.toLowerCase().includes(search.toLowerCase())) ?? [];
+
+  // ── Client-side pagination ──
+  const PAGE_SIZE = 12;
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  // Snap back to a valid page when the filtered set shrinks (search/delete).
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
+  // Reset to page 1 whenever the search term changes.
+  useEffect(() => { setPage(1); }, [search]);
 
   const openCreate = () => { setEditing(null); setForm(emptyForm); setOpen(true); };
   const openEdit = (p: Product) => {
@@ -413,7 +426,7 @@ const AdminProducts = () => {
             ) : filtered.length === 0 ? (
               <TableRow><TableCell colSpan={8} className="text-center font-body text-muted-foreground py-10">No products found</TableCell></TableRow>
             ) : (
-              filtered.map((p) => (
+              paginated.map((p) => (
                 <TableRow key={p.id}>
                   <TableCell>
                     {p.image_url ? (
@@ -451,6 +464,16 @@ const AdminProducts = () => {
           </TableBody>
         </Table>
       </div>
+
+      {/* Pagination + count */}
+      {filtered.length > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4">
+          <p className="font-body text-xs text-muted-foreground">
+            Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
+          </p>
+          <PaginationControls currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+        </div>
+      )}
 
       <Dialog open={!!imagePopupUrl} onOpenChange={(open) => !open && setImagePopupUrl(null)}>
         <DialogContent className="max-w-3xl max-h-[90vh] p-0 border-0">
