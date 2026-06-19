@@ -66,25 +66,24 @@ const Navbar = () => {
     };
   }, [location.pathname]);
 
-  // `isDark` tracks the section underneath the navbar. The bar *inverts*
-  // against it (dark section → light bar, light section → near-black bar) and
-  // spans edge-to-edge as a frosted glass strip — the premium directory-nav
-  // treatment (Linear / Vercel / Mercury).
+  // `isDark` tracks the section underneath the navbar. The bar *matches* it —
+  // dark section → near-black bar, light section → light bar — as a frosted
+  // glass strip spanning edge-to-edge.
   const isDark = theme === "dark";
 
   // NB: the dark-bar colour bakes its alpha INTO the arbitrary value
   // (`hsl(… / 0.75)`) — the `/75` opacity modifier does NOT work on an
   // arbitrary `bg-[hsl(...)]` and silently resolves to transparent.
   const barBg = isDark
-    ? // dark section underneath → LIGHT frosted bar
-      `bg-background/70 border-b border-foreground/10 ${scrolled ? "bg-background/85 shadow-[0_8px_30px_-14px_rgba(0,0,0,0.25)]" : ""}`
-    : // light section underneath → near-black frosted bar (hint of forest)
-      `bg-[hsl(150_26%_6%/0.75)] border-b border-white/10 ${scrolled ? "bg-[hsl(150_26%_6%/0.92)] shadow-[0_8px_30px_-14px_rgba(0,0,0,0.6)]" : ""}`;
+    ? // dark section underneath → near-black frosted bar (hint of forest)
+      `bg-[hsl(150_26%_6%/0.75)] border-b border-white/10 ${scrolled ? "bg-[hsl(150_26%_6%/0.92)] shadow-[0_8px_30px_-14px_rgba(0,0,0,0.6)]" : ""}`
+    : // light section underneath → LIGHT frosted bar
+      `bg-background/70 border-b border-foreground/10 ${scrolled ? "bg-background/85 shadow-[0_8px_30px_-14px_rgba(0,0,0,0.25)]" : ""}`;
 
-  // Inactive link + control colours follow the bar (not the section).
+  // Inactive link + control colours follow the bar (= the section).
   const mutedText = isDark
-    ? "text-muted-foreground hover:text-foreground"
-    : "text-primary-foreground/55 hover:text-primary-foreground";
+    ? "text-primary-foreground/55 hover:text-primary-foreground"
+    : "text-muted-foreground hover:text-foreground";
 
   return (
     <>
@@ -105,10 +104,11 @@ const Navbar = () => {
                   whileHover={{ scale: 1.06 }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  /* Bar inverted: near-black bar (over light section) needs the
-                   * white-logo treatment; light bar keeps native colours. */
+                  /* Bar matches section: near-black bar (over dark section)
+                   * needs the white-logo treatment; light bar keeps native
+                   * colours. */
                   className={`h-8 w-auto object-contain transition-[filter] duration-500 group-hover:drop-shadow-[0_0_12px_hsl(42_80%_55%/0.5)] ${
-                    !isDark ? "brightness-0 invert" : ""
+                    isDark ? "brightness-0 invert" : ""
                   }`}
                 />
               </Link>
@@ -141,8 +141,8 @@ const Navbar = () => {
                 to="/contact"
                 className={`hidden md:inline-flex items-center h-9 px-4 rounded-md border font-body text-[12px] font-semibold uppercase tracking-[0.2em] transition-colors duration-300 ${
                   isDark
-                    ? "border-foreground/15 text-foreground hover:bg-foreground/[0.06]"
-                    : "border-white/20 text-primary-foreground hover:bg-white/10"
+                    ? "border-white/20 text-primary-foreground hover:bg-white/10"
+                    : "border-foreground/15 text-foreground hover:bg-foreground/[0.06]"
                 }`}
               >
                 Contact
@@ -153,7 +153,7 @@ const Navbar = () => {
                 onClick={() => setMobileOpen(!mobileOpen)}
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
                 className={`md:hidden w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-500 ${
-                  isDark ? "text-foreground hover:bg-foreground/[0.06]" : "text-primary-foreground hover:bg-white/10"
+                  isDark ? "text-primary-foreground hover:bg-white/10" : "text-foreground hover:bg-foreground/[0.06]"
                 }`}
               >
                 {mobileOpen ? <X size={18} /> : <Menu size={18} />}
