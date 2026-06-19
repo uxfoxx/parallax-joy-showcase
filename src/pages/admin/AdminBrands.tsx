@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useBrands, useCreateBrand, useUpdateBrand, useDeleteBrand, type Brand } from "@/lib/api";
+import PaginationControls from "@/components/PaginationControls";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +25,13 @@ const AdminBrands = () => {
   const [form, setForm] = useState(emptyBrand);
 
   const filtered = brands?.filter((b) => b.name.toLowerCase().includes(search.toLowerCase())) ?? [];
+
+  const PAGE_SIZE = 12;
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  useEffect(() => { if (page > totalPages) setPage(totalPages); }, [page, totalPages]);
+  useEffect(() => { setPage(1); }, [search]);
 
   const openCreate = () => { setEditing(null); setForm(emptyBrand); setOpen(true); };
   const openEdit = (b: Brand) => { setEditing(b); setForm({ name: b.name, slug: b.slug, description: b.description, origin: b.origin, established: b.established ?? undefined, image_url: b.image_url ?? "" }); setOpen(true); };
@@ -106,7 +114,7 @@ const AdminBrands = () => {
             ) : filtered.length === 0 ? (
               <TableRow><TableCell colSpan={5} className="text-center font-body text-muted-foreground py-10">No brands found</TableCell></TableRow>
             ) : (
-              filtered.map((b) => (
+              paginated.map((b) => (
                 <TableRow key={b.id}>
                   <TableCell>{b.image_url ? <img src={b.image_url} alt={b.name} className="h-10 w-10 rounded-md object-cover" /> : <div className="h-10 w-10 rounded-md bg-muted" />}</TableCell>
                   <TableCell className="font-body font-medium">{b.name}</TableCell>
@@ -130,6 +138,15 @@ const AdminBrands = () => {
           </TableBody>
         </Table>
       </div>
+
+      {filtered.length > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4">
+          <p className="font-body text-xs text-muted-foreground">
+            Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
+          </p>
+          <PaginationControls currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+        </div>
+      )}
     </div>
   );
 };

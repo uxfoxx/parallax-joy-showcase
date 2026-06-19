@@ -239,7 +239,7 @@ const ContactPage = () => {
                 </div>
 
                 <div className="flex flex-col items-start gap-2">
-                  <Button type="submit" disabled={loading} className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-xl px-8 h-12 text-base gap-2 shine-sweep">
+                  <Button type="submit" disabled={loading} className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-md px-8 h-12 text-base gap-2 shine-sweep">
                     {loading ? (
                       <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
                         <Loader2 className="w-4 h-4" />

@@ -34,14 +34,17 @@ const AdminLayout = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full">
+      {/* h-screen (not min-h-screen) + an internally-scrolling <main> keeps the
+       * window itself from scrolling. Radix dialogs lock scroll on <main>, so
+       * opening/closing an edit dialog no longer jumps the admin to the top. */}
+      <div className="h-screen overflow-hidden flex w-full">
         <AdminSidebar />
-        <div className="flex-1 flex flex-col">
-          <header className="h-14 flex items-center border-b border-border px-4">
+        <div className="flex-1 flex flex-col min-h-0">
+          <header className="h-14 shrink-0 flex items-center border-b border-border px-4">
             <SidebarTrigger className="mr-4" />
             <span className="font-display text-lg font-semibold text-foreground">Admin Panel</span>
           </header>
-          <main className="flex-1 p-6 bg-muted/30">
+          <main className="flex-1 min-h-0 overflow-y-auto p-6 bg-muted/30">
             <Outlet />
           </main>
         </div>

@@ -46,6 +46,10 @@ const AppRoutes = () => {
   const location = useLocation();
 
   useEffect(() => {
+    // The admin panel has its own scroll container (AdminLayout's <main>);
+    // resetting window scroll there fights with dialog open/close and makes
+    // the page jump to the top on every edit. Only auto-scroll the public site.
+    if (location.pathname.startsWith("/admin")) return;
     window.scrollTo(0, 0);
   }, [location.pathname]);
 

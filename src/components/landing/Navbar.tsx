@@ -200,7 +200,7 @@ const Navbar = () => {
               className="mt-8"
             >
               <Link to="/contact" onClick={() => setMobileOpen(false)}>
-                <Button className="bg-transparent text-white hover:bg-white/10 font-body font-semibold rounded-full px-10 py-6 text-lg border-2 border-white/70">
+                <Button className="bg-transparent text-white hover:bg-white/10 font-body font-semibold rounded-md px-10 py-6 text-lg border-2 border-white/70">
                   Contact Us
                 </Button>
               </Link>

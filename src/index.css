@@ -34,7 +34,9 @@
     --input: 80 15% 88%;
     --ring: 140 50% 19%;
 
-    --radius: 0.75rem;
+    /* Slightly sharp, not pill-round. Drives lg/md/sm radius tokens:
+     * lg = 0.5rem (8px), md = 6px, sm = 4px. */
+    --radius: 0.5rem;
 
     --forest-deep: 150 40% 10%;
     --forest-mid: 140 50% 19%;

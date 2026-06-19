@@ -1,10 +1,11 @@
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
-import { UploadCloud, Link as LinkIcon, Loader2, X } from "lucide-react";
+import { UploadCloud, Link as LinkIcon, Loader2, X, Crop } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { uploadImage } from "@/lib/upload";
+import ImageCropDialog from "@/components/admin/ImageCropDialog";
 
 interface ImageUploadFieldProps {
   /** Current image URL (or empty string / null). */
@@ -44,6 +45,7 @@ const ImageUploadField = ({
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [showUrlField, setShowUrlField] = useState(false);
+  const [cropOpen, setCropOpen] = useState(false);
 
   const handleFile = async (file: File) => {
     if (!file.type.startsWith("image/") && file.type !== "image/svg+xml") {
@@ -125,9 +127,22 @@ const ImageUploadField = ({
             <div className="flex-1 min-w-0">
               <p className="text-foreground truncate text-xs">{value.split("/").pop()}</p>
               <p className="text-muted-foreground text-[11px] mt-0.5">
-                Click or drop a new file to replace
+                Click or drop a new file to replace · or crop the current one
               </p>
             </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                setCropOpen(true);
+              }}
+              className="shrink-0 text-muted-foreground hover:text-accent"
+              aria-label="Crop image"
+            >
+              <Crop className="w-4 h-4" />
+            </Button>
             <Button
               type="button"
               variant="ghost"
@@ -179,6 +194,16 @@ const ImageUploadField = ({
           />
         </div>
       )}
+
+      {/* Crop the current image (works for both new uploads and already-saved
+       * images) — uploads the result and swaps in the new URL. */}
+      <ImageCropDialog
+        src={cropOpen ? value : null}
+        open={cropOpen}
+        onOpenChange={setCropOpen}
+        folder={folder}
+        onCropped={(url) => onChange(url)}
+      />
     </div>
   );
 };

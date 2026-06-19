@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useContactSubmissions, useDeleteSubmission, type ContactSubmission } from "@/lib/api";
+import PaginationControls from "@/components/PaginationControls";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -20,6 +21,13 @@ const AdminSubmissions = () => {
     s.subject.toLowerCase().includes(search.toLowerCase()) ||
     s.email.toLowerCase().includes(search.toLowerCase())
   ) ?? [];
+
+  const PAGE_SIZE = 12;
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  useEffect(() => { if (page > totalPages) setPage(totalPages); }, [page, totalPages]);
+  useEffect(() => { setPage(1); }, [search]);
 
   const handleDelete = async (id: string) => {
     try {
@@ -56,7 +64,7 @@ const AdminSubmissions = () => {
             ) : filtered.length === 0 ? (
               <TableRow><TableCell colSpan={5} className="text-center font-body text-muted-foreground py-10">No submissions found</TableCell></TableRow>
             ) : (
-              filtered.map((s) => (
+              paginated.map((s) => (
                 <TableRow key={s.id}>
                   <TableCell className="font-body text-muted-foreground text-sm">{format(new Date(s.created_at), "MMM d, yyyy")}</TableCell>
                   <TableCell className="font-body font-medium">{s.name}</TableCell>
@@ -80,6 +88,15 @@ const AdminSubmissions = () => {
           </TableBody>
         </Table>
       </div>
+
+      {filtered.length > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4">
+          <p className="font-body text-xs text-muted-foreground">
+            Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
+          </p>
+          <PaginationControls currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+        </div>
+      )}
 
       <Dialog open={!!viewing} onOpenChange={() => setViewing(null)}>
         <DialogContent>

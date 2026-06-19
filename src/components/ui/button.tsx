@@ -29,12 +29,13 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
+        sm: "h-9 px-3",
+        lg: "h-11 px-8",
         icon: "h-10 w-10",
-        // ── Landing CTA size ──
-        pill: "h-12 rounded-full px-7 text-[15px] font-semibold",
-        "pill-sm": "h-10 rounded-full px-5 text-[13px] font-semibold",
+        // ── Landing CTA size ── (kept the name "pill" for API stability, but
+        // now slightly-sharp like every other button — no longer fully round.)
+        pill: "h-12 px-7 text-[15px] font-semibold",
+        "pill-sm": "h-10 px-5 text-[13px] font-semibold",
       },
     },
     defaultVariants: {
