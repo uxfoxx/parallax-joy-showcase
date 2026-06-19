@@ -33,31 +33,37 @@ const Navbar = () => {
 
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
-  // IntersectionObserver to detect section theme
+  // Section-theme detection — deterministic hit-test at a fixed line just under
+  // the navbar (rAF-throttled on scroll). The old IntersectionObserver picked a
+  // "winner" by ratio, which rapidly flip-flopped near section boundaries and
+  // made the colour flicker. Exactly one section spans a given y, so this is
+  // stable; the bar's `transition-colors` then crossfades smoothly.
   useEffect(() => {
-    const sections = document.querySelectorAll("[data-navbar-theme]");
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        let best: IntersectionObserverEntry | null = null;
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            if (!best || entry.intersectionRatio > best.intersectionRatio) {
-              best = entry;
-            }
-          }
-        });
-        if (best) {
-          const t = (best as IntersectionObserverEntry).target.getAttribute("data-navbar-theme");
-          if (t === "light" || t === "dark") setTheme(t);
+    const LINE = 72; // px below the viewport top (navbar is 64px)
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const sections = document.querySelectorAll("[data-navbar-theme]");
+      for (const s of sections) {
+        const r = s.getBoundingClientRect();
+        if (r.top <= LINE && r.bottom > LINE) {
+          const t = s.getAttribute("data-navbar-theme");
+          if (t === "light" || t === "dark") setTheme((prev) => (prev === t ? prev : t));
+          break;
         }
-      },
-      { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.1, 0.5, 1] }
-    );
-
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
+      }
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, [location.pathname]);
 
   // `isDark` tracks the section underneath the navbar. The bar *inverts*

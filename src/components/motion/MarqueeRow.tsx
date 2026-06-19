@@ -1,12 +1,5 @@
-import {
-  motion,
-  useAnimationFrame,
-  useMotionValue,
-  useTransform,
-  useReducedMotion,
-  wrap,
-} from "framer-motion";
-import { useRef, type ReactNode } from "react";
+import { useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 type MarqueeRowProps = {
   children: ReactNode;
@@ -16,22 +9,23 @@ type MarqueeRowProps = {
   direction?: 1 | -1;
   className?: string;
   rowClassName?: string;
-  /** How many duplicated tracks to render (must be >= 2 for seamless loop). */
+  /** Total duplicated copies of children to render (split across two groups). */
   repeat?: number;
 };
 
 /**
- * Smooth, seamless, constant-velocity marquee.
+ * Seamless, GPU-composited marquee.
  *
- * The outer flex has `gap: 0` and each track carries its own
- * trailing `paddingRight: 2rem` instead — that way the total content
- * width is exactly `repeat × trackStride`, so a `-100/repeat %`
- * translate shifts by exactly one stride and the wrap is invisible.
+ * Renders the children as TWO identical groups inside a max-content track and
+ * animates `translateX(0 → -50%)` via a pure CSS keyframe — so the motion runs
+ * on the compositor and stays buttery even when the main thread is busy with
+ * parallax/springs elsewhere on the page (the old useAnimationFrame approach
+ * stuttered under that contention).
  *
- * Scroll-velocity reactivity was removed because the spring it relied
- * on caused visible speed flicker and short direction-flip glitches
- * while the page was being scrolled. Pure constant velocity reads as
- * "smooth seamless" the way the design calls for.
+ * Each group repeats the children enough times to overflow the viewport, so
+ * there's never a gap at the wrap point. `animationDuration` is set inline from
+ * the measured group width to keep a constant px/second speed regardless of how
+ * much content a row holds.
  */
 const MarqueeRow = ({
   children,
@@ -42,18 +36,26 @@ const MarqueeRow = ({
   repeat = 4,
 }: MarqueeRowProps) => {
   const reduced = useReducedMotion();
-  const baseX = useMotionValue(0);
-  const directionRef = useRef(direction);
-  directionRef.current = direction;
+  const groupRef = useRef<HTMLDivElement>(null);
+  const [duration, setDuration] = useState(20);
 
-  // Wrap interval equals one copy's stride (1/repeat of total width).
-  const x = useTransform(baseX, (v) => `${wrap(-100 / repeat, 0, v)}%`);
+  // Copies inside ONE group (two groups total ≈ `repeat`).
+  const perGroup = Math.max(2, Math.ceil(repeat / 2));
 
-  useAnimationFrame((_t, delta) => {
+  // Measure one group's width → duration = width / speed (constant px/sec).
+  useEffect(() => {
     if (reduced) return;
-    const moveBy = directionRef.current * baseVelocity * (delta / 1000);
-    baseX.set(baseX.get() + moveBy);
-  });
+    const el = groupRef.current;
+    if (!el) return;
+    const measure = () => {
+      const w = el.scrollWidth;
+      if (w > 0) setDuration(Math.max(4, w / Math.max(1, baseVelocity)));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [baseVelocity, reduced, perGroup]);
 
   if (reduced) {
     return (
@@ -65,39 +67,37 @@ const MarqueeRow = ({
     );
   }
 
-  const tracks = Array.from({ length: repeat });
+  const group = (refIt: boolean) => (
+    <div
+      ref={refIt ? groupRef : undefined}
+      aria-hidden={!refIt}
+      style={{ display: "flex", flexShrink: 0, gap: "2rem", paddingRight: "2rem" }}
+    >
+      {Array.from({ length: perGroup }).map((_, i) => (
+        <div key={i} style={{ display: "flex", flexShrink: 0, gap: "2rem", paddingRight: "2rem" }}>
+          {children}
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div className={className} style={{ overflow: "hidden", width: "100%" }}>
-      <motion.div
-        className={rowClassName}
+      <div
+        className={`animate-marquee-scroll ${rowClassName ?? ""}`}
         style={{
-          x,
           display: "flex",
-          // Must size to content (not to its 100%-width parent) so that
-          // translateX(<percentage>) resolves against total content width.
-          // Without this, the wrap interval is a fraction of the *viewport*
-          // and never lines up with a copy stride → visible snap.
           width: "max-content",
-          willChange: "transform",
           whiteSpace: "nowrap",
+          willChange: "transform",
+          animationDuration: `${duration}s`,
+          // direction 1 = left→right: play the same keyframes in reverse.
+          animationDirection: direction === 1 ? "reverse" : "normal",
         }}
       >
-        {tracks.map((_, i) => (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              flexShrink: 0,
-              gap: "2rem",
-              paddingRight: "2rem",
-            }}
-            aria-hidden={i > 0}
-          >
-            {children}
-          </div>
-        ))}
-      </motion.div>
+        {group(true)}
+        {group(false)}
+      </div>
     </div>
   );
 };
