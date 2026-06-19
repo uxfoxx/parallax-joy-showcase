@@ -4,6 +4,7 @@ import {
   useSpring,
   useTransform,
   useReducedMotion,
+  useInView,
   type MotionValue,
 } from "framer-motion";
 import { useCallback, useRef, type ReactNode } from "react";
@@ -62,6 +63,10 @@ type DepthSceneProps = {
 const DepthScene = ({ ghostWord, children }: DepthSceneProps) => {
   const reduced = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
+  // Only run the continuously-repainting floor-grid drift while the section is
+  // near the viewport — keeps two off-screen scenes from contending for the
+  // main thread (which made the marquee + navbar feel janky).
+  const inView = useInView(sectionRef, { margin: "200px 0px 200px 0px" });
 
   // ── Scroll parallax per plane (different magnitudes = depth) ──
   const auroraY = useParallaxRange(sectionRef, [-30, 30]);
@@ -169,9 +174,9 @@ const DepthScene = ({ ghostWord, children }: DepthSceneProps) => {
             WebkitMaskImage: "linear-gradient(to top, black 0%, transparent 78%)",
             willChange: "transform, background-position",
           }}
-          animate={reduced ? undefined : { backgroundPositionY: ["0px", "64px"] }}
+          animate={reduced || !inView ? undefined : { backgroundPositionY: ["0px", "64px"] }}
           transition={
-            reduced ? undefined : { duration: 3.2, repeat: Infinity, ease: "linear" }
+            reduced || !inView ? undefined : { duration: 3.2, repeat: Infinity, ease: "linear" }
           }
         />
       </div>

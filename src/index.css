@@ -251,6 +251,19 @@
   .animate-slide-in-left { animation: slide-in-left 0.6s ease-out forwards; }
   .animate-counter-roll { animation: counter-roll 0.5s ease-out forwards; }
   .animate-marquee { animation: marquee 30s linear infinite; }
+  /* Seamless marquee track: two identical copies, translate one copy width
+   * (-50% of the 2-copy track). GPU-composited, so it stays smooth even when
+   * the main thread is busy with parallax/springs elsewhere. Duration is set
+   * inline per row to preserve a constant px/second speed. */
+  @keyframes marquee-scroll {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+  .animate-marquee-scroll {
+    animation-name: marquee-scroll;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
   .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
   .animate-gradient-shift { animation: gradient-shift 8s ease infinite; }
   .animate-particle { animation: particle-float linear infinite; }
