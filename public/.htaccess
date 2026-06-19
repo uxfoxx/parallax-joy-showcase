@@ -11,14 +11,39 @@
 # Plus. On Netlify, the existing public/_redirects file handles the same job
 # and this rule is ignored.
 
+# Options +FollowSymLinks is required by some cPanel hosts (including
+# Namecheap shared plans) before the rewrite engine activates. Without it
+# RewriteEngine silently no-ops and deep-links fall through to a 404.
+Options +FollowSymLinks -MultiViews
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # 1. Force HTTPS. Catches both direct http:// requests and any reverse-proxy
+  #    chain that arrives over plain HTTP. AutoSSL needs to be live in cPanel
+  #    for this to land cleanly; until then the redirect is a soft no-op
+  #    because https:// won't respond.
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://www.olivefoods.lk%{REQUEST_URI} [L,R=301]
+
+  # 2. Force www. — olivefoods.lk → www.olivefoods.lk so we ship a single
+  #    canonical host (matches index.html's <link rel="canonical">).
+  RewriteCond %{HTTP_HOST} ^olivefoods\.lk$ [NC]
+  RewriteRule ^ https://www.olivefoods.lk%{REQUEST_URI} [L,R=301]
+
+  # 3. SPA fallback — allow the real index.html through, then any real file
+  #    or directory, then route everything else back to /index.html so
+  #    React Router can resolve client-side deep-links.
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
 </IfModule>
+
+# Explicit 404 fallback in case mod_rewrite is unavailable on this host.
+ErrorDocument 404 /index.html
 
 # Make sure the static asset cache is sane for hashed Vite chunks.
 <IfModule mod_headers.c>

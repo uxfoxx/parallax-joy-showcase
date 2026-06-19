@@ -12,3 +12,8 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+# Canonical host — see <link rel="canonical"> in index.html. Crawlers
+# fetching from olivefoods.lk also get 301'd to www via .htaccess.
+Host: www.olivefoods.lk
+Sitemap: https://www.olivefoods.lk/sitemap.xml
