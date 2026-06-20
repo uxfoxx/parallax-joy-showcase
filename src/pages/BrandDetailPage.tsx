@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import Seo, { SITE_URL } from "@/components/Seo";
 import { motion } from "framer-motion";
 import { ArrowLeft, MapPin, Calendar, MessageCircle } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
@@ -36,6 +37,34 @@ const BrandDetailPage = () => {
 
   return (
     <PageLayout>
+      <Seo
+        title={`${brand.name} — Imported & Distributed in Sri Lanka`}
+        description={
+          (brand.description || "").replace(/\s+/g, " ").trim().slice(0, 160) ||
+          `${brand.name}${brand.origin ? ` from ${brand.origin}` : ""} — imported and distributed across Sri Lanka by Olive Foods.`
+        }
+        path={`/brands/${brand.slug}`}
+        image={brand.image_url || undefined}
+        schema={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Brand",
+            name: brand.name,
+            ...(brand.description ? { description: brand.description } : {}),
+            ...(brand.image_url ? { logo: brand.image_url } : {}),
+            url: `${SITE_URL}/brands/${brand.slug}`,
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+              { "@type": "ListItem", position: 2, name: "Brands", item: `${SITE_URL}/brands` },
+              { "@type": "ListItem", position: 3, name: brand.name, item: `${SITE_URL}/brands/${brand.slug}` },
+            ],
+          },
+        ]}
+      />
       <PageHero
         eyebrow={`Brands / ${brand.name}`}
         title={<span className="text-gradient-gold italic">{brand.name}</span>}

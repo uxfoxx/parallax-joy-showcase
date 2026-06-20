@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import Seo, { SITE_URL } from "@/components/Seo";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import LogoStrip from "@/components/landing/LogoStrip";
@@ -27,6 +28,36 @@ const FAQSection = lazy(() => import("@/components/landing/FAQSection"));
 const Index = () => {
   return (
     <div className="smooth-scroll overflow-x-hidden">
+      <Seo
+        title="Olive Foods — Premium Food Importer & Distributor, Sri Lanka"
+        description="Olive Foods is a premium food importer and distributor in Sri Lanka, supplying hotels, restaurants, cafés and supermarkets with globally sourced food brands — built on relationships, not transactions."
+        path="/"
+        schema={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Olive Foods",
+            url: SITE_URL,
+            logo: `${SITE_URL}/olive-foods-hero-logo.svg`,
+            description:
+              "Premium food importer and distributor in Sri Lanka serving hotels, restaurants, cafés and supermarkets.",
+            email: "info@olivefoods.lk",
+            telephone: "+94112071717",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Colombo",
+              addressCountry: "LK",
+            },
+            areaServed: "LK",
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "Olive Foods",
+            url: SITE_URL,
+          },
+        ]}
+      />
       <ImmersiveBackground />
       <Navbar />
       <FloatingWhatsApp />

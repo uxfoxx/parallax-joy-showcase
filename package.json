@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-sitemap.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -68,6 +68,7 @@
     "react-dom": "^18.3.1",
     "react-easy-crop": "^6.0.2",
     "react-fast-marquee": "^1.6.5",
+    "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.61.1",
     "react-parallax-tilt": "^1.7.323",
     "react-resizable-panels": "^2.1.9",

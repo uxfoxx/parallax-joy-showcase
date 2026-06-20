@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef } from "react";
+import Seo from "@/components/Seo";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Search, X, SlidersHorizontal, Star } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
@@ -76,6 +77,11 @@ const FilterPanel = ({
 
   return (
     <div className="flex flex-col h-full">
+      <Seo
+        title="Products — Premium Imported Food for Sri Lanka's Trade"
+        description="Browse Olive Foods' range of globally sourced food products — frozen foods, dairy, grocery staples, edible oils and specialty imports — supplied to hotels, restaurants and supermarkets across Sri Lanka."
+        path="/products"
+      />
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
         <h2 className="font-display text-base font-semibold text-foreground">Filters</h2>

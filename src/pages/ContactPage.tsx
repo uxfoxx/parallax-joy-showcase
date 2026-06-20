@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Seo from "@/components/Seo";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Mail, Phone, MapPin, MessageCircle, Send, Clock, CheckCircle2, Loader2 } from "lucide-react";
@@ -87,6 +88,11 @@ const ContactPage = () => {
 
   return (
     <div className="smooth-scroll overflow-x-hidden">
+      <Seo
+        title="Contact Olive Foods — Food Supply for Hotels, Restaurants & Retail"
+        description="Hotel, restaurant, supermarket, or sourcing a hard-to-find product in Sri Lanka? Talk to Olive Foods — email info@olivefoods.lk or message us on WhatsApp. We respond within one business day."
+        path="/contact"
+      />
       <ImmersiveBackground />
       <ScrollFloatingElement />
       <Navbar />
