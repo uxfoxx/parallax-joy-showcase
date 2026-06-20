@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import Seo from "@/components/Seo";
 import { motion, useScroll, useTransform } from "framer-motion";
 import PageLayout from "@/components/PageLayout";
 import PageHero from "@/components/PageHero";
@@ -21,6 +22,11 @@ const BrandsPage = () => {
 
   return (
     <PageLayout>
+      <Seo
+        title="Our Brands — World-Class Food Producers | Olive Foods"
+        description="The international food brands Olive Foods imports and represents in Sri Lanka — sourced from world-class growers and producers across Europe, Asia and the Middle East."
+        path="/brands"
+      />
       <PageHero
         eyebrow="Olive Foods / Brands"
         title={<>The <span className="text-gradient-gold italic">makers</span> behind our shelves.</>}

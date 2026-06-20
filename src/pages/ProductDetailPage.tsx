@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
+import Seo, { SITE_URL } from "@/components/Seo";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ArrowLeft, Package, MessageCircle, Share2, MapPin, Tag, Building2, ChevronLeft, ChevronRight, Sparkles, Box, Globe, Hash } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
@@ -82,6 +83,9 @@ const ProductDetailPage = () => {
   const brandName = product.brands?.name ?? "";
   const brandSlug = product.brands?.slug ?? "";
   const isHtml = product.description.includes("<");
+  const plainDesc =
+    (product.description || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 160) ||
+    `${product.name}${brandName ? ` by ${brandName}` : ""} — imported and distributed across Sri Lanka by Olive Foods.`;
 
   const specs = [
     { icon: Tag, label: "Category", value: product.category },
@@ -92,6 +96,35 @@ const ProductDetailPage = () => {
 
   return (
     <PageLayout>
+      <Seo
+        title={`${product.name}${brandName ? ` — ${brandName}` : ""}`}
+        description={plainDesc}
+        path={`/products/${product.slug}`}
+        image={product.image_url || undefined}
+        type="product"
+        schema={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: product.name,
+            description: plainDesc,
+            ...(product.image_url ? { image: product.image_url } : {}),
+            ...(product.sku ? { sku: product.sku } : {}),
+            ...(brandName ? { brand: { "@type": "Brand", name: brandName } } : {}),
+            category: product.category,
+            url: `${SITE_URL}/products/${product.slug}`,
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+              { "@type": "ListItem", position: 2, name: "Products", item: `${SITE_URL}/products` },
+              { "@type": "ListItem", position: 3, name: product.name, item: `${SITE_URL}/products/${product.slug}` },
+            ],
+          },
+        ]}
+      />
       {/* Category Hero Bar */}
       <motion.div
         className="relative overflow-hidden"

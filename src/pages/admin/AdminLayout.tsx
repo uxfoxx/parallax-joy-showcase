@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import Seo from "@/components/Seo";
 
 const AdminLayout = () => {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ const AdminLayout = () => {
 
   return (
     <SidebarProvider>
+      <Seo title="Admin" description="Olive Foods admin panel." path="/admin" noindex />
       {/* h-screen (not min-h-screen) + an internally-scrolling <main> keeps the
        * window itself from scrolling. Radix dialogs lock scroll on <main>, so
        * opening/closing an edit dialog no longer jumps the admin to the top. */}

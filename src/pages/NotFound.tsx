@@ -1,4 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
+import Seo from "@/components/Seo";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Home, ArrowLeft } from "lucide-react";
@@ -15,6 +16,12 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen overflow-hidden flex flex-col">
+      <Seo
+        title="Page Not Found"
+        description="The page you're looking for doesn't exist. Browse Olive Foods' products or get in touch."
+        path="/404"
+        noindex
+      />
       <ImmersiveBackground />
       <Navbar />
 

@@ -1,5 +1,6 @@
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
+import Seo from "@/components/Seo";
 import { Globe, Users, Package, Warehouse, Thermometer, Truck, ShoppingBag, Hotel, UtensilsCrossed, Target, Eye, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -183,6 +184,11 @@ const AboutPage = () => {
 
   return (
     <div className="smooth-scroll overflow-x-hidden">
+      <Seo
+        title="About Olive Foods — Sri Lanka's Premium Food Import Partner"
+        description="Thirty-plus years of food-industry experience. Olive Foods sources globally and distributes island-wide to Sri Lanka's hotels, restaurants and retailers — built on relationships, not transactions."
+        path="/about"
+      />
       <ImmersiveBackground />
       <ScrollFloatingElement />
       <Navbar />
