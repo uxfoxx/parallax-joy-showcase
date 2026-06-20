@@ -491,7 +491,7 @@ const WhyChooseUs = () => {
           </Eyebrow>
 
           <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-5 leading-tight tracking-tight">
-            <SplitText text="Your Complete Import And Distribution Partner" by="word" stagger={0.05} as="span" className="block" />
+            <SplitText text="Your complete import and distribution partner" by="word" stagger={0.05} as="span" className="block" />
             
           </h2>
 
@@ -526,7 +526,7 @@ const WhyChooseUs = () => {
           className="mt-12 lg:mt-14 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
         >
           <div>
-            <h3 className="text-white text-xl font-bold font-display mb-1">Ready to partner with Olive?</h3>
+            <h3 className="text-white text-xl font-bold font-display mb-1">Ready to partner with Olive Foods?</h3>
             <p className="font-body text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
               Discover how we can streamline your distribution.
             </p>

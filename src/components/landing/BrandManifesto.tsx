@@ -43,8 +43,8 @@ const BrandManifesto = () => {
         transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="font-body text-base sm:text-lg text-white/60 leading-relaxed max-w-2xl mx-auto mt-8"
       >
-        For thirty-plus years we've connected the world's finest growers and
-        producers with Sri Lanka's hotels, restaurants and retailers —
+        For thirty-plus years we've connected leading growers and
+        producers with Sri Lanka's hotels, restaurants, and retailers —
         sourced with intent, delivered with trust.
       </motion.p>
 
