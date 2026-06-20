@@ -5,7 +5,7 @@ import { useState } from "react";
 const approachItems: { title: string; body: string }[] = [
   {
     title: "Consistent, dependable supply",
-    body: "Stock you can plan against — we don't run out at the wrong moment.",
+    body: "Stock you can plan against. We don't run out at the wrong moment.",
   },
   {
     title: "Professional, personal service",
@@ -17,7 +17,7 @@ const approachItems: { title: string; body: string }[] = [
   },
   {
     title: "Flexible terms for trusted partners",
-    body: "Credit and timing flexibility for partners we trust — not as a sales lever, as a relationship.",
+    body: "Credit and timing flexibility for partners we trust, offered as a relationship, not as a sales lever.",
   },
 ];
 
@@ -30,12 +30,12 @@ const coreValues = [
   {
     icon: Users,
     title: "Support Client Growth",
-    desc: "Your success is our success — we invest in the businesses we serve.",
+    desc: "Your success is our success. We invest in the businesses we serve.",
   },
   {
     icon: RefreshCw,
     title: "Consistency & Professionalism",
-    desc: "Every interaction, every delivery, every communication — held to the same high standard.",
+    desc: "Every interaction, every delivery, every communication, held to the same high standard.",
   },
   {
     icon: Shield,
@@ -190,7 +190,7 @@ const CompanyPhilosophy = () => {
           className="space-y-4 font-body text-muted-foreground text-lg leading-relaxed mb-14"
         >
           <p>
-            At Olive Foods, we believe distribution is more than just supply — it's about building
+            At Olive Foods, we believe distribution is more than just supply. It's about building
             lasting partnerships.
           </p>
           <p>
@@ -217,7 +217,7 @@ const CompanyPhilosophy = () => {
             className="absolute left-0 top-0 bottom-0 w-1 rounded-full bg-gradient-to-b from-accent to-accent/20"
           />
           <p className="font-display text-2xl sm:text-3xl text-foreground font-semibold italic leading-relaxed">
-            "We don't chase transactions — we build relationships."
+            "We don't chase transactions. We build relationships."
           </p>
         </motion.div>
 
@@ -303,7 +303,7 @@ const CompanyPhilosophy = () => {
           <p>
             Behind the scenes, Olive Foods operates with strong systems and a centralised structure
             to ensure every client receives the same level of service, regardless of who they
-            interact with. Our team works as one — not as individuals — so our clients always depend
+            interact with. Our team works as one, not as individuals, so our clients always depend
             on the company, not just a single point of contact.
           </p>
         </motion.div>
@@ -315,7 +315,7 @@ const CompanyPhilosophy = () => {
           transition={{ duration: 0.5 }}
           className="font-body text-foreground text-base font-medium mb-14"
         >
-          We are a partner you can rely on — not just a supplier you order from.
+          We are a partner you can rely on, not just a supplier you order from.
         </motion.p>
 
         {/* Core Values — 3-D flip cards */}
@@ -344,7 +344,7 @@ const CompanyPhilosophy = () => {
           transition={{ duration: 0.6 }}
           className="font-body text-muted-foreground text-base leading-relaxed mb-8"
         >
-          We are here for the long term — to grow with the businesses we work with, and to become a
+          We are here for the long term, to grow with the businesses we work with, and to become a
           trusted name in every partnership we build.
         </motion.p>
 

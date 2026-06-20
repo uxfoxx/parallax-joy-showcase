@@ -87,7 +87,7 @@ export const getCroppedFile = async (
           ? resolve(b)
           : reject(
               new Error(
-                "Crop export failed — the image may be from a host that blocks editing. Re-upload it and try again.",
+                "Crop export failed. The image may be from a host that blocks editing. Re-upload it and try again.",
               ),
             ),
       mime,

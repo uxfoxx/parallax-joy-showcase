@@ -7,11 +7,11 @@ import Eyebrow from "@/components/ui/eyebrow";
 const faqs = [
   {
     q: "What types of food products do you import?",
-    a: "Multiple categories — with a particular focus on frozen lines (french fries, meat, seafood, frozen fruits and vegetables), alongside dairy, grocery staples, edible oils, and specialty imports. Vegan, gluten-free, and organic ranges round out the catalogue. Suppliers across Europe, Asia, and the Middle East — and growing.",
+    a: "Multiple categories, with a particular focus on frozen lines (french fries, meat, seafood, frozen fruits and vegetables), alongside dairy, grocery staples, edible oils, and specialty imports. Vegan, gluten-free, and organic ranges round out the catalogue. Suppliers across Europe, Asia, and the Middle East, and growing.",
   },
   {
     q: "Who do you supply to?",
-    a: "Sri Lanka's hospitality and retail trade — five-star hotel chains, restaurants, cafés, catering operations, and major supermarkets. From a single venue to a national chain, we deliver island-wide.",
+    a: "Sri Lanka's hospitality and retail trade: five-star hotel chains, restaurants, cafés, catering operations, and major supermarkets. From a single venue to a national chain, we deliver island-wide.",
   },
   {
     q: "Are your products certified and safe?",
@@ -19,19 +19,19 @@ const faqs = [
   },
   {
     q: "Can I request specific products for import?",
-    a: "Yes — if you need a brand or product line we don't currently carry, our sourcing team can locate and import it through our supplier network. Tell us what you need.",
+    a: "Yes. If you need a brand or product line we don't currently carry, our sourcing team can locate and import it through our supplier network. Tell us what you need.",
   },
   {
     q: "What are your delivery timelines?",
-    a: "Island-wide delivery in our own temperature-controlled fleet — timing stays predictable from Colombo to the regions. Lead times for new imports depend on origin; we'll scope timing during the order conversation.",
+    a: "Island-wide delivery in our own temperature-controlled fleet, so timing stays predictable from Colombo to the regions. Lead times for new imports depend on origin; we'll scope timing during the order conversation.",
   },
   {
     q: "What brands do you represent?",
-    a: "We're the exclusive Sri Lankan representatives for a roster of international brands — AZIZAA, Hungritos, Fletcher, Granoro, Daily Dairy, Snorre Foods, Wai Wai, Royal Arm, and more, growing as the catalogue expands.",
+    a: "We're the exclusive Sri Lankan representatives for a roster of international brands: AZIZAA, Hungritos, Fletcher, Granoro, Daily Dairy, Snorre Foods, Wai Wai, Royal Arm, and more, growing as the catalogue expands.",
   },
   {
     q: "Do you handle seasonal or one-off requests?",
-    a: "Yes — inventory rotates with the seasons (turkey and Dutch specialties around December, fresh imports as demand patterns shift). Happy to source one-off products for events or specific menus.",
+    a: "Yes. Inventory rotates with the seasons (turkey and Dutch specialties around December, fresh imports as demand patterns shift). Happy to source one-off products for events or specific menus.",
   },
 ];
 

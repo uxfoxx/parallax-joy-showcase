@@ -268,7 +268,7 @@ const StatsSection = () => {
               transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="font-body text-[17px] leading-relaxed text-muted-foreground max-w-xl mt-7"
             >
-              Every origin is a relationship — built over thirty-plus
+              Every origin is a relationship, built over thirty-plus
               years between our team and the producers we source from.
               Hover any country to see what we bring in.
             </motion.p>
@@ -470,7 +470,7 @@ const StatsSection = () => {
                     onClick={() => pick(i)}
                     tabIndex={0}
                     role="button"
-                    aria-label={`${o.country} — ${o.region}`}
+                    aria-label={`${o.country}, ${o.region}`}
                   >
                     <circle cx={o.pos.x} cy={o.pos.y} r={14} fill="transparent" />
 

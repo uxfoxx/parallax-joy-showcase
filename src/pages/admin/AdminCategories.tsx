@@ -85,7 +85,7 @@ const AdminCategories = () => {
         columns={categoryColumns}
         currentRows={(categories ?? []).map((c) => ({ name: c.name, description: c.description ?? "" }))}
         downloadLabel={categories && categories.length > 0 ? "Download categories" : "Download sample"}
-        description="Rows match by Name — unknown names create new categories, existing ones get their description updated."
+        description="Rows match by Name. Unknown names create new categories, existing ones get their description updated."
         onUpload={async (rows) => {
           const existing = new Map<string, string>();
           (categories ?? []).forEach((c) => existing.set(c.name.trim().toLowerCase(), c.id));
@@ -94,7 +94,7 @@ const AdminCategories = () => {
           for (let i = 0; i < rows.length; i++) {
             const r = rows[i] as Partial<CategoryRow>;
             const name = String(r.name ?? "").trim();
-            if (!name) { skipped++; errors.push(`Row ${i + 2}: missing Name — skipped.`); continue; }
+            if (!name) { skipped++; errors.push(`Row ${i + 2}: missing Name, skipped.`); continue; }
             const description = r.description ? String(r.description) : null;
             const id = existing.get(name.toLowerCase());
             try {

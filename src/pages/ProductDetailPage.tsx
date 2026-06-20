@@ -85,7 +85,7 @@ const ProductDetailPage = () => {
   const isHtml = product.description.includes("<");
   const plainDesc =
     (product.description || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 160) ||
-    `${product.name}${brandName ? ` by ${brandName}` : ""} — imported and distributed across Sri Lanka by Olive Foods.`;
+    `${product.name}${brandName ? ` by ${brandName}` : ""}, imported and distributed across Sri Lanka by Olive Foods.`;
 
   const specs = [
     { icon: Tag, label: "Category", value: product.category },
@@ -97,7 +97,7 @@ const ProductDetailPage = () => {
   return (
     <PageLayout>
       <Seo
-        title={`${product.name}${brandName ? ` — ${brandName}` : ""}`}
+        title={`${product.name}${brandName ? ` by ${brandName}` : ""}`}
         description={plainDesc}
         path={`/products/${product.slug}`}
         image={product.image_url || undefined}

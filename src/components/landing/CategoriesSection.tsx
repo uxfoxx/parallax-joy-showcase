@@ -182,7 +182,7 @@ const CategoriesSection = () => {
             </motion.div>
           </h2>
           <p className="text-muted-foreground font-body text-lg leading-relaxed">
-            We import and distribute across all major food categories — quality and variety for every business need.
+            We import and distribute across all major food categories, with quality and variety for every business need.
           </p>
         </motion.div>
 

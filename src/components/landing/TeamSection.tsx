@@ -44,7 +44,7 @@ const TeamSection = () => {
         transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="font-body text-base sm:text-lg text-white/60 leading-relaxed max-w-2xl mx-auto mt-8"
       >
-        Olive Foods exists because of relationships — thirty-plus years of
+        Olive Foods exists because of relationships, thirty-plus years of
         them, between our team and the suppliers, hoteliers, and retailers who
         shape Sri Lanka's food trade. We value relationships more than
         transactions; consistency more than sales; trust more than speed.

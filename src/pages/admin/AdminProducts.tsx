@@ -269,12 +269,12 @@ const AdminProducts = () => {
 
       if (!sku) {
         skipped++;
-        errors.push(`${rowLabel}: missing SKU — skipped.`);
+        errors.push(`${rowLabel}: missing SKU, skipped.`);
         continue;
       }
       if (!name) {
         skipped++;
-        errors.push(`${rowLabel} (${sku}): missing Name — skipped.`);
+        errors.push(`${rowLabel} (${sku}): missing Name, skipped.`);
         continue;
       }
       const brand_id = brandByName.get(brandName.toLowerCase());
@@ -397,7 +397,7 @@ const AdminProducts = () => {
         columns={productColumns}
         currentRows={currentRows}
         onUpload={handleXlsxUpload}
-        description="Download to edit all products in Excel, then upload to apply changes. Rows match by SKU — unknown SKUs create new products. Brand must already exist (add brands on the Brands page)."
+        description="Download to edit all products in Excel, then upload to apply changes. Rows match by SKU. Unknown SKUs create new products. Brand must already exist (add brands on the Brands page)."
         downloadLabel={products && products.length > 0 ? "Download products" : "Download sample"}
       />
 

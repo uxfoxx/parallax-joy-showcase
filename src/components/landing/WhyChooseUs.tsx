@@ -123,7 +123,7 @@ const RouteMapPanel = () => {
           Integrated Import-to-Distribution
         </h3>
         <p className="font-body text-sm mt-2 leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
-          End-to-end import and brand representation — from sourcing and customs clearance to shelf-ready distribution.
+          End-to-end import and brand representation, from sourcing and customs clearance to shelf-ready distribution.
         </p>
       </div>
     </motion.div>

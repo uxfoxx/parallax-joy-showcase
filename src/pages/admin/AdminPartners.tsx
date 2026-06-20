@@ -191,7 +191,7 @@ const AdminPartners = () => {
               </div>
               <ImageUploadField
                 label="Logo"
-                hint="Transparent PNG or SVG works best — logos are unified with a brightness-0 invert treatment on the dark background."
+                hint="Transparent PNG or SVG works best. Logos are unified with a brightness-0 invert treatment on the dark background."
                 value={form.image_url}
                 onChange={(url) => setForm({ ...form, image_url: url })}
                 folder="partner-logos"
@@ -240,7 +240,7 @@ const AdminPartners = () => {
           active: l.active ? "yes" : "no",
         }))}
         downloadLabel={logos.length > 0 ? "Download logos" : "Download sample"}
-        description="Rows match by Name — unknown names create new logos, existing ones get their URL, order, and active flag updated. Image URLs must point to hosted images."
+        description="Rows match by Name. Unknown names create new logos, existing ones get their URL, order, and active flag updated. Image URLs must point to hosted images."
         onUpload={async (rows) => {
           const existing = new Map<string, string>();
           logos.forEach((l) => existing.set(l.name.trim().toLowerCase(), l.id));
@@ -250,8 +250,8 @@ const AdminPartners = () => {
             const r = rows[i] as Partial<PartnerRow>;
             const name = String(r.name ?? "").trim();
             const image_url = String(r.image_url ?? "").trim();
-            if (!name) { skipped++; errors.push(`Row ${i + 2}: missing Name — skipped.`); continue; }
-            if (!image_url) { skipped++; errors.push(`Row ${i + 2} (${name}): missing Image URL — skipped.`); continue; }
+            if (!name) { skipped++; errors.push(`Row ${i + 2}: missing Name, skipped.`); continue; }
+            if (!image_url) { skipped++; errors.push(`Row ${i + 2} (${name}): missing Image URL, skipped.`); continue; }
             const orderRaw = r.display_order;
             const display_order =
               typeof orderRaw === "number" ? orderRaw : Number(String(orderRaw ?? "").trim()) || 0;
