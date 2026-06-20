@@ -66,7 +66,7 @@ const ImageCropDialog = ({
     if (!src || !areaPixels) return;
     setSaving(true);
     try {
-      const file = await getCroppedFile(src, areaPixels, "product-cropped");
+      const file = await getCroppedFile(src, areaPixels, rotation, "product-cropped");
       const url = await uploadImage(file, folder);
       onCropped(url);
       toast.success("Image cropped & saved");

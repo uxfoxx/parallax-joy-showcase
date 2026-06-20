@@ -122,6 +122,7 @@ const ImageUploadField = ({
             <img
               src={value}
               alt="Preview"
+              crossOrigin="anonymous"
               className={`${previewClassName} object-contain rounded-md border border-border bg-muted shrink-0`}
             />
             <div className="flex-1 min-w-0">
