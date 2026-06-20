@@ -255,7 +255,7 @@ const HeroSection = () => {
           transition={{ duration: 0.7, delay: 0.85, ease: EASE_OUT_EXPO }}
           className="font-body text-[15px] md:text-[17px] text-foreground/75 leading-relaxed mb-10 max-w-2xl mx-auto"
         >
-          Connecting Sri Lanka's hotels, restaurants and supermarkets
+          Connecting Sri Lanka's hotels, restaurants, and supermarkets
           with globally sourced food brands — through trusted
           relationships, not transactions.
         </motion.p>
@@ -277,7 +277,7 @@ const HeroSection = () => {
           <MagneticButton>
             <Link to="/about">
               <Button variant="brandOutline" size="pill" className="font-body">
-                Our Story
+                Our story
               </Button>
             </Link>
           </MagneticButton>

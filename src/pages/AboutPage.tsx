@@ -206,7 +206,7 @@ const AboutPage = () => {
               <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 tracking-widest uppercase">
                 Our Story
               </span>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight tracking-tight">Who We Are</h2>
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight tracking-tight">Who we are</h2>
               <div className="space-y-5 font-body text-muted-foreground leading-relaxed text-lg">
                 <p>Olive Foods is built on thirty-plus years of food-industry experience and the supplier relationships that come with it. We import and distribute across Sri Lanka, supplying the hospitality and retail trade through relationships that came first — Olive Foods exists to bring them to the market.</p>
                 <p>Our focus is frozen lines (french fries, meat, seafood, fruits, vegetables) alongside dairy, grocery staples, edible oils, and specialty imports — with vegan, gluten-free, and organic ranges supported throughout. Suppliers across Europe, Asia, and the Middle East, and growing.</p>
