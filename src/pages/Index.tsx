@@ -29,8 +29,8 @@ const Index = () => {
   return (
     <div className="smooth-scroll overflow-x-hidden">
       <Seo
-        title="Olive Foods — Premium Food Importer & Distributor, Sri Lanka"
-        description="Olive Foods is a premium food importer and distributor in Sri Lanka, supplying hotels, restaurants, cafés and supermarkets with globally sourced food brands — built on relationships, not transactions."
+        title="Olive Foods: Premium Food Importer & Distributor, Sri Lanka"
+        description="Olive Foods is a premium food importer and distributor in Sri Lanka, supplying hotels, restaurants, cafés and supermarkets with globally sourced food brands, built on relationships, not transactions."
         path="/"
         schema={[
           {

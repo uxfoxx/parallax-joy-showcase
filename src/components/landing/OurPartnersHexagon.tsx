@@ -132,7 +132,7 @@ const OurPartnersHexagon = () => {
             transition={{ duration: 0.7, delay: 0.3, ease: EASE_OUT_EXPO }}
             className="font-body text-[15.5px] md:text-[17px] text-muted-foreground leading-relaxed mt-7"
           >
-            We don't just import — we represent. Long-term relationships with
+            We don't just import. We represent. Long-term relationships with
             growers, producers, and brand owners across Europe, Asia, and the
             Middle East.
           </motion.p>

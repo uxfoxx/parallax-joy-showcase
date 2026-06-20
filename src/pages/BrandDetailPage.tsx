@@ -38,10 +38,10 @@ const BrandDetailPage = () => {
   return (
     <PageLayout>
       <Seo
-        title={`${brand.name} — Imported & Distributed in Sri Lanka`}
+        title={`${brand.name}: Imported & Distributed in Sri Lanka`}
         description={
           (brand.description || "").replace(/\s+/g, " ").trim().slice(0, 160) ||
-          `${brand.name}${brand.origin ? ` from ${brand.origin}` : ""} — imported and distributed across Sri Lanka by Olive Foods.`
+          `${brand.name}${brand.origin ? ` from ${brand.origin}` : ""}, imported and distributed across Sri Lanka by Olive Foods.`
         }
         path={`/brands/${brand.slug}`}
         image={brand.image_url || undefined}

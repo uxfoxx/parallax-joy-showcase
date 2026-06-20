@@ -256,7 +256,7 @@ const HeroSection = () => {
           className="font-body text-[15px] md:text-[17px] text-foreground/75 leading-relaxed mb-10 max-w-2xl mx-auto"
         >
           Connecting Sri Lanka's hotels, restaurants, and supermarkets
-          with globally sourced food brands — through trusted
+          with globally sourced food brands, through trusted
           relationships, not transactions.
         </motion.p>
 

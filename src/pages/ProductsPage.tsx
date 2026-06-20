@@ -78,8 +78,8 @@ const FilterPanel = ({
   return (
     <div className="flex flex-col h-full">
       <Seo
-        title="Products — Premium Imported Food for Sri Lanka's Trade"
-        description="Browse Olive Foods' range of globally sourced food products — frozen foods, dairy, grocery staples, edible oils and specialty imports — supplied to hotels, restaurants and supermarkets across Sri Lanka."
+        title="Products: Premium Imported Food for Sri Lanka's Trade"
+        description="Browse Olive Foods' range of globally sourced food products: frozen foods, dairy, grocery staples, edible oils and specialty imports, supplied to hotels, restaurants and supermarkets across Sri Lanka."
         path="/products"
       />
       {/* Header */}
@@ -333,7 +333,7 @@ const ProductsPage = () => {
         }
         subtitle={
           showOurProducts
-            ? "The range we source and distribute ourselves — quality lines built for the Sri Lankan market."
+            ? "The range we source and distribute ourselves, quality lines built for the Sri Lankan market."
             : "Browse the complete catalogue of premium food imports from our supplier network across the world."
         }
       />

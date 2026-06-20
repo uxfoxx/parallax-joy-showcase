@@ -27,7 +27,7 @@ const clientSegments = [
     icon: Hotel,
     label: "Hotels & Resorts",
     description:
-      "Five-star kitchens and resort F&B teams rely on our cold-chain for premium meats, dairy, and specialty imports — delivered on schedule, every week.",
+      "Five-star kitchens and resort F&B teams rely on our cold-chain for premium meats, dairy, and specialty imports, delivered on schedule, every week.",
     examples: ["Premium beef cuts", "Aged dairy & cheese", "Specialty ingredients"],
   },
   {
@@ -185,8 +185,8 @@ const AboutPage = () => {
   return (
     <div className="smooth-scroll overflow-x-hidden">
       <Seo
-        title="About Olive Foods — Sri Lanka's Premium Food Import Partner"
-        description="Thirty-plus years of food-industry experience. Olive Foods sources globally and distributes island-wide to Sri Lanka's hotels, restaurants and retailers — built on relationships, not transactions."
+        title="About Olive Foods: Sri Lanka's Premium Food Import Partner"
+        description="Thirty-plus years of food-industry experience. Olive Foods sources globally and distributes island-wide to Sri Lanka's hotels, restaurants and retailers, built on relationships, not transactions."
         path="/about"
       />
       <ImmersiveBackground />
@@ -197,7 +197,7 @@ const AboutPage = () => {
       <PageHero
         eyebrow="Olive Foods / About"
         title={<>Sri Lanka's <span className="text-gradient-gold italic">trusted</span> import partner.</>}
-        subtitle="Import, bonded warehousing & distribution — built on thirty-plus years of supplier relationships brought to Sri Lanka's hospitality and retail trade."
+        subtitle="Import, bonded warehousing & distribution, built on thirty-plus years of supplier relationships brought to Sri Lanka's hospitality and retail trade."
       />
 
       <SectionTransition />
@@ -214,9 +214,9 @@ const AboutPage = () => {
               </span>
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight tracking-tight">Who we are</h2>
               <div className="space-y-5 font-body text-muted-foreground leading-relaxed text-lg">
-                <p>Olive Foods is built on thirty-plus years of food-industry experience and the supplier relationships that come with it. We import and distribute across Sri Lanka, supplying the hospitality and retail trade through relationships that came first — Olive Foods exists to bring them to the market.</p>
-                <p>Our focus is frozen lines (french fries, meat, seafood, fruits, vegetables) alongside dairy, grocery staples, edible oils, and specialty imports — with vegan, gluten-free, and organic ranges supported throughout. Suppliers across Europe, Asia, and the Middle East, and growing.</p>
-                <p>The integrated model covers every step from sourcing and customs through our bonded warehouse, into −18 °C cold-chain storage, and onto the road in our own island-wide delivery fleet — serving hotels, restaurants, cafés, catering operations, and major supermarkets.</p>
+                <p>Olive Foods is built on thirty-plus years of food-industry experience and the supplier relationships that come with it. We import and distribute across Sri Lanka, supplying the hospitality and retail trade through relationships that came first. Olive Foods exists to bring them to the market.</p>
+                <p>Our focus is frozen lines (french fries, meat, seafood, fruits, vegetables) alongside dairy, grocery staples, edible oils, and specialty imports, with vegan, gluten-free, and organic ranges supported throughout. Suppliers across Europe, Asia, and the Middle East, and growing.</p>
+                <p>The integrated model covers every step from sourcing and customs through our bonded warehouse, into −18 °C cold-chain storage, and onto the road in our own island-wide delivery fleet, serving hotels, restaurants, cafés, catering operations, and major supermarkets.</p>
               </div>
             </motion.div>
           </div>
@@ -308,14 +308,14 @@ const AboutPage = () => {
                   <Target className="w-6 h-6 text-accent" />
                 </motion.div>
                 <h3 className="font-display text-2xl font-bold text-foreground mb-4 tracking-tight">Our Mission</h3>
-                <p className="font-body text-muted-foreground leading-relaxed">To bring globally sourced food products to Sri Lanka's hospitality and retail trade — through trusted, long-term relationships, consistent service, and reliable supply.</p>
+                <p className="font-body text-muted-foreground leading-relaxed">To bring globally sourced food products to Sri Lanka's hospitality and retail trade, through trusted, long-term relationships, consistent service, and reliable supply.</p>
               </motion.div>
               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="p-8 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
                 <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-6">
                   <Eye className="w-6 h-6 text-accent" />
                 </motion.div>
                 <h3 className="font-display text-2xl font-bold text-foreground mb-4 tracking-tight">Our Vision</h3>
-                <p className="font-body text-muted-foreground leading-relaxed">To be Sri Lanka's most trusted premium food distribution partner — known not for chasing transactions, but for the partnerships we build.</p>
+                <p className="font-body text-muted-foreground leading-relaxed">To be Sri Lanka's most trusted premium food distribution partner, known not for chasing transactions, but for the partnerships we build.</p>
               </motion.div>
             </div>
           </div>
@@ -410,7 +410,7 @@ const AboutPage = () => {
               Get Started
             </motion.span>
             <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">Ready to Partner With Us?</motion.h2>
-            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="font-body text-primary-foreground/70 text-lg leading-relaxed">Tell us what your operation needs — single venue or national chain. We'd like to understand before we quote a price.</motion.p>
+            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="font-body text-primary-foreground/70 text-lg leading-relaxed">Tell us what your operation needs, single venue or national chain. We'd like to understand before we quote a price.</motion.p>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-wrap gap-4 justify-center">
               <Link to="/contact"><Button className="shine-sweep bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-lg px-8 h-12 text-base backdrop-blur-sm border border-white/15">Contact Us</Button></Link>
               <Link to="/products"><Button variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 font-body rounded-lg px-8 h-12 text-base backdrop-blur-sm">Explore Products</Button></Link>

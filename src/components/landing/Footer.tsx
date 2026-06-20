@@ -61,7 +61,7 @@ const Footer = () => {
             </div>
             <p className="text-primary-foreground/45 font-body text-sm leading-relaxed max-w-xs">
               A premium food sourcing and distribution partner connecting globally
-              sourced products with Sri Lanka's hospitality and retail trade —
+              sourced products with Sri Lanka's hospitality and retail trade,
               built on relationships, not transactions.
             </p>
             <p className="text-primary-foreground/55 font-body text-xs">

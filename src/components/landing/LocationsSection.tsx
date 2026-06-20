@@ -346,7 +346,7 @@ const LocationsSection = () => {
           </h2>
           <p className="font-body text-[16.5px] leading-relaxed text-primary-foreground/65 mt-7 max-w-xl">
             One bonded warehouse, one cold-chain, one office that ties the
-            whole network together. Drop in or reach out — we keep the kettle
+            whole network together. Drop in or reach out, and we keep the kettle
             on.
           </p>
         </motion.div>
@@ -436,7 +436,7 @@ const LocationsSection = () => {
             {/* Days strip */}
             <div className="mb-8">
               <p className="font-body text-[10.5px] tracking-[0.28em] uppercase text-primary-foreground/45 mb-3">
-                Open hours · 8:30 — 17:30
+                Open hours · 8:30 to 17:30
               </p>
               <div className="flex gap-1.5">
                 {DAYS.map((d, i) => {
