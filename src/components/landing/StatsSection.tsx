@@ -8,6 +8,7 @@ import {
 import SplitText from "@/components/motion/SplitText";
 import CountUp from "@/components/motion/CountUp";
 import Eyebrow from "@/components/ui/eyebrow";
+import { COUNTRY_SHAPES } from "@/data/countryShapes";
 
 /**
  * Global Origins — combined sourcing-map + headline stats.
@@ -192,6 +193,78 @@ const Stipple = () => {
         <circle key={i} cx={d.x} cy={d.y} r={d.r} />
       ))}
     </g>
+  );
+};
+
+/** Per-country map silhouette for the info card: forest-filled body with a
+ *  gold edge, a one-shot border draw-in, and a pulsing gold sourcing marker.
+ *  Every country is pre-fit to the same 0–100 viewBox, so they all render at a
+ *  consistent on-card size regardless of real-world area. */
+const CountrySilhouette = ({
+  shapeKey,
+  reduced,
+}: {
+  shapeKey: string;
+  reduced: boolean | null;
+}) => {
+  const shape = COUNTRY_SHAPES[shapeKey];
+  if (!shape) return null;
+  const [mx, my] = shape.marker;
+  return (
+    <svg viewBox="0 0 100 100" className="w-full h-full" role="img" aria-hidden>
+      <defs>
+        <filter id="silGlow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="1" result="b" />
+          <feMerge>
+            <feMergeNode in="b" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      {/* Filled body + steady gold edge */}
+      <motion.path
+        d={shape.d}
+        fill="hsl(var(--forest-mid) / 0.18)"
+        stroke="hsl(var(--accent))"
+        strokeWidth={1}
+        strokeLinejoin="round"
+        filter="url(#silGlow)"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      />
+
+      {/* One-shot border sweep on country change */}
+      {!reduced && (
+        <motion.path
+          d={shape.d}
+          fill="none"
+          stroke="hsl(var(--accent))"
+          strokeWidth={1.4}
+          strokeLinejoin="round"
+          initial={{ pathLength: 0, opacity: 0.9 }}
+          animate={{ pathLength: 1, opacity: 0 }}
+          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+        />
+      )}
+
+      {/* Pulsing sourcing marker */}
+      {!reduced && (
+        <motion.circle
+          cx={mx}
+          cy={my}
+          fill="none"
+          stroke="hsl(var(--accent))"
+          strokeWidth={1}
+          initial={{ r: 1.5, opacity: 0.8 }}
+          animate={{ r: 9, opacity: 0 }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
+        />
+      )}
+      <circle cx={mx} cy={my} r={2.4} fill="hsl(var(--accent))" filter="url(#silGlow)" />
+      <circle cx={mx} cy={my} r={1} fill="hsl(var(--background))" />
+    </svg>
   );
 };
 
@@ -579,8 +652,29 @@ const StatsSection = () => {
                     animate={{ scaleX: 1 }}
                     transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     style={{ transformOrigin: "left" }}
-                    className="h-px w-16 bg-accent mb-7"
+                    className="h-px w-16 bg-accent mb-6"
                   />
+
+                  {/* Country map silhouette — square box keeps the shared
+                      0–100 viewBox undistorted and same-size across countries. */}
+                  <div className="relative mx-auto mb-7 aspect-square w-full max-w-[180px]">
+                    <CountrySilhouette shapeKey={current.key} reduced={reduced} />
+                  </div>
+
+                  {/* Brands sourced from this country */}
+                  <p className="font-body text-[10px] tracking-[0.32em] uppercase text-muted-foreground mb-3">
+                    Brands sourced
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {current.brands.map((b) => (
+                      <span
+                        key={b}
+                        className="rounded-full border border-border bg-background/40 px-2.5 py-1 font-body text-[11px] text-muted-foreground"
+                      >
+                        {b}
+                      </span>
+                    ))}
+                  </div>
 
                 </motion.div>
               </AnimatePresence>
