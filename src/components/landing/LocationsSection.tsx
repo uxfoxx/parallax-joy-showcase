@@ -341,7 +341,7 @@ const LocationsSection = () => {
           <h2 className="font-display text-4xl sm:text-5xl lg:text-[64px] font-bold text-primary-foreground leading-[1.02] tracking-tight">
             <SplitText text="Visit our" by="word" stagger={0.05} as="span" className="block" />
             
-              <SplitText className="text-gradient-gold-dark block" text="Colombo HQ" by="word" stagger={0.05} delay={0.18} as="span" />
+              <SplitText className="text-gradient-gold-dark block" tokenClassName="text-gradient-gold-dark" text="Colombo HQ" by="word" stagger={0.05} delay={0.18} as="span" />
             
           </h2>
           <p className="font-body text-[16.5px] leading-relaxed text-primary-foreground/65 mt-7 max-w-xl">

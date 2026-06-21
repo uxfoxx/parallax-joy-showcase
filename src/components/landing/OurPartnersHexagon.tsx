@@ -123,6 +123,7 @@ const OurPartnersHexagon = () => {
               delay={0.16}
               as="span"
               className="inline-block text-gradient-gold italic"
+              tokenClassName="text-gradient-gold italic"
             />
           </h2>
           <motion.p

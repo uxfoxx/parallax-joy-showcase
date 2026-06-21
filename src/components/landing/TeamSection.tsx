@@ -33,7 +33,7 @@ const TeamSection = () => {
         <SplitText text="Building partnerships" by="word" stagger={0.05} as="span" className="block" />
         <span className="block mt-1">
           <SplitText text="that" by="word" stagger={0.05} delay={0.18} as="span" className="mr-[0.28em]" />
-          <SplitText text="last." by="word" stagger={0.05} delay={0.28} as="span" className="italic text-gradient-gold-dark" />
+          <SplitText text="last." by="word" stagger={0.05} delay={0.28} as="span" className="italic text-gradient-gold-dark" tokenClassName="text-gradient-gold-dark italic" />
         </span>
       </h2>
 
