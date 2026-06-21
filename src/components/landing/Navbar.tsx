@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import logoSvg from "@/assets/olive-mark.svg";
+import ProductsMegaMenu from "@/components/landing/ProductsMegaMenu";
+import { useCategories } from "@/lib/api";
 
 const links = [
   { label: "Home", href: "/" },
@@ -16,6 +18,7 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const location = useLocation();
+  const { data: categories = [] } = useCategories();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -104,12 +107,9 @@ const Navbar = () => {
                   whileHover={{ scale: 1.06 }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  /* Bar matches section: near-black bar (over dark section)
-                   * needs the white-logo treatment; light bar keeps native
-                   * colours. */
-                  className={`h-8 w-auto object-contain transition-[filter] duration-500 group-hover:drop-shadow-[0_0_12px_hsl(42_80%_55%/0.5)] ${
-                    isDark ? "brightness-0 invert" : ""
-                  }`}
+                  /* Keep the olive mark in its native colours on every bar —
+                   * no white/inverted treatment. */
+                  className="h-10 w-auto transition-[filter] duration-500 group-hover:drop-shadow-[0_0_12px_hsl(42_80%_55%/0.5)]"
                 />
               </Link>
             </div>
@@ -121,6 +121,16 @@ const Navbar = () => {
                   link.href === "/"
                     ? location.pathname === "/"
                     : (location.pathname + location.search).startsWith(link.href);
+                if (link.label === "Products") {
+                  return (
+                    <ProductsMegaMenu
+                      key={link.label}
+                      isDark={isDark}
+                      mutedText={mutedText}
+                      isActive={isActive}
+                    />
+                  );
+                }
                 return (
                   <Link
                     key={link.label}
@@ -190,6 +200,43 @@ const Navbar = () => {
                 >
                   {link.label}
                 </Link>
+
+                {/* Products sub-links (categories + browse) — hover doesn't
+                    exist on touch, so surface the shortcuts inline. */}
+                {link.label === "Products" && (
+                  <div className="mt-4 flex flex-col items-center gap-3">
+                    {categories.length > 0 && (
+                      <div className="flex flex-wrap justify-center gap-2 max-w-[19rem]">
+                        {categories.slice(0, 6).map((c) => (
+                          <Link
+                            key={c.id}
+                            to={`/products?category=${encodeURIComponent(c.name)}`}
+                            onClick={() => setMobileOpen(false)}
+                            className="rounded-full border border-white/20 px-3 py-1 font-body text-xs text-primary-foreground/70 hover:border-accent/50 hover:text-accent transition-colors"
+                          >
+                            {c.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                    <div className="flex items-center gap-4">
+                      {[
+                        { label: "All", to: "/products" },
+                        { label: "Featured", to: "/products?featured=true" },
+                        { label: "Brands", to: "/brands" },
+                      ].map((o) => (
+                        <Link
+                          key={o.label}
+                          to={o.to}
+                          onClick={() => setMobileOpen(false)}
+                          className="font-body text-[11px] uppercase tracking-[0.2em] text-primary-foreground/55 hover:text-accent transition-colors"
+                        >
+                          {o.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </motion.div>
             ))}
             <motion.div
