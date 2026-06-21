@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useProduct, useProducts, useProductImages } from "@/lib/api";
 import { useProductModal } from "@/lib/productModal";
+import { originToFlag } from "@/lib/flags";
 
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
@@ -77,6 +78,14 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
 
   const brandName = product.brands?.name ?? "";
   const brandSlug = product.brands?.slug ?? "";
+  const brandLogo = product.brands?.image_url ?? null;
+  const established = product.brands?.established ?? null;
+  const initials = (brandName || product.name)
+    .split(/\s+/)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
   const isHtml = product.description?.includes("<") ?? false;
   const plainDesc = isHtml
     ? new DOMParser().parseFromString(product.description, "text/html").body.textContent || ""
@@ -151,18 +160,72 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
             animate="show"
             className="p-6 flex flex-col gap-5"
           >
-            {/* Brand */}
-            {brandName && (
-              <motion.div variants={fadeUp}>
-                <Link to={`/brands/${brandSlug}`} onClick={onClose}>
-                  <Badge
-                    variant="secondary"
-                    className="font-body text-xs px-3 py-1.5 hover:bg-secondary/80 transition-colors inline-flex items-center gap-1.5"
+            {/* Provenance — brand crest + where it's from */}
+            <motion.div
+              variants={fadeUp}
+              className="flex items-center gap-4 rounded-2xl border border-border bg-gradient-to-br from-forest-deep/[0.05] to-accent/[0.06] p-4"
+            >
+              {/* Brand-logo medallion */}
+              <Link
+                to={brandSlug ? `/brands/${brandSlug}` : "#"}
+                onClick={onClose}
+                className="shrink-0"
+                aria-label={brandName || "Brand"}
+              >
+                <div className="w-16 h-16 rounded-full border border-border bg-background shadow-sm flex items-center justify-center overflow-hidden">
+                  {brandLogo ? (
+                    <img src={brandLogo} alt={brandName} className="w-12 h-12 object-contain" />
+                  ) : (
+                    <span className="font-display text-lg font-bold text-forest-mid">{initials}</span>
+                  )}
+                </div>
+              </Link>
+
+              <div className="min-w-0">
+                {brandName ? (
+                  <Link
+                    to={`/brands/${brandSlug}`}
+                    onClick={onClose}
+                    className="font-display text-base font-bold text-foreground hover:text-accent transition-colors inline-flex items-center gap-1"
                   >
-                    <Building2 className="w-3 h-3" />
                     {brandName}
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </Link>
+                ) : (
+                  <span className="font-display text-base font-bold text-foreground inline-flex items-center gap-1">
+                    <Building2 className="w-4 h-4" /> Olive Foods
+                  </span>
+                )}
+                <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                  {product.origin && (
+                    <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-accent/40 bg-accent/[0.06] px-2.5 py-0.5 font-body text-[11px] font-medium text-foreground">
+                      <span aria-hidden className="text-sm leading-none">{originToFlag(product.origin)}</span>
+                      {product.origin}
+                    </span>
+                  )}
+                  {established && (
+                    <span className="font-body text-[11px] text-muted-foreground">Est. {established}</span>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Category + tags */}
+            {(product.category || (product.tags?.length ?? 0) > 0) && (
+              <motion.div variants={fadeUp} className="flex flex-wrap gap-1.5">
+                {product.category && (
+                  <Badge variant="secondary" className="font-body text-[11px]">
+                    {product.category}
                   </Badge>
-                </Link>
+                )}
+                {(product.tags ?? []).slice(0, 6).map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-full border border-border px-2 py-0.5 font-body text-[11px] text-muted-foreground"
+                  >
+                    {t}
+                  </span>
+                ))}
               </motion.div>
             )}
 
@@ -311,14 +374,18 @@ const ProductDetailModal = () => {
       onOpenChange={(open) => { if (!open) closeProductModal(); }}
     >
       <DialogContent className="max-w-4xl w-full p-0 overflow-hidden rounded-2xl border-border bg-background gap-0 h-[88vh] max-h-[88vh] flex flex-col [&>button]:hidden">
-        {/* Close button */}
-        <button
-          onClick={closeProductModal}
-          className="absolute top-3 right-3 z-50 w-8 h-8 rounded-full bg-muted/80 backdrop-blur-sm flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-          aria-label="Close"
-        >
-          <X className="w-4 h-4" />
-        </button>
+        {/* Close button — wrapped in a div so DialogContent's
+            [&>button]:hidden (which hides Radix's default close) doesn't also
+            hide ours. Without the wrapper this button renders 0×0. */}
+        <div className="absolute top-3.5 right-3.5 z-50">
+          <button
+            onClick={closeProductModal}
+            className="w-9 h-9 rounded-full border border-border bg-background/90 backdrop-blur-sm shadow-sm flex items-center justify-center text-foreground/70 hover:text-foreground hover:bg-muted hover:border-accent/40 transition-colors"
+            aria-label="Close"
+          >
+            <X className="w-4 h-4" strokeWidth={2.5} />
+          </button>
+        </div>
 
         <div className="flex-1 min-h-0 overflow-hidden">
           {activeSlug && (

@@ -19,6 +19,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Separator } from "@/components/ui/separator";
 import { useProducts, useBrands, useCategories } from "@/lib/api";
 import ProductQuickView from "@/components/ProductQuickView";
+import FilterBar, { type FilterDef } from "@/components/products/FilterBar";
 import type { Product, Brand, Category } from "@/lib/api";
 
 type SortBy = "featured" | "name-asc" | "name-desc";
@@ -232,10 +233,10 @@ const FilterPanel = ({
 ──────────────────────────────────────────────────────────── */
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
-  const showOurProducts = searchParams.get("our") === "true";
   const categoryParam = searchParams.get("category");
   const brandParam = searchParams.get("brand");
   const featuredParam = searchParams.get("featured") === "true";
+  const ourParam = searchParams.get("our") === "true";
 
   const [query, setQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
@@ -245,13 +246,13 @@ const ProductsPage = () => {
     brandParam ? [brandParam] : []
   );
   const [featuredOnly, setFeaturedOnly] = useState(featuredParam);
+  const [ourOnly, setOurOnly] = useState(ourParam);
+  const [sortBy, setSortBy] = useState<SortBy>("featured");
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
-  // The URL is the source of truth for category/brand/featured filters. Re-sync
-  // when the query string changes — navigating from /products?category=A to
-  // ?category=B (or activating a filter from the navbar mega-menu while already
-  // on this page) does NOT remount, so initial state alone wouldn't update.
-  // Scoped to each param so manual FilterPanel toggles (which don't touch the
-  // URL) are never clobbered.
+  // The URL is the source of truth for filters — re-sync when the query string
+  // changes (deep-links + navbar mega-menu activate filters without remounting).
+  // Scoped per-param so manual chip changes (which don't touch the URL) survive.
   useEffect(() => {
     setSelectedCategories(categoryParam ? [categoryParam] : []);
   }, [categoryParam]);
@@ -261,39 +262,63 @@ const ProductsPage = () => {
   useEffect(() => {
     setFeaturedOnly(featuredParam);
   }, [featuredParam]);
-  const [sortBy, setSortBy] = useState<SortBy>("featured");
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  useEffect(() => {
+    setOurOnly(ourParam);
+  }, [ourParam]);
 
   const { data: allProducts = [], isLoading } = useProducts();
   const { data: brands = [] } = useBrands();
   const { data: categories = [] } = useCategories();
 
-  /* ── Toggle helpers ── */
-  const toggleCategory = (name: string) =>
-    setSelectedCategories((prev) =>
-      prev.includes(name) ? prev.filter((c) => c !== name) : [...prev, name]
-    );
-
-  const toggleBrand = (slug: string) =>
-    setSelectedBrands((prev) =>
-      prev.includes(slug) ? prev.filter((b) => b !== slug) : [...prev, slug]
-    );
-
   const clearAll = () => {
     setSelectedCategories([]);
     setSelectedBrands([]);
     setFeaturedOnly(false);
+    setOurOnly(false);
   };
 
-  const hasFilters = selectedCategories.length > 0 || selectedBrands.length > 0 || featuredOnly;
+  const hasFilters =
+    selectedCategories.length > 0 || selectedBrands.length > 0 || featuredOnly || ourOnly;
   const activeFilterCount =
-    selectedCategories.length + selectedBrands.length + (featuredOnly ? 1 : 0);
+    selectedCategories.length + selectedBrands.length + (featuredOnly ? 1 : 0) + (ourOnly ? 1 : 0);
+
+  /* ── Filter chip definitions for the FilterBar ── */
+  const filterDefs: FilterDef[] = [
+    {
+      id: "category",
+      label: "Category",
+      searchable: true,
+      options: categories.map((c) => ({ value: c.name, label: c.name })),
+      selected: selectedCategories,
+      onApply: setSelectedCategories,
+    },
+    {
+      id: "brand",
+      label: "Brand",
+      searchable: true,
+      options: brands.map((b) => ({ value: b.slug, label: b.name })),
+      selected: selectedBrands,
+      onApply: setSelectedBrands,
+    },
+    {
+      id: "type",
+      label: "Type",
+      options: [
+        { value: "featured", label: "Featured" },
+        { value: "our", label: "Our products" },
+      ],
+      selected: [...(featuredOnly ? ["featured"] : []), ...(ourOnly ? ["our"] : [])],
+      onApply: (vals) => {
+        setFeaturedOnly(vals.includes("featured"));
+        setOurOnly(vals.includes("our"));
+      },
+    },
+  ];
 
   /* ── Filtering + sorting ── */
   const filtered = useMemo(() => {
     // Start with all products or "our products" subset
-    let results: Product[] = showOurProducts
+    let results: Product[] = ourOnly
       ? allProducts.filter((p) => (p as any).our_product === true)
       : [...allProducts];
 
@@ -329,7 +354,7 @@ const ProductsPage = () => {
     else sorted.sort((a, b) => Number(b.featured ?? false) - Number(a.featured ?? false));
 
     return sorted;
-  }, [query, selectedCategories, selectedBrands, featuredOnly, sortBy, allProducts, showOurProducts]);
+  }, [query, selectedCategories, selectedBrands, featuredOnly, ourOnly, sortBy, allProducts]);
 
   /* ── Pagination ── */
   const { currentPage, setCurrentPage, totalPages, paginatedItems, startIndex, endIndex, totalItems } =
@@ -345,14 +370,14 @@ const ProductsPage = () => {
   return (
     <PageLayout>
       <PageHero
-        eyebrow={`Olive Foods / ${showOurProducts ? "Our Products" : "All Products"}`}
+        eyebrow={`Olive Foods / ${ourParam ? "Our Products" : "All Products"}`}
         title={
-          showOurProducts
+          ourParam
             ? (<>Our <span className="text-gradient-gold italic">curated</span> selection.</>)
             : (<>Every <span className="text-gradient-gold italic">import</span>, one catalogue.</>)
         }
         subtitle={
-          showOurProducts
+          ourParam
             ? "The range we source and distribute ourselves, quality lines built for the Sri Lankan market."
             : "Browse the complete catalogue of premium food imports from our supplier network across the world."
         }
@@ -414,78 +439,16 @@ const ProductsPage = () => {
                 </SelectContent>
               </Select>
 
-              {/* Filters button — always visible, opens right Sheet */}
-              <Button
-                variant="outline"
-                onClick={() => setFilterOpen(true)}
-                className={`h-11 rounded-xl font-body gap-2 border-border shrink-0 transition-all duration-200 ${
-                  hasFilters
-                    ? "bg-accent/10 border-accent/40 text-accent hover:bg-accent/15"
-                    : "bg-card/90 hover:border-accent/30"
-                }`}
-              >
-                <SlidersHorizontal className="w-4 h-4" />
-                <span className="hidden sm:inline">Filters</span>
-                {activeFilterCount > 0 && (
-                  <span className="w-5 h-5 rounded-full bg-accent text-white text-[10px] font-bold flex items-center justify-center">
-                    {activeFilterCount}
-                  </span>
-                )}
-              </Button>
             </motion.div>
 
-            {/* ── Active filter chips ── */}
-            {hasFilters && (
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex flex-wrap items-center gap-2 mb-5"
-              >
-                <span className="font-body text-xs text-muted-foreground">Active:</span>
-                {selectedCategories.map((c) => (
-                  <Badge
-                    key={c}
-                    variant="secondary"
-                    className="gap-1.5 font-body text-xs cursor-pointer bg-accent/10 text-accent border border-accent/20 hover:bg-accent/20 transition-colors"
-                    onClick={() => toggleCategory(c)}
-                  >
-                    {c}
-                    <X className="w-3 h-3" />
-                  </Badge>
-                ))}
-                {selectedBrands.map((slug) => {
-                  const brand = brands.find((b) => b.slug === slug);
-                  return (
-                    <Badge
-                      key={slug}
-                      variant="secondary"
-                      className="gap-1.5 font-body text-xs cursor-pointer bg-accent/10 text-accent border border-accent/20 hover:bg-accent/20 transition-colors"
-                      onClick={() => toggleBrand(slug)}
-                    >
-                      {brand?.name ?? slug}
-                      <X className="w-3 h-3" />
-                    </Badge>
-                  );
-                })}
-                {featuredOnly && (
-                  <Badge
-                    variant="secondary"
-                    className="gap-1.5 font-body text-xs cursor-pointer bg-accent/10 text-accent border border-accent/20 hover:bg-accent/20 transition-colors"
-                    onClick={() => setFeaturedOnly(false)}
-                  >
-                    <Star className="w-3 h-3 fill-accent" />
-                    Featured
-                    <X className="w-3 h-3" />
-                  </Badge>
-                )}
-                <button
-                  onClick={clearAll}
-                  className="font-body text-xs text-muted-foreground hover:text-accent transition-colors underline-offset-2 hover:underline ml-1"
-                >
-                  Clear all
-                </button>
-              </motion.div>
-            )}
+            {/* ── Filter chip bar (Stripe-style) ── */}
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-5"
+            >
+              <FilterBar filters={filterDefs} onClearAll={clearAll} />
+            </motion.div>
 
             {/* ── Result count ── */}
             <div ref={gridRef} className="flex items-center gap-3 mb-7">
@@ -556,30 +519,6 @@ const ProductsPage = () => {
           </div>
         </section>
       </div>
-
-      {/* ── Filter Side Modal ── */}
-      <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
-        <SheetContent
-          side="right"
-          className="w-[320px] sm:w-[380px] p-0 flex flex-col"
-        >
-          <FilterPanel
-            categories={categories}
-            brands={brands}
-            allProducts={allProducts}
-            selectedCategories={selectedCategories}
-            selectedBrands={selectedBrands}
-            featuredOnly={featuredOnly}
-            onToggleCategory={toggleCategory}
-            onToggleBrand={toggleBrand}
-            onToggleFeatured={() => setFeaturedOnly((v) => !v)}
-            onClearAll={clearAll}
-            hasFilters={hasFilters}
-            resultCount={totalItems}
-            onClose={() => setFilterOpen(false)}
-          />
-        </SheetContent>
-      </Sheet>
 
       {/* Quick View Modal */}
       <ProductQuickView
