@@ -17,11 +17,11 @@ const BROWSE = [
 ];
 
 /**
- * Desktop "Products" hover mega-menu. The label itself still links to
- * /products; hovering (or focusing) reveals a panel of category shortcuts and
- * browse options, each navigating to /products with the matching filter
- * pre-activated via the URL (handled in ProductsPage). A short close delay +
- * a pt-3 hover bridge keep it from flickering when moving cursor into the panel.
+ * Desktop "Products" mega-menu. The label still links to /products; hovering
+ * (or focusing) drops a FULL-WIDTH panel from directly beneath the navbar with
+ * category shortcuts + browse options, each navigating to /products with the
+ * matching filter pre-activated via the URL (handled in ProductsPage). A short
+ * close delay bridges the gap between the trigger and the panel.
  */
 const ProductsMegaMenu = ({ isDark, mutedText, isActive }: Props) => {
   const reduced = useReducedMotion();
@@ -35,25 +35,27 @@ const ProductsMegaMenu = ({ isDark, mutedText, isActive }: Props) => {
       closeTimer.current = null;
     }
   };
+  const openNow = () => { cancelClose(); setOpen(true); };
   const scheduleClose = () => {
     cancelClose();
-    closeTimer.current = window.setTimeout(() => setOpen(false), 150);
+    closeTimer.current = window.setTimeout(() => setOpen(false), 160);
   };
 
-  const cats = categories.slice(0, 6);
+  const cats = categories.slice(0, 10);
 
   const panelSurface = isDark
-    ? "bg-[hsl(150_26%_6%/0.97)] border-white/10 text-primary-foreground"
-    : "bg-background/97 border-foreground/10 text-foreground";
+    ? "bg-[hsl(150_26%_6%/0.98)] border-white/10 text-primary-foreground"
+    : "bg-background/98 border-foreground/10 text-foreground";
   const itemHover = "hover:bg-accent/10 hover:text-accent";
   const subtle = isDark ? "text-primary-foreground/45" : "text-muted-foreground";
+  const eyebrow = `font-body text-[10px] tracking-[0.28em] uppercase mb-3 ${subtle}`;
 
   return (
     <div
       className="relative"
-      onMouseEnter={() => { cancelClose(); setOpen(true); }}
+      onMouseEnter={openNow}
       onMouseLeave={scheduleClose}
-      onFocusCapture={() => { cancelClose(); setOpen(true); }}
+      onFocusCapture={openNow}
       onBlurCapture={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(false);
       }}
@@ -76,57 +78,69 @@ const ProductsMegaMenu = ({ isDark, mutedText, isActive }: Props) => {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={reduced ? { opacity: 0 } : { opacity: 0, y: 8 }}
+            onMouseEnter={openNow}
+            onMouseLeave={scheduleClose}
+            initial={reduced ? { opacity: 0 } : { opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={reduced ? { opacity: 0 } : { opacity: 0, y: 8 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute left-1/2 top-full -translate-x-1/2 pt-3"
+            exit={reduced ? { opacity: 0 } : { opacity: 0, y: -10 }}
+            transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+            className={`fixed left-0 right-0 top-16 z-40 border-b backdrop-blur-xl shadow-[0_28px_64px_-28px_rgba(0,0,0,0.5)] ${panelSurface}`}
           >
-            <div
-              className={`w-[480px] grid grid-cols-[1.3fr_1fr] gap-2 rounded-2xl border p-3 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.5)] backdrop-blur-xl ${panelSurface}`}
-            >
-              {/* Categories */}
-              <div className="p-1">
-                <p className={`px-3 pb-2 pt-1 font-body text-[10px] tracking-[0.28em] uppercase ${subtle}`}>
-                  Categories
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-9 grid grid-cols-12 gap-8 lg:gap-10">
+              {/* Editorial intro */}
+              <div className="col-span-12 lg:col-span-3 flex flex-col">
+                <p className="font-display text-2xl font-bold leading-tight">
+                  Explore the <span className="text-gradient-gold">catalogue</span>
                 </p>
+                <p className={`mt-2.5 font-body text-sm leading-relaxed ${subtle}`}>
+                  Globally sourced food brands for Sri Lanka's hotels, restaurants and retail trade.
+                </p>
+                <Link
+                  to="/products"
+                  className="mt-auto pt-5 inline-flex items-center gap-1.5 font-body text-[12px] font-semibold uppercase tracking-[0.18em] text-accent hover:gap-2.5 transition-all"
+                >
+                  Browse all <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+
+              {/* Categories */}
+              <div className="col-span-12 lg:col-span-5">
+                <p className={eyebrow}>Shop by Category</p>
                 {cats.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-0.5">
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-0.5">
                     {cats.map((c) => (
                       <Link
                         key={c.id}
                         to={`/products?category=${encodeURIComponent(c.name)}`}
-                        className={`rounded-md px-3 py-2 font-body text-[13px] leading-snug transition-colors duration-200 ${itemHover}`}
+                        className={`group/cat flex items-center justify-between rounded-md px-3 py-2 font-body text-sm transition-colors duration-200 ${itemHover}`}
                       >
                         {c.name}
+                        <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 transition-all duration-200 group-hover/cat:opacity-100 group-hover/cat:translate-x-0" />
                       </Link>
                     ))}
                   </div>
                 ) : (
-                  <Link
-                    to="/products"
-                    className={`block rounded-md px-3 py-2 font-body text-[13px] transition-colors duration-200 ${itemHover}`}
-                  >
+                  <Link to="/products" className={`block rounded-md px-3 py-2 font-body text-sm ${itemHover}`}>
                     Browse all categories
                   </Link>
                 )}
               </div>
 
               {/* Browse */}
-              <div className={`p-1 ${isDark ? "border-l border-white/10" : "border-l border-foreground/10"}`}>
-                <p className={`px-3 pb-2 pt-1 font-body text-[10px] tracking-[0.28em] uppercase ${subtle}`}>
-                  Browse
-                </p>
-                <div className="flex flex-col gap-0.5">
+              <div className={`col-span-12 lg:col-span-4 lg:pl-10 ${isDark ? "lg:border-l lg:border-white/10" : "lg:border-l lg:border-foreground/10"}`}>
+                <p className={eyebrow}>Browse</p>
+                <div className="grid gap-2">
                   {BROWSE.map(({ label, to, Icon, desc }) => (
                     <Link
                       key={label}
                       to={to}
-                      className={`group/item flex items-start gap-2.5 rounded-md px-3 py-2 transition-colors duration-200 ${itemHover}`}
+                      className={`group/item flex items-start gap-3 rounded-xl border border-transparent px-3 py-2.5 transition-colors duration-200 hover:border-accent/20 ${itemHover}`}
                     >
-                      <Icon className="mt-0.5 w-4 h-4 shrink-0 text-accent" />
+                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
+                        <Icon className="w-4 h-4" />
+                      </span>
                       <span className="flex flex-col">
-                        <span className="flex items-center gap-1 font-body text-[13px] font-medium">
+                        <span className="flex items-center gap-1 font-body text-sm font-semibold">
                           {label}
                           <ArrowRight className="w-3 h-3 opacity-0 -translate-x-1 transition-all duration-200 group-hover/item:opacity-100 group-hover/item:translate-x-0" />
                         </span>
