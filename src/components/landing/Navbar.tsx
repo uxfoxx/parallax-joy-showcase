@@ -106,7 +106,7 @@ const Navbar = () => {
                   transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                   /* Keep the olive mark in its native colours on every bar —
                    * no white/inverted treatment. */
-                  className="h-8 w-auto object-contain transition-[filter] duration-500 group-hover:drop-shadow-[0_0_12px_hsl(42_80%_55%/0.5)]"
+                  className="h-10 w-auto transition-[filter] duration-500 group-hover:drop-shadow-[0_0_12px_hsl(42_80%_55%/0.5)]"
                 />
               </Link>
             </div>
