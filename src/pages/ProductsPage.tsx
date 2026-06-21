@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import Seo from "@/components/Seo";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Search, X, SlidersHorizontal, Star } from "lucide-react";
@@ -233,14 +233,34 @@ const FilterPanel = ({
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
   const showOurProducts = searchParams.get("our") === "true";
-  const initialBrandSlug = searchParams.get("brand");
+  const categoryParam = searchParams.get("category");
+  const brandParam = searchParams.get("brand");
+  const featuredParam = searchParams.get("featured") === "true";
 
   const [query, setQuery] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>(
-    initialBrandSlug ? [initialBrandSlug] : []
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    categoryParam ? [categoryParam] : []
   );
-  const [featuredOnly, setFeaturedOnly] = useState(false);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(
+    brandParam ? [brandParam] : []
+  );
+  const [featuredOnly, setFeaturedOnly] = useState(featuredParam);
+
+  // The URL is the source of truth for category/brand/featured filters. Re-sync
+  // when the query string changes — navigating from /products?category=A to
+  // ?category=B (or activating a filter from the navbar mega-menu while already
+  // on this page) does NOT remount, so initial state alone wouldn't update.
+  // Scoped to each param so manual FilterPanel toggles (which don't touch the
+  // URL) are never clobbered.
+  useEffect(() => {
+    setSelectedCategories(categoryParam ? [categoryParam] : []);
+  }, [categoryParam]);
+  useEffect(() => {
+    setSelectedBrands(brandParam ? [brandParam] : []);
+  }, [brandParam]);
+  useEffect(() => {
+    setFeaturedOnly(featuredParam);
+  }, [featuredParam]);
   const [sortBy, setSortBy] = useState<SortBy>("featured");
   const [filterOpen, setFilterOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
