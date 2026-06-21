@@ -4,6 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import { EASE_OUT_EXPO, softFadeUp } from "@/lib/motion";
 import SplitText from "@/components/motion/SplitText";
 import Eyebrow from "@/components/ui/eyebrow";
+import { SRI_LANKA_PATH, SRI_LANKA_CITIES } from "@/data/sriLankaMap";
 
 /* ─── Shared panel styles ────────────────────────────────────────────── */
 
@@ -288,15 +289,9 @@ const ColdChainPanel = () => {
 
 /* ─── Panel 4 — Sri Lanka distribution map ───────────────────────────── */
 
-const cities: Array<{ cx: number; cy: number; name: string; delay: number }> = [
-  { cx: 72,  cy: 148, name: "Colombo",    delay: 0    },
-  { cx: 108, cy: 96,  name: "Kandy",      delay: 0.25 },
-  { cx: 60,  cy: 190, name: "Galle",      delay: 0.4  },
-  { cx: 130, cy: 52,  name: "Jaffna",     delay: 0.55 },
-  { cx: 148, cy: 135, name: "Batticaloa", delay: 0.7  },
-  { cx: 54,  cy: 160, name: "Kalutara",   delay: 0.15 },
-  { cx: 90,  cy: 175, name: "Matara",     delay: 0.5  },
-];
+// Detailed coastline + real-geography city positions (generated, fit to the
+// 200×240 viewBox) — see scripts/generate-country-shapes.mjs.
+const cities = SRI_LANKA_CITIES;
 
 const SriLankaMapPanel = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -352,10 +347,11 @@ const SriLankaMapPanel = () => {
           <svg viewBox="0 0 200 240" className="w-full max-w-[160px]" aria-hidden>
             {/* Island outline — bumped up opacity for dark bg */}
             <motion.path
-              d="M 100 10 C 130 12, 155 28, 162 52 C 168 72, 165 92, 160 112 C 155 130, 158 148, 152 162 C 145 178, 130 192, 112 200 C 94 208, 72 206, 58 196 C 44 186, 36 170, 34 154 C 32 138, 38 120, 42 104 C 46 88, 40 68, 44 50 C 48 32, 70 8, 100 10 Z"
+              d={SRI_LANKA_PATH}
               fill="rgba(255,255,255,0.055)"
               stroke="rgba(255,255,255,0.2)"
               strokeWidth="1"
+              strokeLinejoin="round"
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}

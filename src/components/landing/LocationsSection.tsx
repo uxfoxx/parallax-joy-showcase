@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SplitText from "@/components/motion/SplitText";
+import SpotlightHover from "@/components/motion/SpotlightHover";
 import Eyebrow from "@/components/ui/eyebrow";
 
 /**
@@ -106,7 +107,7 @@ const ContactRow = ({
   };
 
   const Inner = (
-    <div className="relative flex items-start gap-4 px-4 py-4 -mx-4 rounded-xl transition-colors duration-300">
+    <SpotlightHover className="flex items-start gap-4 px-4 py-4 -mx-4 rounded-xl transition-colors duration-300">
       {/* Hover bg */}
       <motion.span
         aria-hidden
@@ -176,7 +177,7 @@ const ContactRow = ({
       {href && !copyText && (
         <ArrowUpRight className="relative w-4 h-4 text-primary-foreground/45 group-hover:text-primary-foreground transition-colors" />
       )}
-    </div>
+    </SpotlightHover>
   );
 
   return href ? (

@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import GoldHairline from "@/components/GoldHairline";
 import SplitText from "@/components/motion/SplitText";
+import SpotlightHover from "@/components/motion/SpotlightHover";
 import Eyebrow from "@/components/ui/eyebrow";
 
 const faqs = [
@@ -102,6 +103,7 @@ const FAQSection = () => {
                   openIndex === i ? "border-accent/30" : "border-border"
                 }`}
               >
+                <SpotlightHover className="block rounded-lg">
                 <button
                   onClick={() => toggle(i)}
                   className="w-full flex items-center justify-between py-6 text-left group"
@@ -146,6 +148,7 @@ const FAQSection = () => {
                     </motion.div>
                   )}
                 </AnimatePresence>
+                </SpotlightHover>
               </motion.div>
             ))}
           </div>

@@ -34,7 +34,18 @@ import Eyebrow from "@/components/ui/eyebrow";
 const HERO_SPREAD_IMAGE =
   "https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/newbg.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9uZXdiZy5wbmciLCJpYXQiOjE3Nzk4ODA0NjcsImV4cCI6MTgxMTQxNjQ2N30.zVuck54ZJ_iFDjZsn0SN4eoHkfc8o9V2JTtlrrahsXY";
 
-/** Tiny olive-sprig SVG — sits in the photo's negative-space margins. */
+/** Olive-sprig SVG with veined leaves + olives — sits in the photo's
+ *  negative-space margins. */
+const SPRIG_LEAVES = [
+  { x: 22, y: 41, r: -38, s: 1 },
+  { x: 38, y: 41, r: 38, s: 1 },
+  { x: 20, y: 31, r: -48, s: 0.95 },
+  { x: 40, y: 31, r: 48, s: 0.95 },
+  { x: 23, y: 21, r: -30, s: 0.85 },
+  { x: 37, y: 21, r: 30, s: 0.85 },
+  { x: 30, y: 12, r: 0, s: 0.8 },
+];
+
 const Sprig = ({ rotate = 0, scale = 1 }: { rotate?: number; scale?: number }) => (
   <svg
     viewBox="0 0 60 60"
@@ -42,31 +53,34 @@ const Sprig = ({ rotate = 0, scale = 1 }: { rotate?: number; scale?: number }) =
     aria-hidden
     style={{ transform: `rotate(${rotate}deg) scale(${scale})` }}
   >
-    <g fill="hsl(140 50% 19% / 0.65)">
-      <ellipse cx="30" cy="14" rx="3.5" ry="7" />
-      <ellipse
-        cx="20" cy="22" rx="3" ry="6"
-        transform="rotate(-25 20 22)"
-      />
-      <ellipse
-        cx="40" cy="22" rx="3" ry="6"
-        transform="rotate(25 40 22)"
-      />
-      <ellipse
-        cx="16" cy="34" rx="2.5" ry="5"
-        transform="rotate(-40 16 34)"
-      />
-      <ellipse
-        cx="44" cy="34" rx="2.5" ry="5"
-        transform="rotate(40 44 34)"
-      />
-    </g>
-    <line
-      x1="30" y1="12" x2="30" y2="56"
+    {/* Stem */}
+    <path
+      d="M30 56 Q 28 38 30 22 Q 31 14 30 9"
       stroke="hsl(140 50% 19% / 0.55)"
       strokeWidth="1.4"
+      fill="none"
       strokeLinecap="round"
     />
+    {/* Veined leaves */}
+    {SPRIG_LEAVES.map((l, i) => (
+      <g key={i} transform={`translate(${l.x} ${l.y}) rotate(${l.r}) scale(${l.s})`}>
+        <path d="M0 0 C -3.6 -4 -3 -11 0 -14 C 3 -11 3.6 -4 0 0 Z" fill="hsl(140 50% 19% / 0.6)" />
+        <path
+          d="M0 -1.5 L0 -12.5"
+          stroke="hsl(140 45% 32% / 0.55)"
+          strokeWidth="0.7"
+          fill="none"
+          strokeLinecap="round"
+        />
+      </g>
+    ))}
+    {/* Olives */}
+    <g>
+      <ellipse cx="25.5" cy="47" rx="2.6" ry="3.4" transform="rotate(-15 25.5 47)" fill="hsl(75 40% 38% / 0.85)" />
+      <ellipse cx="24.7" cy="45.8" rx="0.8" ry="1.1" fill="hsl(75 45% 72% / 0.7)" />
+      <ellipse cx="34.5" cy="43" rx="2.4" ry="3.2" transform="rotate(15 34.5 43)" fill="hsl(75 40% 38% / 0.85)" />
+      <ellipse cx="33.8" cy="41.9" rx="0.7" ry="1" fill="hsl(75 45% 72% / 0.7)" />
+    </g>
   </svg>
 );
 

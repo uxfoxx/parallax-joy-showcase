@@ -8,7 +8,6 @@ import SectionTransition from "@/components/landing/SectionTransition";
 import Footer from "@/components/landing/Footer";
 import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
-import ScrollProgressRing from "@/components/motion/ScrollProgressRing";
 
 /* Below-the-fold sections — code-split so the initial bundle drops to
  * the hero + LogoStrip + Featured trio. Each chunk loads on demand as
