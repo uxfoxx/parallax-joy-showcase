@@ -5,6 +5,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/api";
+import { originToFlag } from "@/lib/flags";
 
 interface ProductQuickViewProps {
   product: Product | null;
@@ -24,15 +25,18 @@ const ProductQuickView = ({ product, open, onOpenChange }: ProductQuickViewProps
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl p-0 overflow-hidden rounded-2xl border-border bg-background gap-0 [&>button]:hidden">
-        {/* Visible close button — sits over the hero image at top-right */}
-        <button
-          type="button"
-          onClick={() => onOpenChange(false)}
-          aria-label="Close"
-          className="absolute top-3 right-3 z-50 w-9 h-9 rounded-full bg-background/85 backdrop-blur-sm border border-border/70 flex items-center justify-center text-foreground/80 hover:text-foreground hover:bg-background transition-colors shadow-sm"
-        >
-          <X className="w-4 h-4" />
-        </button>
+        {/* Visible close button — wrapped in a div so DialogContent's
+            [&>button]:hidden doesn't also hide it (it would render 0×0). */}
+        <div className="absolute top-3 right-3 z-50">
+          <button
+            type="button"
+            onClick={() => onOpenChange(false)}
+            aria-label="Close"
+            className="w-9 h-9 rounded-full bg-background/90 backdrop-blur-sm border border-border flex items-center justify-center text-foreground/80 hover:text-foreground hover:bg-muted hover:border-accent/40 transition-colors shadow-sm"
+          >
+            <X className="w-4 h-4" strokeWidth={2.5} />
+          </button>
+        </div>
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -65,19 +69,29 @@ const ProductQuickView = ({ product, open, onOpenChange }: ProductQuickViewProps
           {/* Content */}
           <div className="p-6 space-y-4">
             <div>
-              <h2 className="font-display text-xl font-bold text-foreground mb-1">{product.name}</h2>
-              <div className="flex items-center gap-3 text-sm font-body text-muted-foreground">
+              <h2 className="font-display text-xl font-bold text-foreground mb-1.5">{product.name}</h2>
+              <div className="flex flex-wrap items-center gap-2 text-sm font-body text-muted-foreground">
                 {brandName && (
                   <Link
                     to={`/brands/${brandSlug}`}
-                    className="text-accent hover:underline font-medium"
+                    className="inline-flex items-center gap-1.5 text-accent hover:underline font-medium"
                     onClick={() => onOpenChange(false)}
                   >
+                    {product.brands?.image_url && (
+                      <img
+                        src={product.brands.image_url}
+                        alt=""
+                        className="w-5 h-5 rounded-full object-contain border border-border bg-background"
+                      />
+                    )}
                     {brandName}
                   </Link>
                 )}
                 {product.origin && (
-                  <span className="text-muted-foreground/60">·&nbsp;{product.origin}</span>
+                  <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-accent/40 bg-accent/[0.06] px-2 py-0.5 text-[11px] font-medium text-foreground">
+                    <span aria-hidden className="text-sm leading-none">{originToFlag(product.origin)}</span>
+                    {product.origin}
+                  </span>
                 )}
               </div>
             </div>
