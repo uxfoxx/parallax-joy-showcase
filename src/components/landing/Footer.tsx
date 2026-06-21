@@ -3,6 +3,16 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import logoSvg from "@/assets/olive-foods-logo.svg";
 import { EASE_OUT_EXPO } from "@/lib/motion";
+import CountUp from "@/components/motion/CountUp";
+
+type FooterStat = { value?: number; suffix?: string; text?: string; label: string };
+
+const FOOTER_STATS: FooterStat[] = [
+  { value: 30, suffix: "+", label: "Years of trade" },
+  { value: 10, label: "Source countries" },
+  { value: 25, label: "Districts served" },
+  { text: "Island-wide", label: "Delivery" },
+];
 
 const containerVariants = {
   hidden: {},
@@ -124,6 +134,31 @@ const Footer = () => {
               ))}
             </ul>
           </motion.div>
+        </motion.div>
+
+        {/* Stat band — animated counters */}
+        <motion.div
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-10%" }}
+          variants={containerVariants}
+          className="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-9 border-t border-primary-foreground/10 pt-12"
+        >
+          {FOOTER_STATS.map((s, i) => (
+            <motion.div key={s.label} custom={i} variants={columnVariants}>
+              <span aria-hidden className="block w-7 h-[2px] bg-accent rounded-full mb-3" />
+              <div
+                className={`font-display font-bold text-primary-foreground leading-none tracking-tight ${
+                  s.text ? "text-[26px] lg:text-[32px]" : "text-[38px] lg:text-[48px] tabular-nums"
+                }`}
+              >
+                {s.text ? s.text : <CountUp to={s.value!} suffix={s.suffix} duration={2.4} />}
+              </div>
+              <p className="font-body text-[11px] tracking-[0.22em] uppercase text-primary-foreground/45 mt-3">
+                {s.label}
+              </p>
+            </motion.div>
+          ))}
         </motion.div>
 
         <motion.div

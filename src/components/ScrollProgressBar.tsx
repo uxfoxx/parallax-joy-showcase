@@ -1,13 +1,19 @@
-import { motion, useScroll } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 
 const ScrollProgressBar = () => {
   const { scrollYProgress } = useScroll();
+  // Spring-smooth the fill so it glides rather than snapping frame-to-frame.
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   return (
     <motion.div
       className="fixed top-0 left-0 right-0 h-[2px] z-[200] origin-left pointer-events-none"
       style={{
-        scaleX: scrollYProgress,
+        scaleX,
         background:
           "linear-gradient(90deg, hsl(140 50% 19%), hsl(75 38% 45%), hsl(80 50% 31%))",
       }}

@@ -1,0 +1,42 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Olive Foods">
+  <!-- Branch -->
+  <path d="M44 176 C 50 150, 74 128, 104 110 C 112 105, 118 101, 122 96"
+        fill="none" stroke="#2f5d2a" stroke-width="13" stroke-linecap="round"/>
+  <path d="M70 138 C 84 132, 98 130, 112 132" fill="none" stroke="#2f5d2a"
+        stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Leaf: large, up-right -->
+  <g transform="translate(118 96) rotate(-52)">
+    <path d="M0 0 Q46 -20 92 0 Q46 20 0 0 Z" fill="#2f5d2a"/>
+    <path d="M10 -2 Q46 -12 84 -2 Q46 0 10 -2 Z" fill="#3f7a34"/>
+    <path d="M6 0 L86 0" stroke="#244a22" stroke-width="2.4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Leaf: medium, right -->
+  <g transform="translate(120 108) rotate(8)">
+    <path d="M0 0 Q40 -16 80 0 Q40 16 0 0 Z" fill="#2f5d2a"/>
+    <path d="M9 -1 Q40 -9 72 -1 Q40 1 9 -1 Z" fill="#3f7a34"/>
+    <path d="M6 0 L74 0" stroke="#244a22" stroke-width="2.2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Leaf: small, left -->
+  <g transform="translate(112 104) rotate(196)">
+    <path d="M0 0 Q30 -13 60 0 Q30 13 0 0 Z" fill="#2f5d2a"/>
+    <path d="M7 0 L56 0" stroke="#244a22" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Olive -->
+  <g transform="rotate(-8 122 138)">
+    <ellipse cx="122" cy="138" rx="44" ry="52" fill="#2f5d2a"/>
+    <ellipse cx="122" cy="138" rx="38" ry="46" fill="#6f8a30"/>
+    <!-- shadow crescent -->
+    <path d="M122 184 C 99 182, 86 162, 86 138 C 86 120, 95 104, 110 96
+             C 96 108, 90 124, 92 142 C 94 166, 106 180, 122 184 Z" fill="#5a722a"/>
+    <!-- highlight -->
+    <ellipse cx="140" cy="116" rx="12" ry="16" fill="#9cb24e"/>
+    <path d="M104 104 C 96 116, 94 132, 98 148" fill="none" stroke="#86a23f"
+          stroke-width="5" stroke-linecap="round"/>
+    <!-- stem dimple -->
+    <path d="M112 92 q10 -6 20 0" fill="none" stroke="#2f5d2a" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>

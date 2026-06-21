@@ -408,19 +408,69 @@ const StatsSection = () => {
               06°55′N · 79°51′E · Colombo
             </div>
 
-            {/* Compass-rose corner mark */}
+            {/* Compass-rose corner mark — engraved rings, degree ticks,
+                8-point star + cardinal letters. */}
             <svg
               aria-hidden
               viewBox="0 0 120 120"
-              className="absolute -top-4 -right-2 w-14 h-14 opacity-30 text-foreground/40 pointer-events-none"
+              className="absolute -top-5 -right-3 w-16 h-16 opacity-30 text-foreground/40 pointer-events-none"
             >
-              <g fill="none" stroke="currentColor" strokeWidth="1">
-                <circle cx="60" cy="60" r="40" />
-                <circle cx="60" cy="60" r="28" strokeDasharray="2 4" />
-                <line x1="60" y1="20" x2="60" y2="100" />
-                <line x1="20" y1="60" x2="100" y2="60" />
+              <g fill="none" stroke="currentColor">
+                {/* Concentric rings */}
+                <circle cx="60" cy="60" r="47" strokeWidth="1" />
+                <circle cx="60" cy="60" r="43" strokeWidth="0.5" />
+                <circle cx="60" cy="60" r="22" strokeWidth="0.6" strokeDasharray="2 4" />
+
+                {/* Degree ticks — every 5°, longer at 30° and the cardinals */}
+                {Array.from({ length: 72 }).map((_, i) => {
+                  const a = (i * 5 * Math.PI) / 180;
+                  const cardinal = i % 18 === 0;
+                  const major = i % 6 === 0;
+                  const rIn = cardinal ? 33 : major ? 36 : 39;
+                  return (
+                    <line
+                      key={`t${i}`}
+                      x1={60 + Math.sin(a) * rIn}
+                      y1={60 - Math.cos(a) * rIn}
+                      x2={60 + Math.sin(a) * 43}
+                      y2={60 - Math.cos(a) * 43}
+                      strokeWidth={cardinal ? 1 : 0.5}
+                    />
+                  );
+                })}
               </g>
-              <circle cx="60" cy="60" r="2.5" fill="currentColor" />
+
+              {/* 8-point star rose — long cardinals, short diagonals */}
+              {Array.from({ length: 8 }).map((_, i) => {
+                const t = (i * 45 * Math.PI) / 180;
+                const tip = i % 2 === 0 ? 30 : 17;
+                const waist = 6.5;
+                const lx = 60 + Math.sin(t - 0.39) * waist;
+                const ly = 60 - Math.cos(t - 0.39) * waist;
+                const tx = 60 + Math.sin(t) * tip;
+                const ty = 60 - Math.cos(t) * tip;
+                const rx = 60 + Math.sin(t + 0.39) * waist;
+                const ry = 60 - Math.cos(t + 0.39) * waist;
+                return (
+                  <path
+                    key={`s${i}`}
+                    d={`M60 60 L${lx} ${ly} L${tx} ${ty} L${rx} ${ry} Z`}
+                    fill="currentColor"
+                    fillOpacity={i % 2 === 0 ? 0.85 : 0.4}
+                  />
+                );
+              })}
+              {/* Gold-tipped North needle */}
+              <path d="M60 60 L56.6 56.7 L60 30 L63.4 56.7 Z" fill="hsl(var(--accent))" fillOpacity="0.9" />
+              <circle cx="60" cy="60" r="2.4" fill="currentColor" />
+
+              {/* Cardinal letters */}
+              <g fill="currentColor" fontSize="11" fontWeight="600" textAnchor="middle" style={{ fontFamily: "var(--font-display, sans-serif)" }}>
+                <text x="60" y="16">N</text>
+                <text x="108" y="64">E</text>
+                <text x="60" y="113">S</text>
+                <text x="12" y="64">W</text>
+              </g>
             </svg>
 
             <svg
