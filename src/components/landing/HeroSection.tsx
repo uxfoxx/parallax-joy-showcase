@@ -236,6 +236,7 @@ const HeroSection = () => {
               delay={0.5}
               duration={0.9}
               className="block text-gradient-gold italic"
+              tokenClassName="text-gradient-gold"
               as="span"
             />
           </span>

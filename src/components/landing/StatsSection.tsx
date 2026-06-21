@@ -331,7 +331,7 @@ const StatsSection = () => {
             <h2 className="font-display text-4xl sm:text-5xl md:text-5xl lg:text-[64px] font-bold text-foreground leading-[1.02] tracking-tight">
               <SplitText text="Sourced where" by="word" stagger={0.05} as="span" className="block" />
               <span className="text-gradient-gold block">
-                <SplitText text="it grows best" by="word" stagger={0.05} delay={0.2} as="span" />
+                <SplitText text="it grows best" by="word" stagger={0.05} delay={0.2} as="span" tokenClassName="text-gradient-gold" />
               </span>
             </h2>
             <motion.p

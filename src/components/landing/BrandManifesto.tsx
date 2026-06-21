@@ -32,7 +32,7 @@ const BrandManifesto = () => {
         <SplitText text="A supply chain is really" by="word" stagger={0.05} as="span" className="block" />
         <span className="block mt-1">
           <SplitText text="a chain of" by="word" stagger={0.05} delay={0.18} as="span" className="mr-[0.28em]" />
-          <SplitText text="relationships." by="word" stagger={0.05} delay={0.32} as="span" className="italic text-gradient-gold-dark" />
+          <SplitText text="relationships." by="word" stagger={0.05} delay={0.32} as="span" className="italic text-gradient-gold-dark" tokenClassName="text-gradient-gold-dark italic" />
         </span>
       </h2>
 
