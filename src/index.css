@@ -141,25 +141,24 @@
 }
 
 @layer utilities {
-  /* text-gradient-gold (light): designed for cream / white backgrounds.
-   * Stops are dark-gold/bronze with L≈28–30% in HSL — computed to keep
-   * relative-luminance contrast ≥ 4.5:1 against the lightest backdrop
-   * the site uses (hsl(42 50% 96%)). Verified ratio ≈ 5.0:1. */
+  /* text-gradient-gold (light): on-brand forest→olive green for cream / white
+   * backgrounds. Stops follow the theme's forest-mid → forest-light hues
+   * (140→82) at L≈20–28%, keeping relative-luminance contrast well above
+   * 4.5:1 against the lightest backdrop the site uses (hsl(42 50% 96%)). */
   .text-gradient-gold {
-    background: linear-gradient(135deg, hsl(45 70% 28%), hsl(38 75% 30%) 50%, hsl(50 65% 26%));
+    background: linear-gradient(135deg, hsl(140 50% 20%), hsl(112 45% 24%) 50%, hsl(82 50% 28%));
     -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-    
+    background-clip: text;
+    color: transparent;
   }
-  /* text-gradient-gold-dark: same gold family but lighter stops (L≈58–65%)
-   * for forest-deep / scrim photo backdrops where the dark version would
-   * disappear. Verified ratio ≈ 5.4:1 against hsl(150 40% 6%). */
+  /* text-gradient-gold-dark: same forest→olive family but lighter stops
+   * (L≈58–60%) for forest-deep / scrim photo backdrops where the dark version
+   * would disappear. Stays above 4.5:1 against hsl(150 40% 6%). */
   .text-gradient-gold-dark {
-    background: linear-gradient(135deg, hsl(45 75% 60%), hsl(38 80% 65%) 50%, hsl(50 70% 58%));
+    background: linear-gradient(135deg, hsl(82 52% 58%), hsl(110 42% 60%) 50%, hsl(140 42% 58%));
     -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+    background-clip: text;
+    color: transparent;
   }
 
   .glow-border {
