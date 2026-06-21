@@ -148,7 +148,9 @@
   .text-gradient-gold {
     background: linear-gradient(135deg, hsl(45 70% 28%), hsl(38 75% 30%) 50%, hsl(50 65% 26%));
     -webkit-background-clip: text;
-    background-clip: text;
+  background-clip: text;
+  color: transparent;
+    
   }
   /* text-gradient-gold-dark: same gold family but lighter stops (L≈58–65%)
    * for forest-deep / scrim photo backdrops where the dark version would
@@ -156,7 +158,8 @@
   .text-gradient-gold-dark {
     background: linear-gradient(135deg, hsl(45 75% 60%), hsl(38 80% 65%) 50%, hsl(50 70% 58%));
     -webkit-background-clip: text;
-    background-clip: text;
+  background-clip: text;
+  color: transparent;
   }
 
   .glow-border {

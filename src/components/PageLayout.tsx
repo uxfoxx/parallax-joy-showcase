@@ -16,7 +16,7 @@ const PageLayout = ({ children }: PageLayoutProps) => {
       <ScrollFloatingElement />
       <Navbar />
       <FloatingWhatsApp />
-      <main className="relative z-10 pt-24">{children}</main>
+      <main className="relative z-10 ">{children}</main>
       <SectionTransition />
       <div data-navbar-theme="dark">
         <Footer />
