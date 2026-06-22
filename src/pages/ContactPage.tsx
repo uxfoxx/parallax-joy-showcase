@@ -113,7 +113,7 @@ const ContactPage = () => {
           <div className="absolute w-[300px] h-[300px] bottom-20 right-10 rounded-full opacity-[0.05]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
 
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20">
+            <div className="grid lg:grid-cols-[1.2fr_1fr] gap-6 lg:gap-20">
               {/* Form */}
               <motion.form
                 onSubmit={handleSubmit}
