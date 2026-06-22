@@ -358,3 +358,101 @@ export const useIsAdmin = () =>
       return (data && data.length > 0) ?? false;
     },
   });
+
+/* ─── E Business Profiles (digital business cards) ─────────────────────────
+   Not in the generated types.ts, so accessed via the `as any` cast pattern
+   (same as partner_logos). */
+export type BusinessProfile = {
+  id: string;
+  slug: string;
+  name: string;
+  title: string | null;
+  company: string;
+  phone: string | null;
+  phone_secondary: string | null;
+  whatsapp: string | null;
+  email: string | null;
+  bio: string | null;
+  photo_url: string | null;
+  active: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type BusinessProfileInput = Omit<
+  BusinessProfile,
+  "id" | "created_at" | "updated_at"
+>;
+
+export const useBusinessProfiles = () =>
+  useQuery({
+    queryKey: ["business_profiles"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("business_profiles" as any)
+        .select("*")
+        .order("display_order");
+      if (error) throw error;
+      return (data as unknown) as BusinessProfile[];
+    },
+  });
+
+export const useBusinessProfile = (slug: string) =>
+  useQuery({
+    queryKey: ["business_profiles", slug],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("business_profiles" as any)
+        .select("*")
+        .eq("slug", slug)
+        .single();
+      if (error) throw error;
+      return (data as unknown) as BusinessProfile;
+    },
+    enabled: !!slug,
+  });
+
+export const useCreateBusinessProfile = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (profile: BusinessProfileInput) => {
+      const { data, error } = await supabase
+        .from("business_profiles" as any)
+        .insert(profile as any)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["business_profiles"] }),
+  });
+};
+
+export const useUpdateBusinessProfile = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...updates }: Partial<BusinessProfile> & { id: string }) => {
+      const { data, error } = await supabase
+        .from("business_profiles" as any)
+        .update({ ...updates, updated_at: new Date().toISOString() } as any)
+        .eq("id", id)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["business_profiles"] }),
+  });
+};
+
+export const useDeleteBusinessProfile = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("business_profiles" as any).delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["business_profiles"] }),
+  });
+};
