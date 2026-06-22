@@ -13,6 +13,7 @@ import BrandsPage from "./pages/BrandsPage.tsx";
 import BrandDetailPage from "./pages/BrandDetailPage.tsx";
 import ProductsPage from "./pages/ProductsPage.tsx";
 import ProductDetailPage from "./pages/ProductDetailPage.tsx";
+import BusinessCardPage from "./pages/BusinessCardPage.tsx";
 
 import AdminLogin from "./pages/admin/AdminLogin.tsx";
 import AdminLayout from "./pages/admin/AdminLayout.tsx";
@@ -23,6 +24,7 @@ import AdminCategories from "./pages/admin/AdminCategories.tsx";
 import AdminFeatured from "./pages/admin/AdminFeatured.tsx";
 import AdminSubmissions from "./pages/admin/AdminSubmissions.tsx";
 import AdminPartners from "./pages/admin/AdminPartners.tsx";
+import AdminBusinessProfiles from "./pages/admin/AdminBusinessProfiles.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
 import { ProductModalProvider } from "@/lib/productModal";
@@ -74,6 +76,7 @@ const AppRoutes = () => {
             <Route path="/brands/:slug" element={<BrandDetailPage />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/products/:slug" element={<ProductDetailPage />} />
+            <Route path="/card/:slug" element={<BusinessCardPage />} />
 
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
@@ -82,6 +85,7 @@ const AppRoutes = () => {
               <Route path="partners" element={<AdminPartners />} />
               <Route path="products" element={<AdminProducts />} />
               <Route path="categories" element={<AdminCategories />} />
+              <Route path="business-profiles" element={<AdminBusinessProfiles />} />
               <Route path="featured" element={<AdminFeatured />} />
               <Route path="submissions" element={<AdminSubmissions />} />
             </Route>
