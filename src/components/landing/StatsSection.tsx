@@ -108,7 +108,7 @@ type HeadlineStat = {
 };
 
 const HEADLINE_STATS: HeadlineStat[] = [
-  { value: 10, suffix: "", label: "Source countries" },
+  { value: 10, suffix: "+", label: "Source countries" },
   { value: 4, suffix: "+", label: "Trade channels" },
   {
     value: 0, suffix: "", label: "Delivery coverage",

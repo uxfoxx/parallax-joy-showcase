@@ -1,21 +1,28 @@
 import { motion } from "framer-motion";
-import { Heart, Users, RefreshCw, Shield, ArrowUpRight } from "lucide-react";
+import {
+  Heart, Users, RefreshCw, Shield, ArrowUpRight,
+  Boxes, Headset, Workflow, Handshake, type LucideIcon,
+} from "lucide-react";
 import { useState } from "react";
 
-const approachItems: { title: string; body: string }[] = [
+const approachItems: { title: string; body: string; Icon: LucideIcon }[] = [
   {
+    Icon: Boxes,
     title: "Consistent, dependable supply",
     body: "Stock you can plan against. We don't run out at the wrong moment.",
   },
   {
+    Icon: Headset,
     title: "Professional, personal service",
     body: "One concierge desk per account. Replies within the hour; no call-trees.",
   },
   {
+    Icon: Workflow,
     title: "Structured systems for reliability",
     body: "SOPs across cold-chain and bonded storage so every order ships to the same standard.",
   },
   {
+    Icon: Handshake,
     title: "Flexible terms for trusted partners",
     body: "Credit and timing flexibility for partners we trust, offered as a relationship, not as a sales lever.",
   },
@@ -221,20 +228,29 @@ const CompanyPhilosophy = () => {
           </p>
         </motion.div>
 
-        {/* Our Approach — vertical step rail */}
-        <div className="mb-14">
-          <motion.h3
+        {/* Our Approach — editorial card grid */}
+        <div className="mb-16">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="font-display text-2xl font-bold text-foreground mb-8 tracking-tight"
+            className="mb-9 max-w-2xl"
           >
-            Our Approach
-          </motion.h3>
+            <p className="font-body text-[11px] font-semibold tracking-[0.28em] uppercase text-accent mb-3">
+              How we work
+            </p>
+            <h3 className="font-display text-3xl sm:text-4xl font-bold text-foreground tracking-tight leading-[1.05]">
+              Our <span className="text-gradient-gold">approach</span>
+            </h3>
+            <p className="font-body text-base text-muted-foreground leading-relaxed mt-4">
+              Four commitments that turn a supplier into a partner — the standards behind every order we ship.
+            </p>
+          </motion.div>
 
-          <div className="relative pl-2">
-            {/* Connecting rail — draws in as user scrolls into view */}
+          {/* Vertical step rail with icon markers */}
+          <div className="relative">
+            {/* Connecting rail — draws in on scroll */}
             <motion.span
               aria-hidden
               initial={{ scaleY: 0 }}
@@ -242,7 +258,7 @@ const CompanyPhilosophy = () => {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
               style={{ transformOrigin: "top" }}
-              className="absolute left-[18px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-primary via-primary/60 to-primary/10 rounded-full"
+              className="absolute left-[23px] top-6 bottom-6 w-[2px] rounded-full bg-gradient-to-b from-primary via-primary/60 to-primary/10"
             />
 
             <ol className="space-y-7">
@@ -252,34 +268,27 @@ const CompanyPhilosophy = () => {
                   initial={{ opacity: 0, x: -24 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
-                  transition={{
-                    duration: 0.55,
-                    delay: 0.2 + i * 0.12,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className="relative flex items-start gap-5 group"
+                  transition={{ duration: 0.55, delay: 0.15 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                  className="group relative flex items-start gap-5 transition-transform duration-300 hover:translate-x-1.5"
                 >
-                  {/* Numbered marker on the rail */}
-                  <div className="relative z-10 shrink-0 w-9 h-9 rounded-full bg-primary text-primary-foreground border-2 border-background flex items-center justify-center shadow-card">
-                    <span className="font-display text-[11px] font-bold tabular-nums">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
+                  {/* Icon marker on the rail — fills with accent on hover */}
+                  <div className="relative z-10 shrink-0 flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-background bg-background text-accent shadow-card ring-1 ring-accent/25 transition-colors duration-300 group-hover:bg-accent group-hover:text-white group-hover:ring-accent">
+                    <item.Icon className="h-5 w-5" strokeWidth={1.8} />
                     <motion.span
                       aria-hidden
-                      className="absolute inset-0 rounded-full bg-primary"
+                      className="absolute inset-0 rounded-full bg-accent"
                       initial={{ scale: 1, opacity: 0 }}
-                      whileInView={{ scale: [1, 1.5], opacity: [0.4, 0] }}
+                      whileInView={{ scale: [1, 1.6], opacity: [0.32, 0] }}
                       viewport={{ once: true }}
-                      transition={{
-                        duration: 1.4,
-                        delay: 0.6 + i * 0.15,
-                        ease: "easeOut",
-                      }}
+                      transition={{ duration: 1.4, delay: 0.6 + i * 0.15, ease: "easeOut" }}
                     />
                   </div>
 
-                  <div className="flex-1 pt-0.5">
-                    <h4 className="font-display text-base lg:text-lg font-semibold text-foreground tracking-tight leading-snug">
+                  <div className="flex-1 pt-1.5">
+                    <p className="font-body text-[10px] font-semibold tracking-[0.24em] uppercase tabular-nums text-accent/70 mb-1">
+                      {String(i + 1).padStart(2, "0")} / {String(approachItems.length).padStart(2, "0")}
+                    </p>
+                    <h4 className="font-display text-base lg:text-lg font-semibold text-foreground tracking-tight leading-snug transition-colors duration-300 group-hover:text-accent">
                       {item.title}
                     </h4>
                     <p className="font-body text-[14px] text-muted-foreground leading-relaxed mt-1.5 max-w-prose">

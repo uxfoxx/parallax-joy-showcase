@@ -35,15 +35,9 @@ const BusinessCardPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: profile, isLoading } = useBusinessProfile(slug || "");
 
-  if (isLoading) {
-    return (
-      <Shell>
-        <div className="flex justify-center py-20">
-          <div className="w-8 h-8 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
-        </div>
-      </Shell>
-    );
-  }
+  // No loading indicator — show the branded backdrop silently until the
+  // profile resolves, then render the card (or the not-found state).
+  if (isLoading) return <Shell>{null}</Shell>;
 
   if (!profile || !profile.active) {
     return (
@@ -70,7 +64,7 @@ const BusinessCardPage = () => {
       <Seo
         title={`${profile.name} — ${profile.company}`}
         description={`${profile.name}${profile.title ? `, ${profile.title}` : ""} at ${profile.company}. Save the contact.`}
-        path={`/card/${profile.slug}`}
+        path={`/profile/${profile.slug}`}
         noindex
       />
       <motion.div
