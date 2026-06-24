@@ -248,41 +248,56 @@ const CompanyPhilosophy = () => {
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 gap-4 lg:gap-5">
-            {approachItems.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.55, delay: 0.1 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-6 lg:p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-card"
-              >
-                {/* Oversized ghost index in the corner */}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -top-4 right-2 select-none font-display text-[88px] font-black leading-none tabular-nums text-foreground/[0.045] transition-colors duration-300 group-hover:text-accent/[0.10]"
+          {/* Vertical step rail with icon markers */}
+          <div className="relative">
+            {/* Connecting rail — draws in on scroll */}
+            <motion.span
+              aria-hidden
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              style={{ transformOrigin: "top" }}
+              className="absolute left-[23px] top-6 bottom-6 w-[2px] rounded-full bg-gradient-to-b from-primary via-primary/60 to-primary/10"
+            />
+
+            <ol className="space-y-7">
+              {approachItems.map((item, i) => (
+                <motion.li
+                  key={i}
+                  initial={{ opacity: 0, x: -24 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.55, delay: 0.15 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+                  className="group relative flex items-start gap-5 transition-transform duration-300 hover:translate-x-1.5"
                 >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+                  {/* Icon marker on the rail — fills with accent on hover */}
+                  <div className="relative z-10 shrink-0 flex h-12 w-12 items-center justify-center rounded-full border-[3px] border-background bg-background text-accent shadow-card ring-1 ring-accent/25 transition-colors duration-300 group-hover:bg-accent group-hover:text-white group-hover:ring-accent">
+                    <item.Icon className="h-5 w-5" strokeWidth={1.8} />
+                    <motion.span
+                      aria-hidden
+                      className="absolute inset-0 rounded-full bg-accent"
+                      initial={{ scale: 1, opacity: 0 }}
+                      whileInView={{ scale: [1, 1.6], opacity: [0.32, 0] }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1.4, delay: 0.6 + i * 0.15, ease: "easeOut" }}
+                    />
+                  </div>
 
-                {/* Icon medallion — fills with accent on hover */}
-                <div className="relative mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent ring-1 ring-accent/15 transition-colors duration-300 group-hover:bg-accent group-hover:text-white group-hover:ring-accent">
-                  <item.Icon className="h-5 w-5" strokeWidth={1.8} />
-                </div>
-
-                <h4 className="relative font-display text-lg font-semibold text-foreground tracking-tight leading-snug">
-                  {item.title}
-                </h4>
-
-                {/* Accent rule grows on hover */}
-                <div className="relative mt-3 mb-3 h-[2px] w-8 rounded-full bg-accent/25 transition-all duration-500 group-hover:w-14 group-hover:bg-accent" />
-
-                <p className="relative font-body text-[14px] text-muted-foreground leading-relaxed max-w-prose">
-                  {item.body}
-                </p>
-              </motion.div>
-            ))}
+                  <div className="flex-1 pt-1.5">
+                    <p className="font-body text-[10px] font-semibold tracking-[0.24em] uppercase tabular-nums text-accent/70 mb-1">
+                      {String(i + 1).padStart(2, "0")} / {String(approachItems.length).padStart(2, "0")}
+                    </p>
+                    <h4 className="font-display text-base lg:text-lg font-semibold text-foreground tracking-tight leading-snug transition-colors duration-300 group-hover:text-accent">
+                      {item.title}
+                    </h4>
+                    <p className="font-body text-[14px] text-muted-foreground leading-relaxed mt-1.5 max-w-prose">
+                      {item.body}
+                    </p>
+                  </div>
+                </motion.li>
+              ))}
+            </ol>
           </div>
         </div>
 
