@@ -140,7 +140,7 @@ const AdminBusinessProfilesInner = () => {
     }
   };
 
-  const cardUrl = (slug: string) => `${window.location.origin}/card/${slug}`;
+  const cardUrl = (slug: string) => `${window.location.origin}/profile/${slug}`;
   const copyLink = async (slug: string) => {
     try {
       await navigator.clipboard.writeText(cardUrl(slug));
@@ -156,7 +156,7 @@ const AdminBusinessProfilesInner = () => {
         <div>
           <h1 className="font-display text-2xl font-bold text-foreground">E Business Profiles</h1>
           <p className="font-body text-sm text-muted-foreground mt-1">
-            Digital business cards for staff. Each profile gets a shareable link at <code>/card/&lt;slug&gt;</code>.
+            Digital business cards for staff. Each profile gets a shareable link at <code>/profile/&lt;slug&gt;</code>.
           </p>
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
@@ -218,7 +218,7 @@ const AdminBusinessProfilesInner = () => {
                 <Label className="font-body">Link slug</Label>
                 <Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder={form.name ? slugify(form.name) : "auto from name"} className="font-body" />
                 <p className="font-body text-xs text-muted-foreground mt-1">
-                  Shareable link: <code>/card/{form.slug ? slugify(form.slug) : (form.name ? slugify(form.name) : "…")}</code>. Leave blank to auto-generate.
+                  Shareable link: <code>/profile/{form.slug ? slugify(form.slug) : (form.name ? slugify(form.name) : "…")}</code>. Leave blank to auto-generate.
                 </p>
               </div>
               <div className="flex items-center justify-between rounded-md border border-border p-3">

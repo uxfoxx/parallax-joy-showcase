@@ -1,21 +1,28 @@
 import { motion } from "framer-motion";
-import { Heart, Users, RefreshCw, Shield, ArrowUpRight } from "lucide-react";
+import {
+  Heart, Users, RefreshCw, Shield, ArrowUpRight,
+  Boxes, Headset, Workflow, Handshake, type LucideIcon,
+} from "lucide-react";
 import { useState } from "react";
 
-const approachItems: { title: string; body: string }[] = [
+const approachItems: { title: string; body: string; Icon: LucideIcon }[] = [
   {
+    Icon: Boxes,
     title: "Consistent, dependable supply",
     body: "Stock you can plan against. We don't run out at the wrong moment.",
   },
   {
+    Icon: Headset,
     title: "Professional, personal service",
     body: "One concierge desk per account. Replies within the hour; no call-trees.",
   },
   {
+    Icon: Workflow,
     title: "Structured systems for reliability",
     body: "SOPs across cold-chain and bonded storage so every order ships to the same standard.",
   },
   {
+    Icon: Handshake,
     title: "Flexible terms for trusted partners",
     body: "Credit and timing flexibility for partners we trust, offered as a relationship, not as a sales lever.",
   },
@@ -221,74 +228,61 @@ const CompanyPhilosophy = () => {
           </p>
         </motion.div>
 
-        {/* Our Approach — vertical step rail */}
-        <div className="mb-14">
-          <motion.h3
+        {/* Our Approach — editorial card grid */}
+        <div className="mb-16">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="font-display text-2xl font-bold text-foreground mb-8 tracking-tight"
+            className="mb-9 max-w-2xl"
           >
-            Our Approach
-          </motion.h3>
+            <p className="font-body text-[11px] font-semibold tracking-[0.28em] uppercase text-accent mb-3">
+              How we work
+            </p>
+            <h3 className="font-display text-3xl sm:text-4xl font-bold text-foreground tracking-tight leading-[1.05]">
+              Our <span className="text-gradient-gold">approach</span>
+            </h3>
+            <p className="font-body text-base text-muted-foreground leading-relaxed mt-4">
+              Four commitments that turn a supplier into a partner — the standards behind every order we ship.
+            </p>
+          </motion.div>
 
-          <div className="relative pl-2">
-            {/* Connecting rail — draws in as user scrolls into view */}
-            <motion.span
-              aria-hidden
-              initial={{ scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-              style={{ transformOrigin: "top" }}
-              className="absolute left-[18px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-primary via-primary/60 to-primary/10 rounded-full"
-            />
-
-            <ol className="space-y-7">
-              {approachItems.map((item, i) => (
-                <motion.li
-                  key={i}
-                  initial={{ opacity: 0, x: -24 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{
-                    duration: 0.55,
-                    delay: 0.2 + i * 0.12,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className="relative flex items-start gap-5 group"
+          <div className="grid sm:grid-cols-2 gap-4 lg:gap-5">
+            {approachItems.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.55, delay: 0.1 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-6 lg:p-7 transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-card"
+              >
+                {/* Oversized ghost index in the corner */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -top-4 right-2 select-none font-display text-[88px] font-black leading-none tabular-nums text-foreground/[0.045] transition-colors duration-300 group-hover:text-accent/[0.10]"
                 >
-                  {/* Numbered marker on the rail */}
-                  <div className="relative z-10 shrink-0 w-9 h-9 rounded-full bg-primary text-primary-foreground border-2 border-background flex items-center justify-center shadow-card">
-                    <span className="font-display text-[11px] font-bold tabular-nums">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <motion.span
-                      aria-hidden
-                      className="absolute inset-0 rounded-full bg-primary"
-                      initial={{ scale: 1, opacity: 0 }}
-                      whileInView={{ scale: [1, 1.5], opacity: [0.4, 0] }}
-                      viewport={{ once: true }}
-                      transition={{
-                        duration: 1.4,
-                        delay: 0.6 + i * 0.15,
-                        ease: "easeOut",
-                      }}
-                    />
-                  </div>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
 
-                  <div className="flex-1 pt-0.5">
-                    <h4 className="font-display text-base lg:text-lg font-semibold text-foreground tracking-tight leading-snug">
-                      {item.title}
-                    </h4>
-                    <p className="font-body text-[14px] text-muted-foreground leading-relaxed mt-1.5 max-w-prose">
-                      {item.body}
-                    </p>
-                  </div>
-                </motion.li>
-              ))}
-            </ol>
+                {/* Icon medallion — fills with accent on hover */}
+                <div className="relative mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent ring-1 ring-accent/15 transition-colors duration-300 group-hover:bg-accent group-hover:text-white group-hover:ring-accent">
+                  <item.Icon className="h-5 w-5" strokeWidth={1.8} />
+                </div>
+
+                <h4 className="relative font-display text-lg font-semibold text-foreground tracking-tight leading-snug">
+                  {item.title}
+                </h4>
+
+                {/* Accent rule grows on hover */}
+                <div className="relative mt-3 mb-3 h-[2px] w-8 rounded-full bg-accent/25 transition-all duration-500 group-hover:w-14 group-hover:bg-accent" />
+
+                <p className="relative font-body text-[14px] text-muted-foreground leading-relaxed max-w-prose">
+                  {item.body}
+                </p>
+              </motion.div>
+            ))}
           </div>
         </div>
 
