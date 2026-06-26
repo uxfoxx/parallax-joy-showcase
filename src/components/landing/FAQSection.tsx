@@ -1,4 +1,6 @@
 import { useState, useRef } from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import GoldHairline from "@/components/GoldHairline";
 import SplitText from "@/components/motion/SplitText";
@@ -23,12 +25,8 @@ const faqs = [
     a: "Yes. If you need a brand or product line we don't currently carry, our sourcing team can locate and import it through our supplier network. Tell us what you need.",
   },
   {
-    q: "What are your delivery timelines?",
-    a: "Island-wide delivery in our own temperature-controlled fleet, so timing stays predictable from Colombo to the regions. Lead times for new imports depend on origin; we'll scope timing during the order conversation.",
-  },
-  {
-    q: "What brands do you represent?",
-    a: "We're the exclusive Sri Lankan representatives for a roster of international brands: AZIZAA, Hungritos, Fletcher, Granoro, Daily Dairy, Snorre Foods, Wai Wai, Royal Arm, and more, growing as the catalogue expands.",
+    q: "Do you only sell what's in your catalogue?",
+    a: "No — the catalogue is where we start, not where we stop. Need a product or brand that isn't listed, even one we don't already represent? Our sourcing team will track it down and import it through our global supplier network. Tell us what you're looking for.",
   },
   {
     q: "Do you handle seasonal or one-off requests?",
@@ -87,6 +85,24 @@ const FAQSection = () => {
               <p className="text-muted-foreground font-body text-base leading-relaxed max-w-sm">
                 How sourcing, supply, and delivery work at Olive Foods.
               </p>
+
+              {/* Still-have-a-question CTA */}
+              <Link
+                to="/contact"
+                className="group/cta mt-8 inline-flex items-center gap-4 rounded-2xl border border-border bg-card/50 px-5 py-4 transition-colors duration-300 hover:border-accent/40 hover:bg-accent/[0.04]"
+              >
+                <span className="flex flex-col">
+                  <span className="font-body text-[10px] font-semibold tracking-[0.24em] uppercase text-muted-foreground">
+                    Still curious?
+                  </span>
+                  <span className="font-display text-base font-semibold text-foreground transition-colors group-hover/cta:text-accent">
+                    Talk to our team
+                  </span>
+                </span>
+                <span className="ml-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-white transition-transform duration-300 group-hover/cta:translate-x-1">
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
             </div>
           </motion.div>
 
@@ -99,55 +115,81 @@ const FAQSection = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-10%" }}
                 transition={{ duration: 0.5, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
-                className={`border-b transition-colors duration-300 ${
+                className={`relative border-b transition-colors duration-300 ${
                   openIndex === i ? "border-accent/30" : "border-border"
                 }`}
               >
-                <SpotlightHover className="block rounded-lg">
-                <button
-                  onClick={() => toggle(i)}
-                  className="w-full flex items-center justify-between py-6 text-left group"
+                {/* Active accent rail */}
+                <motion.span
+                  aria-hidden
+                  className="absolute left-0 top-2 bottom-2 w-[2px] origin-top rounded-full bg-accent"
+                  initial={false}
+                  animate={{ scaleY: openIndex === i ? 1 : 0, opacity: openIndex === i ? 1 : 0 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                />
+
+                <SpotlightHover
+                  className={`block rounded-lg transition-colors duration-300 ${
+                    openIndex === i ? "bg-accent/[0.03]" : ""
+                  }`}
                 >
-                  <div className="flex items-center gap-4 pr-4">
-                    <span className={`font-display text-sm font-bold transition-colors duration-300 shrink-0 ${openIndex === i ? "text-accent" : "text-muted-foreground/50"}`}>
-                      {String(i + 1).padStart(2, "0")}.
-                    </span>
-                    <div className="flex flex-col gap-1.5">
-                      <span className={`font-body font-medium text-base transition-colors duration-300 ${openIndex === i ? "text-accent" : "text-foreground group-hover:text-accent"}`}>
-                        {faq.q}
-                      </span>
-                      <GoldHairline width={28} inView className="opacity-70" />
-                    </div>
-                  </div>
-                  <motion.span
-                    animate={{ rotate: openIndex === i ? 45 : 0 }}
-                    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                    className={`flex-shrink-0 w-7 h-7 rounded-md border flex items-center justify-center transition-colors duration-300 text-lg font-light leading-none ${
-                      openIndex === i
-                        ? "border-accent/40 text-accent bg-accent/5"
-                        : "border-border text-muted-foreground group-hover:border-accent/30"
-                    }`}
+                  <button
+                    onClick={() => toggle(i)}
+                    className="w-full flex items-center justify-between py-6 pl-4 pr-2 text-left group"
                   >
-                    +
-                  </motion.span>
-                </button>
-                <AnimatePresence>
-                  {openIndex === i && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pl-10 pb-6">
-                        <p className="font-body text-muted-foreground text-sm leading-relaxed">
-                          {faq.a}
-                        </p>
+                    <div className="flex items-center gap-4 pr-4">
+                      <motion.span
+                        animate={{
+                          color: openIndex === i ? "hsl(var(--accent))" : "hsl(var(--muted-foreground) / 0.5)",
+                          scale: openIndex === i ? 1.1 : 1,
+                        }}
+                        transition={{ duration: 0.3 }}
+                        className="font-display text-sm font-bold shrink-0 tabular-nums origin-left"
+                      >
+                        {String(i + 1).padStart(2, "0")}.
+                      </motion.span>
+                      <div className="flex flex-col gap-1.5">
+                        <span className={`font-body font-medium text-base transition-colors duration-300 ${openIndex === i ? "text-accent" : "text-foreground group-hover:text-accent"}`}>
+                          {faq.q}
+                        </span>
+                        <GoldHairline width={28} inView className="opacity-70" />
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                    </div>
+                    {/* Toggle — "+" spins into "×" and fills accent when open */}
+                    <motion.span
+                      animate={{ rotate: openIndex === i ? 135 : 0 }}
+                      transition={{ type: "spring", stiffness: 320, damping: 20 }}
+                      className={`flex-shrink-0 w-8 h-8 rounded-full border flex items-center justify-center text-xl font-light leading-none transition-colors duration-300 ${
+                        openIndex === i
+                          ? "border-accent bg-accent text-white"
+                          : "border-border text-muted-foreground group-hover:border-accent/40 group-hover:text-accent"
+                      }`}
+                    >
+                      +
+                    </motion.span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {openIndex === i && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <motion.div
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.35, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+                          className="pl-12 pr-6 pb-6"
+                        >
+                          <p className="font-body text-muted-foreground text-sm leading-relaxed">
+                            {faq.a}
+                          </p>
+                        </motion.div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </SpotlightHover>
               </motion.div>
             ))}

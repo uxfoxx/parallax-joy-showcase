@@ -381,6 +381,7 @@ const ProductsPage = () => {
             ? "The range we source and distribute ourselves, quality lines built for the Sri Lankan market."
             : "Browse the complete catalogue of premium food imports from our supplier network across the world."
         }
+        subheading
       />
 
       {/* ── Content ── */}

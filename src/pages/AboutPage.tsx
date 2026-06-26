@@ -198,6 +198,7 @@ const AboutPage = () => {
         eyebrow="Olive Foods / About"
         title={<>Sri Lanka's <span className="text-gradient-gold italic">trusted</span> import partner.</>}
         subtitle="Import, bonded warehousing & distribution, built on thirty-plus years of supplier relationships brought to Sri Lanka's hospitality and retail trade."
+        subheading
       />
 
       <SectionTransition />
