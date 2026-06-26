@@ -9,6 +9,7 @@ import SplitText from "@/components/motion/SplitText";
 import CountUp from "@/components/motion/CountUp";
 import Eyebrow from "@/components/ui/eyebrow";
 import { COUNTRY_SHAPES } from "@/data/countryShapes";
+import { WORLD_STIPPLE } from "@/data/worldStipple";
 
 /**
  * Global Origins — combined sourcing-map + headline stats.
@@ -143,58 +144,26 @@ function labelAnchor(o: Origin): { x: number; y: number; anchor: "start" | "end"
   };
 }
 
-/** Stippled "world" backdrop — pseudo-continents drawn as dot densities.
- *  Not real cartography; gives the map a sense of land vs ocean. The
- *  dots cluster around continent centroids that line up with the eight
- *  origin positions, so the visual ties to the data. */
-const CONTINENT_BLOBS = [
-  // Europe
-  { cx: 524, cy: 120, r: 65, density: 0.65 },
-  // Middle East / N. Africa
-  { cx: 600, cy: 200, r: 55, density: 0.45 },
-  // South Asia
-  { cx: 715, cy: 195, r: 50, density: 0.55 },
-  // East Asia
-  { cx: 800, cy: 165, r: 70, density: 0.6 },
-  // SE Asia
-  { cx: 785, cy: 230, r: 45, density: 0.5 },
-  // Oceania
-  { cx: 870, cy: 320, r: 55, density: 0.45 },
-  // South America
-  { cx: 470, cy: 250, r: 60, density: 0.5 },
-];
-
-const Stipple = () => {
-  const dots: { x: number; y: number; r: number }[] = [];
-  // Deterministic random with a seeded LCG so SSR/CSR match.
-  let seed = 1337;
-  const rand = () => {
-    seed = (seed * 1664525 + 1013904223) % 4294967296;
-    return seed / 4294967296;
-  };
-
-  for (const blob of CONTINENT_BLOBS) {
-    const count = Math.round(blob.r * blob.density * 2.2);
-    for (let i = 0; i < count; i++) {
-      // Polar sample biased toward center for a soft falloff.
-      const angle = rand() * Math.PI * 2;
-      const dist = Math.pow(rand(), 0.6) * blob.r;
-      dots.push({
-        x: blob.cx + Math.cos(angle) * dist,
-        y: blob.cy + Math.sin(angle) * dist,
-        r: 0.6 + rand() * 0.6,
-      });
-    }
-  }
-
-  return (
-    <g fill="hsl(var(--forest-mid) / 0.32)">
-      {dots.map((d, i) => (
-        <circle key={i} cx={d.x} cy={d.y} r={d.r} />
+/** Stippled world backdrop — real Natural-Earth land sampled as dots
+ *  (generated in scripts/generate-country-shapes.mjs → src/data/worldStipple.ts),
+ *  projected into the section's coordinate space so the continents line up
+ *  under the sourcing arcs. Same dotted aesthetic as before, but it now reads
+ *  as a recognisable Eurasia/Africa/Oceania map. A sparse set of slightly
+ *  larger, fainter dots adds depth/texture. */
+const Stipple = () => (
+  <>
+    <g fill="hsl(var(--forest-mid) / 0.30)">
+      {WORLD_STIPPLE.map(([x, y], i) => (
+        <circle key={i} cx={x} cy={y} r={0.62} />
       ))}
     </g>
-  );
-};
+    <g fill="hsl(var(--forest-mid) / 0.16)">
+      {WORLD_STIPPLE.map(([x, y], i) =>
+        i % 6 === 0 ? <circle key={i} cx={x} cy={y} r={1.15} /> : null,
+      )}
+    </g>
+  </>
+);
 
 /** Per-country map silhouette for the info card: forest-filled body with a
  *  gold edge, a one-shot border draw-in, and a pulsing gold sourcing marker.
