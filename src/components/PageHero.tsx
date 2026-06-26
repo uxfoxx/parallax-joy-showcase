@@ -7,6 +7,8 @@ interface PageHeroProps {
   eyebrow: string;
   title: ReactNode;
   subtitle?: string;
+  /** Render the subtitle as a prominent deck/sub-heading instead of a small line. */
+  subheading?: boolean;
   children?: ReactNode;
 }
 
@@ -15,7 +17,7 @@ interface PageHeroProps {
  * Replaces the copy-pasted mesh+noise+orbs pattern with: solid forest, film grain,
  * single gold radial glow top-right, and a drawn-in gold hairline under the eyebrow.
  */
-const PageHero = ({ eyebrow, title, subtitle, children }: PageHeroProps) => {
+const PageHero = ({ eyebrow, title, subtitle, subheading, children }: PageHeroProps) => {
   return (
     <section
       data-navbar-theme="dark"
@@ -75,14 +77,18 @@ const PageHero = ({ eyebrow, title, subtitle, children }: PageHeroProps) => {
           </motion.span>
         </motion.h1>
 
-        {/* Subtitle */}
+        {/* Subtitle — `subheading` renders it as a prominent deck/standfirst */}
         {subtitle && (
           <motion.p
             initial="hidden"
             animate="show"
             custom={0.55}
             variants={softFadeUp}
-            className="font-body text-base md:text-lg text-white/60 leading-relaxed max-w-2xl mt-6"
+            className={
+              subheading
+                ? "font-body text-xl md:text-2xl lg:text-[26px] font-medium text-white/85 leading-snug max-w-3xl mt-5"
+                : "font-body text-base md:text-lg text-white/60 leading-relaxed max-w-2xl mt-6"
+            }
           >
             {subtitle}
           </motion.p>

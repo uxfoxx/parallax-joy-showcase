@@ -14,7 +14,7 @@ const approachItems: { title: string; body: string; Icon: LucideIcon }[] = [
   {
     Icon: Headset,
     title: "Professional, personal service",
-    body: "One concierge desk per account. Replies within the hour; no call-trees.",
+    body: "One dedicated sales rep per account — a single point of contact who knows your business and replies within the hour.",
   },
   {
     Icon: Workflow,
