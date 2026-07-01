@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { useProduct, useProducts, useProductImages } from "@/lib/api";
 import { useProductModal } from "@/lib/productModal";
 import { originToFlag } from "@/lib/flags";
+import { cdnImg } from "@/lib/img";
 
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
@@ -110,8 +111,9 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
               {allImages.length > 0 ? (
                 <motion.img
                   key={activeImage}
-                  src={allImages[activeImage]}
+                  src={cdnImg(allImages[activeImage], 1000)}
                   alt={product.name}
+                  decoding="async"
                   className="w-full h-full object-contain p-6 group-hover:scale-[1.04] transition-transform duration-700 ease-out"
                   initial={{ opacity: 0, scale: 1.03 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -145,7 +147,7 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
                       : "border-border hover:border-accent/50 opacity-55 hover:opacity-100"
                   }`}
                 >
-                  <img src={img} alt="" className="w-full h-full object-cover" />
+                  <img src={cdnImg(img, 120)} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -174,7 +176,7 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
               >
                 <div className="w-16 h-16 rounded-full border border-border bg-background shadow-sm flex items-center justify-center overflow-hidden">
                   {brandLogo ? (
-                    <img src={brandLogo} alt={brandName} className="w-12 h-12 object-contain" />
+                    <img src={cdnImg(brandLogo, 140)} alt={brandName} loading="lazy" decoding="async" className="w-12 h-12 object-contain" />
                   ) : (
                     <span className="font-display text-lg font-bold text-forest-mid">{initials}</span>
                   )}
@@ -279,8 +281,10 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
                       <div className="aspect-square bg-muted/50 overflow-hidden">
                         {p.image_url ? (
                           <img
-                            src={p.image_url}
+                            src={cdnImg(p.image_url, 400)}
                             alt={p.name}
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         ) : (
@@ -349,7 +353,7 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
                         : "border-white/20 hover:border-white/50 opacity-60 hover:opacity-100"
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <img src={cdnImg(img, 120)} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>

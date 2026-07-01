@@ -1,6 +1,7 @@
 import SplitText from "@/components/motion/SplitText";
 import MarqueeRow from "@/components/motion/MarqueeRow";
 import { usePartnerLogos } from "@/lib/api";
+import { cdnImg } from "@/lib/img";
 
 /**
  * "Our Clients" — velocity-reactive marquee of client/partner logos.
@@ -33,9 +34,11 @@ const LogoStrip = () => {
                 "group flex-shrink-0 flex items-center justify-center h-16 md:h-[130px] px-8 md:px-10";
               const inner = (
                 <img
-                  src={logo.image_url}
+                  src={cdnImg(logo.image_url, 320)}
                   alt={`${logo.name} logo`}
                   loading="lazy"
+                  decoding="async"
+                  height={120}
                   className="h-[120px] w-auto max-w-[180px] object-contain filter brightness-0 invert opacity-70 group-hover:opacity-100 transition-all duration-500 group-hover:scale-[1.04]"
                 />
               );

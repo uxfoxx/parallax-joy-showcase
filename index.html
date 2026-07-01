@@ -10,6 +10,18 @@
          description/canonical/OG here too would duplicate them on every route. -->
     <title>Olive Foods — Premium Food Importer & Distributor, Sri Lanka</title>
 
+    <!-- Warm up the TLS handshakes to Supabase (images + data) and Google
+         Fonts so they overlap with HTML parsing instead of blocking later. -->
+    <link rel="preconnect" href="https://vqvspkuhqthvbtsgfgbo.supabase.co" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fonts loaded here (not via a render-blocking CSS @import) so the
+         request starts during HTML parse. display=swap avoids invisible text. -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+    />
+
   <!-- Preload the hero background photo so the browser starts fetching
        it before the JS bundle parses + React mounts the hero. Without
        this the signed-URL request only fires after first render and the

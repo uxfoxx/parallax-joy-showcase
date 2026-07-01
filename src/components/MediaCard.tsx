@@ -5,6 +5,7 @@ import Tilt from "react-parallax-tilt";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import { staggerGrid, EASE_OUT_EXPO } from "@/lib/motion";
 import CurtainImage from "@/components/motion/CurtainImage";
+import { cdnImg } from "@/lib/img";
 
 type MediaCardProps = {
   /** Navigate to a URL — mutually exclusive with `onClick`. */
@@ -77,7 +78,7 @@ const MediaCard = ({
                 imageInset ? "absolute inset-6 md:inset-8" : "absolute inset-0"
               }
               wrapperStyle={{ width: "auto", height: "auto" }}
-              src={image}
+              src={cdnImg(image, 600)}
               alt={title}
               onLoad={() => setImgLoaded(true)}
               className={`absolute inset-0 w-full h-full object-scale-down transition-transform duration-[900ms] ease-out group-hover:scale-[1.06] ${

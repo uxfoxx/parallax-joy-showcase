@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/api";
 import { originToFlag } from "@/lib/flags";
+import { cdnImg } from "@/lib/img";
 
 interface ProductQuickViewProps {
   product: Product | null;
@@ -46,8 +47,9 @@ const ProductQuickView = ({ product, open, onOpenChange }: ProductQuickViewProps
           <div className="relative aspect-[16/9] bg-muted overflow-hidden">
             {product.image_url ? (
               <img
-                src={product.image_url}
+                src={cdnImg(product.image_url, 900)}
                 alt={product.name}
+                decoding="async"
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -79,8 +81,10 @@ const ProductQuickView = ({ product, open, onOpenChange }: ProductQuickViewProps
                   >
                     {product.brands?.image_url && (
                       <img
-                        src={product.brands.image_url}
+                        src={cdnImg(product.brands.image_url, 48)}
                         alt=""
+                        loading="lazy"
+                        decoding="async"
                         className="w-5 h-5 rounded-full object-contain border border-border bg-background"
                       />
                     )}
