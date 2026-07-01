@@ -16,6 +16,20 @@
 # RewriteEngine silently no-ops and deep-links fall through to a 404.
 Options +FollowSymLinks -MultiViews
 
+# ── Compression ────────────────────────────────────────────────────────────
+# Brotli first (LiteSpeed / newer Apache), gzip fallback. Shrinks the JS/CSS
+# bundle ~70% over the wire — the single biggest transfer win.
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/css \
+    text/javascript application/javascript application/json application/xml \
+    image/svg+xml application/manifest+json
+</IfModule>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css \
+    text/javascript application/javascript application/json application/xml \
+    image/svg+xml application/manifest+json application/x-font-ttf font/otf
+</IfModule>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
@@ -45,12 +59,33 @@ Options +FollowSymLinks -MultiViews
 # Explicit 404 fallback in case mod_rewrite is unavailable on this host.
 ErrorDocument 404 /index.html
 
-# Make sure the static asset cache is sane for hashed Vite chunks.
+# ── Cache-Control ──────────────────────────────────────────────────────────
 <IfModule mod_headers.c>
-  <FilesMatch "\.(js|css|woff2?|png|jpg|jpeg|gif|svg|webp|avif)$">
+  # Content-hashed Vite build assets never change for a given URL → cache a
+  # year, immutable.
+  <FilesMatch "\.(js|mjs|css|woff2?|ttf|otf|eot)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
+  # Static images/media aren't content-hashed → long but revalidatable, so a
+  # swapped asset can still refresh (not pinned for a year).
+  <FilesMatch "\.(png|jpe?g|gif|webp|avif|svg|ico|mp4|webmanifest)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  # HTML must always revalidate so a new deploy is picked up immediately.
   <FilesMatch "\.html$">
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
+</IfModule>
+
+# Fallback TTLs for hosts with mod_expires but not mod_headers.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType text/html "access plus 0 seconds"
 </IfModule>

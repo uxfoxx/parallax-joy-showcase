@@ -25,11 +25,14 @@ const CurtainImage = ({
   // Default to an empty string so the image is treated as decorative
   // when the caller forgets to set one — keeps the markup a11y-clean.
   const a11yAlt = alt ?? "";
+  // Defer offscreen decode/fetch unless the caller opts out.
+  const { loading = "lazy", decoding = "async", ...rest } = imgProps;
+  const imgAttrs = { loading, decoding, ...rest };
 
   if (reduced) {
     return (
       <div className={wrapperClassName} style={wrapperStyle}>
-        <img className={className} alt={a11yAlt} {...imgProps} />
+        <img className={className} alt={a11yAlt} {...imgAttrs} />
       </div>
     );
   }
@@ -43,7 +46,7 @@ const CurtainImage = ({
       viewport={{ once: !retrigger, margin: "-10%" }}
       variants={curtainRevealVariants}
     >
-      <img className={className} alt={a11yAlt} {...imgProps} />
+      <img className={className} alt={a11yAlt} {...imgAttrs} />
     </motion.div>
   );
 };

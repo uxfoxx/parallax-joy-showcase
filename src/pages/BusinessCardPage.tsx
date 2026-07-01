@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Phone, MessageCircle, Mail, Download, Building2 } from "lucide-react";
 import { useBusinessProfile } from "@/lib/api";
 import { downloadVCard } from "@/lib/vcard";
+import { cdnImg } from "@/lib/img";
 import Seo from "@/components/Seo";
 import oliveMark from "@/assets/olive-mark.svg";
 
@@ -82,7 +83,7 @@ const BusinessCardPage = () => {
           {/* Photo */}
           <div className="mx-auto h-24 w-24 rounded-full border-4 border-forest-deep bg-forest-mid overflow-hidden shadow-lg flex items-center justify-center">
             {profile.photo_url ? (
-              <img src={profile.photo_url} alt={profile.name} className="h-full w-full object-cover" />
+              <img src={cdnImg(profile.photo_url, 320)} alt={profile.name} decoding="async" className="h-full w-full object-cover" />
             ) : (
               <span className="font-display text-2xl font-bold text-white">{initials}</span>
             )}
