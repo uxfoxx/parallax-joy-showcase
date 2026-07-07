@@ -8,11 +8,13 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Pencil, Trash2, Search, ImagePlus, X, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, ImagePlus, X, Loader2, Crop } from "lucide-react";
 import { toast } from "sonner";
 import ImageUploadField from "@/components/admin/ImageUploadField";
+import ImageCropDialog from "@/components/admin/ImageCropDialog";
+import BatchCropDialog from "@/components/admin/BatchCropDialog";
+import { cdnImg } from "@/lib/img";
 import { uploadImage } from "@/lib/upload";
 import PaginationControls from "@/components/PaginationControls";
 import XlsxSyncBar from "@/components/admin/XlsxSyncBar";
@@ -158,6 +160,85 @@ const productColumns: SheetColumn<keyof ProductRow & string>[] = [
   { key: "image_url",   header: "Image URL",   sample: "https://…/image.jpg" },
 ];
 
+/* Public-style product card with admin actions (edit / crop / delete). */
+const AdminProductCard = ({
+  p,
+  onEdit,
+  onCrop,
+  onDelete,
+}: {
+  p: Product;
+  onEdit: () => void;
+  onCrop: () => void;
+  onDelete: () => void;
+}) => (
+  <div className="group relative overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition-shadow hover:shadow-md">
+    <button type="button" onClick={onEdit} className="relative block aspect-[4/5] w-full bg-white text-left">
+      {p.image_url ? (
+        <img
+          src={cdnImg(p.image_url, 600)}
+          alt={p.name}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-scale-down p-2"
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center bg-muted/40">
+          <ImagePlus className="h-8 w-8 text-muted-foreground/40" />
+        </div>
+      )}
+      <div className="absolute left-2 top-2 flex flex-col gap-1">
+        {p.featured && <Badge className="h-4 border-0 bg-accent px-1.5 py-0 text-[9px] text-white">Featured</Badge>}
+        {(p as any).our_product && <Badge className="h-4 border-0 bg-forest-deep px-1.5 py-0 text-[9px] text-white">Our</Badge>}
+        {(p as any).premium && <Badge className="h-4 border-0 bg-accent/80 px-1.5 py-0 text-[9px] text-white">Premium</Badge>}
+      </div>
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-2 pt-6">
+        <p className="font-body text-xs font-semibold leading-snug text-white line-clamp-2">{p.name}</p>
+        <p className="font-body text-[10px] text-white/70 line-clamp-1">{p.brands?.name ?? p.category}</p>
+      </div>
+    </button>
+
+    <div className="flex items-center gap-1 border-t border-border bg-card px-2 py-1.5">
+      <button
+        type="button"
+        onClick={onEdit}
+        className="inline-flex h-7 flex-1 items-center justify-center gap-1 rounded-md font-body text-xs text-muted-foreground transition-colors hover:bg-accent/5 hover:text-accent"
+      >
+        <Pencil className="h-3.5 w-3.5" /> Edit
+      </button>
+      <button
+        type="button"
+        onClick={onCrop}
+        disabled={!p.image_url}
+        className="inline-flex h-7 flex-1 items-center justify-center gap-1 rounded-md font-body text-xs text-muted-foreground transition-colors hover:bg-accent/5 hover:text-accent disabled:opacity-40"
+      >
+        <Crop className="h-3.5 w-3.5" /> Crop
+      </button>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <button
+            type="button"
+            className="inline-flex h-7 w-7 items-center justify-center rounded-md text-destructive transition-colors hover:bg-destructive/10"
+            aria-label={`Delete ${p.name}`}
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete {p.name}?</AlertDialogTitle>
+            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={onDelete}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  </div>
+);
+
 const AdminProducts = () => {
   const { data: products, isLoading } = useProducts();
   const { data: brands } = useBrands();
@@ -171,11 +252,14 @@ const AdminProducts = () => {
   const [editing, setEditing] = useState<Product | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [imagePopupUrl, setImagePopupUrl] = useState<string | null>(null);
+  const [cropProduct, setCropProduct] = useState<Product | null>(null);
+  const [batchOpen, setBatchOpen] = useState(false);
 
   const filtered = products?.filter((p) => p.name.toLowerCase().includes(search.toLowerCase())) ?? [];
+  const withImages = (products ?? []).filter((p) => p.image_url);
 
   // ── Client-side pagination ──
-  const PAGE_SIZE = 12;
+  const PAGE_SIZE = 20;
   const [page, setPage] = useState(1);
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -219,6 +303,14 @@ const AdminProducts = () => {
       setOpen(false);
     } catch (err: any) {
       toast.error(err.message);
+    }
+  };
+
+  const handleCardCrop = async (id: string, url: string) => {
+    try {
+      await updateProduct.mutateAsync({ id, image_url: url } as any);
+    } catch (err: any) {
+      toast.error(err.message ?? "Could not update the image.");
     }
   };
 
@@ -330,6 +422,15 @@ const AdminProducts = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl font-bold text-foreground">Products</h1>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setBatchOpen(true)}
+            disabled={withImages.length === 0}
+            className="gap-2 font-body"
+          >
+            <Crop className="w-4 h-4" /> Crop all{withImages.length ? ` (${withImages.length})` : ""}
+          </Button>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button onClick={openCreate} className="gap-2 font-body"><Plus className="w-4 h-4" /> Add Product</Button>
@@ -390,6 +491,7 @@ const AdminProducts = () => {
             </div>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       <XlsxSyncBar
@@ -406,64 +508,23 @@ const AdminProducts = () => {
         <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search products..." className="pl-10 font-body" />
       </div>
 
-      <div className="rounded-lg border border-border bg-card">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="font-body w-14">Image</TableHead>
-              <TableHead className="font-body">Name</TableHead>
-              <TableHead className="font-body">Brand</TableHead>
-              <TableHead className="font-body">Category</TableHead>
-              <TableHead className="font-body">Featured</TableHead>
-              <TableHead className="font-body">Our Product</TableHead>
-              <TableHead className="font-body">Premium</TableHead>
-              <TableHead className="font-body w-24">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow><TableCell colSpan={8} className="text-center font-body text-muted-foreground py-10">Loading...</TableCell></TableRow>
-            ) : filtered.length === 0 ? (
-              <TableRow><TableCell colSpan={8} className="text-center font-body text-muted-foreground py-10">No products found</TableCell></TableRow>
-            ) : (
-              paginated.map((p) => (
-                <TableRow key={p.id}>
-                  <TableCell>
-                    {p.image_url ? (
-                      <button
-                        onClick={() => setImagePopupUrl(p.image_url)}
-                        className="h-10 w-10 rounded-md object-cover cursor-pointer hover:opacity-80 transition-opacity"
-                      >
-                        <img src={p.image_url} alt={p.name} className="h-10 w-10 rounded-md object-cover" />
-                      </button>
-                    ) : (
-                      <div className="h-10 w-10 rounded-md bg-muted" />
-                    )}
-                  </TableCell>
-                  <TableCell className="font-body font-medium">{p.name}</TableCell>
-                  <TableCell className="font-body text-muted-foreground">{p.brands?.name ?? "—"}</TableCell>
-                  <TableCell><Badge variant="outline" className="font-body text-xs">{p.category}</Badge></TableCell>
-                  <TableCell>{p.featured ? <Badge className="bg-accent text-white font-body text-xs">Yes</Badge> : <span className="font-body text-muted-foreground text-xs">No</span>}</TableCell>
-                  <TableCell>{(p as any).our_product ? <Badge className="bg-forest-deep text-white font-body text-xs">Yes</Badge> : <span className="font-body text-muted-foreground text-xs">No</span>}</TableCell>
-                  <TableCell>{(p as any).premium ? <Badge className="bg-accent text-white font-body text-xs">Yes</Badge> : <span className="font-body text-muted-foreground text-xs">No</span>}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="icon" onClick={() => openEdit(p)}><Pencil className="w-4 h-4" /></Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild><Button variant="ghost" size="icon" className="text-destructive"><Trash2 className="w-4 h-4" /></Button></AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader><AlertDialogTitle>Delete {p.name}?</AlertDialogTitle><AlertDialogDescription>This action cannot be undone.</AlertDialogDescription></AlertDialogHeader>
-                          <AlertDialogFooter><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction onClick={() => handleDelete(p.id)}>Delete</AlertDialogAction></AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      {isLoading ? (
+        <p className="text-center font-body text-muted-foreground py-16">Loading…</p>
+      ) : filtered.length === 0 ? (
+        <p className="text-center font-body text-muted-foreground py-16">No products found</p>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+          {paginated.map((p) => (
+            <AdminProductCard
+              key={p.id}
+              p={p}
+              onEdit={() => openEdit(p)}
+              onCrop={() => setCropProduct(p)}
+              onDelete={() => handleDelete(p.id)}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Pagination + count */}
       {filtered.length > 0 && (
@@ -489,6 +550,25 @@ const AdminProducts = () => {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Per-card crop */}
+      <ImageCropDialog
+        src={cropProduct?.image_url ?? null}
+        open={!!cropProduct}
+        onOpenChange={(o) => { if (!o) setCropProduct(null); }}
+        folder="product-images"
+        defaultAspect={4 / 5}
+        onCropped={(url) => { if (cropProduct) handleCardCrop(cropProduct.id, url); }}
+      />
+
+      {/* Batch "Crop all" — sequential */}
+      <BatchCropDialog
+        products={withImages.map((p) => ({ id: p.id, name: p.name, image_url: p.image_url as string }))}
+        folder="product-images"
+        open={batchOpen}
+        onOpenChange={setBatchOpen}
+        onDone={() => qc.invalidateQueries({ queryKey: ["products"] })}
+      />
     </div>
   );
 };

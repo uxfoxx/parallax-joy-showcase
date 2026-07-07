@@ -1,12 +1,14 @@
 import { useCallback, useState } from "react";
 import Cropper, { type Area } from "react-easy-crop";
-import { ZoomIn, ZoomOut, Loader2, RotateCw } from "lucide-react";
+import { ZoomIn, ZoomOut, Loader2, RotateCw, Ruler } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
 import { getCroppedFile } from "@/lib/cropImage";
 import { uploadImage } from "@/lib/upload";
+import { useCropGuides } from "@/hooks/useCropGuides";
+import CropGuides from "@/components/admin/CropGuides";
 
 type AspectOption = { label: string; value: number | undefined };
 
@@ -51,6 +53,7 @@ const ImageCropDialog = ({
   const [aspect, setAspect] = useState<number | undefined>(defaultAspect);
   const [areaPixels, setAreaPixels] = useState<Area | null>(null);
   const [saving, setSaving] = useState(false);
+  const { guides, setGuide, show, setShow } = useCropGuides();
 
   const onCropComplete = useCallback((_area: Area, areaPx: Area) => {
     setAreaPixels(areaPx);
@@ -103,6 +106,7 @@ const ImageCropDialog = ({
               restrictPosition={false}
             />
           )}
+          <CropGuides guides={guides} setGuide={setGuide} show={show} />
         </div>
 
         {/* Controls */}
@@ -126,8 +130,17 @@ const ImageCropDialog = ({
             ))}
             <button
               type="button"
+              onClick={() => setShow(!show)}
+              className={`font-body text-xs px-3 h-8 rounded-md border inline-flex items-center gap-1 ml-auto transition-colors ${
+                show ? "border-accent text-accent bg-accent/5" : "border-border text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Ruler className="w-3.5 h-3.5" /> Guides
+            </button>
+            <button
+              type="button"
               onClick={() => setRotation((r) => (r + 90) % 360)}
-              className="font-body text-xs px-3 h-8 rounded-md border border-border text-muted-foreground hover:text-foreground inline-flex items-center gap-1 ml-auto"
+              className="font-body text-xs px-3 h-8 rounded-md border border-border text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
             >
               <RotateCw className="w-3.5 h-3.5" /> Rotate
             </button>
