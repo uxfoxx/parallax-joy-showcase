@@ -255,7 +255,17 @@ const AdminProducts = () => {
   const [cropProduct, setCropProduct] = useState<Product | null>(null);
   const [batchOpen, setBatchOpen] = useState(false);
 
-  const filtered = products?.filter((p) => p.name.toLowerCase().includes(search.toLowerCase())) ?? [];
+  const filtered = products?.filter((p) => {
+    const q = search.toLowerCase();
+    if (!q) return true;
+    return (
+      p.name.toLowerCase().includes(q) ||
+      (p.brands?.name ?? "").toLowerCase().includes(q) ||
+      (p.category ?? "").toLowerCase().includes(q) ||
+      (p.sku ?? "").toLowerCase().includes(q) ||
+      (p.tags ?? []).some((t) => t.toLowerCase().includes(q))
+    );
+  }) ?? [];
   const withImages = (products ?? []).filter((p) => p.image_url);
 
   // ── Client-side pagination ──
@@ -529,7 +539,7 @@ const AdminProducts = () => {
 
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search products..." className="pl-10 font-body" />
+        <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by name, brand, category, SKU, tag..." className="pl-10 font-body" />
       </div>
 
       {isLoading ? (
