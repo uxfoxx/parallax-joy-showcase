@@ -22,7 +22,7 @@ import { parseBool, parseCommaList, type SheetColumn } from "@/lib/xlsxSheet";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 
-const emptyForm = { name: "", slug: "", brand_id: "", category: "", description: "", featured: false, our_product: false, premium: false, tags: "" as string, origin: "", sku: "", image_url: "" };
+const emptyForm = { name: "", slug: "", brand_id: "", categories: [] as string[], description: "", featured: false, our_product: false, premium: false, tags: "" as string, origin: "", sku: "", image_url: "" };
 
 const ProductImagesManager = ({ productId }: { productId: string }) => {
   const { data: images = [] } = useProductImages(productId);
@@ -273,8 +273,16 @@ const AdminProducts = () => {
   const openCreate = () => { setEditing(null); setForm(emptyForm); setOpen(true); };
   const openEdit = (p: Product) => {
     setEditing(p);
-    setForm({ name: p.name, slug: p.slug, brand_id: p.brand_id, category: p.category, description: p.description, featured: p.featured, our_product: (p as any).our_product ?? false, premium: (p as any).premium ?? false, tags: (p.tags ?? []).join(", "), origin: p.origin, sku: p.sku, image_url: p.image_url ?? "" });
+    const cats = (p as any).categories?.length ? (p as any).categories : p.category ? [p.category] : [];
+    setForm({ name: p.name, slug: p.slug, brand_id: p.brand_id, categories: cats, description: p.description, featured: p.featured, our_product: (p as any).our_product ?? false, premium: (p as any).premium ?? false, tags: (p.tags ?? []).join(", "), origin: p.origin, sku: p.sku, image_url: p.image_url ?? "" });
     setOpen(true);
+  };
+
+  const toggleFormCategory = (name: string) => {
+    setForm((f) => ({
+      ...f,
+      categories: f.categories.includes(name) ? f.categories.filter((c) => c !== name) : [...f.categories, name],
+    }));
   };
 
   const handleSave = async () => {
@@ -283,7 +291,8 @@ const AdminProducts = () => {
         name: form.name,
         slug: form.slug || form.name.toLowerCase().replace(/\s+/g, "-"),
         brand_id: form.brand_id,
-        category: form.category,
+        category: form.categories[0] ?? "",
+        categories: form.categories,
         description: form.description,
         featured: form.featured,
         our_product: form.our_product,
@@ -448,11 +457,26 @@ const AdminProducts = () => {
                 </Select>
               </div>
               <div>
-                <Label className="font-body">Category</Label>
-                <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
-                  <SelectTrigger className="font-body"><SelectValue placeholder="Select category" /></SelectTrigger>
-                  <SelectContent>{categories?.map((c) => <SelectItem key={c.id} value={c.name} className="font-body">{c.name}</SelectItem>)}</SelectContent>
-                </Select>
+                <Label className="font-body">Categories (select one or more)</Label>
+                <div className="flex flex-wrap gap-1.5 mt-1.5">
+                  {categories?.map((c) => {
+                    const active = form.categories.includes(c.name);
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => toggleFormCategory(c.name)}
+                        className={`font-body text-xs px-2.5 h-7 rounded-full border transition-colors ${
+                          active
+                            ? "border-accent bg-accent text-white"
+                            : "border-border text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        {c.name}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
               <div><Label className="font-body">Description</Label><RichTextEditor value={form.description} onChange={(html) => setForm({ ...form, description: html })} /></div>
               <div className="grid grid-cols-2 gap-4">

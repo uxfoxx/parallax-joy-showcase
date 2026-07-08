@@ -76,7 +76,7 @@ export const useProducts = (filters?: { category?: string; brandSlug?: string })
     queryKey: ["products", filters],
     queryFn: async () => {
       let query = supabase.from("products").select("*, brands(*)").order("name");
-      if (filters?.category) query = query.eq("category", filters.category);
+      if (filters?.category) query = query.contains("categories", [filters.category]);
       if (filters?.brandSlug) {
         const { data: brand } = await supabase.from("brands").select("id").eq("slug", filters.brandSlug).single();
         if (brand) query = query.eq("brand_id", brand.id);
