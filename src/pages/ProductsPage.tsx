@@ -63,7 +63,7 @@ const FilterPanel = ({
   const catCounts = useMemo(
     () =>
       Object.fromEntries(
-        categories.map((c) => [c.name, allProducts.filter((p) => p.category === c.name).length])
+        categories.map((c) => [c.name, allProducts.filter((p) => ((p as any).categories?.length ? (p as any).categories : [p.category]).includes(c.name)).length])
       ),
     [categories, allProducts]
   );
@@ -324,7 +324,10 @@ const ProductsPage = () => {
 
     // Category multi-select
     if (selectedCategories.length > 0)
-      results = results.filter((p) => selectedCategories.includes(p.category));
+      results = results.filter((p) => {
+        const cats: string[] = (p as any).categories?.length ? (p as any).categories : [p.category];
+        return cats.some((c) => selectedCategories.includes(c));
+      });
 
     // Brand multi-select (compare by slug via joined brands object)
     if (selectedBrands.length > 0)

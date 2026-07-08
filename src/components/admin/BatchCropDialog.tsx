@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
-import Cropper, { type Area } from "react-easy-crop";
-import { ZoomIn, ZoomOut, Loader2, RotateCw, Ruler, SkipForward } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Cropper, { type Area, type MediaSize } from "react-easy-crop";
+import { ZoomIn, ZoomOut, Loader2, RotateCw, Ruler, SkipForward, AlignCenter, AlignStartVertical, AlignEndVertical, AlignStartHorizontal, AlignEndHorizontal } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -10,6 +10,7 @@ import { uploadImage } from "@/lib/upload";
 import { useUpdateProduct } from "@/lib/api";
 import { useCropGuides } from "@/hooks/useCropGuides";
 import CropGuides from "@/components/admin/CropGuides";
+import { computeAlignedCrop, type AlignSide } from "@/lib/cropAlign";
 
 export type BatchItem = { id: string; name: string; image_url: string };
 
@@ -59,6 +60,15 @@ const BatchCropDialog = ({ products, folder, open, onOpenChange, onDone }: Props
   const [areaPixels, setAreaPixels] = useState<Area | null>(null);
   const [saving, setSaving] = useState(false);
   const [savedCount, setSavedCount] = useState(0);
+  const mediaSizeRef = useRef<MediaSize | null>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  const align = (side: AlignSide) => {
+    const media = mediaSizeRef.current;
+    const el = stageRef.current;
+    if (!media || !el) return;
+    setCrop(computeAlignedCrop(side, media, zoom, el.getBoundingClientRect()));
+  };
 
   // Reset the transient crop state (but keep guides + aspect) on open + per image.
   useEffect(() => {
@@ -139,7 +149,7 @@ const BatchCropDialog = ({ products, folder, open, onOpenChange, onDone }: Props
         </DialogHeader>
 
         {/* Crop stage */}
-        <div className="relative h-[340px] bg-[hsl(150_20%_10%)]">
+        <div ref={stageRef} className="relative h-[340px] bg-[hsl(150_20%_10%)]">
           <Cropper
             key={current.id}
             image={current.image_url}
@@ -151,14 +161,40 @@ const BatchCropDialog = ({ products, folder, open, onOpenChange, onDone }: Props
             onZoomChange={setZoom}
             onRotationChange={setRotation}
             onCropComplete={onCropComplete}
+            onMediaLoaded={(m) => { mediaSizeRef.current = m; }}
             showGrid
             restrictPosition={false}
+            minZoom={0.3}
+            maxZoom={4}
           />
           <CropGuides guides={guides} setGuide={setGuide} show={show} />
         </div>
 
         {/* Controls */}
         <div className="px-5 py-4 space-y-4">
+          {/* Quick alignment */}
+          <div className="flex items-center gap-2">
+            <span className="font-body text-xs text-muted-foreground mr-1">Align</span>
+            {([
+              ["center", AlignCenter, "Center"],
+              ["left", AlignStartVertical, "Left"],
+              ["right", AlignEndVertical, "Right"],
+              ["top", AlignStartHorizontal, "Top"],
+              ["bottom", AlignEndHorizontal, "Bottom"],
+            ] as [AlignSide, typeof AlignCenter, string][]).map(([side, Icon, label]) => (
+              <button
+                key={side}
+                type="button"
+                onClick={() => align(side)}
+                aria-label={label}
+                title={label}
+                className="w-8 h-8 rounded-md border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-accent/50 shrink-0"
+              >
+                <Icon className="w-4 h-4" />
+              </button>
+            ))}
+          </div>
+
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-body text-xs text-muted-foreground mr-1">Ratio</span>
             {ASPECTS.map((a) => (
@@ -196,13 +232,13 @@ const BatchCropDialog = ({ products, folder, open, onOpenChange, onDone }: Props
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={() => setZoom((z) => Math.max(1, +(z - 0.2).toFixed(2)))}
+              onClick={() => setZoom((z) => Math.max(0.3, +(z - 0.2).toFixed(2)))}
               className="w-8 h-8 rounded-md border border-border flex items-center justify-center text-muted-foreground hover:text-foreground shrink-0"
               aria-label="Zoom out"
             >
               <ZoomOut className="w-4 h-4" />
             </button>
-            <Slider value={[zoom]} min={1} max={4} step={0.01} onValueChange={([v]) => setZoom(v)} className="flex-1" />
+            <Slider value={[zoom]} min={0.3} max={4} step={0.01} onValueChange={([v]) => setZoom(v)} className="flex-1" />
             <button
               type="button"
               onClick={() => setZoom((z) => Math.min(4, +(z + 0.2).toFixed(2)))}
