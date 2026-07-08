@@ -585,8 +585,10 @@ const AdminProducts = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Per-card crop */}
+      {/* Per-card crop — remounts per product so zoom/pan/rotation start fresh,
+          while the alignment guides (persisted in localStorage) carry over. */}
       <ImageCropDialog
+        key={cropProduct?.id ?? "none"}
         src={cropProduct?.image_url ?? null}
         open={!!cropProduct}
         onOpenChange={(o) => { if (!o) setCropProduct(null); }}
