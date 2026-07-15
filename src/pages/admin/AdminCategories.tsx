@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Home } from "lucide-react";
 import { toast } from "sonner";
 import XlsxSyncBar from "@/components/admin/XlsxSyncBar";
 import type { SheetColumn } from "@/lib/xlsxSheet";
@@ -30,23 +31,46 @@ const AdminCategories = () => {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Category | null>(null);
-  const [form, setForm] = useState({ name: "", description: "" });
+  const [form, setForm] = useState({ name: "", description: "", homepage_featured: false, homepage_order: 0 });
 
   const filtered = categories?.filter((c) => c.name.toLowerCase().includes(search.toLowerCase())) ?? [];
 
-  const openCreate = () => { setEditing(null); setForm({ name: "", description: "" }); setOpen(true); };
-  const openEdit = (c: Category) => { setEditing(c); setForm({ name: c.name, description: c.description ?? "" }); setOpen(true); };
+  const openCreate = () => { setEditing(null); setForm({ name: "", description: "", homepage_featured: false, homepage_order: 0 }); setOpen(true); };
+  const openEdit = (c: Category) => {
+    setEditing(c);
+    setForm({
+      name: c.name,
+      description: c.description ?? "",
+      homepage_featured: (c as any).homepage_featured ?? false,
+      homepage_order: (c as any).homepage_order ?? 0,
+    });
+    setOpen(true);
+  };
 
   const handleSave = async () => {
     try {
+      const payload = {
+        name: form.name,
+        description: form.description || null,
+        homepage_featured: form.homepage_featured,
+        homepage_order: form.homepage_order,
+      } as any;
       if (editing) {
-        await updateCategory.mutateAsync({ id: editing.id, name: form.name, description: form.description || null });
+        await updateCategory.mutateAsync({ id: editing.id, ...payload });
         toast.success("Category updated");
       } else {
-        await createCategory.mutateAsync({ name: form.name, description: form.description || null });
+        await createCategory.mutateAsync(payload);
         toast.success("Category created");
       }
       setOpen(false);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  const toggleHomepage = async (c: Category, next: boolean) => {
+    try {
+      await updateCategory.mutateAsync({ id: c.id, homepage_featured: next } as any);
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -74,6 +98,22 @@ const AdminCategories = () => {
             <div className="space-y-4">
               <div><Label className="font-body">Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="font-body" /></div>
               <div><Label className="font-body">Description</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="font-body" /></div>
+              <div className="flex items-center gap-3">
+                <Switch checked={form.homepage_featured} onCheckedChange={(v) => setForm({ ...form, homepage_featured: v })} />
+                <Label className="font-body">Show on homepage</Label>
+              </div>
+              {form.homepage_featured && (
+                <div>
+                  <Label className="font-body">Homepage position</Label>
+                  <Input
+                    type="number"
+                    value={form.homepage_order}
+                    onChange={(e) => setForm({ ...form, homepage_order: Number(e.target.value) || 0 })}
+                    className="font-body"
+                  />
+                  <p className="text-xs text-muted-foreground font-body mt-1">Lower numbers show first. The homepage shows the first 5 featured categories.</p>
+                </div>
+              )}
               <Button onClick={handleSave} className="w-full font-body">{editing ? "Update" : "Create"}</Button>
             </div>
           </DialogContent>
@@ -128,19 +168,32 @@ const AdminCategories = () => {
             <TableRow>
               <TableHead className="font-body">Name</TableHead>
               <TableHead className="font-body">Description</TableHead>
+              <TableHead className="font-body w-32">Homepage</TableHead>
               <TableHead className="font-body w-24">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableRow><TableCell colSpan={3} className="text-center font-body text-muted-foreground py-10">Loading...</TableCell></TableRow>
+              <TableRow><TableCell colSpan={4} className="text-center font-body text-muted-foreground py-10">Loading...</TableCell></TableRow>
             ) : filtered.length === 0 ? (
-              <TableRow><TableCell colSpan={3} className="text-center font-body text-muted-foreground py-10">No categories found</TableCell></TableRow>
+              <TableRow><TableCell colSpan={4} className="text-center font-body text-muted-foreground py-10">No categories found</TableCell></TableRow>
             ) : (
               filtered.map((c) => (
                 <TableRow key={c.id}>
                   <TableCell className="font-body font-medium">{c.name}</TableCell>
                   <TableCell className="font-body text-muted-foreground">{c.description ?? "—"}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Switch
+                        checked={(c as any).homepage_featured ?? false}
+                        onCheckedChange={(v) => toggleHomepage(c, v)}
+                        aria-label={`Show ${c.name} on homepage`}
+                      />
+                      {(c as any).homepage_featured && (
+                        <Home className="w-3.5 h-3.5 text-accent" />
+                      )}
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <div className="flex gap-1">
                       <Button variant="ghost" size="icon" onClick={() => openEdit(c)}><Pencil className="w-4 h-4" /></Button>
