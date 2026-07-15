@@ -5,7 +5,6 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/api";
-import { originToFlag } from "@/lib/flags";
 import { cdnImg } from "@/lib/img";
 
 interface ProductQuickViewProps {
@@ -90,12 +89,6 @@ const ProductQuickView = ({ product, open, onOpenChange }: ProductQuickViewProps
                     )}
                     {brandName}
                   </Link>
-                )}
-                {product.origin && (
-                  <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-accent/40 bg-accent/[0.06] px-2 py-0.5 text-[11px] font-medium text-foreground">
-                    <span aria-hidden className="text-sm leading-none">{originToFlag(product.origin)}</span>
-                    {product.origin}
-                  </span>
                 )}
               </div>
             </div>

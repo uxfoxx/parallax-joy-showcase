@@ -33,9 +33,9 @@ type MediaCardProps = {
 
 /**
  * Shared portrait card used by ProductCard and BrandCard so the two card
- * families read as visual siblings. Image fills a 4/5 tile; content is
- * overlaid on a bottom scrim. Tilt + curtain reveal + shine sweep + accent
- * hairline draw-in on hover.
+ * families read as visual siblings. Image fills a 4/5 tile (tilt + curtain
+ * reveal + shine sweep on hover); name/meta sit in a plain caption below the
+ * image, with an accent hairline that draws in on hover.
  */
 const MediaCard = ({
   to,
@@ -92,9 +92,6 @@ const MediaCard = ({
           </div>
         )}
 
-        {/* Bottom scrim for text legibility — hidden until hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
         {/* Shine sweep */}
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none bg-gradient-to-tr from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full"
@@ -104,40 +101,36 @@ const MediaCard = ({
         {/* Top-right badge slot */}
         {badge && <div className="absolute top-3 right-3 z-20">{badge}</div>}
 
-        {/* Always-visible product name overlay — bottom left */}
-        <div className="absolute inset-x-0 bottom-0 z-15 bg-gradient-to-t from-black/70  p-3">
-          <h3 className="font-body text-xs md:text-sm font-semibold leading-snug text-white drop-shadow-sm line-clamp-2">
-            {title}
-          </h3>
-        </div>
-
         {/* Arrow chip — appears on hover */}
         <div className="absolute top-3 left-3 z-20 opacity-0 group-hover:opacity-100 translate-y-[-4px] group-hover:translate-y-0 transition-all duration-300">
           <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/15 backdrop-blur-md border border-white/25">
             <ArrowUpRight className="w-4 h-4 text-white" />
           </span>
         </div>
-
-        {/* Text overlay — additional info on hover */}
-        <div className="absolute inset-x-0 bottom-0 p-5 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-[opacity,transform] duration-500 ease-out">
-          {(meta || origin) && (
-            <div className="flex items-center justify-between gap-3 font-body text-xs text-white/70">
-              {meta && <span className="truncate">{meta}</span>}
-              {origin && (
-                <span className="flex items-center gap-1 shrink-0 text-white/65">
-                  <MapPin className="w-3 h-3" />
-                  <span className="truncate max-w-[120px]">{origin}</span>
-                </span>
-              )}
-            </div>
-          )}
-          {/* Accent hairline draws in on hover */}
-          <div className="relative mt-3 h-px bg-white/10 overflow-hidden">
-            <div className="absolute inset-y-0 left-0 w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-[700ms] ease-out" />
-          </div>
-        </div>
       </div>
     </Tilt>
+  );
+
+  const caption = (
+    <div className="pt-2.5 px-0.5">
+      <h3 className="font-body text-sm font-semibold leading-snug text-foreground group-hover:text-accent transition-colors line-clamp-2">
+        {title}
+      </h3>
+      {(meta || origin) && (
+        <div className="mt-1 flex items-center justify-between gap-2 font-body text-xs text-muted-foreground">
+          {meta && <span className="truncate">{meta}</span>}
+          {origin && (
+            <span className="flex items-center gap-1 shrink-0">
+              <MapPin className="w-3 h-3" />
+              <span className="truncate max-w-[120px]">{origin}</span>
+            </span>
+          )}
+        </div>
+      )}
+      <div className="relative mt-1.5 h-px bg-border overflow-hidden">
+        <div className="absolute inset-y-0 left-0 w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+      </div>
+    </div>
   );
 
   return (
@@ -160,10 +153,12 @@ const MediaCard = ({
           aria-label={title}
         >
           {inner}
+          {caption}
         </button>
       ) : (
         <Link to={to!} className="block group" aria-label={title}>
           {inner}
+          {caption}
         </Link>
       )}
     </motion.div>

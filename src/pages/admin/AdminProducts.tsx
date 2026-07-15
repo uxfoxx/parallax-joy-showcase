@@ -192,11 +192,12 @@ const AdminProductCard = ({
         {(p as any).our_product && <Badge className="h-4 border-0 bg-forest-deep px-1.5 py-0 text-[9px] text-white">Our</Badge>}
         {(p as any).premium && <Badge className="h-4 border-0 bg-accent/80 px-1.5 py-0 text-[9px] text-white">Premium</Badge>}
       </div>
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-2 pt-6">
-        <p className="font-body text-xs font-semibold leading-snug text-white line-clamp-2">{p.name}</p>
-        <p className="font-body text-[10px] text-white/70 line-clamp-1">{p.brands?.name ?? p.category}</p>
-      </div>
     </button>
+
+    <div className="border-t border-border px-2.5 pt-2 pb-1.5">
+      <p className="font-body text-xs font-semibold leading-snug text-foreground line-clamp-2">{p.name}</p>
+      <p className="font-body text-[10px] text-muted-foreground line-clamp-1">{p.brands?.name ?? p.category}</p>
+    </div>
 
     <div className="flex items-center gap-1 border-t border-border bg-card px-2 py-1.5">
       <button
