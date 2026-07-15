@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useProduct, useProducts, useProductImages } from "@/lib/api";
 import { useProductModal } from "@/lib/productModal";
-import { originToFlag } from "@/lib/flags";
 import { cdnImg } from "@/lib/img";
 
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
@@ -198,17 +197,11 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
                     <Building2 className="w-4 h-4" /> Olive Foods
                   </span>
                 )}
-                <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                  {product.origin && (
-                    <span className="inline-flex items-center gap-1 rounded-full border border-dashed border-accent/40 bg-accent/[0.06] px-2.5 py-0.5 font-body text-[11px] font-medium text-foreground">
-                      <span aria-hidden className="text-sm leading-none">{originToFlag(product.origin)}</span>
-                      {product.origin}
-                    </span>
-                  )}
-                  {established && (
+                {established && (
+                  <div className="mt-1.5 flex flex-wrap items-center gap-2">
                     <span className="font-body text-[11px] text-muted-foreground">Est. {established}</span>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </motion.div>
 
