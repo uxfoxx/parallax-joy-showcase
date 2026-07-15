@@ -104,7 +104,11 @@ const CategoryRow = ({
 
 const CategoriesSection = () => {
   const { data: allCategories = [] } = useCategories();
-  const categories = allCategories.slice(0, 5);
+  const featured = allCategories
+    .filter((c) => (c as any).homepage_featured)
+    .sort((a, b) => ((a as any).homepage_order ?? 0) - ((b as any).homepage_order ?? 0));
+  // Falls back to the first 5 categories (alphabetical) until curated in Admin → Categories.
+  const categories = (featured.length > 0 ? featured : allCategories).slice(0, 5);
 
   const sectionRef = useRef<HTMLElement>(null);
 
