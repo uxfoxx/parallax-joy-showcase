@@ -13,7 +13,7 @@ import BrandsPage from "./pages/BrandsPage.tsx";
 import BrandDetailPage from "./pages/BrandDetailPage.tsx";
 import ProductsPage from "./pages/ProductsPage.tsx";
 import ProductDetailPage from "./pages/ProductDetailPage.tsx";
-import BusinessCardPage from "./pages/BusinessCardPage.tsx";
+import ProfileLinkPage from "./pages/ProfileLinkPage.tsx";
 
 import AdminLogin from "./pages/admin/AdminLogin.tsx";
 import AdminLayout from "./pages/admin/AdminLayout.tsx";
@@ -76,7 +76,7 @@ const AppRoutes = () => {
             <Route path="/brands/:slug" element={<BrandDetailPage />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/products/:slug" element={<ProductDetailPage />} />
-            <Route path="/profile/:slug" element={<BusinessCardPage />} />
+            <Route path="/profile/:slug" element={<ProfileLinkPage />} />
 
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminLayout />}>
