@@ -376,6 +376,9 @@ export type BusinessProfile = {
   photo_url: string | null;
   active: boolean;
   display_order: number;
+  show_website: boolean;
+  show_card: boolean;
+  show_brochure: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -454,5 +457,39 @@ export const useDeleteBusinessProfile = () => {
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["business_profiles"] }),
+  });
+};
+
+/* ─── Brochure settings (one shared PDF for every profile) ──────────────── */
+export type BrochureSettings = { id: true; pdf_url: string | null; updated_at: string };
+
+export const useBrochureSettings = () =>
+  useQuery({
+    queryKey: ["brochure_settings"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("brochure_settings" as any)
+        .select("*")
+        .eq("id", true)
+        .single();
+      if (error) throw error;
+      return (data as unknown) as BrochureSettings;
+    },
+  });
+
+export const useUpdateBrochureSettings = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (pdf_url: string | null) => {
+      const { data, error } = await supabase
+        .from("brochure_settings" as any)
+        .update({ pdf_url, updated_at: new Date().toISOString() } as any)
+        .eq("id", true)
+        .select()
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["brochure_settings"] }),
   });
 };
