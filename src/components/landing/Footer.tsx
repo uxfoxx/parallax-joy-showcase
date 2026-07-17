@@ -69,6 +69,9 @@ const Footer = () => {
                 className="h-10 w-auto object-contain brightness-0 invert"
               />
             </div>
+            <p className="font-display text-sm font-semibold text-primary-foreground/85 tracking-[0.01em]">
+              Quality You Can Trust. Excellence You Can Taste.
+            </p>
             <p className="text-primary-foreground/45 font-body text-sm leading-relaxed max-w-xs">
               A premium food sourcing and distribution partner connecting globally
               sourced products with Sri Lanka's hospitality and retail trade,

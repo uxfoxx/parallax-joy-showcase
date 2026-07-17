@@ -267,6 +267,15 @@ const HeroSection = () => {
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.78, ease: EASE_OUT_EXPO }}
+          className="font-display text-base md:text-lg font-semibold text-primary tracking-[0.01em] mb-4"
+        >
+          Quality You Can Trust. Excellence You Can Taste.
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.85, ease: EASE_OUT_EXPO }}
           className="font-body text-[15px] md:text-[17px] text-foreground/75 leading-relaxed mb-10 max-w-2xl mx-auto"
         >
