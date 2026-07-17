@@ -16,21 +16,102 @@ import certificate from "@/assets/gmp-certificate.webp";
 /* Transcribed from the certificate. Verifiable claims — keep in sync. */
 const CERT_NO = "KMC-LK-20100098-OFPL";
 const VERIFY_URL = "https://www.kmcertification.com";
+const SCOPE =
+  "Receiving, handling and storing of locally sourced and imported food and beverages, and repacking of dry food items — corn flour, dried nuts, seeds and herbs.";
 
-const FACTS = [
-  { k: "Issued to", v: "Olive Foods (Pvt) Ltd\nNo. 615, Negombo Road, Mabola, Wattala" },
-  { k: "Standard", v: "GMP — Codex Alimentarius\nCXC 1-1969, General Principles of Food Hygiene" },
-  { k: "Certificate no.", v: CERT_NO },
-  { k: "Issued", v: "10 July 2026" },
-  { k: "Valid to", v: "9 July 2029" },
-  { k: "Issued by", v: "Knowledge Mag Certifications (Pvt) Ltd" },
-];
+/** Audit cycle. ISO dates so the "where we are now" marker stays true over time. */
+const MILESTONES = [
+  { label: "Issued", date: "2026-07-10" },
+  { label: "Surveillance I", date: "2027-07-10" },
+  { label: "Surveillance II", date: "2028-07-10" },
+  { label: "Recertification", date: "2029-07-09" },
+] as const;
+
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+
+/* ─── Audit cycle rail ───────────────────────────────────────────────── */
+
+const AuditRail = () => {
+  const now = Date.now();
+  const start = new Date(MILESTONES[0].date).getTime();
+  const end = new Date(MILESTONES[MILESTONES.length - 1].date).getTime();
+  const progress = Math.min(1, Math.max(0, (now - start) / (end - start)));
+
+  return (
+    <div>
+      <div className="flex items-baseline justify-between mb-4">
+        <Eyebrow variant="plain" tone="muted">
+          Audit cycle
+        </Eyebrow>
+        <span className="font-body text-[11px] text-primary-foreground/40 tabular-nums">
+          Valid to {fmt(MILESTONES[MILESTONES.length - 1].date)}
+        </span>
+      </div>
+
+      <div className="relative">
+        {/* Rail. NB: Tailwind's opacity scale only emits multiples of 5 — an
+         * off-scale value like /12 compiles to nothing and the rail vanishes. */}
+        <div aria-hidden className="absolute left-0 right-0 top-[5px] h-px bg-white/[0.12]" />
+        {/* Elapsed portion. The width carries the real value so a skipped
+         * animation can never imply a completed cycle; the transform only
+         * wipes it in. */}
+        <div
+          aria-hidden
+          className="absolute left-0 top-[5px] h-px overflow-hidden"
+          style={{ width: `${progress * 100}%` }}
+        >
+          <motion.div
+            className="h-full w-full bg-accent origin-left"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.1, ease: EASE_OUT_EXPO, delay: 0.2 }}
+          />
+        </div>
+
+        <ol className="relative grid grid-cols-4 gap-2">
+          {MILESTONES.map((m, i) => {
+            const done = new Date(m.date).getTime() <= now;
+            return (
+              <li key={m.label} className="flex flex-col">
+                <motion.span
+                  aria-hidden
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: 0.3 + i * 0.09 }}
+                  className={`w-[11px] h-[11px] rounded-full border-2 ${
+                    done ? "bg-accent border-accent" : "bg-forest-deep border-white/25"
+                  }`}
+                />
+                {/* 10px on mobile: "Recertification" is a single unbreakable
+                  * word and overflows a quarter-width column at 11px. */}
+                <span className="mt-3 font-body text-[10px] sm:text-xs font-semibold text-primary-foreground/85 leading-tight">
+                  {m.label}
+                </span>
+                <span className="mt-0.5 font-body text-[10px] sm:text-[11px] text-primary-foreground/40 tabular-nums">
+                  {fmt(m.date)}
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </div>
+  );
+};
+
+/* ─── Section ────────────────────────────────────────────────────────── */
 
 /**
- * The GMP certificate on the About page, shown in full. Framed like the
- * physical document it is — light rakes across the "glass" as the pointer
- * moves — and opens to full size for actually reading it. The homepage carries
- * the seal + audit cycle; here the document itself is the point.
+ * The GMP certificate, in full, on /about.
+ *
+ * The homepage manifesto ("The Olive Standard") makes the claim and closes it
+ * with the seal; this is where that claim is cashed. Deliberately shows only
+ * what the document *can't* tell you at a glance — the scope in plain English,
+ * and the audit cycle that keeps it true — rather than restating fields that
+ * are already legible on the page beside it.
  */
 const CertificateDocument = () => {
   const reduced = useReducedMotion();
@@ -42,7 +123,7 @@ const CertificateDocument = () => {
   const sx = useSpring(px, { stiffness: 130, damping: 20 });
   const sy = useSpring(py, { stiffness: 130, damping: 20 });
 
-  // A narrow band of light travelling across the glass, plus a slight tilt.
+  // Light raking across the glass of a framed document, plus a slight tilt.
   const rotateY = useTransform(sx, [0, 1], [-7, 7]);
   const rotateX = useTransform(sy, [0, 1], [5, -5]);
   const glareX = useTransform(sx, (v) => `${v * 100}%`);
@@ -74,6 +155,12 @@ const CertificateDocument = () => {
           backgroundSize: "24px 24px",
         }}
       />
+      {/* Warm glow behind the document, echoing the seal on the homepage */}
+      <div
+        aria-hidden
+        className="absolute -left-32 top-1/2 -translate-y-1/2 w-[560px] h-[560px] rounded-full pointer-events-none hidden lg:block"
+        style={{ background: "radial-gradient(circle, hsl(45 70% 55% / 0.10), transparent 65%)" }}
+      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -94,24 +181,26 @@ const CertificateDocument = () => {
               onPointerLeave={reset}
               aria-label="View the full GMP certificate"
               style={reduced ? undefined : { rotateX, rotateY, transformStyle: "preserve-3d" }}
-              className="group relative w-full max-w-[420px] rounded-lg overflow-hidden shadow-[0_40px_90px_-24px_rgba(0,0,0,0.9)] ring-1 ring-white/15 transition-shadow duration-500 hover:shadow-[0_50px_110px_-20px_rgba(0,0,0,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="group relative w-full max-w-[460px] rounded-lg overflow-hidden shadow-[0_40px_90px_-24px_rgba(0,0,0,0.9)] ring-1 ring-white/15 transition-shadow duration-500 hover:shadow-[0_50px_110px_-20px_rgba(0,0,0,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               <img
                 src={certificate}
                 alt={`GMP certificate ${CERT_NO} issued to Olive Foods (Pvt) Ltd by Knowledge Mag Certifications`}
                 width={618}
                 height={882}
-                loading="lazy"
+                /* NOT lazy. Inside this 3D-transformed (tilt) subtree Chromium
+                 * resolves the lazy-load intersection unreliably — the document
+                 * intermittently never loads at all. It's the whole point of the
+                 * section, so a guaranteed 124KB beats an image that sometimes
+                 * isn't there. Same reason as the seal in StandardSeal.tsx. */
                 decoding="async"
                 className="w-full h-auto block"
               />
-              {/* Light raking across the glass */}
               <motion.span
                 aria-hidden
                 className="absolute inset-0 pointer-events-none"
                 style={reduced ? undefined : { backgroundImage: glare }}
               />
-              {/* Enlarge affordance */}
               <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-forest-deep/85 backdrop-blur-sm px-3 py-1.5 font-body text-[11px] font-semibold text-primary-foreground/90 opacity-0 translate-y-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 group-focus-visible:opacity-100">
                 <Maximize2 className="w-3 h-3" />
                 Click to enlarge
@@ -119,7 +208,7 @@ const CertificateDocument = () => {
             </motion.button>
           </motion.div>
 
-          {/* The record */}
+          {/* What the document can't tell you at a glance */}
           <motion.div
             initial={{ opacity: 0, y: 26 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -132,27 +221,26 @@ const CertificateDocument = () => {
             </Eyebrow>
 
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.08] tracking-tight text-primary-foreground">
-              The certificate,
-              <span className="block text-gradient-gold-dark italic">in full.</span>
+              The Olive Standard,
+              <span className="block text-gradient-gold-dark italic">on paper.</span>
             </h2>
 
             <p className="mt-5 font-body text-[15px] md:text-base text-primary-foreground/60 leading-relaxed max-w-lg">
-              Not a badge we drew ourselves — the actual document, exactly as issued.
-              Read it here, or check it against the issuer's register.
+              A standard you describe yourself isn't worth much. This is the document
+              behind ours — issued by an independent body, audited against the same
+              food-hygiene code your own auditors work to.
             </p>
 
-            <dl className="mt-8 divide-y divide-white/[0.07] border-y border-white/[0.07]">
-              {FACTS.map(({ k, v }) => (
-                <div key={k} className="grid grid-cols-[110px_1fr] sm:grid-cols-[132px_1fr] gap-4 py-3">
-                  <dt className="font-body text-[10px] sm:text-[11px] uppercase tracking-[0.16em] text-primary-foreground/40 pt-0.5">
-                    {k}
-                  </dt>
-                  <dd className="font-body text-sm text-primary-foreground/85 whitespace-pre-line leading-relaxed">
-                    {v}
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            <div className="mt-8 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5">
+              <Eyebrow variant="plain" tone="muted" className="mb-2.5">
+                What's covered
+              </Eyebrow>
+              <p className="font-body text-sm text-primary-foreground/75 leading-relaxed">{SCOPE}</p>
+            </div>
+
+            <div className="mt-8">
+              <AuditRail />
+            </div>
 
             <a
               href={VERIFY_URL}
@@ -164,6 +252,9 @@ const CertificateDocument = () => {
               Verify this certificate
               <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
+            <p className="mt-3 font-body text-[11px] text-primary-foreground/35">
+              Certificate {CERT_NO} · Knowledge Mag Certifications (Pvt) Ltd
+            </p>
           </motion.div>
         </div>
       </div>
