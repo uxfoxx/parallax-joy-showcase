@@ -11,6 +11,7 @@ import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
 import ScrollFloatingElement from "@/components/landing/ScrollFloatingElement";
 import SectionTransition from "@/components/landing/SectionTransition";
 import CompanyPhilosophy from "@/components/about/CompanyPhilosophy";
+import CertificateDocument from "@/components/about/CertificateDocument";
 import PageHero from "@/components/PageHero";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
 
@@ -285,6 +286,13 @@ const AboutPage = () => {
             </motion.div>
           </div>
         </section>
+      </div>
+
+      <SectionTransition />
+
+      {/* Certificate — Dark. Proof of the activities claimed just above. */}
+      <div data-navbar-theme="dark">
+        <CertificateDocument />
       </div>
 
       <SectionTransition />
