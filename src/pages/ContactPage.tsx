@@ -193,21 +193,26 @@ const ContactPage = () => {
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {/* Phone */}
-                  <div className="relative">
-                    <input
-                      className={`${lightInputClasses} peer pt-5 pb-1`}
-                      value={form.phone}
-                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      placeholder=" "
-                      id="contact-phone"
-                    />
-                    <label
-                      htmlFor="contact-phone"
-                      className="absolute left-4 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground/60 transition-all duration-200 pointer-events-none peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px]"
-                    >
-                      Phone (optional)
-                    </label>
+                  {/* Phone — invisible label mirrors Subject's so both inputs top-align */}
+                  <div className="space-y-2">
+                    <Label className="font-body text-sm text-muted-foreground invisible select-none" aria-hidden>
+                      Phone
+                    </Label>
+                    <div className="relative">
+                      <input
+                        className={`${lightInputClasses} peer pt-5 pb-1`}
+                        value={form.phone}
+                        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                        placeholder=" "
+                        id="contact-phone"
+                      />
+                      <label
+                        htmlFor="contact-phone"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground/60 transition-all duration-200 pointer-events-none peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px]"
+                      >
+                        Phone (optional)
+                      </label>
+                    </div>
                   </div>
                   {/* Subject */}
                   <div className="space-y-2">

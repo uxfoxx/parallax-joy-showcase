@@ -43,9 +43,13 @@ const ProductsMegaMenu = ({ isDark, mutedText, isActive }: Props) => {
 
   const cats = categories.slice(0, 10);
 
+  // Fully opaque — this panel floats over whatever section is scrolled
+  // beneath it, so a translucent surface (even at 98%) can visibly
+  // let that section show through depending on the browser/backdrop-filter
+  // combination. No opacity modifier here on purpose.
   const panelSurface = isDark
-    ? "bg-[hsl(150_26%_6%/0.98)] border-white/10 text-primary-foreground"
-    : "bg-background/98 border-foreground/10 text-foreground";
+    ? "bg-[hsl(150_26%_6%)] border-white/10 text-primary-foreground"
+    : "bg-background border-foreground/10 text-foreground";
   const itemHover = "hover:bg-accent/10 hover:text-accent";
   const subtle = isDark ? "text-primary-foreground/45" : "text-muted-foreground";
   const eyebrow = `font-body text-[10px] tracking-[0.28em] uppercase mb-3 ${subtle}`;
