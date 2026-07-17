@@ -19,99 +19,16 @@ const VERIFY_URL = "https://www.kmcertification.com";
 const SCOPE =
   "Receiving, handling and storing of locally sourced and imported food and beverages, and repacking of dry food items — corn flour, dried nuts, seeds and herbs.";
 
-/** Audit cycle. ISO dates so the "where we are now" marker stays true over time. */
-const MILESTONES = [
-  { label: "Issued", date: "2026-07-10" },
-  { label: "Surveillance I", date: "2027-07-10" },
-  { label: "Surveillance II", date: "2028-07-10" },
-  { label: "Recertification", date: "2029-07-09" },
-] as const;
-
-const fmt = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-
-/* ─── Audit cycle rail ───────────────────────────────────────────────── */
-
-const AuditRail = () => {
-  const now = Date.now();
-  const start = new Date(MILESTONES[0].date).getTime();
-  const end = new Date(MILESTONES[MILESTONES.length - 1].date).getTime();
-  const progress = Math.min(1, Math.max(0, (now - start) / (end - start)));
-
-  return (
-    <div>
-      <div className="flex items-baseline justify-between mb-4">
-        <Eyebrow variant="plain" tone="muted">
-          Audit cycle
-        </Eyebrow>
-        <span className="font-body text-[11px] text-primary-foreground/40 tabular-nums">
-          Valid to {fmt(MILESTONES[MILESTONES.length - 1].date)}
-        </span>
-      </div>
-
-      <div className="relative">
-        {/* Rail. NB: Tailwind's opacity scale only emits multiples of 5 — an
-         * off-scale value like /12 compiles to nothing and the rail vanishes. */}
-        <div aria-hidden className="absolute left-0 right-0 top-[5px] h-px bg-white/[0.12]" />
-        {/* Elapsed portion. The width carries the real value so a skipped
-         * animation can never imply a completed cycle; the transform only
-         * wipes it in. */}
-        <div
-          aria-hidden
-          className="absolute left-0 top-[5px] h-px overflow-hidden"
-          style={{ width: `${progress * 100}%` }}
-        >
-          <motion.div
-            className="h-full w-full bg-accent origin-left"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.1, ease: EASE_OUT_EXPO, delay: 0.2 }}
-          />
-        </div>
-
-        <ol className="relative grid grid-cols-4 gap-2">
-          {MILESTONES.map((m, i) => {
-            const done = new Date(m.date).getTime() <= now;
-            return (
-              <li key={m.label} className="flex flex-col">
-                <motion.span
-                  aria-hidden
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, ease: EASE_OUT_EXPO, delay: 0.3 + i * 0.09 }}
-                  className={`w-[11px] h-[11px] rounded-full border-2 ${
-                    done ? "bg-accent border-accent" : "bg-forest-deep border-white/25"
-                  }`}
-                />
-                {/* 10px on mobile: "Recertification" is a single unbreakable
-                  * word and overflows a quarter-width column at 11px. */}
-                <span className="mt-3 font-body text-[10px] sm:text-xs font-semibold text-primary-foreground/85 leading-tight">
-                  {m.label}
-                </span>
-                <span className="mt-0.5 font-body text-[10px] sm:text-[11px] text-primary-foreground/40 tabular-nums">
-                  {fmt(m.date)}
-                </span>
-              </li>
-            );
-          })}
-        </ol>
-      </div>
-    </div>
-  );
-};
-
 /* ─── Section ────────────────────────────────────────────────────────── */
 
 /**
  * The GMP certificate, in full, on /about.
  *
  * The homepage manifesto ("The Olive Standard") makes the claim and closes it
- * with the seal; this is where that claim is cashed. Deliberately shows only
- * what the document *can't* tell you at a glance — the scope in plain English,
- * and the audit cycle that keeps it true — rather than restating fields that
- * are already legible on the page beside it.
+ * with the seal; this is where that claim is cashed. The document does the
+ * talking — the only copy alongside it is the scope in plain English and a
+ * route to verify, rather than a restatement of fields already legible on the
+ * page beside it.
  */
 const CertificateDocument = () => {
   const reduced = useReducedMotion();
@@ -236,10 +153,6 @@ const CertificateDocument = () => {
                 What's covered
               </Eyebrow>
               <p className="font-body text-sm text-primary-foreground/75 leading-relaxed">{SCOPE}</p>
-            </div>
-
-            <div className="mt-8">
-              <AuditRail />
             </div>
 
             <a
