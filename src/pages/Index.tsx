@@ -16,7 +16,6 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
  * sections animate in via whileInView regardless. */
 const OurProductsSection = lazy(() => import("@/components/landing/OurProductsSection"));
 const WhyChooseUs = lazy(() => import("@/components/landing/WhyChooseUs"));
-const CertificationSeal = lazy(() => import("@/components/landing/CertificationSeal"));
 const CategoriesSection = lazy(() => import("@/components/landing/CategoriesSection"));
 const BrandManifesto = lazy(() => import("@/components/landing/BrandManifesto"));
 const StatsSection = lazy(() => import("@/components/landing/StatsSection"));
@@ -82,11 +81,6 @@ const Index = () => {
         <SectionTransition />
         <div data-navbar-theme="dark">
           <WhyChooseUs />
-        </div>
-        <SectionTransition />
-        {/* Proof for the capability WhyChooseUs claims — sits directly under it. */}
-        <div data-navbar-theme="dark">
-          <CertificationSeal />
         </div>
         <SectionTransition />
         <div data-navbar-theme="light">

@@ -6,11 +6,16 @@ import Eyebrow from "@/components/ui/eyebrow";
 import SplitText from "@/components/motion/SplitText";
 import MagneticButton from "@/components/motion/MagneticButton";
 import DepthScene from "@/components/landing/DepthScene";
+import StandardSeal from "@/components/landing/StandardSeal";
 
 /**
  * BrandManifesto — "The Olive Standard". A dark, cinematic statement moment
  * rendered on the shared DepthScene (3D depth-parallax backdrop). TeamSection
  * uses the same scene so the two read as visual siblings.
+ *
+ * The GMP seal closes the section: the statement is the claim, the seal is the
+ * receipt for it. Kept here rather than in a section of its own so the two
+ * can't be read apart.
  */
 const BrandManifesto = () => {
   const reduced = useReducedMotion();
@@ -71,6 +76,8 @@ const BrandManifesto = () => {
           </Link>
         </MagneticButton>
       </motion.div>
+
+      <StandardSeal />
     </DepthScene>
   );
 };
