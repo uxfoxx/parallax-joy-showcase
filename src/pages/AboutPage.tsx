@@ -1,7 +1,7 @@
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import Seo from "@/components/Seo";
-import { Globe, Users, Package, Warehouse, Thermometer, Truck, ShoppingBag, Hotel, UtensilsCrossed, Target, Eye, ArrowRight } from "lucide-react";
+import { Users, Package, Warehouse, Thermometer, Truck, ShoppingBag, Hotel, UtensilsCrossed } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/landing/Navbar";
@@ -11,8 +11,9 @@ import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
 import ScrollFloatingElement from "@/components/landing/ScrollFloatingElement";
 import SectionTransition from "@/components/landing/SectionTransition";
 import CompanyPhilosophy from "@/components/about/CompanyPhilosophy";
-import CertificateDocument from "@/components/about/CertificateDocument";
+import CertificationSection from "@/components/about/CertificationSection";
 import PageHero from "@/components/PageHero";
+import Eyebrow from "@/components/ui/eyebrow";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
 
 const businessActivities = [
@@ -54,8 +55,61 @@ const clientSegments = [
   },
 ];
 
-const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
-const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
+/**
+ * The five business activities as the thing they literally are — one supply
+ * chain. A spine draws itself down the rail as you scroll, linking numbered
+ * stations from port to shelf; each station is a node ON the line, so the
+ * "fully integrated, no handoffs" claim is carried by the layout itself
+ * rather than by five disconnected cards.
+ */
+const SupplyChain = () => {
+  const ref = useRef<HTMLOListElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.78", "end 0.6"] });
+  const drawn = useSpring(scrollYProgress, { stiffness: 70, damping: 22 });
+
+  return (
+    <ol ref={ref} className="relative">
+      {/* Rail + the drawn-in chain */}
+      <span aria-hidden className="absolute left-7 top-4 bottom-10 w-px bg-primary-foreground/10" />
+      <motion.span
+        aria-hidden
+        style={{ scaleY: drawn }}
+        className="absolute left-7 top-4 bottom-10 w-px bg-accent origin-top"
+      />
+
+      {businessActivities.map((a, i) => (
+        <motion.li
+          key={a.title}
+          initial={{ opacity: 0, x: 24 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+          className="group relative py-6 pl-24 pr-2"
+        >
+          {/* Station node, sitting on the line */}
+          <span className="absolute left-0 top-6 flex h-14 w-14 items-center justify-center rounded-full border border-primary-foreground/15 bg-[hsl(150_38%_8%)] transition-colors duration-300 group-hover:border-accent/60">
+            <a.icon className="h-5 w-5 text-accent" />
+          </span>
+
+          {/* Ghost station number */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 select-none font-display text-6xl sm:text-7xl font-black tabular-nums text-primary-foreground/[0.05] transition-colors duration-300 group-hover:text-primary-foreground/[0.09]"
+          >
+            {String(i + 1).padStart(2, "0")}
+          </span>
+
+          <h3 className="relative font-display text-lg sm:text-xl font-semibold tracking-tight text-primary-foreground transition-colors duration-300 group-hover:text-accent">
+            {a.title}
+          </h3>
+          <p className="relative mt-1.5 max-w-md font-body text-sm leading-relaxed text-primary-foreground/60">
+            {a.desc}
+          </p>
+        </motion.li>
+      ))}
+    </ol>
+  );
+};
 
 const WhoWeServe = () => {
   const [active, setActive] = useState(0);
@@ -209,17 +263,65 @@ const AboutPage = () => {
         <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
           <div className="absolute w-[400px] h-[400px] -top-20 -left-20 rounded-full opacity-[0.08]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
           <div className="absolute w-[300px] h-[300px] bottom-10 right-10 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
-          <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-8">
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="space-y-8">
-              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 tracking-widest uppercase">
-                Our Story
-              </span>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight tracking-tight">Who we are</h2>
-              <div className="space-y-5 font-body text-muted-foreground leading-relaxed text-lg">
-                <p>Olive Foods is built on thirty-plus years of food-industry experience and the supplier relationships that come with it. We import and distribute across Sri Lanka, supplying the hospitality and retail trade through relationships that came first. Olive Foods exists to bring them to the market.</p>
-                <p>Our focus is frozen lines (french fries, meat, seafood, fruits, vegetables) alongside dairy, grocery staples, edible oils, and specialty imports, with vegan, gluten-free, and organic ranges supported throughout. Suppliers across Europe, Asia, and the Middle East, and growing.</p>
-                <p>The integrated model covers every step from sourcing and customs through our bonded warehouse, into −18 °C cold-chain storage, and onto the road in our own island-wide delivery fleet, serving hotels, restaurants, cafés, catering operations, and major supermarkets.</p>
-              </div>
+          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
+              {/* Sticky editorial label */}
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="lg:col-span-4 lg:sticky lg:top-28 self-start"
+              >
+                <Eyebrow variant="pill" tone="accent" className="mb-6">
+                  Our Story
+                </Eyebrow>
+                <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-[1.05] tracking-tight">
+                  Who
+                  <span className="block text-gradient-gold italic">we are.</span>
+                </h2>
+              </motion.div>
+
+              {/* Standfirst + body */}
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+                className="lg:col-span-8"
+              >
+                <p className="font-body text-xl md:text-2xl font-medium text-foreground leading-relaxed">
+                  Olive Foods is built on thirty-plus years of food-industry experience — and
+                  the supplier relationships that come with it. We import and distribute across
+                  Sri Lanka, supplying the hospitality and retail trade through relationships
+                  that came first.
+                </p>
+                <div className="mt-7 space-y-5 font-body text-muted-foreground leading-relaxed">
+                  <p>Our focus is frozen lines (french fries, meat, seafood, fruits, vegetables) alongside dairy, grocery staples, edible oils, and specialty imports, with vegan, gluten-free, and organic ranges supported throughout. Suppliers across Europe, Asia, and the Middle East, and growing.</p>
+                  <p>The integrated model covers every step from sourcing and customs through our bonded warehouse, into −18 °C cold-chain storage, and onto the road in our own island-wide delivery fleet, serving hotels, restaurants, cafés, catering operations, and major supermarkets.</p>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Record strip — hairlines, not cards */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-16 grid grid-cols-2 md:grid-cols-4 border-y border-border divide-x divide-border"
+            >
+              {[
+                { value: "30+", label: "Years of trade" },
+                { value: "10+", label: "Source countries" },
+                { value: "25", label: "Districts served" },
+                { value: "−18°C", label: "Cold chain" },
+              ].map((s) => (
+                <div key={s.label} className="py-8 px-5 md:px-8">
+                  <p className="font-display text-3xl md:text-4xl font-bold text-foreground tabular-nums">{s.value}</p>
+                  <p className="mt-1.5 font-body text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{s.label}</p>
+                </div>
+              ))}
             </motion.div>
           </div>
         </section>
@@ -250,49 +352,42 @@ const AboutPage = () => {
           </motion.div>
           <div className="absolute inset-0 pointer-events-none z-[1] opacity-30" style={gradientStyle} />
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="text-center max-w-3xl mx-auto mb-20">
-              <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
-                What We Do
-              </span>
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 leading-tight tracking-tight">
-                Core Business Activities
-              </h2>
-              <p className="text-primary-foreground/70 font-body text-lg leading-relaxed">
-                A fully integrated supply chain covering every step from port to shelf
-              </p>
-            </motion.div>
+            <div className="grid lg:grid-cols-12 gap-12 lg:gap-16">
+              {/* Sticky header — stays alongside while the chain draws */}
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="lg:col-span-5 lg:sticky lg:top-28 self-start"
+              >
+                <Eyebrow variant="pill" tone="primary" className="mb-6">
+                  What We Do
+                </Eyebrow>
+                <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground leading-[1.05] tracking-tight">
+                  From port to shelf,
+                  <span className="block text-gradient-gold-dark italic">one unbroken chain.</span>
+                </h2>
+                <p className="mt-6 font-body text-lg text-primary-foreground/60 leading-relaxed max-w-md">
+                  Five operations, one integrated supply chain — no handoffs, no
+                  third parties between the source and your kitchen.
+                </p>
+              </motion.div>
 
-            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {businessActivities.slice(0, 3).map((a) => (
-                <motion.div key={a.title} variants={item} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="group relative p-6 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20" style={{ background: `radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%), linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))` }}>
-                  <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-primary-foreground flex items-center justify-center mb-4 shadow-lg shadow-primary-foreground/10">
-                    <a.icon className="w-6 h-6 text-forest-deep" />
-                  </motion.div>
-                  <h3 className="font-display text-xl font-semibold text-primary-foreground mb-4 tracking-tight">{a.title}</h3>
-                  <p className="text-primary-foreground/70 font-body leading-relaxed text-sm">{a.desc}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-            <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid sm:grid-cols-2 gap-5 mt-5 max-w-2xl mx-auto lg:max-w-none lg:px-[16.666%]">
-              {businessActivities.slice(3).map((a) => (
-                <motion.div key={a.title} variants={item} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="group relative p-6 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20 transition-all duration-500 hover:shadow-xl hover:shadow-forest-mid/20" style={{ background: `radial-gradient(ellipse at 30% 20%, hsl(140 50% 19% / 0.4) 0%, transparent 60%), linear-gradient(180deg, hsl(140 50% 19%), hsl(150 40% 10%))` }}>
-                  <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-primary-foreground flex items-center justify-center mb-4 shadow-lg shadow-primary-foreground/10">
-                    <a.icon className="w-6 h-6 text-forest-deep" />
-                  </motion.div>
-                  <h3 className="font-display text-xl font-semibold text-primary-foreground mb-4 tracking-tight">{a.title}</h3>
-                  <p className="text-primary-foreground/70 font-body leading-relaxed text-sm">{a.desc}</p>
-                </motion.div>
-              ))}
-            </motion.div>
+              {/* The chain itself */}
+              <div className="lg:col-span-7">
+                <SupplyChain />
+              </div>
+            </div>
           </div>
         </section>
       </div>
 
       <SectionTransition />
 
-      {/* Certificate — Dark. Proof of the activities claimed just above. */}
+      {/* Certification — Dark. Proof of the chain claimed just above. */}
       <div data-navbar-theme="dark">
-        <CertificateDocument />
+        <CertificationSection />
       </div>
 
       <SectionTransition />
@@ -301,30 +396,49 @@ const AboutPage = () => {
       <div data-navbar-theme="light">
         <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
           <div className="absolute w-[350px] h-[350px] top-1/4 -right-20 rounded-full opacity-[0.07]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="text-center max-w-3xl mx-auto mb-20">
-              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
+          <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="mb-14"
+            >
+              <Eyebrow variant="pill" tone="accent">
                 Our Purpose
-              </span>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight tracking-tight">
-                Mission & Vision
-              </h2>
+              </Eyebrow>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 gap-5">
-              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="p-8 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
-                <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-6">
-                  <Target className="w-6 h-6 text-accent" />
-                </motion.div>
-                <h3 className="font-display text-2xl font-bold text-foreground mb-4 tracking-tight">Our Mission</h3>
-                <p className="font-body text-muted-foreground leading-relaxed">To bring globally sourced food products to Sri Lanka's hospitality and retail trade, through trusted, long-term relationships, consistent service, and reliable supply.</p>
+            {/* Two statements set large, split by a hairline — no boxes, no icons */}
+            <div className="grid md:grid-cols-2 border-y border-border md:divide-x divide-border">
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className="py-14 md:pr-14 border-b border-border md:border-b-0"
+              >
+                <p className="font-body text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Mission</p>
+                <p className="mt-6 font-display text-2xl sm:text-[28px] font-semibold leading-snug text-foreground">
+                  To bring globally sourced food products to Sri Lanka's hospitality and
+                  retail trade — through{" "}
+                  <span className="text-gradient-gold italic">trusted, long-term relationships</span>,
+                  consistent service, and reliable supply.
+                </p>
               </motion.div>
-              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }} whileHover={{ y: -6, transition: { duration: 0.3 } }} className="p-8 rounded-lg border border-border bg-card hover:border-accent/30 transition-all duration-500 hover:shadow-lg">
-                <motion.div whileHover={{ scale: 1.15, rotate: 5 }} transition={{ type: "spring", stiffness: 300 }} className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center mb-6">
-                  <Eye className="w-6 h-6 text-accent" />
-                </motion.div>
-                <h3 className="font-display text-2xl font-bold text-foreground mb-4 tracking-tight">Our Vision</h3>
-                <p className="font-body text-muted-foreground leading-relaxed">To be Sri Lanka's most trusted premium food distribution partner, known not for chasing transactions, but for the partnerships we build.</p>
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+                className="py-14 md:pl-14"
+              >
+                <p className="font-body text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Vision</p>
+                <p className="mt-6 font-display text-2xl sm:text-[28px] font-semibold leading-snug text-foreground">
+                  To be Sri Lanka's most trusted premium food distribution partner — known not
+                  for chasing transactions, but for{" "}
+                  <span className="text-gradient-gold italic">the partnerships we build</span>.
+                </p>
               </motion.div>
             </div>
           </div>
@@ -339,9 +453,9 @@ const AboutPage = () => {
           <div className="absolute w-[400px] h-[400px] -bottom-20 -left-20 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="text-center max-w-3xl mx-auto mb-20">
-              <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 mb-8 tracking-widest uppercase">
+              <Eyebrow variant="pill" tone="accent" className="mb-8">
                 Our Clients
-              </span>
+              </Eyebrow>
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground mb-6 leading-tight tracking-tight">
                 Who We Serve
               </h2>
@@ -368,32 +482,37 @@ const AboutPage = () => {
             `,
           }} />
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center max-w-3xl mx-auto mb-20">
-              <span className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 mb-8 tracking-widest uppercase">
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-16">
+              <Eyebrow variant="pill" tone="primary" className="mb-6">
                 Find Us
-              </span>
+              </Eyebrow>
               <h2 className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">Our Location</h2>
             </motion.div>
 
-            <div className="grid lg:grid-cols-[1fr_1.5fr] gap-10 items-start">
-              <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-5">
-                {[
-                  { label: "Address", value: "Olive Foods (Pvt) Ltd\nColombo, Sri Lanka", href: undefined },
-                  { label: "Phone", value: "+94 11 207 1717", href: "tel:+94112071717" },
-                  { label: "Email", value: "info@olivefoods.lk", href: "mailto:info@olivefoods.lk" },
-                  { label: "Hours", value: "Mon – Fri: 8:30 AM – 5:30 PM", href: undefined },
-                ].map((info) => (
-                  <div key={info.label} className="p-5 rounded-lg border border-primary-foreground/15" style={{ background: `linear-gradient(135deg, hsl(140 50% 19% / 0.8), hsl(150 40% 14% / 0.6))` }}>
-                    <h4 className="font-display text-sm font-semibold text-primary-foreground/60 uppercase tracking-widest mb-2">{info.label}</h4>
-                    {info.href ? (
-                      <a href={info.href} className="text-primary-foreground font-body text-sm hover:text-accent transition-colors duration-300 whitespace-pre-line">
-                        {info.value}
-                      </a>
-                    ) : (
-                      <p className="text-primary-foreground font-body text-sm whitespace-pre-line">{info.value}</p>
-                    )}
-                  </div>
-                ))}
+            <div className="grid lg:grid-cols-[1fr_1.5fr] gap-12 items-start">
+              {/* Spec-sheet rows — hairlines, not boxes */}
+              <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+                <dl className="border-y border-primary-foreground/10 divide-y divide-primary-foreground/10">
+                  {[
+                    { label: "Address", value: "Olive Foods (Pvt) Ltd\nColombo, Sri Lanka", href: undefined },
+                    { label: "Phone", value: "+94 11 207 1717", href: "tel:+94112071717" },
+                    { label: "Email", value: "info@olivefoods.lk", href: "mailto:info@olivefoods.lk" },
+                    { label: "Hours", value: "Mon – Fri: 8:30 AM – 5:30 PM", href: undefined },
+                  ].map((info) => (
+                    <div key={info.label} className="grid grid-cols-[92px_1fr] sm:grid-cols-[120px_1fr] gap-5 py-5">
+                      <dt className="font-body text-[11px] uppercase tracking-[0.18em] text-primary-foreground/45 pt-0.5">{info.label}</dt>
+                      <dd>
+                        {info.href ? (
+                          <a href={info.href} className="text-primary-foreground/90 font-body text-sm hover:text-accent transition-colors duration-300 whitespace-pre-line">
+                            {info.value}
+                          </a>
+                        ) : (
+                          <p className="text-primary-foreground/90 font-body text-sm whitespace-pre-line">{info.value}</p>
+                        )}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
               </motion.div>
               <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="rounded-lg overflow-hidden border border-primary-foreground/15 shadow-xl">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.58585953498!2d79.7861!3d6.9271!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" width="100%" height="400" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Olive Foods Location" className="w-full h-[400px] block" scrolling="no" />
@@ -415,9 +534,11 @@ const AboutPage = () => {
             `,
           }} />
           <div className="max-w-3xl mx-auto px-6 text-center space-y-8 relative z-10">
-            <motion.span initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="inline-block px-5 py-2 rounded-full bg-primary-foreground/10 text-primary-foreground font-body text-sm font-medium border border-primary-foreground/15 tracking-widest uppercase">
-              Get Started
-            </motion.span>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <Eyebrow variant="pill" tone="primary">
+                Get Started
+              </Eyebrow>
+            </motion.div>
             <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">Ready to Partner With Us?</motion.h2>
             <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="font-body text-primary-foreground/70 text-lg leading-relaxed">Tell us what your operation needs, single venue or national chain. We'd like to understand before we quote a price.</motion.p>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-wrap gap-4 justify-center">
