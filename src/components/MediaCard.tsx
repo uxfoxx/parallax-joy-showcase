@@ -119,12 +119,12 @@ const MediaCard = ({
       {(meta || origin) && (
         <div className="mt-1 flex items-center justify-between gap-2 font-body text-xs text-muted-foreground">
           {meta && <span className="truncate">{meta}</span>}
-          {origin && (
+          {/* {origin && (
             <span className="flex items-center gap-1 shrink-0">
               <MapPin className="w-3 h-3" />
               <span className="truncate max-w-[120px]">{origin}</span>
             </span>
-          )}
+          )} */}
         </div>
       )}
       <div className="relative mt-1.5 h-px bg-border overflow-hidden">
