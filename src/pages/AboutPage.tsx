@@ -385,13 +385,6 @@ const AboutPage = () => {
 
       <SectionTransition />
 
-      {/* Certification — Dark. Proof of the chain claimed just above. */}
-      <div data-navbar-theme="dark">
-        <CertificationSection />
-      </div>
-
-      <SectionTransition />
-
       {/* Mission & Vision — Light */}
       <div data-navbar-theme="light">
         <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
@@ -443,6 +436,14 @@ const AboutPage = () => {
             </div>
           </div>
         </section>
+      </div>
+
+      <SectionTransition />
+
+      {/* Certification — Dark. The purpose above is the promise; this is the
+          independent audit of it. (#certificate anchor target from the home seal.) */}
+      <div data-navbar-theme="dark">
+        <CertificationSection />
       </div>
 
       <SectionTransition />
@@ -524,26 +525,23 @@ const AboutPage = () => {
 
       <SectionTransition />
 
-      {/* CTA — Dark */}
-      <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden py-28 lg:py-36">
-          <div className="absolute inset-0" style={{
-            background: `
-              radial-gradient(ellipse at 50% 50%, hsl(140 50% 19% / 0.6) 0%, transparent 50%),
-              linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 14%), hsl(150 40% 8%))
-            `,
-          }} />
+      {/* CTA — Light */}
+      <div data-navbar-theme="light">
+        <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
+          <div className="absolute w-[480px] h-[480px] -top-32 left-1/2 -translate-x-1/2 rounded-full opacity-[0.08] pointer-events-none" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
           <div className="max-w-3xl mx-auto px-6 text-center space-y-8 relative z-10">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-              <Eyebrow variant="pill" tone="primary">
+              <Eyebrow variant="pill" tone="accent">
                 Get Started
               </Eyebrow>
             </motion.div>
-            <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">Ready to Partner With Us?</motion.h2>
-            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="font-body text-primary-foreground/70 text-lg leading-relaxed">Tell us what your operation needs, single venue or national chain. We'd like to understand before we quote a price.</motion.p>
+            <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-tight tracking-tight">
+              Ready to <span className="text-gradient-gold italic">partner</span> with us?
+            </motion.h2>
+            <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="font-body text-muted-foreground text-lg leading-relaxed">Tell us what your operation needs, single venue or national chain. We'd like to understand before we quote a price.</motion.p>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-wrap gap-4 justify-center">
-              <Link to="/contact"><Button className="shine-sweep bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-lg px-8 h-12 text-base backdrop-blur-sm border border-white/15">Contact Us</Button></Link>
-              <Link to="/products"><Button variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 font-body rounded-lg px-8 h-12 text-base backdrop-blur-sm">Explore Products</Button></Link>
+              <Link to="/contact"><Button className="shine-sweep bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-lg px-8 h-12 text-base">Contact Us</Button></Link>
+              <Link to="/products"><Button variant="outline" className="border-border text-foreground hover:bg-foreground/5 font-body rounded-lg px-8 h-12 text-base">Explore Products</Button></Link>
             </motion.div>
           </div>
         </section>

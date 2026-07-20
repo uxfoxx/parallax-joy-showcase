@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import Seo, { SITE_URL } from "@/components/Seo";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ArrowLeft, Package, MessageCircle, Share2, MapPin, Tag, Building2, ChevronLeft, ChevronRight, Sparkles, Box, Globe, Hash } from "lucide-react";
+import { ArrowLeft, Package, MessageCircle, Share2, Tag, Building2, ChevronLeft, ChevronRight, Sparkles, Box, Hash } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
@@ -87,9 +87,10 @@ const ProductDetailPage = () => {
     (product.description || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 160) ||
     `${product.name}${brandName ? ` by ${brandName}` : ""}, imported and distributed across Sri Lanka by Olive Foods.`;
 
+  // NB: no origin here — product↔country associations are admin-only,
+  // deliberately not shown anywhere on the public site.
   const specs = [
     { icon: Tag, label: "Category", value: product.category },
-    { icon: Globe, label: "Origin", value: product.origin },
     { icon: Hash, label: "SKU", value: product.sku },
     { icon: Building2, label: "Brand", value: brandName, link: `/brands/${brandSlug}` },
   ];
@@ -249,21 +250,13 @@ const ProductDetailPage = () => {
                 transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
               />
 
-              {/* Category + Origin Pills */}
+              {/* Category Pill */}
               <motion.div className="flex flex-wrap gap-2 mb-8" variants={fadeUp}>
                 {product.category && (
                   <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
                     <Badge variant="outline" className="font-body text-xs px-3 py-1.5">
                       <Tag className="w-3 h-3 mr-1.5" />
                       {product.category}
-                    </Badge>
-                  </motion.div>
-                )}
-                {product.origin && (
-                  <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
-                    <Badge variant="outline" className="font-body text-xs px-3 py-1.5">
-                      <MapPin className="w-3 h-3 mr-1.5" />
-                      {product.origin}
                     </Badge>
                   </motion.div>
                 )}

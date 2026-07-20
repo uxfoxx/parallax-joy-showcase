@@ -1,9 +1,6 @@
 import { motion } from "framer-motion";
-import {
-  Heart, Users, RefreshCw, Shield, ArrowUpRight,
-  Boxes, Headset, Workflow, Handshake, type LucideIcon,
-} from "lucide-react";
-import { useState } from "react";
+import { Boxes, Headset, Workflow, Handshake, type LucideIcon } from "lucide-react";
+import Eyebrow from "@/components/ui/eyebrow";
 
 const approachItems: { title: string; body: string; Icon: LucideIcon }[] = [
   {
@@ -30,22 +27,18 @@ const approachItems: { title: string; body: string; Icon: LucideIcon }[] = [
 
 const coreValues = [
   {
-    icon: Heart,
     title: "Long-term Relationships",
     desc: "We build partnerships that stand the test of time, not just transactions.",
   },
   {
-    icon: Users,
     title: "Support Client Growth",
     desc: "Your success is our success. We invest in the businesses we serve.",
   },
   {
-    icon: RefreshCw,
     title: "Consistency & Professionalism",
     desc: "Every interaction, every delivery, every communication, held to the same high standard.",
   },
   {
-    icon: Shield,
     title: "Accountability & Trust",
     desc: "Our clients depend on the company, not just a single point of contact.",
   },
@@ -60,70 +53,39 @@ const titleWords = [
   { text: "Growth.", accent: true },
 ];
 
-type Value = (typeof coreValues)[number];
-
-const FlipCard = ({ value, index }: { value: Value; index: number }) => {
-  const [flipped, setFlipped] = useState(false);
-  const Icon = value.icon;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.55, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      onMouseEnter={() => setFlipped(true)}
-      onMouseLeave={() => setFlipped(false)}
-      onClick={() => setFlipped((f) => !f)}
-      className="relative h-44 sm:h-48 cursor-pointer select-none"
-    >
-      <motion.div
-        animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        style={{ transformStyle: "preserve-3d" }}
-        className="relative w-full h-full"
-      >
-        {/* Front */}
-        <div
-          style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
-          className="absolute inset-0 rounded-xl border border-border bg-card p-6 flex flex-col justify-between overflow-hidden shadow-card"
-        >
-          <span
-            aria-hidden
-            className="absolute top-0 right-0 w-16 h-16 rounded-bl-[3rem] bg-primary/5 pointer-events-none"
-          />
-          <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Icon className="w-5 h-5 text-primary" strokeWidth={1.7} />
-          </div>
-          <div>
-            <h4 className="font-display text-base lg:text-lg font-bold text-foreground tracking-tight leading-snug">
-              {value.title}
-            </h4>
-            <span className="block w-8 h-[2px] rounded-full bg-primary mt-3" />
-          </div>
-        </div>
-
-        {/* Back */}
-        <div
-          style={{
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-            transform: "rotateY(180deg)",
-          }}
-          className="absolute inset-0 rounded-xl bg-primary text-primary-foreground p-6 flex flex-col justify-between overflow-hidden shadow-card"
-        >
-          <p className="font-body text-[14px] leading-relaxed">{value.desc}</p>
-          <div className="flex items-center justify-between">
-            <span className="font-body text-[10.5px] tracking-[0.28em] uppercase text-primary-foreground/70">
-              {String(index + 1).padStart(2, "0")} / {String(coreValues.length).padStart(2, "0")}
-            </span>
-            <ArrowUpRight className="w-4 h-4 text-primary-foreground/80" />
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-};
+/**
+ * One value in the ledger. No box, no icon, no flip — a tabular index, the
+ * value, and its meaning always readable, separated by hairlines. The flip
+ * cards this replaces hid their content until hover, which buried the actual
+ * values on touch devices.
+ */
+const ValueEntry = ({
+  value,
+  index,
+}: {
+  value: (typeof coreValues)[number];
+  index: number;
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 18 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.55, delay: (index % 2) * 0.1 + 0.05, ease: [0.22, 1, 0.36, 1] }}
+    className={`group py-9 ${
+      index % 2 === 0 ? "sm:pr-12" : "sm:pl-12 sm:border-l sm:border-border"
+    } ${index > 0 ? "border-t border-border" : ""} ${index === 1 ? "sm:border-t-0" : ""}`}
+  >
+    <p className="font-body text-[11px] font-semibold tracking-[0.24em] uppercase tabular-nums text-accent/60 transition-colors duration-300 group-hover:text-accent">
+      {String(index + 1).padStart(2, "0")}
+    </p>
+    <h4 className="mt-3 font-display text-xl lg:text-2xl font-bold text-foreground tracking-tight leading-snug transition-colors duration-300 group-hover:text-accent">
+      {value.title}
+    </h4>
+    <p className="mt-2.5 font-body text-[15px] text-muted-foreground leading-relaxed max-w-prose">
+      {value.desc}
+    </p>
+  </motion.div>
+);
 
 const CompanyPhilosophy = () => {
   return (
@@ -147,9 +109,9 @@ const CompanyPhilosophy = () => {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <span className="inline-block px-5 py-2 rounded-full bg-accent/10 text-accent font-body text-sm font-medium border border-accent/20 tracking-widest uppercase">
+          <Eyebrow variant="pill" tone="accent">
             Our Philosophy
-          </span>
+          </Eyebrow>
         </motion.div>
 
         {/* Title — word-by-word reveal */}
@@ -327,20 +289,20 @@ const CompanyPhilosophy = () => {
           We are a partner you can rely on, not just a supplier you order from.
         </motion.p>
 
-        {/* Core Values — 3-D flip cards */}
+        {/* Core Values — a hairline ledger, always readable */}
         <div className="mb-14">
           <motion.h3
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="font-display text-2xl font-bold text-foreground mb-8 tracking-tight"
+            className="font-display text-2xl font-bold text-foreground mb-9 tracking-tight"
           >
-            Our Team Values
+            Our Team <span className="text-gradient-gold">Values</span>
           </motion.h3>
-          <div className="grid sm:grid-cols-2 gap-4" style={{ perspective: "1400px" }}>
+          <div className="grid sm:grid-cols-2 border-y border-border">
             {coreValues.map((value, i) => (
-              <FlipCard key={value.title} value={value} index={i} />
+              <ValueEntry key={value.title} value={value} index={i} />
             ))}
           </div>
         </div>
