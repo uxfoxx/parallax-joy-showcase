@@ -24,7 +24,9 @@ const ProductCard = ({ product, variant = "light", index = 0, columns = 3 }: Pro
       image={product.image_url ?? null}
       title={product.name}
       meta={meta}
-      origin={product.origin ?? null}
+      /* origin deliberately not passed — product↔country associations are
+       * admin-only and never shown to visitors (BrandCard still uses the
+       * MediaCard origin slot; a brand's home country is fine to show). */
       variant={variant}
       index={index}
       columns={columns}
