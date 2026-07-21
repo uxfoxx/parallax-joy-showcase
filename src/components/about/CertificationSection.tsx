@@ -12,7 +12,8 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 import Eyebrow from "@/components/ui/eyebrow";
 import { CERT_NO } from "@/components/FoilSeal";
-import certificate from "@/assets/gmp-certificate.webp";
+import { useBrochureSettings } from "@/lib/api";
+import defaultCertificate from "@/assets/gmp-certificate.webp";
 
 /* Transcribed from certificate KMC-LK-20100098-OFPL. Verifiable claims. */
 const VERIFY_URL = "https://www.kmcertification.com";
@@ -31,6 +32,11 @@ const CertificationSection = () => {
   const reduced = useReducedMotion();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLButtonElement>(null);
+
+  // Admin-set certificate image, falling back to the bundled default so the
+  // section always renders even before an upload or if the settings read fails.
+  const { data: settings } = useBrochureSettings();
+  const certificate = settings?.certificate_url || defaultCertificate;
 
   const px = useMotionValue(0.5);
   const py = useMotionValue(0.5);

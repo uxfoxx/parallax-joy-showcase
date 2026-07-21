@@ -85,7 +85,7 @@ const BrochureCard = () => {
     setUploading(true);
     try {
       const url = await uploadImage(file, "brochure");
-      await updateBrochure.mutateAsync(url);
+      await updateBrochure.mutateAsync({ pdf_url: url });
       toast.success("Brochure updated");
     } catch (err: any) {
       toast.error(err.message ?? "Upload failed");
@@ -127,6 +127,38 @@ const BrochureCard = () => {
           />
         </label>
       </div>
+    </div>
+  );
+};
+
+const CertificateCard = () => {
+  const { data: settings } = useBrochureSettings();
+  const updateBrochure = useUpdateBrochureSettings();
+
+  const handleChange = async (url: string) => {
+    try {
+      await updateBrochure.mutateAsync({ certificate_url: url || null });
+      toast.success(url ? "Certificate updated" : "Certificate reset to the built-in default");
+    } catch (err: any) {
+      toast.error(err.message ?? "Update failed");
+    }
+  };
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-4">
+      <h2 className="font-display text-base font-bold text-foreground">GMP Certificate</h2>
+      <p className="font-body text-xs text-muted-foreground mt-0.5 mb-4">
+        The certificate image shown on the About page. Upload a new scan to replace it;
+        clear it to fall back to the built-in default.
+      </p>
+      <ImageUploadField
+        label="Certificate image"
+        hint="A portrait scan of the certificate works best. PNG, JPG or WEBP."
+        value={settings?.certificate_url ?? ""}
+        onChange={handleChange}
+        folder="certificate"
+        previewClassName="h-28 w-20"
+      />
     </div>
   );
 };
@@ -326,7 +358,10 @@ const AdminBusinessProfilesInner = () => {
         </Dialog>
       </div>
 
-      <BrochureCard />
+      <div className="grid gap-4 md:grid-cols-2">
+        <BrochureCard />
+        <CertificateCard />
+      </div>
 
       <div className="rounded-xl border border-border bg-card">
         <Table>

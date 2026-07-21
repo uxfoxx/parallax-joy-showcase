@@ -9,7 +9,7 @@ type FooterStat = { value?: number; suffix?: string; text?: string; label: strin
 
 const FOOTER_STATS: FooterStat[] = [
   { value: 30, suffix: "+", label: "Years of trade" },
-  { value: 10, suffix: "+", label: "Source countries" },
+  { value: 30, suffix: "+", label: "Source countries" },
   { value: 25, label: "Districts served" },
   { text: "Island-wide", label: "Delivery" },
 ];

@@ -460,8 +460,16 @@ export const useDeleteBusinessProfile = () => {
   });
 };
 
-/* ─── Brochure settings (one shared PDF for every profile) ──────────────── */
-export type BrochureSettings = { id: true; pdf_url: string | null; updated_at: string };
+/* ─── Site settings (singleton row of shared company assets) ────────────── */
+export type BrochureSettings = {
+  id: true;
+  pdf_url: string | null;
+  /** GMP certificate image shown on /about; null = use the bundled default. */
+  certificate_url: string | null;
+  updated_at: string;
+};
+
+type SiteSettingsPatch = Partial<Pick<BrochureSettings, "pdf_url" | "certificate_url">>;
 
 export const useBrochureSettings = () =>
   useQuery({
@@ -480,10 +488,10 @@ export const useBrochureSettings = () =>
 export const useUpdateBrochureSettings = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (pdf_url: string | null) => {
+    mutationFn: async (patch: SiteSettingsPatch) => {
       const { data, error } = await supabase
         .from("brochure_settings" as any)
-        .update({ pdf_url, updated_at: new Date().toISOString() } as any)
+        .update({ ...patch, updated_at: new Date().toISOString() } as any)
         .eq("id", true)
         .select()
         .single();
