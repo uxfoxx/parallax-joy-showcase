@@ -313,7 +313,7 @@ const AboutPage = () => {
             >
               {[
                 { value: "30+", label: "Years of trade" },
-                { value: "10+", label: "Source countries" },
+                { value: "30+", label: "Source countries" },
                 { value: "25", label: "Districts served" },
                 { value: "−18°C", label: "Cold chain" },
               ].map((s) => (
