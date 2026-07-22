@@ -1,19 +1,18 @@
 import { useMemo, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Globe, IdCard, BookOpen, ArrowLeft } from "lucide-react";
+import { Globe, IdCard, FileText, ArrowLeft, Download } from "lucide-react";
 import { useBusinessProfile, useBrochureSettings } from "@/lib/api";
 import Seo from "@/components/Seo";
 import ProfileShell from "@/components/profile/ProfileShell";
 import BusinessCardView from "@/components/profile/BusinessCardView";
-import BrochureExperience from "@/components/profile/BrochureExperience";
 
 type OptionKey = "website" | "card" | "brochure";
 
 const OPTIONS: Record<OptionKey, { label: string; hint: string; Icon: typeof Globe }> = {
   website: { label: "Website", hint: "Visit our main site", Icon: Globe },
   card: { label: "E Business Profile", hint: "View the digital business card", Icon: IdCard },
-  brochure: { label: "Brochure", hint: "Read the supplier's lookbook", Icon: BookOpen },
+  brochure: { label: "Brochure", hint: "View our product brochure", Icon: FileText },
 };
 
 /**
@@ -33,11 +32,9 @@ const ProfileLinkPage = () => {
     const opts: OptionKey[] = [];
     if (profile.show_website) opts.push("website");
     if (profile.show_card) opts.push("card");
-    // The brochure is rendered in code now — no PDF required. The uploaded
-    // PDF, when present, is offered as a download inside the lookbook.
-    if (profile.show_brochure) opts.push("brochure");
+    if (profile.show_brochure && brochure?.pdf_url) opts.push("brochure");
     return opts;
-  }, [profile]);
+  }, [profile, brochure]);
 
   // No loading indicator — show the branded backdrop silently until the
   // profile resolves, then render the right screen.
@@ -76,7 +73,7 @@ const ProfileLinkPage = () => {
     return (
       <>
         {seo}
-        <BrochureExperience pdfUrl={brochure?.pdf_url ?? null} onBack={null} />
+        <BrochureView pdfUrl={brochure!.pdf_url!} onBack={null} />
       </>
     );
   }
@@ -86,7 +83,7 @@ const ProfileLinkPage = () => {
     return (<>{seo}<ProfileShell><BusinessCardView profile={profile} /><BackButton onClick={() => setView("chooser")} dark /></ProfileShell></>);
   }
   if (view === "brochure") {
-    return (<>{seo}<BrochureExperience pdfUrl={brochure?.pdf_url ?? null} onBack={() => setView("chooser")} /></>);
+    return (<>{seo}<BrochureView pdfUrl={brochure!.pdf_url!} onBack={() => setView("chooser")} /></>);
   }
 
   return (
@@ -138,6 +135,30 @@ const BackButton = ({ onClick, dark }: { onClick: () => void; dark?: boolean }) 
   >
     <ArrowLeft className="w-4 h-4" /> Back to options
   </button>
+);
+
+const BrochureView = ({ pdfUrl, onBack }: { pdfUrl: string; onBack: (() => void) | null }) => (
+  <main className="flex h-screen w-full flex-col bg-forest-deep">
+    <div className="flex shrink-0 items-center justify-between border-b border-white/10 bg-forest-deep px-4 py-3">
+      {onBack ? (
+        <button type="button" onClick={onBack} className="inline-flex items-center gap-1.5 font-body text-sm text-white/70 hover:text-white transition-colors">
+          <ArrowLeft className="w-4 h-4" /> Back
+        </button>
+      ) : <span />}
+      <a
+        href={pdfUrl}
+        download
+        className="inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 font-body text-xs font-semibold uppercase tracking-[0.1em] text-white hover:bg-accent/90 transition-colors"
+      >
+        <Download className="w-3.5 h-3.5" /> Download
+      </a>
+    </div>
+    <iframe title="Brochure" src={pdfUrl} className="flex-1 w-full border-0 bg-white" />
+    <p className="shrink-0 py-2 text-center font-body text-xs text-white/40">
+      Can't view it here?{" "}
+      <a href={pdfUrl} download className="text-accent hover:underline">Download the PDF</a>
+    </p>
+  </main>
 );
 
 export default ProfileLinkPage;
