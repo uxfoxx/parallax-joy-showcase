@@ -43,7 +43,7 @@ fi
 
 echo "▶  Syncing dist/ → ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}"
 # --delete removes stale files on the server so it mirrors dist/ exactly.
-rsync -avz --delete --human-readable \
+rsync -avz --delete \
   -e "ssh -p ${DEPLOY_SSH_PORT}" \
   "$ROOT/dist/" \
   "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
