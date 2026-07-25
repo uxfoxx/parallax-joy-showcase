@@ -1,11 +1,26 @@
-import { useMemo, useState } from "react";
+import { lazy, Suspense, useMemo, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Globe, IdCard, FileText, ArrowLeft, Download } from "lucide-react";
+import { Globe, IdCard, FileText, ArrowLeft, Loader2 } from "lucide-react";
 import { useBusinessProfile, useBrochureSettings } from "@/lib/api";
 import Seo from "@/components/Seo";
 import ProfileShell from "@/components/profile/ProfileShell";
 import BusinessCardView from "@/components/profile/BusinessCardView";
+
+// pdf.js is heavy — load the reader only when a brochure is actually opened.
+const PdfBrochure = lazy(() => import("@/components/profile/PdfBrochure"));
+
+const BrochureView = ({ pdfUrl, onBack }: { pdfUrl: string; onBack: (() => void) | null }) => (
+  <Suspense
+    fallback={
+      <div className="flex h-[100dvh] w-full items-center justify-center bg-forest-deep">
+        <Loader2 className="w-6 h-6 animate-spin text-accent" />
+      </div>
+    }
+  >
+    <PdfBrochure pdfUrl={pdfUrl} onBack={onBack} />
+  </Suspense>
+);
 
 type OptionKey = "website" | "card" | "brochure";
 
@@ -135,30 +150,6 @@ const BackButton = ({ onClick, dark }: { onClick: () => void; dark?: boolean }) 
   >
     <ArrowLeft className="w-4 h-4" /> Back to options
   </button>
-);
-
-const BrochureView = ({ pdfUrl, onBack }: { pdfUrl: string; onBack: (() => void) | null }) => (
-  <main className="flex h-screen w-full flex-col bg-forest-deep">
-    <div className="flex shrink-0 items-center justify-between border-b border-white/10 bg-forest-deep px-4 py-3">
-      {onBack ? (
-        <button type="button" onClick={onBack} className="inline-flex items-center gap-1.5 font-body text-sm text-white/70 hover:text-white transition-colors">
-          <ArrowLeft className="w-4 h-4" /> Back
-        </button>
-      ) : <span />}
-      <a
-        href={pdfUrl}
-        download
-        className="inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-2 font-body text-xs font-semibold uppercase tracking-[0.1em] text-white hover:bg-accent/90 transition-colors"
-      >
-        <Download className="w-3.5 h-3.5" /> Download
-      </a>
-    </div>
-    <iframe title="Brochure" src={pdfUrl} className="flex-1 w-full border-0 bg-white" />
-    <p className="shrink-0 py-2 text-center font-body text-xs text-white/40">
-      Can't view it here?{" "}
-      <a href={pdfUrl} download className="text-accent hover:underline">Download the PDF</a>
-    </p>
-  </main>
 );
 
 export default ProfileLinkPage;
