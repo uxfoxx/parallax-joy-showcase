@@ -24,3 +24,9 @@ dist.zip
 *.sln
 *.sw?
 
+
+# Deploy config — points at your server; keep out of git
+deploy/deploy.conf
+
+# Local env — contains the Supabase DB password; must NOT be committed
+.env
