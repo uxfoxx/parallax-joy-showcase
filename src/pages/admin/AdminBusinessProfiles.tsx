@@ -40,7 +40,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Pencil, Trash2, Link2, ExternalLink, User, FileText, Upload, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Link2, ExternalLink, User, FileText, Upload, Loader2, Download, Palette } from "lucide-react";
 import { toast } from "sonner";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import PinGate from "@/components/admin/PinGate";
@@ -162,6 +162,30 @@ const CertificateCard = () => {
     </div>
   );
 };
+
+const BrandGuidelinesCard = () => (
+  <div className="rounded-xl border border-border bg-card p-4">
+    <div className="flex items-center justify-between gap-4 flex-wrap">
+      <div>
+        <div className="flex items-center gap-2">
+          <Palette className="w-4 h-4 text-accent" />
+          <h2 className="font-display text-base font-bold text-foreground">Brand Guidelines</h2>
+        </div>
+        <p className="font-body text-xs text-muted-foreground mt-0.5">
+          A short PDF of the Olive Foods marks, colours, type and voice. Hand it to
+          designers, printers or partners so everything stays on-brand.
+        </p>
+      </div>
+      <a
+        href="/olive-foods-brand-guidelines.pdf"
+        download
+        className="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-md border border-border px-3 py-2 font-body text-sm text-foreground hover:bg-accent/5 hover:text-accent hover:border-accent/40 transition-colors"
+      >
+        <Download className="w-4 h-4" /> Download PDF
+      </a>
+    </div>
+  </div>
+);
 
 const AdminBusinessProfilesInner = () => {
   const { data: profiles = [], isLoading } = useBusinessProfiles();
@@ -361,6 +385,7 @@ const AdminBusinessProfilesInner = () => {
       <div className="grid gap-4 md:grid-cols-2">
         <BrochureCard />
         <CertificateCard />
+        <BrandGuidelinesCard />
       </div>
 
       <div className="rounded-xl border border-border bg-card">
