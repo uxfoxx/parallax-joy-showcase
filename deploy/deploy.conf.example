@@ -1,0 +1,8 @@
+# Copy this file to  deploy/deploy.conf  and fill in your VPS details.
+# deploy.conf is gitignored — it only points at your server. No passwords go
+# here: rsync/ssh authenticate with your SSH key (set up in SERVER_SETUP.md).
+
+DEPLOY_HOST="203.0.113.10"        # your Namecheap VPS IP (from the welcome email) or a hostname
+DEPLOY_USER="deploy"              # the non-root user created in SERVER_SETUP.md
+DEPLOY_PATH="/var/www/olivefoods" # web root nginx serves from
+DEPLOY_SSH_PORT="22"              # change only if you moved SSH off port 22
