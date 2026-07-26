@@ -27,12 +27,15 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, "..");
 
 loadEnv({ path: join(repoRoot, ".env") });
+// SUPABASE_DB_URL lives in .env.local (gitignored) so the DB password is never
+// committed. .env (committed) holds only the public VITE_ keys.
+loadEnv({ path: join(repoRoot, ".env.local") });
 
 const url = process.env.SUPABASE_DB_URL;
 if (!url) {
   console.error(
     "✗ SUPABASE_DB_URL is not set.\n" +
-      "  Add it to .env. Get the value from Supabase Studio →\n" +
+      "  Add it to .env.local. Get the value from Supabase Studio →\n" +
       "  Project Settings → Database → Connection string → URI\n" +
       "  (use the pooled 'Transaction' connection).",
   );

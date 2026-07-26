@@ -28,5 +28,7 @@ dist.zip
 # Deploy config — points at your server; keep out of git
 deploy/deploy.conf
 
-# Local env — contains the Supabase DB password; must NOT be committed
-.env
+# .env holds only the public VITE_ keys (safe to commit — they ship in the
+# browser bundle). Secrets like SUPABASE_DB_URL live in .env.local, which is
+# ignored by the *.local rule above and must NOT be committed.
+
