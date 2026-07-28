@@ -23,11 +23,13 @@ import Eyebrow from "@/components/ui/eyebrow";
  * bottom-right corner for the real-utility action.
  */
 
-const ADDRESS = "Olive Foods (Pvt) Ltd\nColombo, Sri Lanka";
+const ADDRESS = "292 Sea Street, Colombo 11\nColombo, Sri Lanka 01100";
 const PHONE = "+94 11 207 1717";
 const EMAIL = "info@olivefoods.lk";
 const MAPS_URL =
-  "https://www.google.com/maps/dir/?api=1&destination=Olive+Foods+Pvt+Ltd+Colombo+Sri+Lanka";
+  "https://www.google.com/maps/dir/?api=1&destination=292+Sea+Street%2C+Colombo+11%2C+Sri+Lanka";
+const MAPS_EMBED =
+  "https://www.google.com/maps?q=292%20Sea%20Street%2C%20Colombo%2011%2C%20Sri%20Lanka&output=embed";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 // Office hours in Sri Lanka local time. Mon-Fri only.
@@ -401,7 +403,7 @@ const LocationsSection = () => {
               Olive Foods (Pvt) Ltd
             </h3>
             <p className="font-body text-[13px] tracking-[0.18em] uppercase text-primary-foreground/55 mb-6">
-              Headquarters · Colombo, Sri Lanka
+              Headquarters · 292 Sea Street, Colombo 11
             </p>
 
             <div className="h-px bg-gradient-to-r from-primary-foreground/20 via-primary-foreground/5 to-transparent mb-3" />
@@ -413,7 +415,7 @@ const LocationsSection = () => {
                 label="Address"
                 value={ADDRESS}
                 href={MAPS_URL}
-                copyText="Olive Foods (Pvt) Ltd, Colombo, Sri Lanka"
+                copyText="Olive Foods (Pvt) Ltd, 292 Sea Street, Colombo 11, Colombo, Sri Lanka 01100"
                 multiline
               />
               <ContactRow
@@ -487,7 +489,7 @@ const LocationsSection = () => {
           >
             {/* The map iframe — slightly desaturated to feel editorial */}
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.58585953498!2d79.7861!3d6.9271!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+              src={MAPS_EMBED}
               width="100%"
               height="100%"
               className="absolute inset-0 w-full h-full"

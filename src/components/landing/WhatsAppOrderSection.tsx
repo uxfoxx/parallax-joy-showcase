@@ -7,7 +7,7 @@ import Eyebrow from "@/components/ui/eyebrow";
 
 // WhatsApp constants
 const PHONE = "94112071717";
-const ENQUIRE_MSG = "Hi Olive Foods — I'm interested in your premium selections.";
+const ENQUIRE_MSG = "Hi Olive Foods, I'd like to enquire about supplying my business.";
 const waLink = (msg: string) =>
   `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
 
@@ -27,19 +27,19 @@ type Beat =
 
 // Conversation script — beats play out sequentially once the phone is in view.
 const script: Beat[] = [
-  { kind: "msg", from: "you", text: "Hi Olive Foods — I'm looking for a whole Australian wagyu striploin for the weekend.", delay: 0.2 },
+  { kind: "msg", from: "you", text: "Hi Olive Foods, I run a restaurant in Colombo and need a steady supply of 9mm frozen fries. What can you do?", delay: 0.2 },
   { kind: "typing", from: "them", delay: 1.8 },
-  { kind: "msg", from: "them", text: "Hello! We have MB7+ Rangers Valley in stock — 4.2kg average. Happy to share pricing and photos.", delay: 3.4 },
-  { kind: "msg", from: "you", text: "Perfect. Can you deliver to Colombo 5 tomorrow?", delay: 5.2 },
+  { kind: "msg", from: "them", text: "Hi! We stock Hungritos 9mm fries by the case and can set you up on a regular delivery. Sending pricing and pack sizes now.", delay: 3.4 },
+  { kind: "msg", from: "you", text: "Great. Can you deliver to Colombo 3 every week?", delay: 5.2 },
   { kind: "typing", from: "them", delay: 6.0 },
-  { kind: "msg", from: "them", text: "Yes — cold-chain van leaves at 10am. You'll have it by noon. Shall I reserve it? 🧊", delay: 7.6 },
+  { kind: "msg", from: "them", text: "Yes. Our cold-chain vans cover Colombo daily, so a weekly slot is easy. Want me to set it up? 🧊", delay: 7.6 },
 ];
 
 const steps = [
-  { num: "01", title: "Say what you need.", body: "Open WhatsApp, tell our concierge team what you're after — a specific cut, a cheese board, or a recommendation for the occasion." },
-  { num: "02", title: "We curate for you.", body: "Instead of scrolling a static catalogue, receive a tailored list with current pricing, provenance, and availability." },
-  { num: "03", title: "Confirm and pay.", body: "Approve your selection in-chat. Secure payment link, or pay on delivery — whichever you prefer." },
-  { num: "04", title: "Cold-chain to your door.", body: "Hand-picked from our bonded warehouse, temperature-controlled, delivered island-wide by our own logistics fleet." },
+  { num: "01", title: "Tell us what you need.", body: "Message us on WhatsApp with the products and quantities you're after, whether it's a single line or a full order." },
+  { num: "02", title: "We send you a quote.", body: "You get current pricing, pack sizes and availability straight back in the chat, with no scrolling through a static list." },
+  { num: "03", title: "Confirm the order.", body: "Approve it in the chat. We'll agree delivery, payment terms and a schedule that fits how your business runs." },
+  { num: "04", title: "Delivered island-wide.", body: "Picked from our bonded warehouse, kept cold the whole way, and delivered by our own fleet across Sri Lanka." },
 ];
 
 const TypingDots = () => (
@@ -133,7 +133,7 @@ const PhoneMockup = () => {
               <Sparkles className="w-4 h-4 text-forest-deep" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="font-body text-[13px] font-semibold truncate">Olive Foods · Concierge</div>
+              <div className="font-body text-[13px] font-semibold truncate">Olive Foods · Sales Team</div>
               <div className="font-body text-[10px] text-white/70 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse" />
                 online · replies within the hour
@@ -253,7 +253,7 @@ const WhatsAppOrderSection = () => {
             </Eyebrow>
           </motion.div>
           <SplitText
-            text="Order premium in four taps."
+            text="Order on WhatsApp in four steps."
             by="word"
             as="h2"
             stagger={0.06}
@@ -266,7 +266,7 @@ const WhatsAppOrderSection = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="font-body text-base md:text-lg text-white/55 leading-relaxed max-w-2xl mx-auto mt-6"
           >
-            No checkout. No forms. Just a message to our concierge team — we'll handle the catalogue, pricing, and delivery personally.
+            No checkout, no forms. Just message our team and we'll handle the products, pricing and delivery for you.
           </motion.p>
         </div>
 

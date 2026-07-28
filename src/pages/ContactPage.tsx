@@ -31,7 +31,7 @@ const contactInfo = [
   { icon: Mail, label: "Email", value: "info@olivefoods.lk", href: "mailto:info@olivefoods.lk" },
   { icon: Phone, label: "Phone", value: "+94 11 207 1717", href: "tel:+94112071717" },
   { icon: MessageCircle, label: "WhatsApp", value: "+94 11 207 1717", href: "https://wa.me/94112071717" },
-  { icon: MapPin, label: "Office", value: "Colombo, Sri Lanka", href: undefined },
+  { icon: MapPin, label: "Office", value: "292 Sea Street, Colombo 11, Colombo, Sri Lanka 01100", href: "https://www.google.com/maps/dir/?api=1&destination=292+Sea+Street%2C+Colombo+11%2C+Sri+Lanka" },
 ];
 
 const ContactPage = () => {
