@@ -78,11 +78,6 @@ const FilterPanel = ({
 
   return (
     <div className="flex flex-col h-full">
-      <Seo
-        title="Products: Premium Imported Food for Sri Lanka's Trade"
-        description="Browse Olive Foods' range of globally sourced food products: frozen foods, dairy, grocery staples, edible oils and specialty imports, supplied to hotels, restaurants and supermarkets across Sri Lanka."
-        path="/products"
-      />
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
         <h2 className="font-display text-base font-semibold text-foreground">Filters</h2>
@@ -372,6 +367,11 @@ const ProductsPage = () => {
 
   return (
     <PageLayout>
+      <Seo
+        title={ourParam ? "Our Products: Food We Source & Distribute in Sri Lanka" : "Products: Premium Imported Food for Sri Lanka's Trade"}
+        description="Browse Olive Foods' range of globally sourced food products: frozen foods, dairy, grocery staples, edible oils and specialty imports, supplied to hotels, restaurants and supermarkets across Sri Lanka."
+        path="/products"
+      />
       <PageHero
         eyebrow={`Olive Foods / ${ourParam ? "Our Products" : "All Products"}`}
         title={

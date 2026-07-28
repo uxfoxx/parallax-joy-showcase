@@ -291,10 +291,10 @@ const AboutPage = () => {
                 className="lg:col-span-8"
               >
                 <p className="font-body text-xl md:text-2xl font-medium text-foreground leading-relaxed">
-                  Olive Foods is built on thirty-plus years of food-industry experience — and
-                  the supplier relationships that come with it. We import and distribute across
-                  Sri Lanka, supplying the hospitality and retail trade through relationships
-                  that came first.
+                  Olive Foods is built on more than thirty years in the food industry, and on
+                  the supplier relationships that came with it. We import and distribute across
+                  Sri Lanka, supplying the hospitality and retail trade, and we have always put
+                  those relationships first.
                 </p>
                 <div className="mt-7 space-y-5 font-body text-muted-foreground leading-relaxed">
                   <p>Our focus is frozen lines (french fries, meat, seafood, fruits, vegetables) alongside dairy, grocery staples, edible oils, and specialty imports, with vegan, gluten-free, and organic ranges supported throughout. Suppliers across Europe, Asia, and the Middle East, and growing.</p>
@@ -369,7 +369,7 @@ const AboutPage = () => {
                   <span className="block text-gradient-gold-dark italic">one unbroken chain.</span>
                 </h2>
                 <p className="mt-6 font-body text-lg text-primary-foreground/60 leading-relaxed max-w-md">
-                  Five operations, one integrated supply chain — no handoffs, no
+                  Five operations, one integrated supply chain, with no handoffs and no
                   third parties between the source and your kitchen.
                 </p>
               </motion.div>
@@ -414,7 +414,7 @@ const AboutPage = () => {
                 <p className="font-body text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Mission</p>
                 <p className="mt-6 font-display text-2xl sm:text-[28px] font-semibold leading-snug text-foreground">
                   To bring globally sourced food products to Sri Lanka's hospitality and
-                  retail trade — through{" "}
+                  retail trade, through{" "}
                   <span className="text-gradient-gold italic">trusted, long-term relationships</span>,
                   consistent service, and reliable supply.
                 </p>
@@ -428,8 +428,8 @@ const AboutPage = () => {
               >
                 <p className="font-body text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Vision</p>
                 <p className="mt-6 font-display text-2xl sm:text-[28px] font-semibold leading-snug text-foreground">
-                  To be Sri Lanka's most trusted premium food distribution partner — known not
-                  for chasing transactions, but for{" "}
+                  To be Sri Lanka's most trusted food distribution partner, known not
+                  for chasing transactions but for{" "}
                   <span className="text-gradient-gold italic">the partnerships we build</span>.
                 </p>
               </motion.div>
@@ -495,7 +495,7 @@ const AboutPage = () => {
               <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
                 <dl className="border-y border-primary-foreground/10 divide-y divide-primary-foreground/10">
                   {[
-                    { label: "Address", value: "Olive Foods (Pvt) Ltd\nColombo, Sri Lanka", href: undefined },
+                    { label: "Address", value: "Olive Foods (Pvt) Ltd\n292 Sea Street, Colombo 11\nColombo, Sri Lanka 01100", href: undefined },
                     { label: "Phone", value: "+94 11 207 1717", href: "tel:+94112071717" },
                     { label: "Email", value: "info@olivefoods.lk", href: "mailto:info@olivefoods.lk" },
                     { label: "Hours", value: "Mon – Fri: 8:30 AM – 5:30 PM", href: undefined },
@@ -516,7 +516,7 @@ const AboutPage = () => {
                 </dl>
               </motion.div>
               <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="rounded-lg overflow-hidden border border-primary-foreground/15 shadow-xl">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126743.58585953498!2d79.7861!3d6.9271!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo%2C%20Sri%20Lanka!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" width="100%" height="400" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Olive Foods Location" className="w-full h-[400px] block" scrolling="no" />
+                <iframe src="https://www.google.com/maps?q=292%20Sea%20Street%2C%20Colombo%2011%2C%20Sri%20Lanka&output=embed" width="100%" height="400" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Olive Foods — 292 Sea Street, Colombo 11" className="w-full h-[400px] block" scrolling="no" />
               </motion.div>
             </div>
           </div>
