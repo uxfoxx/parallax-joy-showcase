@@ -107,6 +107,7 @@ const ProductDetailPage = () => {
           {
             "@context": "https://schema.org",
             "@type": "Product",
+            "@id": `${SITE_URL}/products/${product.slug}#product`,
             name: product.name,
             description: plainDesc,
             ...(product.image_url ? { image: product.image_url } : {}),
@@ -114,6 +115,15 @@ const ProductDetailPage = () => {
             ...(brandName ? { brand: { "@type": "Brand", name: brandName } } : {}),
             category: product.category,
             url: `${SITE_URL}/products/${product.slug}`,
+            offers: {
+              "@type": "Offer",
+              availability: "https://schema.org/InStock",
+              itemCondition: "https://schema.org/NewCondition",
+              priceCurrency: "LKR",
+              url: `${SITE_URL}/products/${product.slug}`,
+              seller: { "@id": `${SITE_URL}/#organization` },
+              areaServed: { "@type": "Country", name: "Sri Lanka" },
+            },
           },
           {
             "@context": "https://schema.org",
