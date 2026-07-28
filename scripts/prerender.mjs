@@ -39,6 +39,23 @@ const ROUTES = [
   { path: "/contact", waitFor: null },
 ];
 
+// Also prerender the category hub + landing pages (the SEO pages that target
+// "[category] importer/distributor Sri Lanka"). We take their paths from the
+// sitemap the previous build step just wrote, so this stays in sync with the
+// data. Category detail pages are ready once their product grid (or empty
+// state) has rendered.
+const categoryReady = () =>
+  document.querySelectorAll('img[src*="supabase.co/storage"]').length >= 1 ||
+  /Ask us to source|No .* listed/.test(document.body.innerText);
+try {
+  const sitemap = await readFile(join(DIST, "sitemap.xml"), "utf8");
+  const catPaths = [...sitemap.matchAll(/<loc>https:\/\/www\.olivefoods\.lk(\/categories[^<]*)<\/loc>/g)].map((m) => m[1]);
+  for (const p of catPaths) {
+    ROUTES.push({ path: p, waitFor: p === "/categories" ? 'a[href^="/categories/"]' : categoryReady });
+  }
+  console.log(`[prerender] + ${catPaths.length} category route(s) from sitemap`);
+} catch { /* no sitemap yet — skip category prerender */ }
+
 const MIME = {
   ".html": "text/html", ".js": "text/javascript", ".mjs": "text/javascript",
   ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml",

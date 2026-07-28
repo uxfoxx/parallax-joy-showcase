@@ -13,6 +13,8 @@ import BrandsPage from "./pages/BrandsPage.tsx";
 import BrandDetailPage from "./pages/BrandDetailPage.tsx";
 import ProductsPage from "./pages/ProductsPage.tsx";
 import ProductDetailPage from "./pages/ProductDetailPage.tsx";
+import CategoriesPage from "./pages/CategoriesPage.tsx";
+import CategoryPage from "./pages/CategoryPage.tsx";
 import ProfileLinkPage from "./pages/ProfileLinkPage.tsx";
 
 import AdminLogin from "./pages/admin/AdminLogin.tsx";
@@ -76,6 +78,9 @@ const AppRoutes = () => {
             <Route path="/brands/:slug" element={<BrandDetailPage />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/products/:slug" element={<ProductDetailPage />} />
+            {/* SEO category landing pages — not linked from the main nav (see CategoryPage). */}
+            <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/categories/:slug" element={<CategoryPage />} />
             <Route path="/profile/:slug" element={<ProfileLinkPage />} />
 
             <Route path="/admin/login" element={<AdminLogin />} />

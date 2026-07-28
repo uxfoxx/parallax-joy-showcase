@@ -29,8 +29,13 @@ const STATIC_ROUTES = [
   { loc: "/about", priority: "0.8", changefreq: "monthly" },
   { loc: "/products", priority: "0.9", changefreq: "weekly" },
   { loc: "/brands", priority: "0.8", changefreq: "weekly" },
+  { loc: "/categories", priority: "0.7", changefreq: "monthly" },
   { loc: "/contact", priority: "0.7", changefreq: "monthly" },
 ];
+
+// Must match categorySlug() in src/lib/categories.ts.
+const categorySlug = (name) =>
+  name.toLowerCase().trim().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
 const url = process.env.VITE_SUPABASE_URL;
 const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -47,14 +52,21 @@ async function dynamicRoutes() {
   const supabase = createClient(url, key);
   const routes = [];
   try {
-    const { data: products, error: pErr } = await supabase.from("products").select("slug, created_at");
+    const { data: products, error: pErr } = await supabase.from("products").select("slug, created_at, categories");
     if (pErr) console.warn("[sitemap] products query failed:", pErr.message);
+    const catCounts = {};
     for (const p of products ?? []) {
       if (p.slug) routes.push({ loc: `/products/${p.slug}`, priority: "0.7", changefreq: "weekly", lastmod: (p.created_at ?? today).slice(0, 10) });
+      for (const c of p.categories ?? []) if (c) catCounts[c] = (catCounts[c] ?? 0) + 1;
     }
     const { data: brands } = await supabase.from("brands").select("slug");
     for (const b of brands ?? []) {
       if (b.slug) routes.push({ loc: `/brands/${b.slug}`, priority: "0.6", changefreq: "monthly" });
+    }
+    // Category landing pages — only categories that actually have products.
+    const { data: categories } = await supabase.from("categories").select("name");
+    for (const c of categories ?? []) {
+      if (c.name && (catCounts[c.name] ?? 0) > 0) routes.push({ loc: `/categories/${categorySlug(c.name)}`, priority: "0.7", changefreq: "weekly" });
     }
   } catch (err) {
     console.warn("[sitemap] Supabase fetch failed — static routes only:", err?.message ?? err);
