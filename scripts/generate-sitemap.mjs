@@ -11,12 +11,17 @@
  * static routes so the file always exists and robots.txt never 404s.
  */
 import { createClient } from "@supabase/supabase-js";
+import { config as loadEnv } from "dotenv";
 import { writeFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const SITE = "https://www.olivefoods.lk";
 const __dirname = dirname(fileURLToPath(import.meta.url));
+// Load the same env Vite uses so the sitemap can pull live product/brand slugs.
+// (Runs as its own node process, so it doesn't inherit Vite's loaded .env.)
+loadEnv({ path: resolve(__dirname, "../.env") });
+loadEnv({ path: resolve(__dirname, "../.env.local") });
 const OUT = resolve(__dirname, "../dist/sitemap.xml");
 
 const STATIC_ROUTES = [
@@ -42,9 +47,10 @@ async function dynamicRoutes() {
   const supabase = createClient(url, key);
   const routes = [];
   try {
-    const { data: products } = await supabase.from("products").select("slug, updated_at");
+    const { data: products, error: pErr } = await supabase.from("products").select("slug, created_at");
+    if (pErr) console.warn("[sitemap] products query failed:", pErr.message);
     for (const p of products ?? []) {
-      if (p.slug) routes.push({ loc: `/products/${p.slug}`, priority: "0.7", changefreq: "weekly", lastmod: (p.updated_at ?? today).slice(0, 10) });
+      if (p.slug) routes.push({ loc: `/products/${p.slug}`, priority: "0.7", changefreq: "weekly", lastmod: (p.created_at ?? today).slice(0, 10) });
     }
     const { data: brands } = await supabase.from("brands").select("slug");
     for (const b of brands ?? []) {

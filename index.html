@@ -10,6 +10,75 @@
          description/canonical/OG here too would duplicate them on every route. -->
     <title>Olive Foods — Premium Food Importer & Distributor, Sri Lanka</title>
 
+    <!-- Static SEO baseline. react-helmet (src/components/Seo.tsx) sets
+         per-route title/description/canonical at runtime for Google's JS
+         rendering; these static tags give search engines AND AI answer engines
+         (ChatGPT, Gemini, Perplexity, Claude) a correct, JS-free baseline plus
+         site-wide Organization/WebSite structured data on every page. -->
+    <meta name="description" content="Olive Foods (Pvt) Ltd imports and distributes premium food and consumer brands across Sri Lanka, supplying hotels, restaurants, supermarkets and retailers island-wide from Colombo." />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://www.olivefoods.lk/" />
+    <meta name="theme-color" content="#0F241A" />
+    <meta name="geo.region" content="LK" />
+    <meta name="geo.placename" content="Colombo, Sri Lanka" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Olive Foods" />
+    <meta property="og:title" content="Olive Foods — Premium Food Importer & Distributor, Sri Lanka" />
+    <meta property="og:description" content="Importer and distributor of premium food and consumer brands across Sri Lanka, supplying hotels, restaurants, supermarkets and retailers island-wide." />
+    <meta property="og:url" content="https://www.olivefoods.lk/" />
+    <meta property="og:image" content="https://www.olivefoods.lk/olive-foods-hero-logo.svg" />
+    <meta property="og:locale" content="en_LK" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Olive Foods — Premium Food Importer & Distributor, Sri Lanka" />
+    <meta name="twitter:description" content="Importer and distributor of premium food and consumer brands across Sri Lanka, supplying hotels, restaurants, supermarkets and retailers island-wide." />
+    <meta name="twitter:image" content="https://www.olivefoods.lk/olive-foods-hero-logo.svg" />
+
+    <!-- Site-wide structured data (read without JS) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://www.olivefoods.lk/#organization",
+      "name": "Olive Foods",
+      "legalName": "Olive Foods (Pvt) Ltd",
+      "url": "https://www.olivefoods.lk/",
+      "logo": "https://www.olivefoods.lk/olive-foods-hero-logo.svg",
+      "image": "https://www.olivefoods.lk/olive-foods-hero-logo.svg",
+      "description": "Olive Foods (Pvt) Ltd imports and distributes premium food and consumer brands across Sri Lanka, supplying hotels, restaurants, supermarkets and retailers island-wide from Colombo.",
+      "email": "info@olivefoods.lk",
+      "telephone": "+94112071717",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Colombo",
+        "addressCountry": "LK"
+      },
+      "areaServed": { "@type": "Country", "name": "Sri Lanka" },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+94112071717",
+        "email": "info@olivefoods.lk",
+        "contactType": "sales",
+        "areaServed": "LK",
+        "availableLanguage": ["en", "si", "ta"]
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://www.olivefoods.lk/#website",
+      "url": "https://www.olivefoods.lk/",
+      "name": "Olive Foods",
+      "inLanguage": "en",
+      "publisher": { "@id": "https://www.olivefoods.lk/#organization" }
+    }
+    </script>
+
     <!-- Warm up the TLS handshakes to Supabase (images + data) and Google
          Fonts so they overlap with HTML parsing instead of blocking later. -->
     <link rel="preconnect" href="https://vqvspkuhqthvbtsgfgbo.supabase.co" crossorigin />

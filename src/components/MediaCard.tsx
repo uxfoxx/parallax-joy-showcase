@@ -52,7 +52,13 @@ const MediaCard = ({
   imageInset = false,
 }: MediaCardProps) => {
   const [imgLoaded, setImgLoaded] = useState(false);
+  // Resilient source: optimized transform → original object URL → placeholder.
+  // Supabase's image-transform endpoint occasionally fails (rate limits, load),
+  // and without a fallback the card would sit on an endless loading pulse. The
+  // original object URL always works, so we retry with it before giving up.
+  const [srcTier, setSrcTier] = useState(0); // 0 = optimized, 1 = original, 2 = failed
   const isDark = variant === "dark";
+  const hasImage = !!image && srcTier < 2;
 
   const inner = (
     <Tilt
@@ -70,7 +76,7 @@ const MediaCard = ({
           isDark ? "border-white/10 bg-forest-deep/40" : "border-border/70"
         }`}
       >
-        {image ? (
+        {hasImage ? (
           <>
             {!imgLoaded && <div className="absolute inset-0 bg-muted animate-pulse" />}
             <CurtainImage
@@ -78,9 +84,10 @@ const MediaCard = ({
                 imageInset ? "absolute inset-6 md:inset-8" : "absolute inset-0"
               }
               wrapperStyle={{ width: "auto", height: "auto" }}
-              src={cdnImg(image, 600)}
+              src={srcTier === 0 ? cdnImg(image!, 600) : image!}
               alt={title}
               onLoad={() => setImgLoaded(true)}
+              onError={() => setSrcTier((t) => t + 1)}
               className={`absolute inset-0 w-full h-full object-scale-down transition-transform duration-[900ms] ease-out group-hover:scale-[1.06] ${
                 imgLoaded ? "opacity-100" : "opacity-0"
               }`}
