@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
@@ -26,13 +27,25 @@ const faqs = [
   },
   {
     q: "Do you only sell what's in your catalogue?",
-    a: "No — the catalogue is where we start, not where we stop. Need a product or brand that isn't listed, even one we don't already represent? Our sourcing team will track it down and import it through our global supplier network. Tell us what you're looking for.",
+    a: "No. The catalogue is a starting point, not a limit. If you need something that isn't listed, or a brand we don't yet carry, our sourcing team will find it and bring it in through our supplier network. Just tell us what you're after.",
   },
   {
     q: "Do you handle seasonal or one-off requests?",
     a: "Yes. Inventory rotates with the seasons (turkey and Dutch specialties around December, fresh imports as demand patterns shift). Happy to source one-off products for events or specific menus.",
   },
 ];
+
+// FAQPage structured data — makes the Q&As eligible for Google rich results
+// and gives AI answer engines clean, quotable question/answer pairs.
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
 
 const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -44,6 +57,9 @@ const FAQSection = () => {
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background">
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+      </Helmet>
       {/* Dot grid pattern */}
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.4]"

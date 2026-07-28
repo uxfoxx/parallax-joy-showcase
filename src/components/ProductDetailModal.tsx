@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useProduct, useProducts, useProductImages } from "@/lib/api";
 import { useProductModal } from "@/lib/productModal";
-import { cdnImg } from "@/lib/img";
+import { cdnImg, fallbackToOriginal } from "@/lib/img";
 
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
@@ -113,6 +113,7 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
                   src={cdnImg(allImages[activeImage], 1000)}
                   alt={product.name}
                   decoding="async"
+                  onError={fallbackToOriginal(allImages[activeImage])}
                   className="w-full h-full object-contain p-6 group-hover:scale-[1.04] transition-transform duration-700 ease-out"
                   initial={{ opacity: 0, scale: 1.03 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -278,6 +279,7 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
                             alt={p.name}
                             loading="lazy"
                             decoding="async"
+                            onError={fallbackToOriginal(p.image_url)}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         ) : (

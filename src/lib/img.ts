@@ -1,3 +1,5 @@
+import type { SyntheticEvent } from "react";
+
 /**
  * Rewrite a Supabase Storage public object URL to the image-transform ("render")
  * endpoint so we download images near their display size instead of full
@@ -14,3 +16,17 @@ export const cdnImg = (url: string, width: number, quality = 70): string => {
   const sep = rendered.includes("?") ? "&" : "?";
   return `${rendered}${sep}width=${width}&quality=${quality}&resize=contain`;
 };
+
+/**
+ * `onError` handler for `<img src={cdnImg(url, w)} />`: if the optimized
+ * transform URL fails (the render endpoint occasionally rate-limits or errors
+ * under load), fall back once to the original object URL, which is always
+ * served. Guards against an error loop.
+ *
+ *   <img src={cdnImg(url, 600)} onError={fallbackToOriginal(url)} />
+ */
+export const fallbackToOriginal =
+  (original: string) => (e: SyntheticEvent<HTMLImageElement>) => {
+    const el = e.currentTarget;
+    if (original && el.src !== original) el.src = original;
+  };

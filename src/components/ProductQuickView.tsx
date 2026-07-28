@@ -5,7 +5,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/api";
-import { cdnImg } from "@/lib/img";
+import { cdnImg, fallbackToOriginal } from "@/lib/img";
 
 interface ProductQuickViewProps {
   product: Product | null;
@@ -48,7 +48,9 @@ const ProductQuickView = ({ product, open, onOpenChange }: ProductQuickViewProps
               <img
                 src={cdnImg(product.image_url, 900)}
                 alt={product.name}
+                loading="lazy"
                 decoding="async"
+                onError={fallbackToOriginal(product.image_url)}
                 className="w-full h-full object-cover"
               />
             ) : (
