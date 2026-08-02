@@ -26,11 +26,47 @@ export const buildVCard = (p: BusinessProfile): string => {
 
 /** Trigger a browser download of the profile as a .vcf contact file. */
 export const downloadVCard = (p: BusinessProfile): void => {
-  const blob = new Blob([buildVCard(p)], { type: "text/vcard;charset=utf-8" });
+  triggerVCardDownload(buildVCard(p), `${p.slug || "contact"}.vcf`);
+};
+
+const COMPANY = {
+  name: "Olive Foods (Pvt) Ltd",
+  phone: "+94 11 207 1717",
+  email: "info@olivefoods.lk",
+  // ADR: ;;street;city;region;postal;country  (commas/semicolons escaped)
+  adr: ";;292 Sea Street\\, Colombo 11;Colombo;;01100;Sri Lanka",
+  url: "https://www.olivefoods.lk",
+};
+
+/** Build a VCARD 3.0 for the Olive Foods company contact. `phone` overrides the
+ *  default number (set in the admin panel). */
+export const buildCompanyVCard = (phone?: string | null): string =>
+  [
+    "BEGIN:VCARD",
+    "VERSION:3.0",
+    `N:${esc(COMPANY.name)};;;`,
+    `FN:${esc(COMPANY.name)}`,
+    `ORG:${esc(COMPANY.name)}`,
+    `TEL;TYPE=WORK,VOICE:${(phone && phone.trim()) || COMPANY.phone}`,
+    `EMAIL;TYPE=INTERNET:${COMPANY.email}`,
+    `ADR;TYPE=WORK:${COMPANY.adr}`,
+    `URL:${COMPANY.url}`,
+    "END:VCARD",
+  ].join("\r\n");
+
+/** Download the Olive Foods company contact as a .vcf. iOS Safari and Android
+ *  Chrome both open the "Add to Contacts" screen for a downloaded .vcf. */
+export const downloadCompanyVCard = (phone?: string | null): void => {
+  triggerVCardDownload(buildCompanyVCard(phone), "olive-foods.vcf");
+};
+
+/** Shared blob-download trigger for a .vcf string. */
+const triggerVCardDownload = (vcard: string, filename: string): void => {
+  const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `${p.slug || "contact"}.vcf`;
+  a.download = filename;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
