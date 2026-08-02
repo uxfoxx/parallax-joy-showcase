@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   useBusinessProfiles,
   useCreateBusinessProfile,
@@ -40,7 +40,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Pencil, Trash2, Link2, ExternalLink, User, FileText, Upload, Loader2, Download, Palette } from "lucide-react";
+import { Plus, Pencil, Trash2, Link2, ExternalLink, User, FileText, Upload, Loader2, Download, Palette, Phone } from "lucide-react";
 import { toast } from "sonner";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import PinGate from "@/components/admin/PinGate";
@@ -159,6 +159,50 @@ const CertificateCard = () => {
         folder="certificate"
         previewClassName="h-28 w-20"
       />
+    </div>
+  );
+};
+
+const ContactNumberCard = () => {
+  const { data: settings } = useBrochureSettings();
+  const updateBrochure = useUpdateBrochureSettings();
+  const [phone, setPhone] = useState("");
+  const [dirty, setDirty] = useState(false);
+
+  useEffect(() => {
+    if (!dirty && settings) setPhone(settings.contact_phone ?? "");
+  }, [settings, dirty]);
+
+  const save = async () => {
+    try {
+      await updateBrochure.mutateAsync({ contact_phone: phone.trim() || null });
+      setDirty(false);
+      toast.success("Contact number saved");
+    } catch (err: any) {
+      toast.error(err.message ?? "Save failed");
+    }
+  };
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-4">
+      <div className="flex items-center gap-2">
+        <Phone className="w-4 h-4 text-accent" />
+        <h2 className="font-display text-base font-bold text-foreground">Contact Number</h2>
+      </div>
+      <p className="font-body text-xs text-muted-foreground mt-0.5 mb-3">
+        The number saved by the "Save Contact" button on profile links. Leave blank to use the default (+94 11 207 1717).
+      </p>
+      <div className="flex gap-2">
+        <Input
+          value={phone}
+          onChange={(e) => { setPhone(e.target.value); setDirty(true); }}
+          placeholder="+94 11 207 1717"
+          className="font-body"
+        />
+        <Button onClick={save} disabled={!dirty || updateBrochure.isPending} className="font-body shrink-0">
+          {updateBrochure.isPending ? "Saving…" : "Save"}
+        </Button>
+      </div>
     </div>
   );
 };
@@ -386,6 +430,7 @@ const AdminBusinessProfilesInner = () => {
         <BrochureCard />
         <CertificateCard />
         <BrandGuidelinesCard />
+        <ContactNumberCard />
       </div>
 
       <div className="rounded-xl border border-border bg-card">

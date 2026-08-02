@@ -1,8 +1,9 @@
 import { lazy, Suspense, useMemo, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Globe, IdCard, FileText, ArrowLeft, Loader2 } from "lucide-react";
+import { Globe, IdCard, FileText, ArrowLeft, Loader2, UserPlus } from "lucide-react";
 import { useBusinessProfile, useBrochureSettings } from "@/lib/api";
+import { downloadCompanyVCard } from "@/lib/vcard";
 import Seo from "@/components/Seo";
 import ProfileShell from "@/components/profile/ProfileShell";
 import BusinessCardView from "@/components/profile/BusinessCardView";
@@ -29,6 +30,21 @@ const OPTIONS: Record<OptionKey, { label: string; hint: string; Icon: typeof Glo
   card: { label: "E Business Profile", hint: "View the digital business card", Icon: IdCard },
   brochure: { label: "Brochure", hint: "View our product brochure", Icon: FileText },
 };
+
+const CARD_CLASS =
+  "w-full flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-left hover:border-accent/40 hover:bg-accent/10 transition-colors";
+
+const OptionContent = ({ Icon, label, hint }: { Icon: typeof Globe; label: string; hint: string }) => (
+  <>
+    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent/15">
+      <Icon className="w-5 h-5 text-accent" />
+    </span>
+    <span>
+      <span className="block font-display text-base font-bold text-white">{label}</span>
+      <span className="block font-body text-sm text-white/55">{hint}</span>
+    </span>
+  </>
+);
 
 /**
  * Public entry point at /profile/:slug. Shows a chooser between Website /
@@ -116,24 +132,21 @@ const ProfileLinkPage = () => {
           </p>
           {options.map((key) => {
             const { label, hint, Icon } = OPTIONS[key];
-            const content = (
-              <>
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent/15">
-                  <Icon className="w-5 h-5 text-accent" />
-                </span>
-                <span>
-                  <span className="block font-display text-base font-bold text-white">{label}</span>
-                  <span className="block font-body text-sm text-white/55">{hint}</span>
-                </span>
-              </>
-            );
-            const className = "w-full flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-left hover:border-accent/40 hover:bg-accent/10 transition-colors";
+            const content = <OptionContent Icon={Icon} label={label} hint={hint} />;
             return key === "website" ? (
-              <Link key={key} to="/" className={className}>{content}</Link>
+              <Link key={key} to="/" className={CARD_CLASS}>{content}</Link>
             ) : (
-              <button key={key} type="button" onClick={() => setView(key)} className={className}>{content}</button>
+              <button key={key} type="button" onClick={() => setView(key)} className={CARD_CLASS}>{content}</button>
             );
           })}
+          {/* Always offer the company contact as a downloadable vCard (iOS + Android). */}
+          <button
+            type="button"
+            onClick={() => downloadCompanyVCard(brochure?.contact_phone ?? null)}
+            className={CARD_CLASS}
+          >
+            <OptionContent Icon={UserPlus} label="Save Contact" hint="Add Olive Foods to your phone" />
+          </button>
         </motion.div>
       </ProfileShell>
     </>

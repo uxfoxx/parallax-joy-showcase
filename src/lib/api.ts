@@ -466,10 +466,13 @@ export type BrochureSettings = {
   pdf_url: string | null;
   /** GMP certificate image shown on /about; null = use the bundled default. */
   certificate_url: string | null;
+  /** Company phone saved by the "Save Contact" vCard option on profile links;
+   *  null = fall back to the built-in default number. */
+  contact_phone: string | null;
   updated_at: string;
 };
 
-type SiteSettingsPatch = Partial<Pick<BrochureSettings, "pdf_url" | "certificate_url">>;
+type SiteSettingsPatch = Partial<Pick<BrochureSettings, "pdf_url" | "certificate_url" | "contact_phone">>;
 
 export const useBrochureSettings = () =>
   useQuery({
