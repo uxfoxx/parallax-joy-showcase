@@ -259,8 +259,21 @@ const AdminBusinessProfilesInner = () => {
   const handleSave = async () => {
     const name = form.name.trim();
     if (!name) return toast.error("Name is required");
-    const slug = (form.slug.trim() && slugify(form.slug)) || slugify(name);
+    let slug = (form.slug.trim() && slugify(form.slug)) || slugify(name);
     if (!slug) return toast.error("Could not derive a link slug — add one manually");
+    // When the slug is auto-derived from the name (no explicit slug typed),
+    // make it unique so creating/renaming never dead-ends on "slug already
+    // taken". An explicitly typed slug is left as-is (the save surfaces a clear
+    // error if that one collides).
+    if (!form.slug.trim()) {
+      const taken = new Set(profiles.filter((p) => p.id !== editing?.id).map((p) => p.slug));
+      if (taken.has(slug)) {
+        const base = slug;
+        let n = 2;
+        while (taken.has(`${base}-${n}`)) n++;
+        slug = `${base}-${n}`;
+      }
+    }
     const payload = {
       slug,
       name,
