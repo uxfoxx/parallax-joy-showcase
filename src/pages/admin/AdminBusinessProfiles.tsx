@@ -40,7 +40,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Pencil, Trash2, Link2, ExternalLink, User, FileText, Upload, Loader2, Download, Palette, Phone } from "lucide-react";
+import { Plus, Pencil, Trash2, Link2, ExternalLink, User, FileText, Upload, Loader2, Download, Palette, Phone, QrCode } from "lucide-react";
+import QRCode from "qrcode";
 import { toast } from "sonner";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import PinGate from "@/components/admin/PinGate";
@@ -320,6 +321,27 @@ const AdminBusinessProfilesInner = () => {
       toast.error("Couldn't copy — link: " + cardUrl(slug));
     }
   };
+  // Download a scannable QR for the profile link (canonical production URL, so
+  // it works no matter where the admin panel is open from).
+  const downloadQR = async (p: BusinessProfile) => {
+    try {
+      const dataUrl = await QRCode.toDataURL(`https://www.olivefoods.lk/profile/${p.slug}`, {
+        width: 1024,
+        margin: 2,
+        errorCorrectionLevel: "M",
+        color: { dark: "#0F241A", light: "#FFFFFF" },
+      });
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = `${p.slug || "profile"}-qr.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      toast.success("QR downloaded");
+    } catch (err: any) {
+      toast.error(err?.message ?? "Couldn't generate QR");
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -442,7 +464,7 @@ const AdminBusinessProfilesInner = () => {
               <TableHead className="font-body">Title</TableHead>
               <TableHead className="font-body">Phone</TableHead>
               <TableHead className="font-body w-20">Active</TableHead>
-              <TableHead className="font-body w-40">Actions</TableHead>
+              <TableHead className="font-body w-56">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -470,6 +492,9 @@ const AdminBusinessProfilesInner = () => {
                     <div className="flex gap-1">
                       <Button variant="ghost" size="icon" onClick={() => copyLink(p.slug)} aria-label="Copy share link" title="Copy share link">
                         <Link2 className="w-4 h-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={() => downloadQR(p)} aria-label="Download QR" title="Download QR code">
+                        <QrCode className="w-4 h-4" />
                       </Button>
                       <Button variant="ghost" size="icon" asChild aria-label="Open card" title="Open card">
                         <a href={cardUrl(p.slug)} target="_blank" rel="noopener noreferrer"><ExternalLink className="w-4 h-4" /></a>
