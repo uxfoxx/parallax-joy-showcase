@@ -39,25 +39,31 @@ const COMPANY = {
 };
 
 /** Build a VCARD 3.0 for the Olive Foods company contact. `phone` overrides the
- *  default number (set in the admin panel). */
-export const buildCompanyVCard = (phone?: string | null): string =>
-  [
+ *  default number, and an optional `phone2` adds a second number — both set in
+ *  the admin panel — so the one saved contact carries both. */
+export const buildCompanyVCard = (phone?: string | null, phone2?: string | null): string => {
+  const lines = [
     "BEGIN:VCARD",
     "VERSION:3.0",
     `N:${esc(COMPANY.name)};;;`,
     `FN:${esc(COMPANY.name)}`,
     `ORG:${esc(COMPANY.name)}`,
     `TEL;TYPE=WORK,VOICE:${(phone && phone.trim()) || COMPANY.phone}`,
+  ];
+  if (phone2 && phone2.trim()) lines.push(`TEL;TYPE=CELL,VOICE:${phone2.trim()}`);
+  lines.push(
     `EMAIL;TYPE=INTERNET:${COMPANY.email}`,
     `ADR;TYPE=WORK:${COMPANY.adr}`,
     `URL:${COMPANY.url}`,
     "END:VCARD",
-  ].join("\r\n");
+  );
+  return lines.join("\r\n");
+};
 
 /** Download the Olive Foods company contact as a .vcf. iOS Safari and Android
  *  Chrome both open the "Add to Contacts" screen for a downloaded .vcf. */
-export const downloadCompanyVCard = (phone?: string | null): void => {
-  triggerVCardDownload(buildCompanyVCard(phone), "olive-foods.vcf");
+export const downloadCompanyVCard = (phone?: string | null, phone2?: string | null): void => {
+  triggerVCardDownload(buildCompanyVCard(phone, phone2), "olive-foods.vcf");
 };
 
 /** Shared blob-download trigger for a .vcf string. */

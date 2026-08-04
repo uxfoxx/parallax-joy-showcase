@@ -142,7 +142,7 @@ const ProfileLinkPage = () => {
           {/* Always offer the company contact as a downloadable vCard (iOS + Android). */}
           <button
             type="button"
-            onClick={() => downloadCompanyVCard(brochure?.contact_phone ?? null)}
+            onClick={() => downloadCompanyVCard(brochure?.contact_phone ?? null, brochure?.contact_phone_2 ?? null)}
             className={CARD_CLASS}
           >
             <OptionContent Icon={UserPlus} label="Save Contact" hint="Add Olive Foods to your phone" />
