@@ -469,10 +469,12 @@ export type BrochureSettings = {
   /** Company phone saved by the "Save Contact" vCard option on profile links;
    *  null = fall back to the built-in default number. */
   contact_phone: string | null;
+  /** Optional second company phone, saved into the same "Save Contact" vCard. */
+  contact_phone_2: string | null;
   updated_at: string;
 };
 
-type SiteSettingsPatch = Partial<Pick<BrochureSettings, "pdf_url" | "certificate_url" | "contact_phone">>;
+type SiteSettingsPatch = Partial<Pick<BrochureSettings, "pdf_url" | "certificate_url" | "contact_phone" | "contact_phone_2">>;
 
 export const useBrochureSettings = () =>
   useQuery({

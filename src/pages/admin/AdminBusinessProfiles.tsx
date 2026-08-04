@@ -168,17 +168,24 @@ const ContactNumberCard = () => {
   const { data: settings } = useBrochureSettings();
   const updateBrochure = useUpdateBrochureSettings();
   const [phone, setPhone] = useState("");
+  const [phone2, setPhone2] = useState("");
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
-    if (!dirty && settings) setPhone(settings.contact_phone ?? "");
+    if (!dirty && settings) {
+      setPhone(settings.contact_phone ?? "");
+      setPhone2(settings.contact_phone_2 ?? "");
+    }
   }, [settings, dirty]);
 
   const save = async () => {
     try {
-      await updateBrochure.mutateAsync({ contact_phone: phone.trim() || null });
+      await updateBrochure.mutateAsync({
+        contact_phone: phone.trim() || null,
+        contact_phone_2: phone2.trim() || null,
+      });
       setDirty(false);
-      toast.success("Contact number saved");
+      toast.success("Contact numbers saved");
     } catch (err: any) {
       toast.error(err.message ?? "Save failed");
     }
@@ -188,19 +195,31 @@ const ContactNumberCard = () => {
     <div className="rounded-xl border border-border bg-card p-4">
       <div className="flex items-center gap-2">
         <Phone className="w-4 h-4 text-accent" />
-        <h2 className="font-display text-base font-bold text-foreground">Contact Number</h2>
+        <h2 className="font-display text-base font-bold text-foreground">Contact Numbers</h2>
       </div>
       <p className="font-body text-xs text-muted-foreground mt-0.5 mb-3">
-        The number saved by the "Save Contact" button on profile links. Leave blank to use the default (+94 11 207 1717).
+        Saved by the "Save Contact" button on profile links. Both numbers go into the one saved contact. Leave the first blank to use the default (+94 11 207 1717); leave the second blank to save just one number.
       </p>
-      <div className="flex gap-2">
-        <Input
-          value={phone}
-          onChange={(e) => { setPhone(e.target.value); setDirty(true); }}
-          placeholder="+94 11 207 1717"
-          className="font-body"
-        />
-        <Button onClick={save} disabled={!dirty || updateBrochure.isPending} className="font-body shrink-0">
+      <div className="space-y-2">
+        <div>
+          <Label className="font-body text-xs">Primary number</Label>
+          <Input
+            value={phone}
+            onChange={(e) => { setPhone(e.target.value); setDirty(true); }}
+            placeholder="+94 11 207 1717"
+            className="font-body mt-1"
+          />
+        </div>
+        <div>
+          <Label className="font-body text-xs">Second number (optional)</Label>
+          <Input
+            value={phone2}
+            onChange={(e) => { setPhone2(e.target.value); setDirty(true); }}
+            placeholder="+94 77 123 4567"
+            className="font-body mt-1"
+          />
+        </div>
+        <Button onClick={save} disabled={!dirty || updateBrochure.isPending} className="font-body w-full">
           {updateBrochure.isPending ? "Saving…" : "Save"}
         </Button>
       </div>
