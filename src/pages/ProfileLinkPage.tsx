@@ -55,7 +55,7 @@ const OptionContent = ({ Icon, label, hint }: { Icon: typeof Globe; label: strin
 const ProfileLinkPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: profile, isLoading } = useBusinessProfile(slug || "");
-  const { data: brochure } = useBrochureSettings();
+  const { data: brochure, isLoading: brochureLoading } = useBrochureSettings();
   const [view, setView] = useState<"chooser" | "card" | "brochure">("chooser");
 
   const enabledOptions = useMemo<OptionKey[]>(() => {
@@ -67,9 +67,12 @@ const ProfileLinkPage = () => {
     return opts;
   }, [profile, brochure]);
 
-  // No loading indicator — show the branded backdrop silently until the
-  // profile resolves, then render the right screen.
-  if (isLoading) return <ProfileShell>{null}</ProfileShell>;
+  // No loading indicator — show the branded backdrop silently until BOTH the
+  // profile and the brochure settings resolve, then render the right screen.
+  // Waiting on the brochure query matters: the "brochure" option only counts
+  // once brochure.pdf_url is known, so deciding earlier can wrongly treat a
+  // Website+Brochure profile as website-only and bounce it to the landing page.
+  if (isLoading || brochureLoading) return <ProfileShell>{null}</ProfileShell>;
 
   if (!profile || !profile.active) {
     return (
