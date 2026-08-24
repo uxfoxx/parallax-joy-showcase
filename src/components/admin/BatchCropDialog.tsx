@@ -22,7 +22,9 @@ const ASPECTS: { label: string; value: number | undefined }[] = [
   { label: "3:2", value: 3 / 2 },
 ];
 
-const ASPECT_KEY = "olive.cropAspect";
+// v2: default is now 1:1 for product images — bumped so a previously-persisted
+// aspect (e.g. 4:5) doesn't override the new default.
+const ASPECT_KEY = "olive.cropAspect.v2";
 const loadAspect = (): number | undefined => {
   try {
     const raw = localStorage.getItem(ASPECT_KEY);
@@ -31,7 +33,7 @@ const loadAspect = (): number | undefined => {
   } catch {
     /* ignore */
   }
-  return 4 / 5;
+  return 1;
 };
 
 type Props = {
@@ -167,7 +169,7 @@ const BatchCropDialog = ({ products, folder, open, onOpenChange, onDone }: Props
             minZoom={0.3}
             maxZoom={4}
           />
-          <CropGuides guides={guides} setGuide={setGuide} show={show} />
+          <CropGuides guides={guides} setGuide={setGuide} show={show} locked />
         </div>
 
         {/* Controls */}

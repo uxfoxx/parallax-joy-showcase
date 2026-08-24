@@ -32,6 +32,8 @@ interface ImageCropDialogProps {
   onCropped: (url: string) => void;
   /** Default aspect ratio; undefined = free crop. */
   defaultAspect?: number;
+  /** When true, the alignment guides are fixed reference lines (not draggable). */
+  lockGuides?: boolean;
 }
 
 /**
@@ -47,6 +49,7 @@ const ImageCropDialog = ({
   folder,
   onCropped,
   defaultAspect,
+  lockGuides = false,
 }: ImageCropDialogProps) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -119,7 +122,7 @@ const ImageCropDialog = ({
               maxZoom={4}
             />
           )}
-          <CropGuides guides={guides} setGuide={setGuide} show={show} />
+          <CropGuides guides={guides} setGuide={setGuide} show={show} locked={lockGuides} />
         </div>
 
         {/* Controls */}
