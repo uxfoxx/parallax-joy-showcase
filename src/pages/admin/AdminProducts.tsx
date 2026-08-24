@@ -594,7 +594,8 @@ const AdminProducts = () => {
         open={!!cropProduct}
         onOpenChange={(o) => { if (!o) setCropProduct(null); }}
         folder="product-images"
-        defaultAspect={4 / 5}
+        defaultAspect={1}
+        lockGuides
         onCropped={(url) => { if (cropProduct) handleCardCrop(cropProduct.id, url); }}
       />
 

@@ -5,16 +5,19 @@ type Props = {
   guides: Guides;
   setGuide: (side: GuideSide, value: number) => void;
   show: boolean;
+  /** When true the guides are fixed reference lines — no dragging, no handles. */
+  locked?: boolean;
 };
 
 /**
- * Four draggable alignment guides overlaid on the crop viewport. Horizontal
- * (top/bottom) lines drag vertically, vertical (left/right) lines drag
- * horizontally. Only the thin guide strips capture pointer events — the rest of
- * the overlay is pass-through so react-easy-crop still pans/zooms underneath.
- * Reference only: does not affect the exported crop.
+ * Four alignment guides overlaid on the crop viewport. Horizontal (top/bottom)
+ * lines drag vertically, vertical (left/right) lines drag horizontally — unless
+ * `locked`, in which case they render as fixed, non-editable reference lines.
+ * Only the thin guide strips capture pointer events — the rest of the overlay is
+ * pass-through so react-easy-crop still pans/zooms underneath. Reference only:
+ * does not affect the exported crop.
  */
-const CropGuides = ({ guides, setGuide, show }: Props) => {
+const CropGuides = ({ guides, setGuide, show, locked = false }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
   if (!show) return null;
 
@@ -47,18 +50,22 @@ const CropGuides = ({ guides, setGuide, show }: Props) => {
       {(["top", "bottom"] as GuideSide[]).map((side) => (
         <div
           key={side}
-          onPointerDown={startDrag(side, "y")}
-          className="absolute left-0 right-0 h-[11px] -translate-y-1/2 pointer-events-auto cursor-ns-resize group/guide"
+          onPointerDown={locked ? undefined : startDrag(side, "y")}
+          className={`absolute left-0 right-0 h-[11px] -translate-y-1/2 group/guide ${
+            locked ? "pointer-events-none" : "pointer-events-auto cursor-ns-resize"
+          }`}
           style={{ top: `${guides[side] * 100}%` }}
         >
           <div
             className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2"
             style={{ background: lineColor, opacity: 0.85, boxShadow: "0 0 0 0.5px rgba(0,0,0,0.4)" }}
           />
-          <span
-            className="absolute left-1/2 top-1/2 h-2.5 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-80 group-hover/guide:opacity-100"
-            style={{ background: lineColor }}
-          />
+          {!locked && (
+            <span
+              className="absolute left-1/2 top-1/2 h-2.5 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-80 group-hover/guide:opacity-100"
+              style={{ background: lineColor }}
+            />
+          )}
         </div>
       ))}
 
@@ -66,18 +73,22 @@ const CropGuides = ({ guides, setGuide, show }: Props) => {
       {(["left", "right"] as GuideSide[]).map((side) => (
         <div
           key={side}
-          onPointerDown={startDrag(side, "x")}
-          className="absolute top-0 bottom-0 w-[11px] -translate-x-1/2 pointer-events-auto cursor-ew-resize group/guide"
+          onPointerDown={locked ? undefined : startDrag(side, "x")}
+          className={`absolute top-0 bottom-0 w-[11px] -translate-x-1/2 group/guide ${
+            locked ? "pointer-events-none" : "pointer-events-auto cursor-ew-resize"
+          }`}
           style={{ left: `${guides[side] * 100}%` }}
         >
           <div
             className="absolute top-0 bottom-0 left-1/2 w-px -translate-x-1/2"
             style={{ background: lineColor, opacity: 0.85, boxShadow: "0 0 0 0.5px rgba(0,0,0,0.4)" }}
           />
-          <span
-            className="absolute top-1/2 left-1/2 w-2.5 h-6 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-80 group-hover/guide:opacity-100"
-            style={{ background: lineColor }}
-          />
+          {!locked && (
+            <span
+              className="absolute top-1/2 left-1/2 w-2.5 h-6 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-80 group-hover/guide:opacity-100"
+              style={{ background: lineColor }}
+            />
+          )}
         </div>
       ))}
     </div>
