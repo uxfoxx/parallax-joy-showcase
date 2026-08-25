@@ -1,194 +1,146 @@
-# Deploying Olive Foods to a Namecheap VPS (AlmaLinux 9)
+# Olive Foods on the shared VPS — how it runs, and how to rebuild it
 
-One-time setup for a **fresh AlmaLinux 9 (64-bit) VPS**, serving the site at
-**https://olivefoods.lk**. After this, every deploy is a single command from
-your Mac: `./scripts/deploy.sh`.
-
-The site is a static build — nginx just serves files. No Node, no database, and
-no secrets live on the server.
-
-> **On Ubuntu/Debian instead?** Swap `dnf`→`apt`, `firewalld`→`ufw`, the wheel
-> group→sudo, put the site config in `/etc/nginx/sites-available/` + symlink,
-> and skip the SELinux step. Ask and I'll give you that variant.
-
-Throughout, replace `<VPS_IP>` with your server's IP (in the Namecheap VPS
-welcome email).
-
----
-
-## Step 0 — Point the domain at the VPS  *(do this first — HTTPS needs it)*
-
-In Namecheap: **Domain List → olivefoods.lk → Manage → Advanced DNS**. Set two
-A records (delete any old ones pointing at the previous host):
-
-| Type     | Host  | Value       | TTL       |
-|----------|-------|-------------|-----------|
-| A Record | `@`   | `<VPS_IP>`  | Automatic |
-| A Record | `www` | `<VPS_IP>`  | Automatic |
-
-DNS can take minutes to a few hours. Check from your Mac until it returns
-`<VPS_IP>`:
-
-```bash
-dig +short olivefoods.lk
-```
-
-> ⚠️ This moves the live site off your current Namecheap shared hosting onto the
-> VPS. Only continue once you're ready for that switch.
-
----
-
-## Step 1 — Connect and update
-
-```bash
-ssh root@<VPS_IP>
-```
-
-```bash
-dnf upgrade -y
-dnf install -y rsync   # needed for deploys; minimal images often lack it
-```
-
----
-
-## Step 2 — Create a deploy user (so you're not deploying as root)
-
-On AlmaLinux the sudo group is **wheel**:
-
-```bash
-adduser deploy
-passwd deploy                 # set a password when prompted
-usermod -aG wheel deploy
-```
-
-Then set up **key-based login** so `deploy.sh` can rsync without a password.
-Run this part **on your Mac**, in a new terminal:
-
-```bash
-# create a key if you don't already have one (press Enter through the prompts)
-[ -f ~/.ssh/id_ed25519.pub ] || ssh-keygen -t ed25519
-
-# install it on the server for the deploy user (uses the password you just set)
-ssh-copy-id deploy@<VPS_IP>
-```
-
-Confirm it works passwordlessly:
-
-```bash
-ssh deploy@<VPS_IP> "echo connected as \$(whoami)"
-```
-
----
-
-## Step 3 — Install nginx + open the firewall  *(back on the server as root)*
-
-```bash
-dnf install -y nginx
-systemctl enable --now nginx
-
-firewall-cmd --permanent --add-service=http
-firewall-cmd --permanent --add-service=https
-firewall-cmd --reload
-```
-
----
-
-## Step 4 — Create the web root (with the right SELinux context)
-
-AlmaLinux runs **SELinux in enforcing mode**. nginx can only serve a directory
-labelled `httpd_sys_content_t`, and `/var/www` isn't labelled that by default —
-skip this and you'll get **403 Forbidden**.
-
-```bash
-mkdir -p /var/www/olivefoods
-chown -R deploy:deploy /var/www/olivefoods
-
-dnf install -y policycoreutils-python-utils
-semanage fcontext -a -t httpd_sys_content_t "/var/www/olivefoods(/.*)?"
-restorecon -Rv /var/www/olivefoods
-```
-
----
-
-## Step 5 — Install the site config
-
-On AlmaLinux, site configs live in `/etc/nginx/conf.d/`. Copy
-`deploy/nginx-olivefoods.conf` from this repo onto the server — **from your Mac**:
-
-```bash
-scp deploy/nginx-olivefoods.conf root@<VPS_IP>:/etc/nginx/conf.d/olivefoods.conf
-```
-
-Then **on the server**:
-
-```bash
-nginx -t                  # test config
-systemctl reload nginx
-```
-
-> Optional: the stock `/etc/nginx/nginx.conf` has a default `server {}` block that
-> shows the "Welcome to nginx" page when someone hits the raw IP. Name-based
-> routing still sends `olivefoods.lk` to our config, so you can leave it. To hide
-> the default page entirely, comment out that `server { … }` block in
-> `nginx.conf` and reload.
-
----
-
-## Step 6 — Enable HTTPS (free, auto-renewing)
-
-Only works once DNS from Step 0 resolves to the VPS. certbot comes from EPEL:
-
-```bash
-dnf install -y epel-release
-dnf install -y certbot python3-certbot-nginx
-certbot --nginx -d olivefoods.lk -d www.olivefoods.lk
-```
-
-Choose **redirect HTTP → HTTPS** when asked. certbot edits the nginx config,
-installs the certificate, and enables auto-renewal (verify with
-`systemctl list-timers | grep certbot`).
-
----
-
-## Step 7 — First deploy  *(from your Mac, in the repo)*
-
-```bash
-cp deploy/deploy.conf.example deploy/deploy.conf
-```
-
-Edit `deploy/deploy.conf` — set `DEPLOY_HOST="<VPS_IP>"` (the other defaults are
-already correct). Then:
+**This is not a from-scratch runbook any more.** The site is live and this
+document describes the arrangement it actually runs under, so that the setup can
+be understood, rebuilt, or moved. For day-to-day work you only need:
 
 ```bash
 ./scripts/deploy.sh
 ```
 
-It builds the site and rsyncs it to the server. Open **https://olivefoods.lk** —
-you're live.
+> **Rewritten 2026-08-19.** The previous version described a static nginx setup
+> serving `/var/www/olivefoods` directly, with the site config hand-installed on
+> the server. That is no longer how this works, and following it would produce a
+> broken deploy.
 
 ---
 
-## Every deploy after that
+## The shared box
 
-```bash
-./scripts/deploy.sh
+`159.198.45.242`, AlmaLinux 9, 1 vCPU / ~1 GB RAM / 2 GB swap. **Two other
+projects run on it** (MiniFlix and Bandit Theory). They are deliberately isolated
+— separate process, port, vhost, directory, logs and memory cap each. Anything
+you do must stay in this project's lane.
+
+| | |
+|---|---|
+| Directory | `/srv/olivefoods/` |
+| Runtime port | **4001**, bound to `127.0.0.1` only |
+| pm2 app | `olivefoods` (namespace `olivefoods`) |
+| nginx vhost | `/etc/nginx/conf.d/10-olivefoods.conf` |
+| Logs | `/var/log/nginx/olivefoods.{access,error}.log`, `pm2 logs olivefoods` |
+
+Ports come from a registry so a new project cannot collide: **4001** olivefoods ·
+**4002** miniflix · **4003** bandittheory. Next one takes 4004. Never 3000 — it is
+the default for Next.js, Express and TanStack Start.
+
+## How a page gets served
+
+```
+browser → nginx :443 (TLS, caching, security headers)
+        → 127.0.0.1:4001  sirv, serving /srv/olivefoods/current/
 ```
 
-That's the whole workflow: it rebuilds and syncs. No FTP, no GitHub secrets, no
-server logins needed for routine updates.
+The build is a static Vite/React bundle plus 30 prerendered HTML pages. It is
+served by **sirv** (a small production static server) running under pm2, not by
+nginx reading files directly, so this project has its own restartable runtime like
+the other two.
 
----
+**nginx still owns HTTP policy** — caching, security headers, gzip. sirv only
+serves bytes, and its `Cache-Control` is hidden and replaced per location. That is
+why `deploy/ecosystem.config.cjs` passes no `--maxage`/`--immutable` flags.
+
+## Directory layout
+
+```
+/srv/olivefoods/
+├── releases/<timestamp>/    each deploy, 5 kept
+├── current -> releases/…    the symlink sirv serves
+├── server/                  sirv runtime (npm ci'd from deploy/server/)
+├── shared/logs/             pm2 stdout/stderr
+├── ecosystem.config.cjs     pm2 process definition
+└── nginx.conf               staged vhost, installed by the helper below
+```
+
+## What `./scripts/deploy.sh` does
+
+1. `npm ci` and `npm run build` **locally** — the VPS OOMs on `vite build`.
+   The build includes sitemap generation and Puppeteer prerendering.
+2. Uploads to a **new** `releases/<timestamp>/` — the running site is untouched.
+3. Flips `current` with an atomic `mv -T` rename.
+4. `pm2 reload olivefoods`. **This is mandatory, not tidiness:** sirv builds its
+   file manifest at startup, so a symlink flip alone would keep serving the old
+   release's file list.
+5. Installs this project's nginx config, smoke-tests the live URL, and **rolls
+   back to the previous release automatically if it fails**.
+6. Prunes to the newest 5 releases.
+
+Manual rollback is a symlink flip plus a reload:
+
+```bash
+ssh deploy@159.198.45.242 'ls /srv/olivefoods/releases'
+ssh deploy@159.198.45.242 'cd /srv/olivefoods && ln -sfn releases/<older> .current.tmp && mv -Tf .current.tmp current'
+ssh deploy@159.198.45.242 'export NVM_DIR=$HOME/.nvm; . $NVM_DIR/nvm.sh; pm2 reload olivefoods'
+```
+
+## nginx config
+
+`deploy/nginx-olivefoods.conf` in this repo is the **source of truth**.
+`deploy.sh` stages it to `/srv/olivefoods/nginx.conf` and runs
+`sudo /usr/local/sbin/reload-site-nginx olivefoods` — a root-owned helper that
+installs it, runs `nginx -t`, and **restores the previous file if the test fails**.
+
+**Never hand-edit `/etc/nginx/conf.d/`.** The server copy had drifted 29 lines
+from this repo and there was no way to tell which was live.
+
+Two things in that file are load-bearing and easy to break:
+
+- **`.mjs` must be served as JavaScript.** nginx's `mime.types` does not map it,
+  which is what broke the pdf.js brochure worker. sirv gets this right; the nginx
+  block only adds caching.
+- **`add_header` is not inherited** into a location that declares its own. Every
+  security header is repeated per location on purpose.
+
+## TLS
+
+Let's Encrypt via certbot, **webroot** authenticator against the shared
+`/var/www/acme`, with a `renew_hook` that reloads nginx — so renewals never
+rewrite vhost files. Auto-renews via `certbot-renew.timer`.
+
+> ⚠️ **Renewal for this cert currently FAILS.** The cert covers both
+> `www.olivefoods.lk` and bare `olivefoods.lk`, and Let's Encrypt validates every
+> name. Bare `olivefoods.lk` still has **two A records** — the VPS and a dead
+> Bluehost IP `50.87.216.108` — so validation hits the dead one and 404s. **The
+> cert expires 2026-10-29.** Fix: remove the stale `@` A record at the **LK Domain
+> Registry (nic.lk)**. Keep the `mail` record on 50.87.216.108 — that is email.
+
+## Access
+
+The `deploy` user is **not** an admin. It can write its own project directories
+and run exactly two privileged things: the nginx helper above and
+`systemctl restart pm2-deploy`. It previously held `NOPASSWD:ALL`, which meant a
+compromise of any one of the three projects was a root compromise of all of them.
+Real admin work uses the separate root SSH key.
+
+## Rebuilding this from scratch
+
+If the box were lost, the order is: install nginx + Node/pm2 → create `deploy`
+(non-admin, key-only) → `/srv/olivefoods` skeleton owned by `deploy` →
+`conf.d/00-default.conf` catch-all **first** (without it, whichever vhost loads
+first becomes the default for the whole server) → shared snippets → certbot
+webroot → then `./scripts/deploy.sh` does everything else.
 
 ## Troubleshooting
 
-- **403 Forbidden** — almost always SELinux. Re-run
-  `restorecon -Rv /var/www/olivefoods` on the server. Confirm files are labelled
-  with `ls -Z /var/www/olivefoods` (you want `httpd_sys_content_t`). New files
-  from `rsync` inherit the directory's label, so this normally only bites if
-  Step 4 was skipped.
-- **404 on a sub-route** (e.g. `/about` works from the menu but 404s on refresh)
-  — the SPA fallback isn't active; check `/etc/nginx/conf.d/olivefoods.conf` has
-  the `try_files $uri $uri/ /index.html;` line and reload nginx.
-- **certbot fails** — DNS isn't pointing at the VPS yet (`dig +short
-  olivefoods.lk` must return `<VPS_IP>`), or ports 80/443 aren't open in
-  firewalld (Step 3).
+```bash
+# is the app up and where it should be?
+ssh deploy@159.198.45.242 'ss -ltn | grep 4001'      # expect 127.0.0.1:4001
+ssh deploy@159.198.45.242 'export NVM_DIR=$HOME/.nvm; . $NVM_DIR/nvm.sh; pm2 list'
+ssh deploy@159.198.45.242 'export NVM_DIR=$HOME/.nvm; . $NVM_DIR/nvm.sh; pm2 logs olivefoods --lines 50'
+
+# this site's own traffic and errors, not the other two projects'
+ssh deploy@159.198.45.242 'sudo tail -f /var/log/nginx/olivefoods.error.log'
+```
+
+If the site 502s, sirv is down — `pm2 list` will show it stopped or restarting.
+If it serves stale content after a deploy, the `pm2 reload` did not run.
