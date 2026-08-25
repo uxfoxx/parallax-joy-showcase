@@ -1,0 +1,11 @@
+{
+  "name": "olivefoods-static-server",
+  "private": true,
+  "description": "Production static server for the Olive Foods site on the VPS. Kept separate from the app's own package.json so the server runtime has no build tooling in it, and so a sirv upgrade in one project cannot affect the other projects sharing the box.",
+  "scripts": {
+    "start": "sirv current --single 200.html --etag --host 127.0.0.1 --port 4001"
+  },
+  "dependencies": {
+    "sirv-cli": "3.0.1"
+  }
+}

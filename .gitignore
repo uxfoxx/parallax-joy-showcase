@@ -32,3 +32,7 @@ deploy/deploy.conf
 # browser bundle). Secrets like SUPABASE_DB_URL live in .env.local, which is
 # ignored by the *.local rule above and must NOT be committed.
 
+
+# sirv runtime for the VPS static server (installed on the server via npm ci)
+deploy/server/node_modules/
+deploy/server/current
