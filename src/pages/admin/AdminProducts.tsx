@@ -297,6 +297,16 @@ const AdminProducts = () => {
   };
 
   const handleSave = async () => {
+    if (!form.name.trim()) {
+      toast.error("Please enter a product name.");
+      return;
+    }
+    // brand_id is a required uuid column — an empty select would otherwise be
+    // sent as "" and rejected by Postgres ("invalid input syntax for type uuid").
+    if (!form.brand_id) {
+      toast.error("Please select a brand.");
+      return;
+    }
     try {
       const payload: any = {
         name: form.name,
@@ -458,10 +468,10 @@ const AdminProducts = () => {
           <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
             <DialogHeader><DialogTitle className="font-display">{editing ? "Edit Product" : "New Product"}</DialogTitle></DialogHeader>
             <div className="space-y-4">
-              <div><Label className="font-body">Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="font-body" /></div>
+              <div><Label className="font-body">Name <span className="text-destructive">*</span></Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="font-body" /></div>
               <div><Label className="font-body">Slug</Label><Input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="auto-generated" className="font-body" /></div>
               <div>
-                <Label className="font-body">Brand</Label>
+                <Label className="font-body">Brand <span className="text-destructive">*</span></Label>
                 <Select value={form.brand_id} onValueChange={(v) => setForm({ ...form, brand_id: v })}>
                   <SelectTrigger className="font-body"><SelectValue placeholder="Select brand" /></SelectTrigger>
                   <SelectContent>{brands?.map((b) => <SelectItem key={b.id} value={b.id} className="font-body">{b.name}</SelectItem>)}</SelectContent>
