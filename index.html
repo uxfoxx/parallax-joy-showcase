@@ -16,8 +16,9 @@
          do NOT put a description/canonical/og:title here — a static homepage
          canonical would otherwise duplicate (and outrank) the correct per-route
          canonical on every prerendered sub-page. Only tags helmet never sets
-         live here, so nothing duplicates. -->
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+         live here, so nothing duplicates. That includes robots: Seo.tsx emits
+         the one robots tag per page (a static "index" here sat alongside the
+         noindex of not-found pages, giving them two contradictory tags). -->
     <meta name="theme-color" content="#0F241A" />
     <meta name="geo.region" content="LK" />
     <meta name="geo.placename" content="292 Sea Street, Colombo 11, Colombo, Sri Lanka" />

@@ -36,3 +36,6 @@ deploy/deploy.conf
 # sirv runtime for the VPS static server (installed on the server via npm ci)
 deploy/server/node_modules/
 deploy/server/current
+
+# SEO build intermediates (scripts/seo)
+.seo-cache/

@@ -25,8 +25,15 @@ const BrandDetailPage = () => {
   if (isLoading) return <PageLayout><div className="py-40 text-center font-body text-muted-foreground">Loading...</div></PageLayout>;
 
   if (!brand) {
+    // Same as a missing product: keep removed brand URLs out of search.
     return (
       <PageLayout>
+        <Seo
+          title="Brand Not Found"
+          description="This brand is no longer listed. See the brands Olive Foods imports and distributes in Sri Lanka."
+          path={`/brands/${slug}`}
+          noindex
+        />
         <div className="py-40 text-center">
           <h1 className="font-display text-3xl font-bold text-foreground mb-4">Brand Not Found</h1>
           <Link to="/brands" className="font-body text-forest-mid hover:underline">← Back to Brands</Link>

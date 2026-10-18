@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/generate-sitemap.mjs && node scripts/generate-llms.mjs && node scripts/prerender.mjs",
+    "build": "vite build && node scripts/seo/collect-routes.mjs && node scripts/generate-llms.mjs && node scripts/prerender.mjs && node scripts/seo/build-sitemap.mjs",
+    "seo:check": "node scripts/seo/check-live.mjs",
+    "seo:indexnow": "node scripts/seo/indexnow.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",

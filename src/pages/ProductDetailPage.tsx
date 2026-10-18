@@ -74,8 +74,17 @@ const ProductDetailPage = () => {
   if (isLoading) return <PageLayout><div className="py-40 text-center font-body text-muted-foreground">Loading...</div></PageLayout>;
 
   if (!product) {
+    // Deleted (or renamed — the build redirects renamed slugs) products still
+    // answer 200 through the SPA fallback; noindex keeps them out of search
+    // instead of lingering as soft 404s.
     return (
       <PageLayout>
+        <Seo
+          title="Product Not Found"
+          description="This product is no longer listed. Browse Olive Foods' current range of imported food products."
+          path={`/products/${slug}`}
+          noindex
+        />
         <div className="py-40 text-center">
           <h1 className="font-display text-3xl font-bold text-foreground mb-4">Product Not Found</h1>
           <Link to="/products" className="font-body text-accent hover:underline">← Back to Products</Link>

@@ -18,6 +18,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
 import { useProducts, useBrands, useCategories } from "@/lib/api";
+import { categorySlug } from "@/lib/categories";
 import ProductQuickView from "@/components/ProductQuickView";
 import FilterBar, { type FilterDef } from "@/components/products/FilterBar";
 import type { Product, Brand, Category } from "@/lib/api";
@@ -265,6 +266,18 @@ const ProductsPage = () => {
   const { data: brands = [] } = useBrands();
   const { data: categories = [] } = useCategories();
 
+  // A filter link for exactly one category or one brand (the homepage and
+  // mega-menu use these) lists the same products as that category/brand
+  // landing page — so point search engines there, and the links count towards
+  // the page built to rank. Any other combination is just /products.
+  const singleFilter = !featuredParam && !ourParam;
+  const canonicalPath =
+    singleFilter && categoryParam && !brandParam && categories.some((c) => c.name === categoryParam)
+      ? `/categories/${categorySlug(categoryParam)}`
+      : singleFilter && brandParam && !categoryParam && brands.some((b) => b.slug === brandParam)
+        ? `/brands/${brandParam}`
+        : "/products";
+
   const clearAll = () => {
     setSelectedCategories([]);
     setSelectedBrands([]);
@@ -370,7 +383,7 @@ const ProductsPage = () => {
       <Seo
         title={ourParam ? "Our Products: Food We Source & Distribute in Sri Lanka" : "Products: Premium Imported Food for Sri Lanka's Trade"}
         description="Browse Olive Foods' range of globally sourced food products: frozen foods, dairy, grocery staples, edible oils and specialty imports, supplied to hotels, restaurants and supermarkets across Sri Lanka."
-        path="/products"
+        path={canonicalPath}
       />
       <PageHero
         eyebrow={`Olive Foods / ${ourParam ? "Our Products" : "All Products"}`}

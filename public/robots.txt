@@ -1,53 +1,73 @@
 # Olive Foods — https://www.olivefoods.lk
+#
+# A crawler follows only the most specific group that names it, so the admin
+# rule is repeated in every group (it used to sit only under "*", which
+# Googlebot and Bingbot ignore because they have groups of their own).
+
 # Search engines
 User-agent: Googlebot
 Allow: /
+Disallow: /admin
 
 User-agent: Bingbot
 Allow: /
+Disallow: /admin
 
 # Social preview crawlers
 User-agent: Twitterbot
 Allow: /
+Disallow: /admin
 
 User-agent: facebookexternalhit
 Allow: /
+Disallow: /admin
 
 # AI answer engines (AEO) — welcome to read and cite the site
 User-agent: GPTBot
 Allow: /
+Disallow: /admin
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /admin
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /admin
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /admin
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /admin
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /admin
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /admin
 
 User-agent: anthropic-ai
 Allow: /
+Disallow: /admin
 
 User-agent: Applebot
 Allow: /
+Disallow: /admin
 
 User-agent: Applebot-Extended
 Allow: /
+Disallow: /admin
 
 # Everyone else
 User-agent: *
 Allow: /
 Disallow: /admin
 
-Host: www.olivefoods.lk
+# Sitemap index — one child sitemap per page type (pages, sectors, categories,
+# products, brands), with image entries.
 Sitemap: https://www.olivefoods.lk/sitemap.xml

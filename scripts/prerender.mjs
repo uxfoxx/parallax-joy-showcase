@@ -9,16 +9,15 @@
  * static files directly (try_files $uri $uri/index.html /200.html); the client
  * bundle still loads and takes over for interactivity.
  *
- * What gets prerendered:
- *   - the curated marketing/listing routes below, and
- *   - EVERY product, brand and category detail page, taken from the sitemap the
- *     previous build step just wrote.
+ * What gets prerendered: every route in .seo-cache/routes.json, written by
+ * scripts/seo/collect-routes.mjs — the fixed pages plus EVERY sector,
+ * category, product and brand page, straight from the live data.
  * Prerendering the detail pages is what lets a search for a single product
  * ("Frozen Coconut Puree Sri Lanka") or a brand ("Marvees Sri Lanka") surface
  * Olive Foods — AI crawlers don't run JS, so a JS-only detail page is invisible
  * to them, and Google ranks server-rendered content more reliably.
  *
- * Runs after `vite build` + the sitemap (see package.json "build").
+ * Runs after `vite build` + collect-routes (see package.json "build").
  * Requires: puppeteer (dev dependency).
  *
  * Env knobs (optional):
@@ -59,41 +58,30 @@ const detailReady = () => {
   );
 };
 
-const ROUTES = [
-  { path: "/", waitFor: hasProductImages },
-  { path: "/about", waitFor: null },
-  { path: "/products", waitFor: hasProductImages },
-  { path: "/brands", waitFor: 'a[href^="/brands/"]' },
-  { path: "/contact", waitFor: null },
-];
+// Fixed pages that need a specific signal; the rest of the fixed pages are
+// static content and need no wait.
+const PAGE_WAIT = {
+  "/": hasProductImages,
+  "/products": hasProductImages,
+  "/brands": 'a[href^="/brands/"]',
+  "/categories": 'a[href^="/categories/"]',
+};
+// Data-driven kinds. Sector pages show a product grid, like category pages.
+// A future kind with no entry here falls back to detailReady.
+const KIND_WAIT = { sector: categoryReady, category: categoryReady, product: detailReady, brand: detailReady };
 
-// Pull the category / product / brand detail routes from the sitemap the
-// previous build step wrote, so this stays in sync with the live data.
+let ROUTES;
 try {
-  const sitemap = await readFile(join(DIST, "sitemap.xml"), "utf8");
-  const locs = [...sitemap.matchAll(/<loc>https:\/\/www\.olivefoods\.lk([^<]*)<\/loc>/g)].map((m) => m[1]);
-  const seen = new Set(ROUTES.map((r) => r.path));
-  let nCat = 0, nSector = 0, nProd = 0, nBrand = 0;
-  for (const p of locs) {
-    if (seen.has(p)) continue;
-    seen.add(p);
-    if (p.startsWith("/categories")) {
-      ROUTES.push({ path: p, waitFor: p === "/categories" ? 'a[href^="/categories/"]' : categoryReady });
-      nCat++;
-    } else if (/^\/products\/.+/.test(p)) {
-      ROUTES.push({ path: p, waitFor: detailReady });
-      nProd++;
-    } else if (/^\/brands\/.+/.test(p)) {
-      ROUTES.push({ path: p, waitFor: detailReady });
-      nBrand++;
-    } else if (/^\/supply\/.+/.test(p)) {
-      ROUTES.push({ path: p, waitFor: categoryReady }); // product grid, like a category page
-      nSector++;
-    }
-  }
-  console.log(`[prerender] + from sitemap: ${nCat} category, ${nSector} sector, ${nProd} product, ${nBrand} brand route(s)`);
+  const { routes } = JSON.parse(await readFile(resolve(__dirname, "../.seo-cache/routes.json"), "utf8"));
+  ROUTES = routes.map((r) => ({
+    path: r.loc,
+    waitFor: r.kind === "page" ? (PAGE_WAIT[r.loc] ?? null) : (KIND_WAIT[r.kind] ?? detailReady),
+  }));
+  const byKind = routes.reduce((m, r) => ((m[r.kind] = (m[r.kind] ?? 0) + 1), m), {});
+  console.log(`[prerender] ${routes.length} routes — ${Object.entries(byKind).map(([k, n]) => `${n} ${k}`).join(", ")}`);
 } catch {
-  console.warn("[prerender] no sitemap.xml — prerendering curated routes only");
+  console.warn("[prerender] no .seo-cache/routes.json — prerendering the fixed pages only");
+  ROUTES = ["/", "/about", "/products", "/brands", "/contact"].map((p) => ({ path: p, waitFor: PAGE_WAIT[p] ?? null }));
 }
 
 const ALL = LIMIT > 0 ? ROUTES.slice(0, LIMIT) : ROUTES;
