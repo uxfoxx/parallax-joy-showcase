@@ -3,8 +3,11 @@ import { useParams, Link } from "react-router-dom";
 import Seo, { SITE_URL } from "@/components/Seo";
 import { categorySlug } from "@/lib/categories";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ArrowLeft, Package, MessageCircle, Share2, Tag, Building2, ChevronLeft, ChevronRight, Sparkles, Box, Hash } from "lucide-react";
+import { ArrowLeft, Package, Share2, Tag, Building2, ChevronLeft, ChevronRight, Sparkles, Box, Hash, FileText, Phone, Check } from "lucide-react";
+import { toast } from "sonner";
 import PageLayout from "@/components/PageLayout";
+import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
+import { PHONE_DISPLAY, PHONE_TEL, quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -96,8 +99,19 @@ const ProductDetailPage = () => {
     { icon: Building2, label: "Brand", value: brandName, link: `/brands/${brandSlug}` },
   ];
 
+  const enquiry: EnquiryTarget = { kind: "product", name: product.name, sku: product.sku, path: `/products/${product.slug}` };
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(`${SITE_URL}/products/${product.slug}`);
+      toast.success("Product link copied");
+    } catch {
+      toast.error("Couldn't copy the link");
+    }
+  };
+
   return (
-    <PageLayout>
+    <PageLayout enquiry={enquiry}>
       <Seo
         title={`${product.name}${brandName ? ` by ${brandName}` : ""}, Sri Lanka`}
         description={plainDesc}
@@ -376,7 +390,7 @@ const ProductDetailPage = () => {
                 <Separator className="mb-8" />
               </motion.div>
 
-              {/* Inquiry CTA Card */}
+              {/* Quote CTA Card */}
               <motion.div
                 className="relative rounded-xl border border-accent/20 bg-accent/5 backdrop-blur-sm p-6 space-y-4 overflow-hidden"
                 variants={fadeUp}
@@ -385,21 +399,53 @@ const ProductDetailPage = () => {
               >
                 {/* Subtle glow */}
                 <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-accent/10 blur-3xl pointer-events-none" />
-                <p className="font-body text-sm text-muted-foreground relative z-10">Interested in this product? Get in touch with our team for pricing and availability.</p>
+                <div className="relative z-10">
+                  <h2 className="font-display text-lg font-semibold text-foreground">Request a quote</h2>
+                  <p className="font-body text-sm text-muted-foreground mt-1">
+                    Trade pricing and availability for {product.name}, supplied island-wide across Sri Lanka.
+                  </p>
+                </div>
                 <div className="flex flex-wrap items-center gap-3 relative z-10">
                   <Link
-                    to={`/contact?subject=Product+Inquiry&product=${encodeURIComponent(product.name)}`}
+                    to={quoteHref(enquiry)}
+                    data-track="request_quote"
+                    data-track-item={product.name}
                     className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-5 h-11 text-sm font-body font-semibold hover:bg-accent/90 transition-all hover:shadow-lg hover:shadow-accent/20"
                   >
-                    <MessageCircle className="w-4 h-4" /> Inquire Now
+                    <FileText className="w-4 h-4" /> Request a Quote
                   </Link>
-                  <button
-                    onClick={() => navigator.clipboard.writeText(window.location.href)}
-                    className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/50 backdrop-blur-sm px-4 h-11 text-sm font-body text-muted-foreground hover:text-foreground hover:border-accent/50 transition-all"
+                  <a
+                    href={whatsappHref(whatsappMessage(enquiry))}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg border border-[#25D366]/40 bg-background/50 px-4 h-11 text-sm font-body font-medium text-foreground hover:border-[#25D366] transition-all"
                   >
-                    <Share2 className="w-4 h-4" /> Share
+                    <WhatsAppIcon className="w-4 h-4 text-[#25D366]" /> WhatsApp
+                  </a>
+                  <a
+                    href={PHONE_TEL}
+                    className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/50 px-4 h-11 text-sm font-body text-muted-foreground hover:text-foreground hover:border-accent/50 transition-all"
+                  >
+                    <Phone className="w-4 h-4" /> {PHONE_DISPLAY}
+                  </a>
+                  <button
+                    type="button"
+                    onClick={copyLink}
+                    aria-label="Copy product link"
+                    title="Copy product link"
+                    className="inline-flex items-center justify-center rounded-lg border border-border bg-background/50 w-11 h-11 text-muted-foreground hover:text-foreground hover:border-accent/50 transition-all"
+                  >
+                    <Share2 className="w-4 h-4" />
                   </button>
                 </div>
+                <ul className="relative z-10 flex flex-wrap gap-x-5 gap-y-1.5 font-body text-xs text-muted-foreground">
+                  {["Island-wide distribution", "Trade pricing for hospitality & retail", "Reply within one business day"].map((t) => (
+                    <li key={t} className="inline-flex items-center gap-1.5">
+                      <Check className="w-3.5 h-3.5 text-accent" />
+                      {t}
+                    </li>
+                  ))}
+                </ul>
               </motion.div>
 
               {/* Back link */}

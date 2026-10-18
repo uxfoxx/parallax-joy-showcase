@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import Seo from "@/components/Seo";
+import Seo, { SITE_URL } from "@/components/Seo";
+import { track } from "@/lib/analytics";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Mail, Phone, MapPin, MessageCircle, Send, Clock, CheckCircle2, Loader2 } from "lucide-react";
@@ -25,7 +26,29 @@ const contactSchema = z.object({
   message: z.string().trim().min(1, "Message is required").max(2000),
 });
 
-const subjects = ["General Inquiry", "Product Inquiry", "Brand Inquiry", "Partnership", "Distribution"];
+const subjects = ["Request a Quote", "Sourcing Request", "Product Inquiry", "Brand Inquiry", "General Inquiry", "Partnership", "Distribution"];
+
+const contactPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: "Contact Olive Foods",
+  url: `${SITE_URL}/contact`,
+  isPartOf: { "@id": `${SITE_URL}/#website` },
+  mainEntity: {
+    "@id": `${SITE_URL}/#organization`,
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      telephone: "+94-11-207-1717",
+      email: "info@olivefoods.lk",
+      areaServed: "LK",
+      hoursAvailable: [
+        { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "08:30", closes: "17:30" },
+        { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "08:30", closes: "13:00" },
+      ],
+    },
+  },
+};
 
 const contactInfo = [
   { icon: Mail, label: "Email", value: "info@olivefoods.lk", href: "mailto:info@olivefoods.lk" },
@@ -44,14 +67,29 @@ const ContactPage = () => {
   const { scrollYProgress } = useScroll();
   const bgY = useTransform(scrollYProgress, [0, 1], ["-50px", "50px"]);
 
+  // Prefill from links like /contact?subject=Request+a+Quote&product=…&sku=…
+  // (product pages), &brand=… (brand pages) or &category=… (category pages).
+  const qProduct = searchParams.get("product") || "";
+  const qSku = searchParams.get("sku") || "";
+  const qBrand = searchParams.get("brand") || "";
+  const qCategory = searchParams.get("category") || "";
+  const regarding = qProduct || qBrand || qCategory;
+
   useEffect(() => {
     const subject = searchParams.get("subject") || "";
-    const product = searchParams.get("product") || "";
-    const brand = searchParams.get("brand") || "";
-    if (subject) setForm((f) => ({ ...f, subject }));
-    if (product) setForm((f) => ({ ...f, message: `I'd like to inquire about: ${product}` }));
-    if (brand) setForm((f) => ({ ...f, message: `I'd like to inquire about the brand: ${brand}` }));
-  }, [searchParams]);
+    setForm((f) => {
+      const next = { ...f };
+      if (subjects.includes(subject)) next.subject = subject;
+      if (qProduct)
+        next.message =
+          subject === "Request a Quote"
+            ? `Please send trade pricing and availability for: ${qProduct}${qSku ? ` (SKU ${qSku})` : ""}.\nEstimated quantity: `
+            : `I'd like to inquire about: ${qProduct}`;
+      else if (qBrand) next.message = `I'd like to inquire about the brand: ${qBrand}`;
+      else if (qCategory) next.message = `I'm looking to source ${qCategory} products: `;
+      return next;
+    });
+  }, [searchParams, qProduct, qSku, qBrand, qCategory]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,6 +115,7 @@ const ContactPage = () => {
     if (error) {
       toast({ title: "Error", description: "Failed to send message. Please try again.", variant: "destructive" });
     } else {
+      track("generate_lead", { form_subject: result.data.subject, item: regarding || undefined });
       toast({ title: "Message Sent", description: "We'll get back to you shortly!" });
       setForm({ name: "", email: "", phone: "", subject: "", message: "" });
       setSubmitted(true);
@@ -92,6 +131,7 @@ const ContactPage = () => {
         title="Contact Olive Foods: Food Supply for Hotels, Restaurants & Retail"
         description="Hotel, restaurant, supermarket, or sourcing a hard-to-find product in Sri Lanka? Talk to Olive Foods: email info@olivefoods.lk or message us on WhatsApp. We respond within one business day."
         path="/contact"
+        schema={contactPageSchema}
       />
       <ImmersiveBackground />
       <ScrollFloatingElement />
@@ -151,7 +191,16 @@ const ContactPage = () => {
                   <span className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent font-body text-xs font-medium border border-accent/20 mb-4 tracking-widest uppercase">
                     Send a Message
                   </span>
-                  <h2 className="font-display text-2xl font-bold text-foreground tracking-tight">How Can We Help?</h2>
+                  <h2 className="font-display text-2xl font-bold text-foreground tracking-tight">
+                    {form.subject === "Request a Quote" ? "Request a Quote" : form.subject === "Sourcing Request" ? "Request Sourcing" : "How Can We Help?"}
+                  </h2>
+                  {regarding && (
+                    <p className="mt-3 inline-flex flex-wrap items-center gap-2 rounded-lg border border-accent/20 bg-accent/5 px-3 py-1.5 font-body text-sm text-foreground">
+                      <span className="text-muted-foreground">Regarding</span>
+                      <span className="font-semibold">{regarding}</span>
+                      {qSku && <span className="text-xs text-muted-foreground">SKU {qSku}</span>}
+                    </p>
+                  )}
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">

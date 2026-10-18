@@ -32,3 +32,48 @@ export const categorySeo = (name: string) => {
     intro: `Olive Foods is a trusted importer and distributor of ${lower} in Sri Lanka. We bring in quality ${lower} through our global supplier network and deliver island-wide from our Colombo base, with warehousing and cold-chain storage that keeps everything in top condition for the hospitality and retail trade.`,
   };
 };
+
+export type Faq = { q: string; a: string };
+
+/** Per-category FAQs — rendered visibly on the page AND as FAQPage JSON-LD, so
+ *  they can win FAQ rich results and be quoted by AI answer engines. Only
+ *  restates claims the site already makes (island-wide, one-business-day reply,
+ *  sourcing). `brands` are the brand names actually listed in the category. */
+export const categoryFaqs = (name: string, brands: string[]): Faq[] => {
+  const lower = name.toLowerCase();
+  const faqs: Faq[] = [
+    {
+      q: `Who supplies ${lower} in Sri Lanka?`,
+      a: `Olive Foods (Pvt) Ltd imports and distributes ${lower} across Sri Lanka, supplying hotels, restaurants, cafés, caterers and supermarkets island-wide from our base in Colombo.`,
+    },
+  ];
+  if (brands.length) {
+    const list = brands.length > 1 ? `${brands.slice(0, -1).join(", ")} and ${brands[brands.length - 1]}` : brands[0];
+    faqs.push({
+      q: `Which ${lower} brands does Olive Foods carry?`,
+      a: `Our ${lower} range includes ${list}. Browse the products on this page or ask our team about the full range.`,
+    });
+  }
+  faqs.push(
+    {
+      q: `How do I get pricing for ${lower}?`,
+      a: `Pricing depends on product and volume. Request a quote through our contact page or WhatsApp and our team will get back to you within one business day.`,
+    },
+    {
+      q: `Can Olive Foods source a ${lower} product that isn't listed?`,
+      a: `Yes. If you need a ${lower} product we don't list yet, our sourcing team can bring it in through our international supplier network.`,
+    },
+  );
+  return faqs;
+};
+
+/** FAQPage JSON-LD for a list of FAQs. */
+export const faqSchema = (faqs: Faq[]) => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+});
