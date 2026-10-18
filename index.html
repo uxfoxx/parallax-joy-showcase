@@ -79,16 +79,11 @@
       href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
     />
 
-  <!-- Preload the hero background photo so the browser starts fetching
-       it before the JS bundle parses + React mounts the hero. Without
-       this the signed-URL request only fires after first render and the
-       hero appears blank until the user hard-reloads (HTTP cache hit). -->
-  <link
-    rel="preload"
-    as="image"
-    href="https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/newbg.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9uZXdiZy5wbmciLCJpYXQiOjE3Nzk4ODA0NjcsImV4cCI6MTgxMTQxNjQ2N30.zVuck54ZJ_iFDjZsn0SN4eoHkfc8o9V2JTtlrrahsXY"
-    fetchpriority="high"
-  />
+  <!-- No hero image preload here: this file is the template for EVERY
+       prerendered page, so a preload made product/brand/contact pages
+       download the homepage photo too. The homepage itself is prerendered,
+       so its <img fetchpriority="high"> is already in the static HTML and
+       the browser discovers it during parse. -->
 </head>
 
   <body>

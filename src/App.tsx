@@ -5,7 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import AboutPage from "./pages/AboutPage.tsx";
@@ -17,17 +17,26 @@ import CategoriesPage from "./pages/CategoriesPage.tsx";
 import CategoryPage from "./pages/CategoryPage.tsx";
 import ProfileLinkPage from "./pages/ProfileLinkPage.tsx";
 
-import AdminLogin from "./pages/admin/AdminLogin.tsx";
-import AdminLayout from "./pages/admin/AdminLayout.tsx";
-import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
-import AdminBrands from "./pages/admin/AdminBrands.tsx";
-import AdminProducts from "./pages/admin/AdminProducts.tsx";
-import AdminCategories from "./pages/admin/AdminCategories.tsx";
-import AdminFeatured from "./pages/admin/AdminFeatured.tsx";
-import AdminSubmissions from "./pages/admin/AdminSubmissions.tsx";
-import AdminPartners from "./pages/admin/AdminPartners.tsx";
-import AdminBusinessProfiles from "./pages/admin/AdminBusinessProfiles.tsx";
 import ContactPage from "./pages/ContactPage.tsx";
+
+// The admin panel is lazy-loaded: it carries SheetJS (xlsx import/export), the
+// TipTap rich-text editor, the image cropper and QR generation — none of which
+// a public visitor needs. Keeping it out of the entry chunk is the biggest
+// single page-speed win for the public site.
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin.tsx"));
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout.tsx"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard.tsx"));
+const AdminBrands = lazy(() => import("./pages/admin/AdminBrands.tsx"));
+const AdminProducts = lazy(() => import("./pages/admin/AdminProducts.tsx"));
+const AdminCategories = lazy(() => import("./pages/admin/AdminCategories.tsx"));
+const AdminFeatured = lazy(() => import("./pages/admin/AdminFeatured.tsx"));
+const AdminSubmissions = lazy(() => import("./pages/admin/AdminSubmissions.tsx"));
+const AdminPartners = lazy(() => import("./pages/admin/AdminPartners.tsx"));
+const AdminBusinessProfiles = lazy(() => import("./pages/admin/AdminBusinessProfiles.tsx"));
+
+const RouteFallback = () => (
+  <div className="min-h-screen flex items-center justify-center font-body text-sm text-muted-foreground">Loading…</div>
+);
 import ScrollProgressBar from "@/components/ScrollProgressBar";
 import { ProductModalProvider } from "@/lib/productModal";
 import ProductDetailModal from "@/components/ProductDetailModal";
@@ -79,32 +88,34 @@ const AppRoutes = () => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
         >
-          <Routes location={location}>
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/brands" element={<BrandsPage />} />
-            <Route path="/brands/:slug" element={<BrandDetailPage />} />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route path="/products/:slug" element={<ProductDetailPage />} />
-            {/* SEO category landing pages — not linked from the main nav (see CategoryPage). */}
-            <Route path="/categories" element={<CategoriesPage />} />
-            <Route path="/categories/:slug" element={<CategoryPage />} />
-            <Route path="/profile/:slug" element={<ProfileLinkPage />} />
+          <Suspense fallback={<RouteFallback />}>
+            <Routes location={location}>
+              <Route path="/" element={<Index />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/brands" element={<BrandsPage />} />
+              <Route path="/brands/:slug" element={<BrandDetailPage />} />
+              <Route path="/products" element={<ProductsPage />} />
+              <Route path="/products/:slug" element={<ProductDetailPage />} />
+              {/* SEO category landing pages — not linked from the main nav (see CategoryPage). */}
+              <Route path="/categories" element={<CategoriesPage />} />
+              <Route path="/categories/:slug" element={<CategoryPage />} />
+              <Route path="/profile/:slug" element={<ProfileLinkPage />} />
 
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminDashboard />} />
-              <Route path="brands" element={<AdminBrands />} />
-              <Route path="partners" element={<AdminPartners />} />
-              <Route path="products" element={<AdminProducts />} />
-              <Route path="categories" element={<AdminCategories />} />
-              <Route path="business-profiles" element={<AdminBusinessProfiles />} />
-              <Route path="featured" element={<AdminFeatured />} />
-              <Route path="submissions" element={<AdminSubmissions />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="brands" element={<AdminBrands />} />
+                <Route path="partners" element={<AdminPartners />} />
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="categories" element={<AdminCategories />} />
+                <Route path="business-profiles" element={<AdminBusinessProfiles />} />
+                <Route path="featured" element={<AdminFeatured />} />
+                <Route path="submissions" element={<AdminSubmissions />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
         </motion.div>
       </AnimatePresence>
     </>

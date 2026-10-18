@@ -35,7 +35,12 @@ const Seo = ({ title, description, path = "/", image, type = "website", noindex,
   const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 
   return (
-    <Helmet prioritizeSeoTags>
+    // defer={false}: commit head tags synchronously instead of in a
+    // requestAnimationFrame. The prerender renders several pages at once and
+    // background tabs don't get animation frames, so with the default (defer)
+    // ~5% of pages — the homepage among them — were captured with no title,
+    // canonical, description or JSON-LD.
+    <Helmet prioritizeSeoTags defer={false}>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
