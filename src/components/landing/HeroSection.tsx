@@ -15,6 +15,8 @@ import { EASE_OUT_EXPO } from "@/lib/motion";
 import MagneticButton from "@/components/motion/MagneticButton";
 import SplitText from "@/components/motion/SplitText";
 import Eyebrow from "@/components/ui/eyebrow";
+import heroWide from "@/assets/hero/hero-spread-wide.webp";
+import heroPortrait from "@/assets/hero/hero-spread-portrait.webp";
 
 /**
  * Hero — editorial food-spread composition.
@@ -25,14 +27,18 @@ import Eyebrow from "@/components/ui/eyebrow";
  * and a soft vignette keeps text legible regardless of the photo crop
  * at any breakpoint.
  *
- * To swap the photo: upload the new file to the Supabase Backgrounds
- * bucket, get a signed URL, and replace both `HERO_SPREAD_IMAGE` here
- * AND the matching `<link rel="preload" as="image">` href in
- * `index.html` so the browser preloads the actual LCP image.
+ * The photo ships as two bundled WebPs (fingerprinted into /assets/, so
+ * nginx caches them for a year): the full 1774×887 frame for landscape
+ * screens, and a 700×887 centre crop for portrait phones — `object-cover`
+ * on a full-height hero only ever shows the middle of the frame there.
+ * Together ~260 KB, down from a 2.8 MB PNG that was the page's LCP.
+ * The homepage is prerendered, so the <img fetchpriority="high"> is in the
+ * static HTML and discovered early without a <link rel="preload">.
+ *
+ * To swap the photo (from a source PNG/JPG, ideally ≥1774 px wide, 2:1):
+ *   cwebp -q 78 -m 6 src.png -o src/assets/hero/hero-spread-wide.webp
+ *   cwebp -q 76 -m 6 -crop <(w-700)/2> 0 700 <h> src.png -o src/assets/hero/hero-spread-portrait.webp
  */
-
-const HERO_SPREAD_IMAGE =
-  "https://vqvspkuhqthvbtsgfgbo.supabase.co/storage/v1/object/sign/Backgrounds/newbg.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84ZWY2OGMyNy1mZDY2LTRkYWEtODA3OC1kZTQ1NjI3MmFmMTEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCYWNrZ3JvdW5kcy9uZXdiZy5wbmciLCJpYXQiOjE3Nzk4ODA0NjcsImV4cCI6MTgxMTQxNjQ2N30.zVuck54ZJ_iFDjZsn0SN4eoHkfc8o9V2JTtlrrahsXY";
 
 /** Olive-sprig SVG with veined leaves + olives — sits in the photo's
  *  negative-space margins. */
@@ -147,13 +153,18 @@ const HeroSection = () => {
         className="absolute inset-0"
         style={{ scale: reduced ? 1 : photoScale, opacity: photoOpacity }}
       >
-        <img
-          src={HERO_SPREAD_IMAGE}
-          alt=""
-          className="w-full h-full object-cover object-center"
-          loading="eager"
-          fetchpriority="high"
-        />
+        <picture className="block w-full h-full">
+          <source media="(max-aspect-ratio: 3/4)" srcSet={heroPortrait} type="image/webp" />
+          <img
+            src={heroWide}
+            alt=""
+            width={1774}
+            height={887}
+            className="w-full h-full object-cover object-center"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </picture>
       </motion.div>
 
       {/* 2 — Centre vignette so type contrast stays consistent across crops */}
