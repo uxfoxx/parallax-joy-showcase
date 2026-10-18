@@ -15,6 +15,7 @@ import ProductsPage from "./pages/ProductsPage.tsx";
 import ProductDetailPage from "./pages/ProductDetailPage.tsx";
 import CategoriesPage from "./pages/CategoriesPage.tsx";
 import CategoryPage from "./pages/CategoryPage.tsx";
+import SectorPage from "./pages/SectorPage.tsx";
 import ProfileLinkPage from "./pages/ProfileLinkPage.tsx";
 
 import ContactPage from "./pages/ContactPage.tsx";
@@ -100,6 +101,8 @@ const AppRoutes = () => {
               {/* SEO category landing pages — not linked from the main nav (see CategoryPage). */}
               <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/categories/:slug" element={<CategoryPage />} />
+              {/* SEO buyer-sector landing pages ("hotel food supplier…") — same policy as categories. */}
+              <Route path="/supply/:slug" element={<SectorPage />} />
               <Route path="/profile/:slug" element={<ProfileLinkPage />} />
 
               <Route path="/admin/login" element={<AdminLogin />} />

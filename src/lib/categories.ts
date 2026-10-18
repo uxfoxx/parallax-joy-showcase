@@ -17,6 +17,13 @@ export const categorySlug = (name: string): string =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)+/g, "");
 
+/** Category name for use mid-sentence: lower-cased, but nationality adjectives
+ *  keep their capital — "Italian Pasta" -> "Italian pasta",
+ *  "Frozen French Fries" -> "frozen French fries". */
+const PROPER_ADJECTIVES = /\b(italian|french|japanese|thai|mexican|chinese|indian|korean|greek|spanish|swiss|belgian|dutch|american|sri lankan)\b/gi;
+export const lowerCategory = (name: string): string =>
+  name.toLowerCase().replace(PROPER_ADJECTIVES, (m) => m.replace(/\b\w/g, (c) => c.toUpperCase()));
+
 /** Resolve a slug back to its category name from a list of known categories. */
 export const categoryFromSlug = (slug: string, categories: string[]): string | undefined =>
   categories.find((c) => categorySlug(c) === slug);
@@ -24,7 +31,7 @@ export const categoryFromSlug = (slug: string, categories: string[]): string | u
 /** Per-category SEO copy, templated so every page reads naturally and targets
  *  the "[category] importer / distributor in Sri Lanka" intent. */
 export const categorySeo = (name: string) => {
-  const lower = name.toLowerCase();
+  const lower = lowerCategory(name);
   return {
     title: `${name} Importer & Distributor in Sri Lanka`,
     h1: `${name} in Sri Lanka`,
@@ -40,7 +47,7 @@ export type Faq = { q: string; a: string };
  *  restates claims the site already makes (island-wide, one-business-day reply,
  *  sourcing). `brands` are the brand names actually listed in the category. */
 export const categoryFaqs = (name: string, brands: string[]): Faq[] => {
-  const lower = name.toLowerCase();
+  const lower = lowerCategory(name);
   const faqs: Faq[] = [
     {
       q: `Who supplies ${lower} in Sri Lanka?`,

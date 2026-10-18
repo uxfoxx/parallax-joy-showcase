@@ -73,7 +73,7 @@ try {
   const sitemap = await readFile(join(DIST, "sitemap.xml"), "utf8");
   const locs = [...sitemap.matchAll(/<loc>https:\/\/www\.olivefoods\.lk([^<]*)<\/loc>/g)].map((m) => m[1]);
   const seen = new Set(ROUTES.map((r) => r.path));
-  let nCat = 0, nProd = 0, nBrand = 0;
+  let nCat = 0, nSector = 0, nProd = 0, nBrand = 0;
   for (const p of locs) {
     if (seen.has(p)) continue;
     seen.add(p);
@@ -86,9 +86,12 @@ try {
     } else if (/^\/brands\/.+/.test(p)) {
       ROUTES.push({ path: p, waitFor: detailReady });
       nBrand++;
+    } else if (/^\/supply\/.+/.test(p)) {
+      ROUTES.push({ path: p, waitFor: categoryReady }); // product grid, like a category page
+      nSector++;
     }
   }
-  console.log(`[prerender] + from sitemap: ${nCat} category, ${nProd} product, ${nBrand} brand route(s)`);
+  console.log(`[prerender] + from sitemap: ${nCat} category, ${nSector} sector, ${nProd} product, ${nBrand} brand route(s)`);
 } catch {
   console.warn("[prerender] no sitemap.xml — prerendering curated routes only");
 }

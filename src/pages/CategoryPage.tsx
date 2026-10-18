@@ -7,7 +7,7 @@ import PageHero from "@/components/PageHero";
 import ProductCard from "@/components/ProductCard";
 import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
 import { useCategories, useProducts } from "@/lib/api";
-import { categoryFromSlug, categorySeo, categoryFaqs, faqSchema } from "@/lib/categories";
+import { categoryFromSlug, categorySeo, categoryFaqs, faqSchema, lowerCategory } from "@/lib/categories";
 import { quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
 
 /**
@@ -110,7 +110,7 @@ const CategoryPage = () => {
               </motion.div>
             ) : (
               <p className="font-body text-muted-foreground py-16 text-center">
-                No {name.toLowerCase()} listed right now.{" "}
+                No {lowerCategory(name)} listed right now.{" "}
                 <Link to={quoteHref(enquiry)} data-track="sourcing_request" data-track-item={name} className="text-accent hover:underline">
                   Ask us to source it
                 </Link>.
@@ -122,9 +122,9 @@ const CategoryPage = () => {
                 {name} for Sri Lanka&apos;s hotels, restaurants &amp; retail
               </h2>
               <p className="font-body text-muted-foreground leading-relaxed">
-                Olive Foods imports {name.toLowerCase()} and distributes it island-wide to hotels,
+                Olive Foods imports {lowerCategory(name)} and distributes it island-wide to hotels,
                 restaurants, cafés, catering operations and supermarkets across Sri Lanka. Need a{" "}
-                {name.toLowerCase()} line we don&apos;t list yet? Our sourcing team will bring it in
+                {lowerCategory(name)} line we don&apos;t list yet? Our sourcing team will bring it in
                 through our supplier network.
               </p>
             </div>
@@ -132,7 +132,7 @@ const CategoryPage = () => {
             {/* Sourcing CTA */}
             <div className="mt-8 max-w-3xl rounded-xl border border-accent/20 bg-accent/5 p-6 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
               <div className="flex-1">
-                <p className="font-display text-lg font-semibold text-foreground">Can&apos;t find the {name.toLowerCase()} you need?</p>
+                <p className="font-display text-lg font-semibold text-foreground">Can&apos;t find the {lowerCategory(name)} you need?</p>
                 <p className="font-body text-sm text-muted-foreground mt-1">
                   Tell us the product, brand or spec and we&apos;ll source it. We reply within one business day.
                 </p>
