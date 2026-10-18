@@ -31,6 +31,7 @@ import ContactPage from "./pages/ContactPage.tsx";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
 import { ProductModalProvider } from "@/lib/productModal";
 import ProductDetailModal from "@/components/ProductDetailModal";
+import { trackPageView } from "@/lib/analytics";
 
 /* Cache responses for 5 minutes so navigating between pages doesn't refetch
  * and flash empty/loading states (the visitor's "have to reload twice for
@@ -57,6 +58,14 @@ const AppRoutes = () => {
     if (location.pathname.startsWith("/admin")) return;
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (location.pathname.startsWith("/admin")) return;
+    // The route swap waits for AnimatePresence's exit (~220ms) and helmet sets
+    // the new <title> a frame after mount — wait so GA records the right title.
+    const t = window.setTimeout(() => trackPageView(location.pathname + location.search), 500);
+    return () => window.clearTimeout(t);
+  }, [location.pathname, location.search]);
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import Seo from "@/components/Seo";
+import Seo, { SITE_URL } from "@/components/Seo";
 import { Users, Package, Warehouse, Thermometer, Truck, ShoppingBag, Hotel, UtensilsCrossed } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -243,6 +243,16 @@ const AboutPage = () => {
         title="About Olive Foods: Sri Lanka's Premium Food Import Partner"
         description="Thirty-plus years of food-industry experience. Olive Foods sources globally and distributes island-wide to Sri Lanka's hotels, restaurants and retailers, built on relationships, not transactions."
         path="/about"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          name: "About Olive Foods",
+          url: `${SITE_URL}/about`,
+          description:
+            "Olive Foods (Pvt) Ltd is a Colombo-based importer and distributor of premium food and consumer brands, supplying Sri Lanka's hotels, restaurants, supermarkets and retailers island-wide.",
+          isPartOf: { "@id": `${SITE_URL}/#website` },
+          mainEntity: { "@id": `${SITE_URL}/#organization` },
+        }}
       />
       <ImmersiveBackground />
       <ScrollFloatingElement />

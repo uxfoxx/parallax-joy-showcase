@@ -97,6 +97,8 @@ const BrandDetailPage = () => {
           )}
           <Link
             to={`/contact?subject=Brand+Inquiry&brand=${encodeURIComponent(brand.name)}`}
+            data-track="brand_enquiry"
+            data-track-item={brand.name}
             className="inline-flex items-center gap-2 rounded-full bg-accent text-white px-6 h-11 text-sm font-body font-semibold hover:bg-accent/90 transition-colors shadow-lg shadow-accent/25"
           >
             <MessageCircle className="w-4 h-4" /> Inquire About This Brand
