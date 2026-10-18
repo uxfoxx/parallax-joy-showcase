@@ -138,7 +138,19 @@ await new Promise((r) => server.listen(PORT, r));
 // a "Connection closed" / "Target closed" error used to kill the whole run.
 // ensureBrowser() relaunches it (once, even under concurrency) and the page is
 // retried.
-const launch = () => puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-dev-shm-usage"] });
+// The anti-backgrounding flags keep timers and rendering running in the tabs
+// that aren't in front — we render several pages at once.
+const launch = () =>
+  puppeteer.launch({
+    headless: true,
+    args: [
+      "--no-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-background-timer-throttling",
+      "--disable-backgrounding-occluded-windows",
+      "--disable-renderer-backgrounding",
+    ],
+  });
 let browser = null;
 let launching = null;
 async function ensureBrowser() {
@@ -179,6 +191,12 @@ async function renderOnce(route, waitFor) {
     else if (waitFor) await page.waitForSelector(waitFor, { timeout: 20000 }).catch(() => {});
     await page.evaluate(scrollThrough);
     await new Promise((r) => setTimeout(r, 1200));
+    // Every prerendered route renders <Seo>; don't capture until its tags
+    // (title, canonical, description, JSON-LD) are actually in <head>.
+    // Throwing here makes the worker retry the page.
+    await page
+      .waitForFunction(() => !!document.head.querySelector('[data-rh="true"]'), { timeout: 8000 })
+      .catch(() => { throw new Error("head tags (react-helmet) never applied"); });
     const html = await page.content();
     const outPath = route === "/" ? join(DIST, "index.html") : join(DIST, route.replace(/^\//, ""), "index.html");
     await mkdir(dirname(outPath), { recursive: true });
@@ -190,6 +208,7 @@ async function renderOnce(route, waitFor) {
 }
 
 let ok = 0, fail = 0, done = 0;
+const failed = [];
 const total = ALL.length;
 const queue = [...ALL];
 
@@ -207,12 +226,16 @@ async function worker() {
         break;
       } catch (e) {
         lastErr = e;
-        if (isCrash(e.message) && attempt < 2) { await ensureBrowser(); continue; }
+        if (attempt < 2) {
+          if (isCrash(e.message)) await ensureBrowser();
+          continue; // one retry for crashes and for pages whose head tags didn't apply
+        }
         break;
       }
     }
     if (lastErr) {
       fail++;
+      failed.push(item.path);
       console.warn(`[prerender] ✗ ${item.path}: ${lastErr.message} [${++done}/${total}]`);
     }
   }
@@ -224,4 +247,7 @@ await Promise.all(Array.from({ length: Math.min(CONCURRENCY, total) }, worker));
 try { await browser?.close(); } catch { /* already gone */ }
 server.close();
 console.log(`[prerender] done — ${ok} rendered, ${fail} failed, ${total} total`);
+// A failed route still works (it falls back to the SPA shell), it just isn't
+// prerendered — so list them instead of failing the deploy over one flake.
+if (failed.length) console.warn(`[prerender] not prerendered (served as SPA shell): ${failed.join(", ")}`);
 if (ok === 0) process.exitCode = 1; // don't ship a build where prerender totally failed
