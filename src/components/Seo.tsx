@@ -44,7 +44,12 @@ const Seo = ({ title, description, path = "/", image, type = "website", noindex,
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
+      {/* Exactly one robots tag per page (index.html deliberately has none).
+          Indexable pages also opt in to large image previews and full snippets. */}
+      <meta
+        name="robots"
+        content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}
+      />
 
       {/* Open Graph */}
       <meta property="og:type" content={type} />

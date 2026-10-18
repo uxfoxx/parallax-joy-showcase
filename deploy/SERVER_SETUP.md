@@ -65,7 +65,7 @@ why `deploy/ecosystem.config.cjs` passes no `--maxage`/`--immutable` flags.
 ## What `./scripts/deploy.sh` does
 
 1. `npm ci` and `npm run build` **locally** — the VPS OOMs on `vite build`.
-   The build includes sitemap generation and Puppeteer prerendering.
+   The build includes the SEO pipeline (see below) and Puppeteer prerendering.
 2. Uploads to a **new** `releases/<timestamp>/` — the running site is untouched.
 3. Flips `current` with an atomic `mv -T` rename.
 4. `pm2 reload olivefoods`. **This is mandatory, not tidiness:** sirv builds its
@@ -73,7 +73,24 @@ why `deploy/ecosystem.config.cjs` passes no `--maxage`/`--immutable` flags.
    release's file list.
 5. Installs this project's nginx config, smoke-tests the live URL, and **rolls
    back to the previous release automatically if it fails**.
-6. Prunes to the newest 5 releases.
+6. Notifies IndexNow (Bing → ChatGPT search/Copilot, Yandex…) of the pages that
+   were added, changed or removed, then audits every URL in the live sitemap
+   (`npm run seo:check`). Neither can fail the deploy. `INDEXNOW=0` skips the
+   notification.
+7. Prunes to the newest 5 releases.
+
+## SEO build pipeline (`npm run build`)
+
+`vite build` → `scripts/seo/collect-routes.mjs` (every indexable URL, from the
+live data) → `scripts/generate-llms.mjs` → `scripts/prerender.mjs` →
+`scripts/seo/build-sitemap.mjs`. The last step writes `/sitemap.xml` as an
+**index** of per-type sitemaps (`sitemap-pages|sectors|categories|products|brands.xml`,
+with image entries) and publishes `/sitemap-state.json`: a content fingerprint,
+`lastmod` and database id per page. The next build compares against it, so a
+page's `lastmod` only moves when its content changes, and a renamed slug gets a
+redirect stub at its old address. New kinds of page are registered in
+`scripts/seo/config.mjs`; the build warns about any public route in
+`src/App.tsx` that isn't covered.
 
 Manual rollback is a symlink flip plus a reload:
 

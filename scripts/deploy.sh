@@ -112,6 +112,14 @@ if [[ "$CODE" != "200" ]]; then
   exit 1
 fi
 
+# Search engines. Neither step can fail the deploy — the release is already
+# live and correct; these only speed up and verify indexing.
+echo "▶  Notifying search engines of new/changed pages (IndexNow; INDEXNOW=0 skips)…"
+node "$ROOT/scripts/seo/indexnow.mjs" || echo "   IndexNow notification failed — not fatal; the sitemap still covers every page."
+
+echo "▶  Checking the live sitemap…"
+node "$ROOT/scripts/seo/check-live.mjs" || echo "   The sitemap check reported problems above — the release is live; worth a look."
+
 echo "▶  Pruning old releases (keeping ${KEEP_RELEASES})…"
 "${SSH[@]}" "cd ${DEPLOY_PATH}/releases && ls -1 | sort -r | tail -n +$((KEEP_RELEASES+1)) | xargs -r rm -rf"
 
