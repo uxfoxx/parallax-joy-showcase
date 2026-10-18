@@ -63,6 +63,20 @@ const BrandDetailPage = () => {
               { "@type": "ListItem", position: 3, name: brand.name, item: `${SITE_URL}/brands/${brand.slug}` },
             ],
           },
+          ...(brandProducts.length
+            ? [{
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                name: `Products by ${brand.name}`,
+                numberOfItems: brandProducts.length,
+                itemListElement: brandProducts.slice(0, 50).map((p, i) => ({
+                  "@type": "ListItem",
+                  position: i + 1,
+                  url: `${SITE_URL}/products/${p.slug}`,
+                  name: p.name,
+                })),
+              }]
+            : []),
         ]}
       />
       <PageHero
