@@ -1,0 +1,218 @@
+[
+  {
+    "slug": "hotels",
+    "name": "Hotels",
+    "audience": "hotels",
+    "heading": "Food supplier for hotels in Sri Lanka",
+    "title": "Hotel Food Supplier in Sri Lanka",
+    "description": "Olive Foods supplies hotels across Sri Lanka with imported cheese, frozen meat and poultry, pasta, oils, sauces and pastry ingredients, island-wide.",
+    "intro": "Olive Foods is a food importer and distributor supplying hotels across Sri Lanka. From breakfast buffets to banquets and à la carte kitchens, we bring in the imported ingredients hotel kitchens rely on and deliver them island-wide from our Colombo warehouse, with cold-chain storage for frozen and chilled lines.",
+    "needs": [
+      {
+        "title": "Consistent quality, every delivery",
+        "body": "Menus and buffets can't change with every shipment. We work with established international brands so the product your chefs specify is the product that arrives."
+      },
+      {
+        "title": "Cold-chain for frozen and chilled lines",
+        "body": "Frozen meat, poultry, vegetables and fries are stored and moved under cold-chain from our warehouse to your kitchen."
+      },
+      {
+        "title": "One supplier for the whole kitchen",
+        "body": "Cheese, pasta, oils, sauces, spices and pastry ingredients from a single importer — and our sourcing team can bring in lines we don't list yet."
+      }
+    ],
+    "categories": [
+      "Imported Cheese",
+      "Frozen Meat",
+      "Poultry",
+      "Frozen Vegetables & Fruits",
+      "Frozen French Fries",
+      "Italian Pasta",
+      "Edible Oils",
+      "Seasonings & Sauce",
+      "Herbs & Spices",
+      "Chocolate & Pastry",
+      "Frozen Fruit Puree",
+      "Honey"
+    ]
+  },
+  {
+    "slug": "restaurants",
+    "name": "Restaurants",
+    "audience": "restaurants",
+    "heading": "Food supplier for restaurants in Sri Lanka",
+    "title": "Restaurant Food Supplier in Sri Lanka",
+    "description": "Olive Foods supplies restaurants in Sri Lanka with frozen meat, fries, cheese, pasta and Thai, Japanese and Mexican ingredients, delivered island-wide.",
+    "intro": "Olive Foods is a food importer and distributor supplying restaurants across Sri Lanka. Whether you run an Italian kitchen, a Pan-Asian menu or a busy burger grill, we import the ingredients your dishes depend on and deliver them island-wide from Colombo.",
+    "needs": [
+      {
+        "title": "Authentic ingredients for your cuisine",
+        "body": "Italian pasta and cheese, Thai pastes, Japanese products and Mexican staples from the brands chefs know."
+      },
+      {
+        "title": "Reliable frozen supply",
+        "body": "Frozen meat, poultry, fries and potato products kept under cold-chain so service never runs short."
+      },
+      {
+        "title": "Sourcing when the menu changes",
+        "body": "Adding a new dish? Tell us the product or brand and our sourcing team will bring it in."
+      }
+    ],
+    "categories": [
+      "Frozen Meat",
+      "Poultry",
+      "Frozen French Fries",
+      "Frozen Potato Products",
+      "Imported Cheese",
+      "Italian Pasta",
+      "Thai Products",
+      "Japanese Products",
+      "Mexican",
+      "Seasonings & Sauce",
+      "Local Sauces",
+      "Herbs & Spices",
+      "Edible Oils",
+      "Vinegar"
+    ]
+  },
+  {
+    "slug": "bakeries-and-cafes",
+    "name": "Bakeries & Cafés",
+    "audience": "bakeries and cafés",
+    "heading": "Bakery and café ingredient supplier in Sri Lanka",
+    "title": "Bakery & Café Ingredient Supplier in Sri Lanka",
+    "description": "Olive Foods supplies bakeries, cafés and pastry kitchens in Sri Lanka with chocolate, pie fillings, flour, fruit purees, nuts and dried fruits.",
+    "intro": "Olive Foods is a food importer and distributor supplying bakeries, cafés and pastry kitchens across Sri Lanka. We import chocolate, pie fillings and toppings, flour, frozen fruit purees, nuts and dried fruits, and deliver them island-wide from Colombo.",
+    "needs": [
+      {
+        "title": "Pastry-grade ingredients",
+        "body": "Chocolate, pie fillings and toppings and flour from established international brands for consistent bakes."
+      },
+      {
+        "title": "Fruit purees for drinks and desserts",
+        "body": "Frozen fruit purees — mango, strawberry, raspberry, passion fruit, coconut and more — for smoothies, mocktails and patisserie."
+      },
+      {
+        "title": "Packaging from the same supplier",
+        "body": "Containers and packing material for takeaway and retail alongside your ingredients."
+      }
+    ],
+    "categories": [
+      "Chocolate & Pastry",
+      "Pie Filling & Topping",
+      "Flour",
+      "Frozen Fruit Puree",
+      "Dry Nuts, Seeds & Dried Fruits",
+      "Canned Vegetables & Dried Fruits",
+      "Honey",
+      "Imported Cheese",
+      "Packing Material"
+    ]
+  },
+  {
+    "slug": "supermarkets-and-retail",
+    "name": "Supermarkets & Retail",
+    "audience": "supermarkets and retailers",
+    "heading": "Imported food distributor for supermarkets in Sri Lanka",
+    "title": "Supermarket Food Distributor in Sri Lanka",
+    "description": "Olive Foods distributes imported food brands to supermarkets and retailers in Sri Lanka: cheese, pasta, canned goods, nuts, sauces, oils and world foods.",
+    "intro": "Olive Foods imports international food brands and distributes them to supermarkets and retailers across Sri Lanka. We handle importing, warehousing and island-wide distribution so imported ranges reach your shelves, and work as a long-term partner rather than a one-off vendor.",
+    "needs": [
+      {
+        "title": "Shelf-ready imported brands",
+        "body": "Recognised international brands across cheese, pasta, canned goods, nuts, sauces, oils and world-food ranges."
+      },
+      {
+        "title": "Island-wide distribution",
+        "body": "Stock moved from our Colombo warehouse to stores across the island."
+      },
+      {
+        "title": "Range development",
+        "body": "Looking for a brand or product line that isn't in Sri Lanka yet? Our sourcing team can bring it in."
+      }
+    ],
+    "categories": [
+      "Imported Cheese",
+      "Italian Pasta",
+      "Canned Vegetables & Dried Fruits",
+      "Dry Nuts, Seeds & Dried Fruits",
+      "Honey",
+      "Edible Oils",
+      "Rice",
+      "Seasonings & Sauce",
+      "Local Sauces",
+      "Japanese Products",
+      "Thai Products",
+      "Mexican",
+      "Vinegar"
+    ]
+  },
+  {
+    "slug": "catering",
+    "name": "Catering",
+    "audience": "caterers",
+    "heading": "Catering food supplier in Sri Lanka",
+    "title": "Catering Food Supplier in Sri Lanka",
+    "description": "Olive Foods supplies caterers and event kitchens in Sri Lanka with frozen meat and poultry, rice, oils, sauces, spices and packing material.",
+    "intro": "Olive Foods is a food importer and distributor supplying caterers and event kitchens across Sri Lanka. We import the volume staples catering depends on — frozen meat and poultry, rice, oils, sauces and spices — along with containers and packing material, and deliver island-wide from Colombo.",
+    "needs": [
+      {
+        "title": "Volume staples you can plan around",
+        "body": "Rice, edible oils, sauces and spices for large-batch cooking."
+      },
+      {
+        "title": "Frozen protein and sides",
+        "body": "Frozen meat, poultry, vegetables and fries stored and delivered under cold-chain."
+      },
+      {
+        "title": "Containers and packing material",
+        "body": "Aluminium containers and packing material from the same supplier as your ingredients."
+      }
+    ],
+    "categories": [
+      "Frozen Meat",
+      "Poultry",
+      "Rice",
+      "Edible Oils",
+      "Frozen Vegetables & Fruits",
+      "Frozen French Fries",
+      "Seasonings & Sauce",
+      "Local Sauces",
+      "Herbs & Spices",
+      "Italian Pasta",
+      "Packing Material"
+    ]
+  },
+  {
+    "slug": "frozen-food",
+    "name": "Frozen Food",
+    "audience": "frozen food buyers",
+    "primaryQuestion": "Who supplies frozen food in Sri Lanka?",
+    "heading": "Frozen food supplier in Sri Lanka",
+    "title": "Frozen Food Supplier in Sri Lanka",
+    "description": "Olive Foods imports and distributes frozen food in Sri Lanka: frozen meat, poultry, vegetables, fries, potato products and fruit purees, in cold-chain.",
+    "intro": "Olive Foods is a frozen food importer and distributor in Sri Lanka. We import frozen meat, poultry, vegetables and fruits, French fries, potato products and fruit purees, keep them in cold-chain storage at our Colombo warehouse, and distribute them island-wide to hotels, restaurants, caterers and retailers.",
+    "needs": [
+      {
+        "title": "Cold-chain from port to kitchen",
+        "body": "Frozen lines are stored and moved under cold-chain so product arrives in top condition."
+      },
+      {
+        "title": "A full frozen range",
+        "body": "Meat, poultry, vegetables, fries, potato products and fruit purees from one importer."
+      },
+      {
+        "title": "Supply for the trade",
+        "body": "Built for hotels, restaurants, caterers and retailers — ask us for trade pricing and availability."
+      }
+    ],
+    "categories": [
+      "Frozen Meat",
+      "Poultry",
+      "Frozen Vegetables & Fruits",
+      "Frozen French Fries",
+      "Frozen Potato Products",
+      "Frozen Fruit Puree"
+    ]
+  }
+]

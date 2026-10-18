@@ -73,7 +73,8 @@ const ContactPage = () => {
   const qSku = searchParams.get("sku") || "";
   const qBrand = searchParams.get("brand") || "";
   const qCategory = searchParams.get("category") || "";
-  const regarding = qProduct || qBrand || qCategory;
+  const qSector = searchParams.get("sector") || "";
+  const regarding = qProduct || qBrand || qCategory || (qSector ? `Supply for ${qSector.toLowerCase()}` : "");
 
   useEffect(() => {
     const subject = searchParams.get("subject") || "";
@@ -87,9 +88,10 @@ const ContactPage = () => {
             : `I'd like to inquire about: ${qProduct}`;
       else if (qBrand) next.message = `I'd like to inquire about the brand: ${qBrand}`;
       else if (qCategory) next.message = `I'm looking to source ${qCategory} products: `;
+      else if (qSector) next.message = `We're looking for a regular food supplier (${qSector}).\nProducts and approximate volumes we need: `;
       return next;
     });
-  }, [searchParams, qProduct, qSku, qBrand, qCategory]);
+  }, [searchParams, qProduct, qSku, qBrand, qCategory, qSector]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

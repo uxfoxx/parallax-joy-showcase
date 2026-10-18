@@ -12,7 +12,7 @@
  */
 import { createClient } from "@supabase/supabase-js";
 import { config as loadEnv } from "dotenv";
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -31,6 +31,12 @@ const STATIC_ROUTES = [
   { loc: "/brands", priority: "0.8", changefreq: "weekly" },
   { loc: "/categories", priority: "0.7", changefreq: "monthly" },
   { loc: "/contact", priority: "0.7", changefreq: "monthly" },
+  // Buyer-sector landing pages ("hotel food supplier…") — same list the app uses.
+  ...JSON.parse(readFileSync(resolve(__dirname, "../src/data/sectors.json"), "utf8")).map((s) => ({
+    loc: `/supply/${s.slug}`,
+    priority: "0.8",
+    changefreq: "monthly",
+  })),
 ];
 
 // Must match categorySlug() in src/lib/categories.ts.

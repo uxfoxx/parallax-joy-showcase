@@ -12,7 +12,7 @@
  */
 import { createClient } from "@supabase/supabase-js";
 import { config as loadEnv } from "dotenv";
-import { writeFileSync } from "node:fs";
+import { writeFileSync, readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -125,8 +125,14 @@ ${prodBlocks}`;
     );
   const faqSection = `## Common questions\n${qa.join("\n")}`;
 
+  // Buyer sectors — same list as the /supply/:slug pages.
+  const sectors = JSON.parse(readFileSync(resolve(__dirname, "../src/data/sectors.json"), "utf8"));
+  const sectorsSection = `## Who we supply
+${sectors.map((s) => `- [${s.heading}](${SITE}/supply/${s.slug}): ${s.description}`).join("\n")}`;
+
   const out = [
     HEADER,
+    sectorsSection,
     brandsSection,
     catsSection,
     productsSection,

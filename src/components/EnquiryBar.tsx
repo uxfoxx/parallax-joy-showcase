@@ -11,17 +11,17 @@ import { PHONE_TEL, quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget
  * Clicks are tracked by the delegated listener in lib/analytics.
  */
 const EnquiryBar = ({ target }: { target: EnquiryTarget }) => {
-  const isProduct = target.kind === "product";
+  const isSourcing = target.kind === "category";
   return (
     <div className="md:hidden fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur-md px-3 pt-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom))] print:hidden">
       <div className="flex items-center gap-2">
         <Link
           to={quoteHref(target)}
-          data-track={isProduct ? "request_quote" : "sourcing_request"}
+          data-track={isSourcing ? "sourcing_request" : "request_quote"}
           data-track-item={target.name}
           className="flex-1 inline-flex items-center justify-center gap-2 h-11 rounded-lg bg-accent text-accent-foreground font-body text-sm font-semibold active:scale-[0.98] transition-transform"
         >
-          <FileText className="w-4 h-4" /> {isProduct ? "Request a quote" : "Request sourcing"}
+          <FileText className="w-4 h-4" /> {isSourcing ? "Request sourcing" : "Request a quote"}
         </Link>
         <a
           href={whatsappHref(whatsappMessage(target))}
