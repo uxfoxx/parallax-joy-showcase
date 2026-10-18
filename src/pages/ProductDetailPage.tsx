@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import Seo, { SITE_URL } from "@/components/Seo";
+import { categorySlug } from "@/lib/categories";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { ArrowLeft, Package, MessageCircle, Share2, Tag, Building2, ChevronLeft, ChevronRight, Sparkles, Box, Hash } from "lucide-react";
 import PageLayout from "@/components/PageLayout";
@@ -98,7 +99,7 @@ const ProductDetailPage = () => {
   return (
     <PageLayout>
       <Seo
-        title={`${product.name}${brandName ? ` by ${brandName}` : ""}`}
+        title={`${product.name}${brandName ? ` by ${brandName}` : ""}, Sri Lanka`}
         description={plainDesc}
         path={`/products/${product.slug}`}
         image={product.image_url || undefined}
@@ -131,7 +132,10 @@ const ProductDetailPage = () => {
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
               { "@type": "ListItem", position: 2, name: "Products", item: `${SITE_URL}/products` },
-              { "@type": "ListItem", position: 3, name: product.name, item: `${SITE_URL}/products/${product.slug}` },
+              ...(product.category
+                ? [{ "@type": "ListItem", position: 3, name: product.category, item: `${SITE_URL}/categories/${categorySlug(product.category)}` }]
+                : []),
+              { "@type": "ListItem", position: product.category ? 4 : 3, name: product.name, item: `${SITE_URL}/products/${product.slug}` },
             ],
           },
         ]}
@@ -157,6 +161,12 @@ const ProductDetailPage = () => {
             <span className="text-primary-foreground/50">/</span>
             <Link to="/products" className="hover:text-primary-foreground transition-colors">Products</Link>
             <span className="text-primary-foreground/50">/</span>
+            {product.category && (
+              <>
+                <Link to={`/categories/${categorySlug(product.category)}`} className="hover:text-primary-foreground transition-colors">{product.category}</Link>
+                <span className="text-primary-foreground/50">/</span>
+              </>
+            )}
             <span className="text-primary-foreground/80">{product.name}</span>
           </motion.nav>
         </div>

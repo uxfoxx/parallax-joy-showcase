@@ -3,14 +3,27 @@
  *
  * The site is a client-rendered SPA, so crawlers and AI answer engines that
  * don't execute JS would otherwise see an empty shell. This step loads each
- * key route in headless Chrome, lets React + react-helmet render, and writes
- * the finished HTML (with per-route <title>/description/canonical and full
- * body content) to dist/<route>/index.html. nginx serves those static files
- * directly (try_files $uri $uri/index.html /index.html); the client bundle
- * still loads and takes over for interactivity.
+ * route in headless Chrome, lets React + react-helmet render, and writes the
+ * finished HTML (with per-route <title>/description/canonical, full body
+ * content and JSON-LD) to dist/<route>/index.html. nginx/sirv serve those
+ * static files directly (try_files $uri $uri/index.html /200.html); the client
+ * bundle still loads and takes over for interactivity.
+ *
+ * What gets prerendered:
+ *   - the curated marketing/listing routes below, and
+ *   - EVERY product, brand and category detail page, taken from the sitemap the
+ *     previous build step just wrote.
+ * Prerendering the detail pages is what lets a search for a single product
+ * ("Frozen Coconut Puree Sri Lanka") or a brand ("Marvees Sri Lanka") surface
+ * Olive Foods — AI crawlers don't run JS, so a JS-only detail page is invisible
+ * to them, and Google ranks server-rendered content more reliably.
  *
  * Runs after `vite build` + the sitemap (see package.json "build").
  * Requires: puppeteer (dev dependency).
+ *
+ * Env knobs (optional):
+ *   PRERENDER_CONCURRENCY  parallel pages (default 4)
+ *   PRERENDER_LIMIT        cap total routes — for quick smoke builds
  */
 import http from "node:http";
 import { readFile, writeFile, mkdir, stat } from "node:fs/promises";
@@ -22,15 +35,30 @@ import puppeteer from "puppeteer";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = resolve(__dirname, "../dist");
 const PORT = 4189;
+const CONCURRENCY = Math.max(1, Number(process.env.PRERENDER_CONCURRENCY) || 4);
+const LIMIT = Number(process.env.PRERENDER_LIMIT) || 0;
+const NAV_TIMEOUT = 45000;
 
-// The high-value marketing/listing routes. Detail pages (/products/:slug,
-// /brands/:slug) stay on the SPA + sitemap; Google renders their JS.
-// `waitFor` is a selector we block on so data-driven pages capture their
-// content (loaded from Supabase) rather than a loading skeleton.
-// `waitFor` is either a CSS selector or a predicate function evaluated in the
-// page. Product cards render as <button> (they open a modal), so we wait on
-// their Supabase-hosted images instead of on anchor links.
+// `waitFor` blocks until data-driven content has loaded (from Supabase) so we
+// don't capture a loading skeleton. It is a CSS selector or a predicate run in
+// the page. Product cards render as <button> (they open a modal), so listing
+// pages wait on their Supabase-hosted images rather than on anchor links.
 const hasProductImages = () => document.querySelectorAll('img[src*="supabase.co/storage"]').length >= 4;
+// Category + detail pages are ready once their real content (an image, or a
+// substantial body of text / an empty-state message) has rendered.
+const categoryReady = () =>
+  document.querySelectorAll('img[src*="supabase.co/storage"]').length >= 1 ||
+  /Ask us to source|No .* listed/.test(document.body.innerText);
+const detailReady = () => {
+  if (document.getElementById("boot-splash")) return false;
+  if (/Product Not Found|Brand Not Found/i.test(document.body.innerText)) return true;
+  const main = document.querySelector("main") || document.body;
+  return (
+    document.querySelectorAll('img[src*="supabase.co/storage"]').length >= 1 ||
+    main.innerText.trim().length > 400
+  );
+};
+
 const ROUTES = [
   { path: "/", waitFor: hasProductImages },
   { path: "/about", waitFor: null },
@@ -39,22 +67,33 @@ const ROUTES = [
   { path: "/contact", waitFor: null },
 ];
 
-// Also prerender the category hub + landing pages (the SEO pages that target
-// "[category] importer/distributor Sri Lanka"). We take their paths from the
-// sitemap the previous build step just wrote, so this stays in sync with the
-// data. Category detail pages are ready once their product grid (or empty
-// state) has rendered.
-const categoryReady = () =>
-  document.querySelectorAll('img[src*="supabase.co/storage"]').length >= 1 ||
-  /Ask us to source|No .* listed/.test(document.body.innerText);
+// Pull the category / product / brand detail routes from the sitemap the
+// previous build step wrote, so this stays in sync with the live data.
 try {
   const sitemap = await readFile(join(DIST, "sitemap.xml"), "utf8");
-  const catPaths = [...sitemap.matchAll(/<loc>https:\/\/www\.olivefoods\.lk(\/categories[^<]*)<\/loc>/g)].map((m) => m[1]);
-  for (const p of catPaths) {
-    ROUTES.push({ path: p, waitFor: p === "/categories" ? 'a[href^="/categories/"]' : categoryReady });
+  const locs = [...sitemap.matchAll(/<loc>https:\/\/www\.olivefoods\.lk([^<]*)<\/loc>/g)].map((m) => m[1]);
+  const seen = new Set(ROUTES.map((r) => r.path));
+  let nCat = 0, nProd = 0, nBrand = 0;
+  for (const p of locs) {
+    if (seen.has(p)) continue;
+    seen.add(p);
+    if (p.startsWith("/categories")) {
+      ROUTES.push({ path: p, waitFor: p === "/categories" ? 'a[href^="/categories/"]' : categoryReady });
+      nCat++;
+    } else if (/^\/products\/.+/.test(p)) {
+      ROUTES.push({ path: p, waitFor: detailReady });
+      nProd++;
+    } else if (/^\/brands\/.+/.test(p)) {
+      ROUTES.push({ path: p, waitFor: detailReady });
+      nBrand++;
+    }
   }
-  console.log(`[prerender] + ${catPaths.length} category route(s) from sitemap`);
-} catch { /* no sitemap yet — skip category prerender */ }
+  console.log(`[prerender] + from sitemap: ${nCat} category, ${nProd} product, ${nBrand} brand route(s)`);
+} catch {
+  console.warn("[prerender] no sitemap.xml — prerendering curated routes only");
+}
+
+const ALL = LIMIT > 0 ? ROUTES.slice(0, LIMIT) : ROUTES;
 
 const MIME = {
   ".html": "text/html", ".js": "text/javascript", ".mjs": "text/javascript",
@@ -77,86 +116,112 @@ async function serveFile(res, filePath) {
   return false;
 }
 
-// Static file server for dist/ with SPA fallback to index.html.
+// Preserve the clean, un-prerendered shell as the SPA fallback BEFORE we start
+// overwriting dist/index.html with the rendered homepage. Every client-side
+// route (including the detail pages we're about to render) boots from this.
+await mkdir(DIST, { recursive: true });
+await writeFile(join(DIST, "200.html"), await readFile(join(DIST, "index.html")));
+const SHELL = await readFile(join(DIST, "200.html"));
+
+// Static file server for dist/ with SPA fallback to the clean shell.
 const server = http.createServer(async (req, res) => {
   const urlPath = decodeURIComponent(req.url.split("?")[0]);
   if (urlPath !== "/" && (await serveFile(res, join(DIST, urlPath)))) return;
-  const fallback = await readFile(join(DIST, "index.html"));
   res.writeHead(200, { "Content-Type": "text/html" });
-  res.end(fallback);
+  res.end(SHELL);
 });
-
 await new Promise((r) => server.listen(PORT, r));
 
-// Preserve the clean, un-prerendered shell as the SPA fallback for routes we
-// don't prerender (product/brand detail pages), so they don't fall back to the
-// full homepage HTML. nginx serves this via `try_files ... /200.html`.
-await writeFile(join(DIST, "200.html"), await readFile(join(DIST, "index.html")));
+// ─── Headless Chrome, with crash resilience ───
+// A single browser is shared across a small pool of pages. A big run (~220
+// pages) makes a transient Chrome crash likely; when the browser disconnects,
+// a "Connection closed" / "Target closed" error used to kill the whole run.
+// ensureBrowser() relaunches it (once, even under concurrency) and the page is
+// retried.
+const launch = () => puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-dev-shm-usage"] });
+let browser = null;
+let launching = null;
+async function ensureBrowser() {
+  const alive = browser && (browser.connected ?? browser.isConnected?.());
+  if (alive) return browser;
+  if (!launching) launching = launch().then((b) => { browser = b; launching = null; return b; });
+  return launching;
+}
+const isCrash = (msg = "") =>
+  /Connection closed|Target closed|Protocol error|Session closed|frame was detached|browser has disconnected|Navigating frame/i.test(msg);
 
-const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-dev-shm-usage"] });
-let ok = 0, fail = 0;
+const scrollThrough = () =>
+  new Promise((res) => {
+    let y = 0;
+    const step = () => {
+      window.scrollBy(0, 700);
+      y += 700;
+      if (y < document.body.scrollHeight + 1600) setTimeout(step, 110);
+      else { window.scrollTo(0, 0); res(); }
+    };
+    step();
+  });
 
-for (const { path: route, waitFor } of ROUTES) {
-  const page = await browser.newPage();
-  page.on("pageerror", (e) => console.warn(`[prerender]   page error on ${route}: ${e.message}`));
+async function renderOnce(route, waitFor) {
+  const b = await ensureBrowser();
+  const page = await b.newPage();
+  page.on("pageerror", () => {});
   try {
     await page.setViewport({ width: 1280, height: 1600 });
-    await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: "networkidle2", timeout: 45000 });
-    // Wait until React has mounted and the boot splash is gone.
+    await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: "networkidle2", timeout: NAV_TIMEOUT });
     await page
       .waitForFunction(
-        () => {
-          const root = document.getElementById("root");
-          return root && root.children.length > 0 && !document.getElementById("boot-splash");
-        },
+        () => { const r = document.getElementById("root"); return r && r.children.length > 0 && !document.getElementById("boot-splash"); },
         { timeout: 20000 }
       )
       .catch(() => {});
-    // Block on real content (Supabase-loaded) so we don't capture a skeleton.
-    if (typeof waitFor === "function") {
-      await page.waitForFunction(waitFor, { timeout: 20000 }).catch(() => {
-        console.warn(`[prerender]   ${route}: content did not load in time`);
-      });
-    } else if (waitFor) {
-      await page.waitForSelector(waitFor, { timeout: 20000 }).catch(() => {
-        console.warn(`[prerender]   ${route}: selector "${waitFor}" not found in time`);
-      });
-    }
-    // Scroll through to trigger lazy-loaded sections + whileInView reveals,
-    // then return to the top and let things settle.
-    await page.evaluate(
-      () =>
-        new Promise((res) => {
-          let y = 0;
-          const step = () => {
-            window.scrollBy(0, 700);
-            y += 700;
-            if (y < document.body.scrollHeight + 1600) setTimeout(step, 110);
-            else {
-              window.scrollTo(0, 0);
-              res();
-            }
-          };
-          step();
-        })
-    );
-    await new Promise((r) => setTimeout(r, 1400));
-
+    if (typeof waitFor === "function") await page.waitForFunction(waitFor, { timeout: 20000 }).catch(() => {});
+    else if (waitFor) await page.waitForSelector(waitFor, { timeout: 20000 }).catch(() => {});
+    await page.evaluate(scrollThrough);
+    await new Promise((r) => setTimeout(r, 1200));
     const html = await page.content();
     const outPath = route === "/" ? join(DIST, "index.html") : join(DIST, route.replace(/^\//, ""), "index.html");
     await mkdir(dirname(outPath), { recursive: true });
     await writeFile(outPath, html, "utf8");
-    console.log(`[prerender] ✓ ${route} -> ${outPath.replace(DIST, "dist")} (${(html.length / 1024).toFixed(0)} KB)`);
-    ok++;
-  } catch (e) {
-    console.warn(`[prerender] ✗ ${route}: ${e.message}`);
-    fail++;
+    return html.length;
   } finally {
-    await page.close();
+    try { await page.close(); } catch { /* browser already gone */ }
   }
 }
 
-await browser.close();
+let ok = 0, fail = 0, done = 0;
+const total = ALL.length;
+const queue = [...ALL];
+
+async function worker() {
+  for (;;) {
+    const item = queue.shift();
+    if (!item) return;
+    let lastErr;
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        const size = await renderOnce(item.path, item.waitFor);
+        ok++;
+        console.log(`[prerender] ✓ ${item.path} (${(size / 1024).toFixed(0)} KB) [${++done}/${total}]`);
+        lastErr = null;
+        break;
+      } catch (e) {
+        lastErr = e;
+        if (isCrash(e.message) && attempt < 2) { await ensureBrowser(); continue; }
+        break;
+      }
+    }
+    if (lastErr) {
+      fail++;
+      console.warn(`[prerender] ✗ ${item.path}: ${lastErr.message} [${++done}/${total}]`);
+    }
+  }
+}
+
+await ensureBrowser();
+await Promise.all(Array.from({ length: Math.min(CONCURRENCY, total) }, worker));
+
+try { await browser?.close(); } catch { /* already gone */ }
 server.close();
-console.log(`[prerender] done — ${ok} rendered, ${fail} failed`);
+console.log(`[prerender] done — ${ok} rendered, ${fail} failed, ${total} total`);
 if (ok === 0) process.exitCode = 1; // don't ship a build where prerender totally failed
