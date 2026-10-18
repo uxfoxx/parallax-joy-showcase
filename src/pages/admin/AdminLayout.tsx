@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -47,7 +47,10 @@ const AdminLayout = () => {
             <span className="font-display text-lg font-semibold text-foreground">Admin Panel</span>
           </header>
           <main className="flex-1 min-h-0 overflow-y-auto p-6 bg-muted/30">
-            <Outlet />
+            {/* Admin pages are lazy chunks — keep the sidebar/header up while one loads. */}
+            <Suspense fallback={<p className="font-body text-sm text-muted-foreground">Loading…</p>}>
+              <Outlet />
+            </Suspense>
           </main>
         </div>
       </div>
