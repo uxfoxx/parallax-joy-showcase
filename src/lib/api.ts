@@ -76,10 +76,15 @@ export const useProducts = (filters?: { category?: string; brandSlug?: string })
     queryKey: ["products", filters],
     queryFn: async () => {
       let query = supabase.from("products").select("*, brands(*)").order("name");
-      if (filters?.category) query = query.contains("categories", [filters.category]);
+      // Quote the element: `.contains()` sends {Dry Nuts, Seeds & Dried Fruits}
+      // unquoted, which PostgREST splits on the commas into three elements — so
+      // any category with a comma in its name matched no products at all.
+      if (filters?.category) query = query.filter("categories", "cs", `{${JSON.stringify(filters.category)}}`);
       if (filters?.brandSlug) {
-        const { data: brand } = await supabase.from("brands").select("id").eq("slug", filters.brandSlug).single();
-        if (brand) query = query.eq("brand_id", brand.id);
+        const { data: brand } = await supabase.from("brands").select("id").eq("slug", filters.brandSlug).maybeSingle();
+        // An unknown brand has no products — not every product.
+        if (!brand) return [] as Product[];
+        query = query.eq("brand_id", brand.id);
       }
       const { data, error } = await query;
       if (error) throw error;

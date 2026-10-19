@@ -1,19 +1,26 @@
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import Seo from "@/components/Seo";
 import { motion, useScroll, useTransform } from "framer-motion";
 import PageLayout from "@/components/PageLayout";
 import PageHero from "@/components/PageHero";
-import PaginationControls from "@/components/PaginationControls";
 import BrandCard from "@/components/BrandCard";
-import { usePagination } from "@/hooks/usePagination";
 import { useBrands, useProducts } from "@/lib/api";
+import { brandProfile } from "@/lib/brands";
 
 const BrandsPage = () => {
-  const { data: brands = [], isLoading } = useBrands();
-  const { data: products = [] } = useProducts();
+  const { data: allBrands = [], isLoading: brandsLoading } = useBrands();
+  const { data: products = [], isLoading: productsLoading } = useProducts();
+  const isLoading = brandsLoading || productsLoading;
 
-  const { currentPage, setCurrentPage, totalPages, paginatedItems } = usePagination(brands, 9);
-  const gridRef = useRef<HTMLDivElement>(null);
+  const prodCounts = useMemo(() => {
+    const m: Record<string, number> = {};
+    for (const p of products) if (p.brand_id) m[p.brand_id] = (m[p.brand_id] ?? 0) + 1;
+    return m;
+  }, [products]);
+  // Every brand on one page, so each brand page has a crawlable link from the
+  // hub. A brand with no products and no profile is left out: its page is
+  // thin and noindex until it has something to show.
+  const brands = allBrands.filter((b) => prodCounts[b.id] > 0 || !!brandProfile(b.slug).about?.trim());
 
   const contentRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: contentRef, offset: ["start end", "end start"] });
@@ -50,7 +57,7 @@ const BrandsPage = () => {
             style={{ y: orb2Y, background: "radial-gradient(circle, hsl(var(--forest-mid) / 0.05), transparent 70%)" }}
           />
 
-          <div ref={gridRef} className="max-w-6xl mx-auto px-6 relative z-10">
+          <div className="max-w-6xl mx-auto px-6 relative z-10">
             {isLoading ? (
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => (
@@ -58,34 +65,22 @@ const BrandsPage = () => {
                 ))}
               </div>
             ) : (
-              <>
-                <motion.div
-                  key={currentPage}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  className="grid sm:grid-cols-2 md:grid-cols-3 gap-6"
-                >
-                  {paginatedItems.map((brand, i) => {
-                    const prodCount = products.filter((p) => p.brand_id === brand.id).length;
-                    return (
-                      <BrandCard
-                        key={brand.id}
-                        brand={brand}
-                        prodCount={prodCount}
-                        index={i}
-                        columns={3}
-                      />
-                    );
-                  })}
-                </motion.div>
-                <PaginationControls
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                  scrollTargetRef={gridRef as React.RefObject<HTMLElement>}
-                />
-              </>
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                className="grid sm:grid-cols-2 md:grid-cols-3 gap-6"
+              >
+                {brands.map((brand, i) => (
+                  <BrandCard
+                    key={brand.id}
+                    brand={brand}
+                    prodCount={prodCounts[brand.id] ?? 0}
+                    index={i}
+                    columns={3}
+                  />
+                ))}
+              </motion.div>
             )}
           </div>
         </section>

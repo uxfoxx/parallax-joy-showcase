@@ -3,7 +3,6 @@ import {
   MapPin, Phone, Mail, Copy, Check, ArrowUpRight, Navigation,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import SplitText from "@/components/motion/SplitText";
 import SpotlightHover from "@/components/motion/SpotlightHover";
@@ -469,7 +468,6 @@ const LocationsSection = () => {
             </div>
 
             {/* CTA */}
-            <Link to={MAPS_URL.replace("https://www.google.com", "")} className="hidden" />
             <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="inline-block">
               <Button variant="hero" size="pill" className="font-body group">
                 <Navigation className="w-4 h-4 mr-1" />

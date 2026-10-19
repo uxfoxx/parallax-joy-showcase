@@ -85,6 +85,16 @@ rsync -az -e "$RSYNC_E" \
 echo "▶  Installing server runtime (sirv)…"
 "${SSH[@]}" "${NVM} cd ${DEPLOY_PATH}/server && npm ci --omit=dev --silent"
 
+echo "▶  Keeping recent assets reachable…"
+# Search engines often render a page well after fetching its HTML. If this
+# deploy deleted the JavaScript/CSS that older HTML references, that render
+# fails and the page looks empty — reported as "Soft 404" or "Crawled –
+# currently not indexed". So the new release also carries the outgoing
+# release's assets from the last 14 days, as hard links: no extra disk, the
+# original mtime is kept (so each file ages out after 14 days), and the
+# content-hashed names can't collide with the new build's.
+"${SSH[@]}" "cd ${DEPLOY_PATH} && if [ -d current/assets ]; then find -L current/assets -maxdepth 1 -type f -mtime -14 -exec cp -ln {} releases/${RELEASE}/assets/ \\; ; fi"
+
 echo "▶  Activating release…"
 # ln -sfn is unlink-then-symlink, so there is a window where `current` does not
 # exist. Creating a temp link and mv -T'ing it over is a genuine atomic rename.
