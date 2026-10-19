@@ -140,14 +140,14 @@ const BrandDetailPage = () => {
             to={quoteHref(enquiry)}
             data-track="brand_enquiry"
             data-track-item={brand.name}
-            className="inline-flex items-center gap-2 rounded-full bg-accent text-white px-6 h-11 text-sm font-body font-semibold hover:bg-accent/90 transition-colors shadow-lg shadow-accent/25"
+            className="inline-flex items-center gap-2 rounded-full bg-accent text-accent-foreground px-6 h-11 text-sm font-body font-semibold hover:bg-accent/90 transition-colors shadow-lg shadow-accent/25"
           >
             <MessageCircle className="w-4 h-4" /> Inquire About This Brand
           </Link>
         </div>
       </PageHero>
 
-      <section className="py-20 lg:py-28 bg-background/90 backdrop-blur-sm">
+      <section data-navbar-theme="light" className="py-20 lg:py-28 bg-background/90 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6">
           {/* Answer first — the sentence search engines and AI assistants quote. */}
           <p className="max-w-3xl font-body text-lg text-foreground leading-relaxed">{answer}</p>
@@ -196,7 +196,7 @@ const BrandDetailPage = () => {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="grid sm:grid-cols-2 md:grid-cols-3 gap-5"
+              className="grid grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-6 sm:gap-5"
             >
               {/* Every product, not a first page — each card is a crawlable link. */}
               {brandProducts.map((product, i) => (

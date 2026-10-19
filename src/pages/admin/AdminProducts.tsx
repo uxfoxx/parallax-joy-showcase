@@ -489,7 +489,7 @@ const AdminProducts = () => {
                         onClick={() => toggleFormCategory(c.name)}
                         className={`font-body text-xs px-2.5 h-7 rounded-full border transition-colors ${
                           active
-                            ? "border-accent bg-accent text-white"
+                            ? "border-accent bg-accent text-accent-foreground"
                             : "border-border text-muted-foreground hover:text-foreground"
                         }`}
                       >

@@ -42,9 +42,9 @@ const Index = () => {
       <ImmersiveBackground />
       <Navbar />
       <FloatingWhatsApp />
-     
 
-      <div data-navbar-theme="dark">
+      <main>
+      <div data-navbar-theme="light">
         <HeroSection />
       </div>
       <SectionTransition />
@@ -93,6 +93,7 @@ const Index = () => {
           <FAQSection />
         </div>
       </Suspense>
+      </main>
       <div data-navbar-theme="dark">
         <Footer />
       </div>

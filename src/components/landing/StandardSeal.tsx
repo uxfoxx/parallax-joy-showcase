@@ -28,7 +28,7 @@ const StandardSeal = () => (
       <FoilSeal coinClassName="w-24 h-24 sm:w-28 sm:h-28" glowClassName="w-44 h-44" />
     </div>
 
-    <p className="mt-5 font-body text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45">
+    <p className="mt-5 font-body text-[11px] font-semibold uppercase tracking-[0.2em] text-white/70">
       GMP certified · Codex Alimentarius CXC 1-1969
     </p>
 

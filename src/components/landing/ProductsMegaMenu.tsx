@@ -52,7 +52,7 @@ const ProductsMegaMenu = ({ isDark, mutedText, isActive }: Props) => {
     : "bg-background border-foreground/10 text-foreground";
   const itemHover = "hover:bg-accent/10 hover:text-accent";
   const subtle = isDark ? "text-primary-foreground/45" : "text-muted-foreground";
-  const eyebrow = `font-body text-[10px] tracking-[0.28em] uppercase mb-3 ${subtle}`;
+  const eyebrow = `font-body text-[11px] tracking-[0.28em] uppercase mb-3 ${subtle}`;
 
   return (
     <div

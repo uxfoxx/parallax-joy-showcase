@@ -79,7 +79,7 @@ const Footer = () => {
           whileInView="show"
           viewport={{ once: true, margin: "-10%" }}
           variants={containerVariants}
-          className="grid sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr] gap-12 lg:gap-16 items-start"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr] gap-12 lg:gap-16 items-start"
         >
           {/* Brand */}
           <motion.div custom={0} variants={columnVariants} className="space-y-5">
@@ -87,28 +87,28 @@ const Footer = () => {
               <img
                 src={logoSvg}
                 alt="Olive Foods"
-                className="h-10 w-auto object-contain brightness-0 invert"
+                className="h-14 w-auto object-contain brightness-0 invert"
               />
             </div>
             <p className="font-display text-sm font-semibold text-primary-foreground/85 tracking-[0.01em]">
               Quality You Can Trust. Excellence You Can Taste.
             </p>
-            <p className="text-primary-foreground/45 font-body text-sm leading-relaxed max-w-xs">
+            <p className="text-primary-foreground/70 font-body text-sm leading-relaxed max-w-xs">
               A premium food sourcing and distribution partner connecting globally
               sourced products with Sri Lanka's hospitality and retail trade,
               built on relationships, not transactions.
             </p>
-            <p className="text-primary-foreground/55 font-body text-xs">
+            <p className="text-primary-foreground/75 font-body text-sm">
               <a
                 href="mailto:info@olivefoods.lk"
-                className="hover:text-primary-foreground/60 transition-colors duration-300"
+                className="inline-block py-1 hover:text-primary-foreground transition-colors duration-300"
               >
                 info@olivefoods.lk
               </a>
               {" · "}
               <a
                 href="tel:+94112071717"
-                className="hover:text-primary-foreground/60 transition-colors duration-300"
+                className="inline-block py-1 hover:text-primary-foreground transition-colors duration-300"
               >
                 +94 11 207 1717
               </a>
@@ -135,15 +135,15 @@ const Footer = () => {
           {/* Link columns */}
           {columns.map((col, i) => (
             <motion.div key={col.title} custom={i + 1} variants={columnVariants}>
-              <h4 className="font-body text-sm font-semibold text-primary-foreground mb-5 tracking-widest uppercase">
+              <h2 className="font-body text-sm font-semibold text-primary-foreground mb-4 tracking-widest uppercase">
                 {col.title}
-              </h4>
-              <ul className="space-y-3.5">
+              </h2>
+              <ul className="space-y-1">
                 {col.links.map((link) => (
                   <li key={link.href}>
                     <Link
                       to={link.href}
-                      className="group text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300 flex items-center gap-1.5"
+                      className="group text-primary-foreground/70 hover:text-primary-foreground font-body text-sm transition-colors duration-300 flex items-center gap-1.5 py-1.5"
                     >
                       <span className="transition-transform duration-300 group-hover:translate-x-1">
                         {link.label}
@@ -175,7 +175,7 @@ const Footer = () => {
               >
                 {s.text ? s.text : <CountUp to={s.value!} suffix={s.suffix} duration={2.4} />}
               </div>
-              <p className="font-body text-[11px] tracking-[0.22em] uppercase text-primary-foreground/45 mt-3">
+              <p className="font-body text-[11px] tracking-[0.22em] uppercase text-primary-foreground/65 mt-3">
                 {s.label}
               </p>
             </motion.div>
@@ -187,10 +187,10 @@ const Footer = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="mt-16 pt-8 border-t border-primary-foreground/10 text-center"
+          className="mt-16 pt-8 pb-20 md:pb-0 border-t border-primary-foreground/10 text-center"
         >
-          <p className="text-primary-foreground/55 font-body text-sm tracking-wide">
-            ©2026 Olive Foods (Pvt) Ltd. All rights reserved.
+          <p className="text-primary-foreground/65 font-body text-sm tracking-wide">
+            © {new Date().getFullYear()} Olive Foods (Pvt) Ltd. All rights reserved.
           </p>
         </motion.div>
       </div>

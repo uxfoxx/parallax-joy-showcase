@@ -105,7 +105,7 @@ const OurPartnersHexagon = () => {
           transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
           className="max-w-2xl mx-auto text-center mb-14 lg:mb-20"
         >
-          <Eyebrow variant="pill" tone="primary" className="mb-7">
+          <Eyebrow variant="pill" tone="accent" className="mb-7">
             Our Partnerships
           </Eyebrow>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-[56px] font-bold text-foreground leading-[1.04] tracking-tight">

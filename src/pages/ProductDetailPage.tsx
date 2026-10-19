@@ -28,7 +28,7 @@ const fadeUp = {
 };
 
 const Eyebrow = ({ children }: { children: React.ReactNode }) => (
-  <span className="inline-block font-body text-[10px] font-semibold tracking-[0.25em] uppercase text-accent/80 mb-3 border-b border-accent/30 pb-1">
+  <span className="inline-block font-body text-[11px] font-semibold tracking-[0.22em] uppercase text-accent mb-3 border-b border-accent/30 pb-1">
     {children}
   </span>
 );
@@ -226,6 +226,7 @@ const ProductDetailPage = () => {
       />
       {/* Category Hero Bar */}
       <motion.div
+        data-navbar-theme="dark"
         className="relative overflow-hidden"
         style={{
           background: `linear-gradient(135deg, hsl(140 50% 14%), hsl(150 40% 10%))`,
@@ -236,18 +237,19 @@ const ProductDetailPage = () => {
         </motion.div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-5">
           <motion.nav
-            className="flex items-center gap-2 text-xs font-body text-primary-foreground/50"
+            aria-label="Breadcrumb"
+            className="flex flex-wrap items-center gap-x-2 text-xs font-body text-primary-foreground/70"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            <Link to="/" className="hover:text-primary-foreground transition-colors">Home</Link>
+            <Link to="/" className="inline-block py-2.5 hover:text-primary-foreground transition-colors">Home</Link>
             <span className="text-primary-foreground/50">/</span>
-            <Link to="/products" className="hover:text-primary-foreground transition-colors">Products</Link>
+            <Link to="/products" className="inline-block py-2.5 hover:text-primary-foreground transition-colors">Products</Link>
             <span className="text-primary-foreground/50">/</span>
             {product.category && (
               <>
-                <Link to={`/categories/${categorySlug(product.category)}`} className="hover:text-primary-foreground transition-colors">{product.category}</Link>
+                <Link to={`/categories/${categorySlug(product.category)}`} className="inline-block py-2.5 hover:text-primary-foreground transition-colors">{product.category}</Link>
                 <span className="text-primary-foreground/50">/</span>
               </>
             )}
@@ -256,7 +258,7 @@ const ProductDetailPage = () => {
         </div>
       </motion.div>
 
-      <section className="bg-background">
+      <section data-navbar-theme="light" className="bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 lg:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-6 lg:gap-14 items-start">
             {/* Left — Gallery (Sticky) */}
@@ -288,7 +290,7 @@ const ProductDetailPage = () => {
                   )}
                 </AnimatePresence>
                 {/* Zoom hint */}
-                <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-foreground/60 backdrop-blur-md text-background text-[10px] font-body opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-foreground/60 backdrop-blur-md text-background text-[11px] font-body opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   Click to zoom
                 </div>
               </motion.div>
@@ -301,7 +303,7 @@ const ProductDetailPage = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                  <Carousel opts={{ align: "start", dragFree: true }} className="w-full">
+                  <Carousel aria-label="Product photos" opts={{ align: "start", dragFree: true }} className="w-full">
                     <CarouselContent className="-ml-2">
                       {allImages.map((img, i) => (
                         <CarouselItem key={i} className="pl-2 basis-1/4 sm:basis-1/5">
@@ -387,10 +389,10 @@ const ProductDetailPage = () => {
               {/* Description Section */}
               <motion.div className="mb-8" variants={fadeUp}>
                 <Eyebrow>Description</Eyebrow>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                <h2 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                   <Box className="w-4 h-4 text-accent" />
                   About this product
-                </h3>
+                </h2>
                 {isHtml ? (
                   <div
                     className="font-body text-muted-foreground leading-relaxed text-sm prose prose-sm max-w-none [&_a]:text-accent"
@@ -408,10 +410,10 @@ const ProductDetailPage = () => {
               {/* Specifications Section */}
               <motion.div className="mb-8" variants={fadeUp}>
                 <Eyebrow>Specifications</Eyebrow>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                <h2 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                   <Hash className="w-4 h-4 text-accent" />
                   Specifications
-                </h3>
+                </h2>
                 <div className="rounded-xl border border-border overflow-hidden">
                   {specs.map((d, i) => (
                     <motion.div
@@ -440,10 +442,10 @@ const ProductDetailPage = () => {
               {variants.length > 0 && (
                 <motion.div className="mb-8" variants={fadeUp}>
                   <Eyebrow>Other versions</Eyebrow>
-                  <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <h2 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                     <Layers className="w-4 h-4 text-accent" />
                     Also available as
-                  </h3>
+                  </h2>
                   <div className="flex flex-wrap gap-2">
                     {family.map((p) =>
                       p.id === product.id ? (
@@ -473,10 +475,10 @@ const ProductDetailPage = () => {
               {(product.tags ?? []).length > 0 && (
                 <motion.div className="mb-8" variants={fadeUp}>
                   <Eyebrow>Highlights</Eyebrow>
-                  <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <h2 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-accent" />
                     Product Highlights
-                  </h3>
+                  </h2>
                   <div className="flex flex-wrap gap-2">
                     {(product.tags ?? []).map((tag, i) => (
                       <motion.div
@@ -568,8 +570,10 @@ const ProductDetailPage = () => {
       </section>
 
       {/* FAQ — native <details> so the answers are in the HTML (FAQPage above). */}
-      <section className="bg-background pb-16">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+      <section data-navbar-theme="light" className="bg-background pb-16">
+        {/* Same container as the product above, so the FAQ lines up with it. */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="max-w-3xl">
           <h2 className="font-display text-xl font-bold text-foreground mb-3">Buying {product.name} in Sri Lanka</h2>
           <div className="divide-y divide-border border-y border-border">
             {faqs.map((f) => (
@@ -581,6 +585,7 @@ const ProductDetailPage = () => {
                 <p className="mt-2 font-body text-sm text-muted-foreground leading-relaxed">{f.a}</p>
               </details>
             ))}
+          </div>
           </div>
         </div>
       </section>
@@ -596,7 +601,7 @@ const ProductDetailPage = () => {
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <section className="py-20 bg-background">
+        <section data-navbar-theme="light" className="py-20 bg-background">
           <div className="max-w-7xl mx-auto px-6">
             <motion.div
               className="flex items-center justify-between mb-10"

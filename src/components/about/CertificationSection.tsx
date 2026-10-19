@@ -154,13 +154,13 @@ const CertificationSection = () => {
 
             {/* Audited scope — hairline rows, not a card */}
             <div className="mt-9 border-y border-white/[0.08] divide-y divide-white/[0.08]">
-              <div className="grid sm:grid-cols-[140px_1fr] gap-2 sm:gap-6 py-5">
+              <div className="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-2 sm:gap-6 py-5">
                 <p className="font-body text-[11px] uppercase tracking-[0.18em] text-primary-foreground/40 pt-0.5">
                   What's covered
                 </p>
                 <p className="font-body text-sm text-primary-foreground/80 leading-relaxed">{SCOPE}</p>
               </div>
-              <div className="grid sm:grid-cols-[140px_1fr] gap-2 sm:gap-6 py-5">
+              <div className="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-2 sm:gap-6 py-5">
                 <p className="font-body text-[11px] uppercase tracking-[0.18em] text-primary-foreground/40 pt-0.5">
                   Issued by
                 </p>

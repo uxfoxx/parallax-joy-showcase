@@ -123,7 +123,7 @@ const ContactPage = () => {
     }
   };
 
-  const lightInputClasses = "flex h-11 w-full rounded-lg border border-border bg-background px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:border-accent/30 transition-colors font-body";
+  const lightInputClasses = "flex h-11 w-full rounded-lg border border-border bg-background px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:border-accent/30 transition-colors font-body";
 
   return (
     <div className="smooth-scroll overflow-x-hidden">
@@ -138,6 +138,7 @@ const ContactPage = () => {
       <Navbar />
       <FloatingWhatsApp />
 
+      <main>
       <PageHero
         eyebrow="Olive Foods / Contact"
         title={<>Get in <span className="text-gradient-gold italic">touch.</span></>}
@@ -203,7 +204,7 @@ const ContactPage = () => {
                   )}
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Name */}
                   <div className="relative">
                     <input
@@ -215,7 +216,7 @@ const ContactPage = () => {
                     />
                     <label
                       htmlFor="contact-name"
-                      className="absolute left-4 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground/60 transition-all duration-200 pointer-events-none peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px]"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground transition-all duration-200 pointer-events-none peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[11px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[11px]"
                     >
                       Name *
                     </label>
@@ -233,7 +234,7 @@ const ContactPage = () => {
                     />
                     <label
                       htmlFor="contact-email"
-                      className="absolute left-4 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground/60 transition-all duration-200 pointer-events-none peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px]"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground transition-all duration-200 pointer-events-none peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[11px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[11px]"
                     >
                       Email *
                     </label>
@@ -241,7 +242,7 @@ const ContactPage = () => {
                   </div>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Phone — invisible label mirrors Subject's so both inputs top-align */}
                   <div className="space-y-2">
                     <Label className="font-body text-sm text-muted-foreground invisible select-none" aria-hidden>
@@ -257,7 +258,7 @@ const ContactPage = () => {
                       />
                       <label
                         htmlFor="contact-phone"
-                        className="absolute left-4 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground/60 transition-all duration-200 pointer-events-none peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px]"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground transition-all duration-200 pointer-events-none peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[11px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[11px]"
                       >
                         Phone (optional)
                       </label>
@@ -265,9 +266,9 @@ const ContactPage = () => {
                   </div>
                   {/* Subject */}
                   <div className="space-y-2">
-                    <Label className="font-body text-sm text-muted-foreground">Subject *</Label>
+                    <Label htmlFor="contact-subject" className="font-body text-sm text-muted-foreground">Subject *</Label>
                     <Select value={form.subject} onValueChange={(v) => setForm({ ...form, subject: v })}>
-                      <SelectTrigger className="h-11 rounded-lg border-border bg-background text-foreground font-body">
+                      <SelectTrigger id="contact-subject" aria-label="Subject" className="h-11 rounded-lg border-border bg-background text-foreground font-body">
                         <SelectValue placeholder="Select subject" />
                       </SelectTrigger>
                       <SelectContent>
@@ -291,7 +292,7 @@ const ContactPage = () => {
                   />
                   <label
                     htmlFor="contact-message"
-                    className="absolute left-4 top-4 font-body text-sm text-muted-foreground/60 transition-all duration-200 pointer-events-none peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px]"
+                    className="absolute left-4 top-4 font-body text-sm text-muted-foreground transition-all duration-200 pointer-events-none peer-focus:top-1.5 peer-focus:text-[11px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[11px]"
                   >
                     Message *
                   </label>
@@ -299,7 +300,7 @@ const ContactPage = () => {
                 </div>
 
                 <div className="flex flex-col items-start gap-2">
-                  <Button type="submit" disabled={loading} className="bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-md px-8 h-12 text-base gap-2 shine-sweep">
+                  <Button type="submit" disabled={loading} className="bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-md px-8 h-12 text-base gap-2 shine-sweep">
                     {loading ? (
                       <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
                         <Loader2 className="w-4 h-4" />
@@ -369,9 +370,13 @@ const ContactPage = () => {
           </div>
         </section>
       </div>
+      </main>
+
 
       <div data-navbar-theme="dark">
+
         <Footer />
+
       </div>
     </div>
   );

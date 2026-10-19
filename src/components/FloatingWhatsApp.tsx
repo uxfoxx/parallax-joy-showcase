@@ -32,12 +32,17 @@ const FloatingWhatsApp = ({ hideOnMobile = false }: { hideOnMobile?: boolean }) 
   const message = buildMessage(matchedProduct?.name, fullUrl);
 
   return (
+    // z-40: below dialogs (z-50), so it never covers a quick view's close button.
+    <aside
+      aria-label="WhatsApp chat"
+      className={`fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-4 sm:right-6 z-40 print:hidden ${hideOnMobile ? "max-md:hidden" : ""}`}
+    >
     <a
       href={`https://wa.me/94112071717?text=${encodeURIComponent(message)}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className={`fixed bottom-6 right-4 sm:right-6 z-[9999] group print:hidden ${hideOnMobile ? "max-md:hidden" : ""}`}
+      className="relative block group"
     >
       <div className="relative">
         {/* Pulse ring — throttled: ~2s burst every 12s instead of continuous */}
@@ -52,6 +57,7 @@ const FloatingWhatsApp = ({ hideOnMobile = false }: { hideOnMobile?: boolean }) 
         {matchedProduct ? `Ask about ${matchedProduct.name}` : "Chat with us"}
       </div>
     </a>
+    </aside>
   );
 };
 

@@ -82,7 +82,7 @@ const PaginationControls = ({
                   onClick={(e) => { e.preventDefault(); handleChange(page); }}
                   className={`cursor-pointer select-none font-body rounded-xl transition-all duration-200 ${
                     page === currentPage
-                      ? "bg-accent text-white border-accent hover:bg-accent/90 hover:text-white"
+                      ? "bg-accent text-accent-foreground border-accent hover:bg-accent/90 hover:text-white"
                       : "hover:bg-accent/10 hover:text-accent"
                   }`}
                 >

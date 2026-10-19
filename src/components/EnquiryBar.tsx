@@ -13,7 +13,7 @@ import { PHONE_TEL, quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget
 const EnquiryBar = ({ target }: { target: EnquiryTarget }) => {
   const isSourcing = target.kind === "category";
   return (
-    <div className="md:hidden fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur-md px-3 pt-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom))] print:hidden">
+    <aside aria-label="Request a quote" className="md:hidden fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur-md px-3 pt-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom))] print:hidden">
       <div className="flex items-center gap-2">
         <Link
           to={quoteHref(target)}
@@ -40,7 +40,7 @@ const EnquiryBar = ({ target }: { target: EnquiryTarget }) => {
           <Phone className="w-5 h-5" />
         </a>
       </div>
-    </div>
+    </aside>
   );
 };
 

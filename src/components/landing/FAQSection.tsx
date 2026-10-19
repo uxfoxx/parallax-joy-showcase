@@ -108,14 +108,14 @@ const FAQSection = () => {
                 className="group/cta mt-8 inline-flex items-center gap-4 rounded-2xl border border-border bg-card/50 px-5 py-4 transition-colors duration-300 hover:border-accent/40 hover:bg-accent/[0.04]"
               >
                 <span className="flex flex-col">
-                  <span className="font-body text-[10px] font-semibold tracking-[0.24em] uppercase text-muted-foreground">
+                  <span className="font-body text-[11px] font-semibold tracking-[0.24em] uppercase text-muted-foreground">
                     Still curious?
                   </span>
                   <span className="font-display text-base font-semibold text-foreground transition-colors group-hover/cta:text-accent">
                     Talk to our team
                   </span>
                 </span>
-                <span className="ml-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-white transition-transform duration-300 group-hover/cta:translate-x-1">
+                <span className="ml-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground transition-transform duration-300 group-hover/cta:translate-x-1">
                   <ArrowRight className="h-4 w-4" />
                 </span>
               </Link>
@@ -177,7 +177,7 @@ const FAQSection = () => {
                       transition={{ type: "spring", stiffness: 320, damping: 20 }}
                       className={`flex-shrink-0 w-8 h-8 rounded-full border flex items-center justify-center text-xl font-light leading-none transition-colors duration-300 ${
                         openIndex === i
-                          ? "border-accent bg-accent text-white"
+                          ? "border-accent bg-accent text-accent-foreground"
                           : "border-border text-muted-foreground group-hover:border-accent/40 group-hover:text-accent"
                       }`}
                     >

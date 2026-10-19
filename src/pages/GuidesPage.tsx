@@ -50,7 +50,7 @@ const GuidesPage = () => {
       <div data-navbar-theme="light">
         <section className="relative py-16 lg:py-24 bg-background/90 backdrop-blur-sm">
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
-            <ul className="grid sm:grid-cols-2 gap-4">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {GUIDES.map((g) => (
                 <li key={g.slug}>
                   <Link

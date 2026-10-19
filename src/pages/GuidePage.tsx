@@ -141,7 +141,7 @@ const GuidePage = () => {
                   ))}
                 </div>
                 {productLinks.length > 0 && (
-                  <ul className="mt-5 grid sm:grid-cols-2 gap-x-6 gap-y-2">
+                  <ul className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
                     {productLinks.map((p) => (
                       <li key={p.id}>
                         <Link to={`/products/${p.slug}`} className="font-body text-sm text-accent hover:underline">

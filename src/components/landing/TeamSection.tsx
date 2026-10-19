@@ -58,19 +58,19 @@ const TeamSection = () => {
         className="flex flex-wrap items-center justify-center gap-3 mt-11"
       >
         <MagneticButton>
-          <Link to="/contact" className="inline-block group">
-            <Button variant="brand" size="pill" className="font-body">
+          <Button asChild variant="brand" size="pill" className="font-body group">
+            <Link to="/contact">
               Become a partner
               <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </MagneticButton>
         <MagneticButton>
-          <Link to="/about" className="inline-block">
-            <Button variant="heroOutline" size="pill" className="font-body">
+          <Button asChild variant="heroOutline" size="pill" className="font-body">
+            <Link to="/about">
               Our story
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </MagneticButton>
       </motion.div>
     </DepthScene>

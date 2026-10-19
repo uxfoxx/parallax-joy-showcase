@@ -27,7 +27,7 @@ const Heading = ({ children, count }: { children: React.ReactNode; count?: numbe
   </h2>
 );
 
-const linkClass = "font-body text-sm text-foreground/80 hover:text-accent transition-colors";
+const linkClass = "inline-block py-1 font-body text-sm text-foreground/80 hover:text-accent transition-colors";
 
 /**
  * /site-map — every public page on one page, as plain links: the pages, who we
@@ -90,7 +90,7 @@ const SiteMapPage = () => {
             <div className="grid gap-10 md:grid-cols-3">
               <nav aria-label="Main pages">
                 <Heading>Pages</Heading>
-                <ul className="space-y-2">
+                <ul className="space-y-0.5">
                   {MAIN_PAGES.map((p) => (
                     <li key={p.to}>
                       <Link to={p.to} className={linkClass}>{p.label}</Link>
@@ -100,7 +100,7 @@ const SiteMapPage = () => {
                 {GUIDES.length > 0 && (
                   <>
                     <h3 className="font-body text-sm font-semibold text-foreground mt-6 mb-2">Buying guides</h3>
-                    <ul className="space-y-2">
+                    <ul className="space-y-0.5">
                       {GUIDES.map((g) => (
                         <li key={g.slug}>
                           <Link to={`/guides/${g.slug}`} className={linkClass}>{g.title}</Link>
@@ -112,7 +112,7 @@ const SiteMapPage = () => {
               </nav>
               <nav aria-label="Who we supply">
                 <Heading>Who we supply</Heading>
-                <ul className="space-y-2">
+                <ul className="space-y-0.5">
                   {SECTORS.map((s) => (
                     <li key={s.slug}>
                       <Link to={`/supply/${s.slug}`} className={linkClass}>{s.heading}</Link>
@@ -125,7 +125,7 @@ const SiteMapPage = () => {
                 {loading ? (
                   <p className="font-body text-sm text-muted-foreground">Loading…</p>
                 ) : (
-                  <ul className="space-y-2">
+                  <ul className="space-y-0.5">
                     {liveBrands.map((b) => (
                       <li key={b.id}>
                         <Link to={`/brands/${b.slug}`} className={linkClass}>
@@ -155,7 +155,7 @@ const SiteMapPage = () => {
                           {c}
                         </Link>
                       </h3>
-                      <ul className="space-y-1.5">
+                      <ul className="space-y-0">
                         {byCategory.get(c)!.map((p) => (
                           <li key={p.id}>
                             <Link to={`/products/${p.slug}`} className={linkClass}>

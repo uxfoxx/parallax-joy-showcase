@@ -85,9 +85,13 @@ const PageHero = ({ eyebrow, title, subtitle, subheading, children }: PageHeroPr
             custom={0.55}
             variants={softFadeUp}
             className={
-              subheading
-                ? "font-body text-xl md:text-2xl lg:text-[26px] font-medium text-white/85 leading-snug max-w-3xl mt-5"
-                : "font-body text-base md:text-lg text-white/60 leading-relaxed max-w-2xl mt-6"
+              // A long intro as a 20–26px deck turned into a wall of text on
+              // phones; long subtitles step down to a readable body size.
+              subheading && subtitle.length <= 180
+                ? "font-body text-lg md:text-2xl lg:text-[26px] font-medium text-white/85 leading-snug max-w-3xl mt-5"
+                : subheading
+                  ? "font-body text-base md:text-xl font-medium text-white/80 leading-relaxed max-w-3xl mt-5"
+                  : "font-body text-base md:text-lg text-white/75 leading-relaxed max-w-2xl mt-6"
             }
           >
             {subtitle}

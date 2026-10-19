@@ -100,8 +100,9 @@ const CategoryPage = () => {
               {prodLoading ? "Loading…" : `${products.length} ${name} ${products.length === 1 ? "product" : "products"} imported and distributed by Olive Foods across Sri Lanka.`}
             </p>
 
+            <h2 className="sr-only">{name} products</h2>
             {prodLoading ? (
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-6 sm:gap-4">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="rounded-xl bg-muted animate-pulse aspect-[4/5]" />
                 ))}
@@ -111,7 +112,7 @@ const CategoryPage = () => {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3"
+                className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-6 sm:gap-4"
               >
                 {products.map((product, i) => (
                   <ProductCard key={product.id} product={product} index={i} columns={4} />

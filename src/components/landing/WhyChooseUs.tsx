@@ -117,7 +117,7 @@ const RouteMapPanel = () => {
       {/* Text footer */}
       <div className="relative z-10 px-8 pb-8">
         <AccentRule />
-        <p className="font-body text-[10px] tracking-[0.28em] uppercase mb-2" style={{ color: "hsl(var(--accent)/0.6)" }}>
+        <p className="font-body text-[11px] tracking-[0.24em] uppercase mb-2" style={{ color: "hsl(var(--accent) / 0.9)" }}>
           Sourcing · Customs · Brand Rep
         </p>
         <h3 className="font-display text-xl font-bold text-white leading-snug">
@@ -190,7 +190,7 @@ const WarehousePanel = () => {
 
       <div className="relative z-10 px-8 pb-8">
         <AccentRule />
-        <p className="font-body text-[10px] tracking-[0.28em] uppercase mb-2" style={{ color: "hsl(var(--accent)/0.6)" }}>
+        <p className="font-body text-[11px] tracking-[0.24em] uppercase mb-2" style={{ color: "hsl(var(--accent) / 0.9)" }}>
           Bonded · Duty-Optimised · Secure
         </p>
         <h3 className="font-display text-xl font-bold text-white leading-snug">Bonded Warehousing</h3>
@@ -275,7 +275,7 @@ const ColdChainPanel = () => {
 
       <div className="relative z-10 px-7 pb-7">
         <AccentRule />
-        <p className="font-body text-[10px] tracking-[0.28em] uppercase mb-2" style={{ color: "hsl(var(--accent)/0.6)" }}>
+        <p className="font-body text-[11px] tracking-[0.24em] uppercase mb-2" style={{ color: "hsl(var(--accent) / 0.9)" }}>
           Frozen · Chilled · -18°C
         </p>
         <h3 className="font-display text-lg font-bold text-white leading-snug">Cold-Chain Logistics</h3>
@@ -322,7 +322,7 @@ const SriLankaMapPanel = () => {
         {/* Left text */}
         <div className="flex flex-col justify-end px-8 pt-8 pb-8 lg:w-[52%] shrink-0">
           <AccentRule />
-          <p className="font-body text-[10px] tracking-[0.28em] uppercase mb-3" style={{ color: "hsl(var(--accent)/0.6)" }}>
+          <p className="font-body text-[11px] tracking-[0.24em] uppercase mb-3" style={{ color: "hsl(var(--accent) / 0.9)" }}>
             HoReCa · Modern Trade · General Trade
           </p>
           <h3 className="font-display text-2xl lg:text-3xl font-bold text-white leading-snug mb-3">

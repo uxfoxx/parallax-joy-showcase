@@ -73,7 +73,7 @@ const Bubble = ({ from, children }: { from: "you" | "them"; children: React.Reac
       >
         {children}
         {isYou && (
-          <span className="inline-flex items-center gap-0.5 ml-2 text-[10px] text-forest-deep/45 align-middle">
+          <span className="inline-flex items-center gap-0.5 ml-2 text-[11px] text-forest-deep/45 align-middle">
             <CheckCheck className="w-3 h-3 text-sky-500" />
           </span>
         )}
@@ -134,7 +134,7 @@ const PhoneMockup = () => {
             </div>
             <div className="flex-1 min-w-0">
               <div className="font-body text-[13px] font-semibold truncate">Olive Foods · Sales Team</div>
-              <div className="font-body text-[10px] text-white/70 flex items-center gap-1.5">
+              <div className="font-body text-[11px] text-white/70 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse" />
                 online · replies within the hour
               </div>
