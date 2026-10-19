@@ -1,0 +1,112 @@
+{
+  "_readme": "DRAFT brand profiles for review — not used by the site. Approved entries are copied into src/data/brand-profiles.json (about / website / aliases). 'origin' fills the brand's Origin field in the admin; 'sources' and 'check' are for the reviewer only.",
+  "acroyali": {
+    "about": "Acroyali is a canned-food brand of Acroyali Holdings (Qingdao) Co., Ltd., a manufacturer in Qingdao, China, that makes canned fruit, fruit pie fillings and toppings, and canned vegetables and pulses for export.\n\nOlive Foods imports Acroyali into Sri Lanka and supplies its range to hotels, restaurants, bakeries and retailers: fruit pie fillings in apple, blueberry, raspberry, red cherry and strawberry, each in a 50% and a 70% version; canned fruit such as peach and pear halves, lychees, fruit cocktail and pitted dark sweet cherries; glacé cherries for baking; and canned sweet corn, young corn, straw and whole mushrooms, baked beans and red kidney beans.",
+    "origin": "China",
+    "sources": ["https://www.gulfood.com/exhibitors/acroyali-holdings-qingdao-coltd"],
+    "check": []
+  },
+  "albertos": {
+    "about": "Albertos (also written Alberto's) is a range of soft flour tortilla wraps. Olive Foods supplies two sizes: 10-inch wraps in packs of 6, for burritos, large wraps and quesadillas, and 6-inch wraps in packs of 8, for street-style tacos, fajitas and smaller bites.\n\nOlive Foods imports Albertos tortillas into Sri Lanka for restaurants, cafés, hotels and caterers that serve Mexican and wrap menus, alongside Tabasco pepper sauce and other world-food ingredients.",
+    "aliases": ["Alberto's"],
+    "sources": ["https://gcc.luluhypermarket.com/en-ae/senor-pepe-s-alberto-s-tortilla-wraps-plain-10-3-x-6-pcs/p/2248789/"],
+    "check": ["Who makes the Albertos wraps you import, and in which country? A UAE retailer sells them as \"Señor Pepe's Alberto's Tortilla Wraps\" made in the UAE, but we could not confirm the maker, so the profile does not name one."]
+  },
+  "azizaa": {
+    "about": "Azizaa is a basmati rice brand from India. Basmati is a long-grain aromatic rice of the Indian subcontinent, known for slender grains that lengthen as they cook and stay separate and fluffy.\n\nOlive Foods supplies four Azizaa lines in Sri Lanka: Basmati Rice in 5 kg and 20 kg bags, Extra Long Grain Basmati Rice Gold, and Extra Long Grain Basmati Rice Platinum 1121, made from the 1121 variety known for its extra-long grains. Hotels, restaurants and caterers buy it for biryani, pilaf, fried rice and buffet service.",
+    "origin": "India",
+    "sources": [],
+    "check": ["Who packs Azizaa? We found no public record of the brand owner, so the profile names only the country (India, from your current data)."]
+  },
+  "daily-dairy": {
+    "about": "Daily Dairy is the brand of Daily Dairy Holland, a cheese and dairy exporter in the Netherlands. Its range runs from classic Dutch cheeses such as Gouda and Edam to cheeses from other European traditions, and it has its own premium aged-cheese label, V.S.O.C.\n\nOlive Foods imports Daily Dairy cheese into Sri Lanka for hotels, restaurants, cafés and retailers: Gouda, Edam, white and coloured Cheddar, Emmental, Comté, Grana Padano, Pecorino Romano, young goat cheese, Danish blue and V.S.O.C Black Label aged Gouda, with grated Parmesan and Greek feta in the same range.",
+    "origin": "Netherlands",
+    "sources": ["https://www.gulfood.com/exhibitors/daily-dairy-holland", "https://www.tridge.com/sellers/daily-dairy-holland"],
+    "check": ["Your catalogue lists \"Failini Grated Parmesan\" and \"Kolios Feta\" under Daily Dairy. Kolios is a separate Greek feta brand. If Daily Dairy supplies them, this wording is fine; if not, they may belong under their own brand names."]
+  },
+  "damaco": {
+    "about": "Damaco is a frozen-food brand of the Damaco Group in Belgium, which produces frozen potato products, vegetables and convenience foods for food service and retail.\n\nOlive Foods imports Damaco frozen vegetables into Sri Lanka and keeps them under cold chain at −18 °C from its Colombo warehouse to the customer: broccoli and cauliflower florets, Brussels sprouts, green peas and a three-way mix of peas, carrots and corn. Hotels, restaurants and caterers use them for stir-fries, fried rice, soups and side dishes, with the same quality all year.",
+    "origin": "Belgium",
+    "sources": ["https://www.freshfromflanders.com/en/supplier/kipco-damaco-member-of-damaco-group"],
+    "check": []
+  },
+  "dedicato": {
+    "about": "Dedicato is the 100% Puglia pasta line of Granoro, the Pastificio Attilio Mastromauro in Corato, southern Italy. It is made from durum wheat grown, milled and turned into pasta within Puglia, through a traced supply chain of local farms and mills that Granoro set up in 2012.\n\nOlive Foods imports Dedicato pasta into Sri Lanka for restaurants, hotels and retailers, including cannelloni for baking, pappardelle, spinach tagliatelle, spaghetti vermicelli, multicoloured spirali fantasia and gnocchi.",
+    "website": "https://granoro.it/en/granoro-product-lines-dedicato/",
+    "origin": "Italy",
+    "sources": ["https://granoro.it/en/granoro-product-lines-dedicato/", "https://granoro.it/en/the-granoro-lines/granoro-dedicato-wholemeal-pasta/"],
+    "check": ["Dedicato \"Gnocchi\": is it Granoro's dried durum-wheat pasta shape called gnocchi, or potato gnocchi? The current product description calls it potato dumplings. If it is the dried pasta shape, that description needs correcting (a corrected version is in the product section)."]
+  },
+  "dira": {
+    "about": "DIRA is the frozen-fruit brand of Dirafrost, a company founded in 1988 in Limburg, Belgium's fruit-growing region, and part of the Austrian AGRANA group since 2004. Dirafrost makes IQF (individually quick frozen) fruit, fruit purees, coulis and smoothie fruit.\n\nOlive Foods imports DIRA into Sri Lanka and delivers it frozen under cold chain: purees in mango, passion fruit, strawberry, raspberry, lemon and coconut, and whole frozen blueberries, raspberries, cranberries, blackcurrants and red currants. Pastry kitchens, bars, cafés and hotels use them for mousses, sorbets, cocktails, smoothies, sauces and baking.",
+    "origin": "Belgium",
+    "sources": ["https://nutrada.com/suppliers/dirafrost", "https://www.food.be/sites/food/files/companies/0012000000RYY69AAH/01257000000VEN0AAO/DirafrostCompanyFolder.pdf"],
+    "check": []
+  },
+  "donna-chiara": {
+    "about": "Donna Chiara is a range of dried pasta in classic Italian shapes.\n\nOlive Foods supplies six Donna Chiara shapes in Sri Lanka: spaghetti and linguine for long-pasta dishes, penne and fusilli for thick and chunky sauces and baked pasta, farfalloni (large bow-ties) for salads and bakes, and mezzi gomiti elbow macaroni for macaroni and cheese. Restaurants, hotels, cafés and retailers buy it for everyday pasta service.",
+    "sources": [],
+    "check": ["Who makes Donna Chiara, and in which country? We found no public record of the maker, so the profile is short. One line from the pack (maker, country, wheat) would let us complete it."]
+  },
+  "hungritos": {
+    "about": "Hungritos is a frozen ready-to-cook brand of Iscon Balaji Foods, an Indian potato processor based in Ahmedabad, Gujarat, which sources its potatoes from contract farmers and makes French fries and potato specialities for food service and export.\n\nOlive Foods imports Hungritos frozen potato products into Sri Lanka and stores and delivers them at −18 °C: 9 mm French fries, coated 7 mm shoestring fries, potato wedges and hash browns. Restaurants, quick-service outlets, hotels and caterers use them for burgers, sides, starters and breakfast service.",
+    "website": "https://hungritos.com/",
+    "origin": "India",
+    "sources": ["https://hungritos.com/", "https://www.potatopro.com/brands/hungritos"],
+    "check": []
+  },
+  "mae-ploy": {
+    "about": "Mae Ploy is a Thai brand of curry pastes and sauces made in Thailand by Theppadungporn Coconut Co., Ltd., the company that also makes Chaokoh coconut milk.\n\nOlive Foods imports Mae Ploy into Sri Lanka and supplies green curry paste, red curry paste and tom yum paste to restaurants, hotels and caterers cooking Thai food. A Thai curry starts by frying the paste in coconut cream before adding coconut milk, meat or vegetables, fish sauce and palm sugar; tom yum paste is the base of the hot and sour soup of the same name.",
+    "aliases": ["Maeploy"],
+    "origin": "Thailand",
+    "sources": ["https://www.souschef.co.uk/products/mae-ploy-tom-yum-paste-1kg"],
+    "check": ["The current brand description says Mae Ploy was \"established in 1993\". Sources disagree on the year, so we left it out — we suggest removing it from the admin description too.", "Please confirm the maker on the pack reads Theppadungporn Coconut Co., Ltd."]
+  },
+  "mahachai": {
+    "about": "Mahachai is a Thai brand of dried rice noodles. Olive Foods supplies its Pad Thai Noodles, a flat rice stick made for pad thai, Thailand's best-known stir-fried noodle dish, and also used in noodle soups and other stir-fries.\n\nThe noodles are soaked in warm water until pliable, then stir-fried briefly with the sauce so they finish cooking in the pan. Olive Foods supplies them to restaurants, hotels and caterers in Sri Lanka alongside Mae Ploy curry pastes, Tiparos fish sauce and Wai Wai rice vermicelli.",
+    "origin": "Thailand",
+    "sources": [],
+    "check": ["Who makes the Mahachai noodles? We found no public record of the maker. The current admin description is just \"Thai Brand\"."]
+  },
+  "mavees": {
+    "about": "Mavee's is a brand of Mavee Foods, a family business in Hyderabad, India, that makes bakery and food-service ingredients, including whip toppings and cooking cream.\n\nOlive Foods supplies three Mavee's creams in Sri Lanka: Premium Cooking Cream for sauces, soups, pasta and gravies, and two sweetened whipping creams, Smooth and Silver, for cake decoration, piping, fillings and desserts. Bakeries, pastry kitchens, cafés and hotels use them every day.",
+    "website": "https://www.maveefoods.com/",
+    "aliases": ["Mavee's", "Mavee"],
+    "origin": "India",
+    "sources": ["https://www.maveefoods.com/"],
+    "check": ["The brand is spelt \"Mavee's\" on the maker's site; your catalogue uses \"Mavees\". Both are kept as names Google will connect. We did not add the misspelling \"Marvees\" as an official name — Google already corrects that search to Mavees, and listing misspellings in structured data can look like keyword stuffing."]
+  },
+  "royal-arm": {
+    "about": "Royal Arm is the own brand of Royal Techno Foodstuff Trading LLC, a food trading company in Dubai, United Arab Emirates, established in 2019. The Royal Arm range covers canned goods, olive and edible oils, honey, vinegars, sauces and condiments.\n\nOlive Foods imports Royal Arm into Sri Lanka and supplies pitted and whole black olives, sliced mushrooms, extra virgin olive oil, olive pomace oil and blended sesame oil, honey, apple cider, balsamic and white vinegar, and sauces including light and sweet soy, hoisin, mint sauce and mayonnaise, to hotels, restaurants, caterers and retailers.",
+    "website": "https://royaltechnofood.com/",
+    "origin": "United Arab Emirates",
+    "sources": ["https://royaltechnofood.com/", "https://www.gulfood.com/exhibitors/royal-techno-foodstuff-trading-llc"],
+    "check": []
+  },
+  "tabasco": {
+    "about": "Tabasco is the pepper sauce made by McIlhenny Company on Avery Island, Louisiana, USA, where Edmund McIlhenny first made it in 1868. The original red sauce is made from tabasco peppers, vinegar and salt, and the company is still run by the McIlhenny family.\n\nOlive Foods supplies Tabasco Original Red Pepper Sauce in 60 ml bottles to restaurants, bars, cafés and hotels in Sri Lanka, where a few drops go on eggs, pizza, oysters and seafood, into Bloody Marys and into marinades.",
+    "website": "https://www.tabasco.com/",
+    "origin": "United States",
+    "sources": ["https://en.wikipedia.org/wiki/Tabasco_sauce", "https://www.tabasco.com/"],
+    "check": []
+  },
+  "tiparos": {
+    "about": "Tiparos is a Thai fish sauce made by Tang Sang Hah Co., Ltd., a company founded in 1919 in Chonburi province on Thailand's Gulf coast that has been making fish sauce for more than a century.\n\nFish sauce (nam pla) is made by fermenting fish with salt and is the main seasoning of Thai cooking. Olive Foods supplies Tiparos fish sauce to restaurants, hotels and caterers in Sri Lanka for Thai curries, stir-fries, soups such as tom yum, salads and dipping sauces.",
+    "website": "https://www.tiparos.com/",
+    "origin": "Thailand",
+    "sources": ["https://en.wikipedia.org/wiki/Tiparos", "https://www.tiparos.com/"],
+    "check": []
+  },
+  "wai-wai": {
+    "about": "Wai Wai is a Thai noodle brand of Thai Preserved Food Factory Co., Ltd., which has made Wai Wai noodles in Thailand since 1972. Its rice vermicelli is made mainly from rice flour and is ready after a short soak in hot water.\n\nOlive Foods supplies Wai Wai rice vermicelli to restaurants, hotels and caterers in Sri Lanka for stir-fries, noodle soups, fresh spring rolls and noodle salads.",
+    "aliases": ["WaiWai"],
+    "origin": "Thailand",
+    "sources": ["https://en.wikipedia.org/wiki/Wai_Wai_(food_brand)", "https://trademark.justia.com/owners/thai-preserved-food-factory-co-ltd-4635524"],
+    "check": []
+  },
+  "generic": {
+    "about": "The Olive Foods own range is the everyday kitchen staples Olive Foods supplies under its own name: nuts, seeds and dried fruit, frozen beef, lamb, mutton and duck, dried herbs and spices, Japanese ingredients, sauces and stock powder, pastry and baking ingredients, flour, cooking oils, and packaging such as foil containers, paper cups, cake cups and food-handling gloves.\n\nIt comes with the same service as the brands Olive Foods imports: trade pricing by quote, warehousing in Colombo, cold chain for frozen lines and delivery across Sri Lanka.",
+    "sources": [],
+    "check": ["Optional. This is the brand page for your own range (/brands/generic)."]
+  }
+}

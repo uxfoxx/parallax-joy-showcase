@@ -1,0 +1,130 @@
+{
+  "_readme": "DRAFT product descriptions for review — not used by the site. Keyed by product slug. Approved ones are imported through Admin → Products → Excel (description column). 'why' and 'check' are for the reviewer only.",
+  "lamb-leg---bone-in": {
+    "why": "No description",
+    "proposed": "Whole frozen lamb leg on the bone, for roasting whole, slow-braising or cutting into curry pieces. Cooking on the bone keeps the meat moist and gives a richer gravy, so it suits carvery stations, Sunday roasts and festive menus.",
+    "check": [
+      "Its web address has a triple hyphen (/products/lamb-leg---bone-in). Changing the slug to lamb-leg-bone-in tidies it; the old address redirects automatically."
+    ]
+  },
+  "lamb-leg-boneless": {
+    "why": "No description",
+    "proposed": "Frozen boneless lamb leg, ready to roll and tie for an even roast, butterfly for the grill, or dice for curries and kebabs. With the bone already out, there is little trim and every portion carves cleanly."
+  },
+  "lamb-sq-cut-shoulder-slices": {
+    "why": "No description",
+    "proposed": "Square-cut lamb shoulder sliced into chops. Shoulder carries more marbling than leg, so these slices stay juicy on the grill or barbecue and turn tender when braised or cooked in a curry."
+  },
+  "mutton-cube": {
+    "why": "No description",
+    "proposed": "Frozen diced mutton, cut into cubes ready for curries, stews, biryani and kebabs. Mutton has a deeper flavour than lamb and rewards long, slow cooking."
+  },
+  "mutton-leg-bone-in": {
+    "why": "No description",
+    "proposed": "Frozen mutton leg on the bone for slow roasting, braising and curries. The bone adds flavour to the gravy and keeps the meat moist through long cooking, which suits biryani and celebration menus."
+  },
+  "mutton-leg-boneless": {
+    "why": "No description",
+    "proposed": "Frozen boneless mutton leg for dicing into curries and biryani, mincing, or rolling and slow-roasting. Lean leg meat with the bone removed, so portioning is quick and waste is low."
+  },
+  "pasta": {
+    "why": "No description",
+    "proposed": "Mezzi gomiti, or half elbows, are short curved pasta tubes: the classic shape for macaroni and cheese, baked pasta and cold pasta salads. The hollow centre fills with cheese and cream sauces.",
+    "check": [
+      "This product's web address is /products/pasta. Changing its slug in the admin to donna-chiara-mezzi-gomiti-elbow-macaroni gives it a descriptive address; the site redirects the old one automatically."
+    ]
+  },
+  "premium-cooking-cream": {
+    "why": "No description",
+    "proposed": "Mavee's Premium Cooking Cream for savoury cooking: creamy pasta sauces, soups, curries, gravies and gratins. Made for hot dishes, it adds body and a rich finish to sauces in hotel, restaurant and café kitchens."
+  },
+  "silver-sweetened-whipping-cream": {
+    "why": "No description",
+    "proposed": "Mavee's Silver Sweetened Whipping Cream, a ready-sweetened cream that whips up for cake decoration, piping, fillings and desserts in bakeries, pastry kitchens and cafés.",
+    "check": [
+      "What sets Silver apart from Smooth (sweetness, stability, pack, price tier)? One line each would let the two pages say something different."
+    ]
+  },
+  "smooth-sweetened-whipping-cream": {
+    "why": "Description only repeats the product name",
+    "proposed": "Mavee's Smooth Sweetened Whipping Cream, a ready-sweetened cream that whips to a smooth, creamy finish for frosting cakes, filling pastries and topping desserts and drinks.",
+    "check": [
+      "See Silver above."
+    ]
+  },
+  "dedicato-gnocchi": {
+    "why": "Possibly wrong (see Dedicato brand note)",
+    "proposed": "Dedicato gnocchi is a dried durum-wheat pasta shaped like small ridged dumplings, from Granoro's 100% Puglia line. The ridges and hollow hold tomato, meat and cream sauces, and it bakes well.",
+    "check": [
+      "Use this ONLY if the product is Granoro's dried pasta shape. If it really is potato gnocchi, keep the current description."
+    ]
+  },
+  "acroyali-apple-pie-filling-50": {
+    "why": "50% and 70% pages are 71% identical",
+    "proposed": "Acroyali apple pie filling, the 50% version: apple pieces in a smooth, lightly spiced glaze, ready for pies, crumbles, turnovers and Danish pastries in everyday baking. For more and larger fruit pieces, choose the 70% version.",
+    "check": [
+      "We read 50% / 70% as the fruit content (your current 70% copy says \"high fruit content\"). Please confirm.",
+      "\"Lightly spiced\": please confirm (cinnamon?) or we drop it."
+    ]
+  },
+  "acroyali-apple-pie-filling-70": {
+    "why": "50% and 70% pages are 71% identical",
+    "proposed": "Acroyali apple pie filling, the 70% version: more apple and less glaze, for lattice pies, strudel and tarts where the fruit is the feature. The 50% version suits everyday pies and crumbles."
+  },
+  "acroyali-blueberry-pie-filling-50": {
+    "why": "50% and 70% pages are 71% identical",
+    "proposed": "Acroyali blueberry pie filling, the 50% version: blueberries in a thick, glossy glaze for pies, cheesecake toppings, muffins and breakfast pastries. The 70% version carries more whole berries."
+  },
+  "acroyali-blueberry-pie-filling-70": {
+    "why": "50% and 70% pages are 71% identical",
+    "proposed": "Acroyali blueberry pie filling, the 70% version: packed with whole berries for premium pies, cheesecakes and plated desserts where the fruit shows. The 50% version suits everyday baking."
+  },
+  "acroyali-raspberry-pie-filling-50": {
+    "why": "50% and 70% pages are 70% identical",
+    "proposed": "Acroyali raspberry pie filling, the 50% version: a bright, tangy filling for jam tarts, sponge layers, swirls through batters and Danish pastries. The 70% version has more fruit."
+  },
+  "acroyali-raspberry-pie-filling-70": {
+    "why": "50% and 70% pages are 70% identical",
+    "proposed": "Acroyali raspberry pie filling, the 70% version: a fruit-heavy filling with intense raspberry flavour for injecting into pastries, filling layer cakes and finishing plated desserts. The 50% version suits everyday baking."
+  },
+  "acroyali-red-cherry-pie-filling-50": {
+    "why": "50% and 70% pages are 70% identical",
+    "proposed": "Acroyali red cherry pie filling, the 50% version: tart cherries in a deep red glaze for classic cherry pies, black forest cakes, waffles and crêpes. The 70% version holds more cherries."
+  },
+  "acroyali-red-cherry-pie-filling-70": {
+    "why": "50% and 70% pages are 70% identical",
+    "proposed": "Acroyali red cherry pie filling, the 70% version: a high-fruit cherry filling for lattice pies, cheesecake toppings and black forest cakes where whole cherries are the point. The 50% version suits everyday baking."
+  },
+  "acroyali-strawberry-pie-filling-50": {
+    "why": "50% and 70% pages are 69% identical",
+    "proposed": "Acroyali strawberry pie filling, the 50% version: sweet strawberry filling for pies, sponge cakes, tarts and dessert toppings in everyday baking. The 70% version has more fruit and stronger flavour."
+  },
+  "acroyali-strawberry-pie-filling-70": {
+    "why": "50% and 70% pages are 69% identical",
+    "proposed": "Acroyali strawberry pie filling, the 70% version: a fruit-rich strawberry filling for artisan tarts, cheesecakes and premium pastries that need a strong strawberry flavour. The 50% version suits everyday baking."
+  },
+  "azizaa-basmati-rice-5kg": {
+    "why": "5 kg and 20 kg pages are 68% identical",
+    "proposed": "Azizaa basmati rice in a 5 kg bag, a handy size for restaurants, cafés, smaller kitchens and retail shelves. Long, fragrant grains that cook separate and fluffy for biryani, pilaf, fried rice and curries. Also available in a 20 kg bag."
+  },
+  "azizaa-basmati-rice-20kg": {
+    "why": "5 kg and 20 kg pages are 68% identical",
+    "proposed": "Azizaa basmati rice in a 20 kg bag for hotels, caterers and high-volume kitchens: the same long, fragrant grain as the 5 kg pack, in a size made for buffets, banquets and daily biryani service."
+  },
+  "generic-aluminium-container-with-lid-750ml": {
+    "why": "750 ml and 1,200 ml pages are 67% identical",
+    "proposed": "750 ml rectangular aluminium container with a lid, sized for a single takeaway meal: a rice and curry portion, a pasta bake or an individual dessert. Also available in 1,200 ml for sharing portions."
+  },
+  "generic-aluminium-container-with-lid-1200ml": {
+    "why": "750 ml and 1,200 ml pages are 67% identical",
+    "proposed": "1,200 ml aluminium container with a lid for family-size takeaway orders, sharing portions and catering: larger servings of rice, biryani, pasta bakes and curries. Also available in 750 ml for single meals."
+  },
+  "generic-cheese-slice-128s": {
+    "why": "128-slice and 90-slice pages are 64% identical",
+    "proposed": "Processed cheese slices in a 128-slice pack for high-volume kitchens: quick-service burger lines, breakfast sandwiches, toasties and room service. Each slice melts evenly in seconds. A 90-slice pack is also available."
+  },
+  "generic-cheese-slice-90s": {
+    "why": "128-slice and 90-slice pages are 64% identical",
+    "proposed": "Processed cheese slices in a 90-slice pack, a practical size for cafés, sandwich counters and smaller kitchens: burgers, melts, wraps and breakfast plates. For busier kitchens there is a 128-slice pack."
+  }
+}
