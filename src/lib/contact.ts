@@ -13,7 +13,8 @@ export const WHATSAPP_NUMBER = "94112071717";
 export type EnquiryTarget =
   | { kind: "product"; name: string; sku?: string | null; path?: string }
   | { kind: "category"; name: string; path?: string }
-  | { kind: "sector"; name: string; path?: string };
+  | { kind: "sector"; name: string; path?: string }
+  | { kind: "brand"; name: string; path?: string };
 
 /** wa.me link with a prefilled message. */
 export const whatsappHref = (message: string) =>
@@ -27,6 +28,7 @@ export const whatsappMessage = (t?: EnquiryTarget) => {
   const url = t.path ? ` (${SITE_URL}${t.path})` : "";
   if (t.kind === "product") return `Hi Olive Foods, I'd like a quote for ${t.name}${t.sku ? ` (SKU ${t.sku})` : ""}${url}.`;
   if (t.kind === "sector") return `Hi Olive Foods, I'm interested in supply for ${t.name.toLowerCase()}${url}.`;
+  if (t.kind === "brand") return `Hi Olive Foods, I'd like to order ${t.name} products${url}.`;
   return `Hi Olive Foods, I'm looking to source ${t.name} products${url}.`;
 };
 
@@ -37,6 +39,8 @@ export const quoteHref = (t: EnquiryTarget) => {
       ? { subject: "Request a Quote", product: t.name, ...(t.sku ? { sku: t.sku } : {}) }
       : t.kind === "sector"
         ? { subject: "Request a Quote", sector: t.name }
-        : { subject: "Sourcing Request", category: t.name };
+        : t.kind === "brand"
+          ? { subject: "Brand Inquiry", brand: t.name }
+          : { subject: "Sourcing Request", category: t.name };
   return `/contact?${new URLSearchParams(params).toString()}`;
 };

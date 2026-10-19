@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Leaf } from "lucide-react";
 import { toast } from "sonner";
+import Seo from "@/components/Seo";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -46,6 +47,8 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen bg-forest-deep flex items-center justify-center p-6">
+      {/* robots.txt also blocks /admin; noindex covers it if linked from elsewhere. */}
+      <Seo title="Admin login" description="Olive Foods admin panel." path="/admin/login" noindex />
       <div className="w-full max-w-sm space-y-8">
         <div className="text-center">
           <div className="w-14 h-14 rounded-full bg-forest-mid flex items-center justify-center mx-auto mb-4">

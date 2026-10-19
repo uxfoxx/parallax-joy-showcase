@@ -20,6 +20,9 @@ const ProductCard = ({ product, variant = "light", index = 0, columns = 3 }: Pro
 
   return (
     <MediaCard
+      // A real link to the product page (crawlable, opens in a new tab on
+      // ⌘/Ctrl-click); a plain click still opens the quick view.
+      to={`/products/${product.slug}`}
       onClick={() => openProductModal(product.slug)}
       image={product.image_url ?? null}
       title={product.name}

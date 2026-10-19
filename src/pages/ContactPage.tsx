@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Seo, { SITE_URL } from "@/components/Seo";
 import { track } from "@/lib/analytics";
+import { openingHoursSchema } from "@/lib/site";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Mail, Phone, MapPin, MessageCircle, Send, Clock, CheckCircle2, Loader2 } from "lucide-react";
@@ -42,10 +43,7 @@ const contactPageSchema = {
       telephone: "+94-11-207-1717",
       email: "info@olivefoods.lk",
       areaServed: "LK",
-      hoursAvailable: [
-        { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "08:30", closes: "17:30" },
-        { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "08:30", closes: "13:00" },
-      ],
+      hoursAvailable: openingHoursSchema,
     },
   },
 };

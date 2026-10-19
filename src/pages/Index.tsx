@@ -1,5 +1,7 @@
 import { lazy, Suspense } from "react";
 import Seo from "@/components/Seo";
+import { organizationSchema } from "@/lib/site";
+import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import LogoStrip from "@/components/landing/LogoStrip";
@@ -25,6 +27,7 @@ const LocationsSection = lazy(() => import("@/components/landing/LocationsSectio
 const FAQSection = lazy(() => import("@/components/landing/FAQSection"));
 
 const Index = () => {
+  const suppliedCategories = useSuppliedCategories();
   return (
     <div className="smooth-scroll overflow-x-hidden">
       {/* Organization + WebSite structured data is defined statically in
@@ -34,6 +37,7 @@ const Index = () => {
         title="Olive Foods: Premium Food Importer & Distributor, Sri Lanka"
         description="Olive Foods imports and distributes premium food and consumer brands across Sri Lanka, supplying hotels, restaurants, supermarkets and retailers island-wide from Colombo."
         path="/"
+        schema={organizationSchema(suppliedCategories.map((c) => c.name))}
       />
       <ImmersiveBackground />
       <Navbar />

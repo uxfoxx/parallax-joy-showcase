@@ -13,7 +13,7 @@
  */
 import { writeFileSync } from "node:fs";
 import {
-  CACHE, ROUTES_FILE, STATIC_PAGES, ensureDir, supabaseClient, categorySlug, readSectors,
+  CACHE, ROUTES_FILE, STATIC_PAGES, ensureDir, supabaseClient, categorySlug, readSectors, readBrandProfiles,
 } from "./config.mjs";
 
 const routes = [];
@@ -33,7 +33,7 @@ if (!supabase) {
   console.warn("[routes] Supabase env not set — fixed pages and sectors only.");
 } else {
   const [products, brands, categories, gallery] = await Promise.all([
-    supabase.from("products").select("id, slug, image_url, category, categories, created_at").order("name"),
+    supabase.from("products").select("id, slug, image_url, category, categories, brand_id, created_at").order("name"),
     supabase.from("brands").select("id, slug, image_url, created_at").order("name"),
     supabase.from("categories").select("id, name, created_at").order("name"),
     supabase.from("product_images").select("product_id, image_url, sort_order").order("sort_order"),
@@ -64,8 +64,18 @@ if (!supabase) {
       images: imagesOf(p.image_url, ...(galleryByProduct[p.id] ?? [])),
     });
   }
+  // A brand page with no products and no profile is thin (Google: "Soft 404")
+  // and renders noindex — so it isn't listed or prerendered either. It
+  // comes back automatically once it has products or a profile.
+  const brandProductCount = {};
+  for (const p of products.data ?? []) if (p.brand_id) brandProductCount[p.brand_id] = (brandProductCount[p.brand_id] ?? 0) + 1;
+  const profiles = readBrandProfiles();
   for (const b of brands.data ?? []) {
     if (!b.slug) continue;
+    if (!brandProductCount[b.id] && !profiles[b.slug]?.about?.trim()) {
+      console.log(`[routes] skipping /brands/${b.slug}: no products and no profile (noindex)`);
+      continue;
+    }
     add({ loc: `/brands/${b.slug}`, kind: "brand", id: b.id, seed: b.created_at, images: imagesOf(b.image_url) });
   }
 }

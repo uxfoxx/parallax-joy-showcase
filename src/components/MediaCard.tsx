@@ -8,9 +8,11 @@ import CurtainImage from "@/components/motion/CurtainImage";
 import { cdnImg } from "@/lib/img";
 
 type MediaCardProps = {
-  /** Navigate to a URL — mutually exclusive with `onClick`. */
+  /** URL the card links to. */
   to?: string;
-  /** Fire a callback on click — mutually exclusive with `to`. */
+  /** Click handler. With `to` as well, the card is still a real link (so
+   *  crawlers follow it and ⌘/Ctrl/middle-click open the page) and a plain
+   *  click runs this instead — e.g. a product quick view. */
   onClick?: () => void;
   image: string | null;
   title: string;
@@ -152,7 +154,27 @@ const MediaCard = ({
       }}
       whileHover={{ y: -4 }}
     >
-      {onClick ? (
+      {to ? (
+        <Link
+          to={to}
+          className="block group"
+          aria-label={title}
+          onClick={
+            onClick
+              ? (e) => {
+                  // Let the browser handle new-tab/window clicks; a plain
+                  // left click runs the handler (quick view) instead.
+                  if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                  e.preventDefault();
+                  onClick();
+                }
+              : undefined
+          }
+        >
+          {inner}
+          {caption}
+        </Link>
+      ) : (
         <button
           type="button"
           onClick={onClick}
@@ -162,11 +184,6 @@ const MediaCard = ({
           {inner}
           {caption}
         </button>
-      ) : (
-        <Link to={to!} className="block group" aria-label={title}>
-          {inner}
-          {caption}
-        </Link>
       )}
     </motion.div>
   );

@@ -4,6 +4,10 @@ import { ArrowRight } from "lucide-react";
 import logoSvg from "@/assets/olive-foods-logo.svg";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 import CountUp from "@/components/motion/CountUp";
+import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
+import { categorySlug } from "@/lib/categories";
+import { SECTORS } from "@/lib/sectors";
+import { SOCIAL_PROFILES } from "@/lib/site";
 
 type FooterStat = { value?: number; suffix?: string; text?: string; label: string };
 
@@ -36,9 +40,23 @@ const quickLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
-const socialLinks = ["Facebook", "LinkedIn"];
+// Sector + category landing pages aren't in the main nav; these footer links
+// are their sitewide internal links (crawl paths + link equity).
+const sectorLinks = SECTORS.map((s) => ({ label: s.name, href: `/supply/${s.slug}` }));
+
+const TOP_CATEGORY_COUNT = 6;
 
 const Footer = () => {
+  const topCategories = useSuppliedCategories()
+    .slice(0, TOP_CATEGORY_COUNT)
+    .map(({ name }) => ({ label: name, href: `/categories/${categorySlug(name)}` }));
+
+  const columns = [
+    { title: "Quick Links", links: quickLinks },
+    { title: "Who We Supply", links: sectorLinks },
+    { title: "Top Categories", links: [...topCategories, { label: "All categories", href: "/categories" }] },
+  ];
+
   return (
     <footer className="relative overflow-hidden">
       {/* Standardized dark gradient */}
@@ -58,7 +76,7 @@ const Footer = () => {
           whileInView="show"
           viewport={{ once: true, margin: "-10%" }}
           variants={containerVariants}
-          className="grid md:grid-cols-[1.5fr_1fr_1fr] gap-16 items-start"
+          className="grid sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr] gap-12 lg:gap-16 items-start"
         >
           {/* Brand */}
           <motion.div custom={0} variants={columnVariants} className="space-y-5">
@@ -92,51 +110,48 @@ const Footer = () => {
                 +94 11 207 1717
               </a>
             </p>
-          </motion.div>
-
-          {/* Quick Links */}
-          <motion.div custom={1} variants={columnVariants}>
-            <h4 className="font-body text-sm font-semibold text-primary-foreground mb-5 tracking-widest uppercase">
-              Quick Links
-            </h4>
-            <ul className="space-y-4">
-              {quickLinks.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    to={link.href}
-                    className="group text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300 flex items-center gap-1.5"
-                  >
-                    <span className="transition-transform duration-300 group-hover:translate-x-1">
-                      {link.label}
-                    </span>
-                    <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-1 group-hover:translate-x-0" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Follow */}
-          <motion.div custom={2} variants={columnVariants}>
-            <h4 className="font-body text-sm font-semibold text-primary-foreground mb-5 tracking-widest uppercase">
-              Follow
-            </h4>
-            <ul className="space-y-4">
-              {socialLinks.map((link) => (
-                <li key={link}>
+            {/* Official profiles — only real ones (see SOCIAL_PROFILES); rel="me"
+                marks them as the same entity as this site. */}
+            {SOCIAL_PROFILES.length > 0 && (
+              <p className="flex flex-wrap gap-x-4 gap-y-2 font-body text-xs">
+                {SOCIAL_PROFILES.map((s) => (
                   <a
-                    href="#"
-                    className="group text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300 flex items-center gap-1.5 underline underline-offset-4 decoration-primary-foreground/20 hover:decoration-primary-foreground/60"
+                    key={s.url}
+                    href={s.url}
+                    target="_blank"
+                    rel="me noopener noreferrer"
+                    className="text-primary-foreground/55 hover:text-primary-foreground underline underline-offset-4 decoration-primary-foreground/20 transition-colors duration-300"
                   >
-                    <span className="transition-transform duration-300 group-hover:translate-x-1">
-                      {link}
-                    </span>
-                    <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-1 group-hover:translate-x-0" />
+                    {s.label}
                   </a>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </p>
+            )}
           </motion.div>
+
+          {/* Link columns */}
+          {columns.map((col, i) => (
+            <motion.div key={col.title} custom={i + 1} variants={columnVariants}>
+              <h4 className="font-body text-sm font-semibold text-primary-foreground mb-5 tracking-widest uppercase">
+                {col.title}
+              </h4>
+              <ul className="space-y-3.5">
+                {col.links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      to={link.href}
+                      className="group text-primary-foreground/45 hover:text-primary-foreground font-body text-sm transition-colors duration-300 flex items-center gap-1.5"
+                    >
+                      <span className="transition-transform duration-300 group-hover:translate-x-1">
+                        {link.label}
+                      </span>
+                      <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-1 group-hover:translate-x-0" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
         </motion.div>
 
         {/* Stat band — animated counters */}

@@ -1,4 +1,5 @@
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import NotFound from "@/pages/NotFound";
 import { motion } from "framer-motion";
 import { FileText, ChevronDown } from "lucide-react";
 import Seo, { SITE_URL } from "@/components/Seo";
@@ -28,7 +29,11 @@ const CategoryPage = () => {
 
   // Wait for categories to resolve before deciding a slug is invalid.
   if (catsLoading) return <PageLayout>{null}</PageLayout>;
-  if (!name) return <Navigate to="/products" replace />;
+  // Unknown slug → the real (noindex) 404 page. Redirecting to /products here
+  // is what Google reports as a "Soft 404" (redirect to an unrelated page).
+  if (!name) return <NotFound />;
+  // A category with no products is thin — keep it for visitors, out of search.
+  const empty = !prodLoading && products.length === 0;
 
   const category = categories.find((c) => c.name === name);
   const seo = categorySeo(name);
@@ -72,7 +77,7 @@ const CategoryPage = () => {
 
   return (
     <PageLayout enquiry={enquiry}>
-      <Seo title={`${seo.title} | Olive Foods`} description={seo.description} path={path} schema={schema} />
+      <Seo title={`${seo.title} | Olive Foods`} description={seo.description} path={path} schema={schema} noindex={empty} />
       <PageHero
         eyebrow={`Olive Foods / Categories / ${name}`}
         title={

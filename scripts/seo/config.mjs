@@ -60,6 +60,14 @@ export const categorySlug = (name) =>
   name.toLowerCase().trim().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
 export const readSectors = () => JSON.parse(readFileSync(resolve(ROOT, "src/data/sectors.json"), "utf8"));
+/** Brand profiles keyed by slug (src/data/brand-profiles.json). */
+export const readBrandProfiles = () => {
+  try {
+    return JSON.parse(readFileSync(resolve(ROOT, "src/data/brand-profiles.json"), "utf8"));
+  } catch {
+    return {};
+  }
+};
 
 export const ensureDir = (p) => mkdirSync(p, { recursive: true });
 

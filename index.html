@@ -28,10 +28,12 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": ["Organization", "WholesaleStore"],
       "@id": "https://www.olivefoods.lk/#organization",
       "name": "Olive Foods",
       "legalName": "Olive Foods (Pvt) Ltd",
+      "alternateName": "Olive Foods Sri Lanka",
+      "slogan": "Quality You Can Trust. Excellence You Can Taste.",
       "url": "https://www.olivefoods.lk/",
       "logo": "https://www.olivefoods.lk/olive-foods-hero-logo.svg",
       "image": "https://www.olivefoods.lk/olive-foods-hero-logo.svg",
@@ -42,9 +44,15 @@
         "@type": "PostalAddress",
         "streetAddress": "292 Sea Street, Colombo 11",
         "addressLocality": "Colombo",
+        "addressRegion": "Western Province",
         "postalCode": "01100",
         "addressCountry": "LK"
       },
+      "hasMap": "https://www.google.com/maps/search/?api=1&query=292+Sea+Street%2C+Colombo+11%2C+Sri+Lanka",
+      "openingHoursSpecification": [
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:30", "closes": "17:30" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "08:30", "closes": "13:00" }
+      ],
       "areaServed": { "@type": "Country", "name": "Sri Lanka" },
       "contactPoint": {
         "@type": "ContactPoint",
