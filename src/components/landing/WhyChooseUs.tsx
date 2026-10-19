@@ -108,9 +108,9 @@ const RouteMapPanel = () => {
           />
 
           {/* Labels */}
-          <text x="40" y="118" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="10" fontFamily="Inter, sans-serif">Origin</text>
-          <text x="260" y="72" textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize="9" fontFamily="Inter, sans-serif">Transit</text>
-          <text x="480" y="118" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="10" fontFamily="Inter, sans-serif">Sri Lanka</text>
+          <text x="40" y="118" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="10" fontFamily="Inter Variable, Inter, sans-serif">Origin</text>
+          <text x="260" y="72" textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize="9" fontFamily="Inter Variable, Inter, sans-serif">Transit</text>
+          <text x="480" y="118" textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="10" fontFamily="Inter Variable, Inter, sans-serif">Sri Lanka</text>
         </svg>
       </div>
 
@@ -261,8 +261,8 @@ const ColdChainPanel = () => {
             transition={{ duration: 1.6, ease: EASE_OUT_EXPO, delay: 0.4 }}
           />
           {/* Centre text */}
-          <text x={gCx} y={gCy - 6} textAnchor="middle" fill="white" fontSize="26" fontWeight="800" fontFamily="Sora, sans-serif">-18</text>
-          <text x={gCx} y={gCy + 14} textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="11" fontFamily="Inter, sans-serif">°C Controlled</text>
+          <text x={gCx} y={gCy - 6} textAnchor="middle" fill="white" fontSize="26" fontWeight="800" fontFamily="Sora Variable, Sora, sans-serif">-18</text>
+          <text x={gCx} y={gCy + 14} textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize="11" fontFamily="Inter Variable, Inter, sans-serif">°C Controlled</text>
           {/* Tick marks */}
           {[-210, -180, -150, -120, -90, -60, -30, 0, 30].map((a, idx) => {
             const p1 = polarToXY(a);

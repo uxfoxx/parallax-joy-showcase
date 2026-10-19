@@ -15,6 +15,9 @@ import CertificationSection from "@/components/about/CertificationSection";
 import PageHero from "@/components/PageHero";
 import Eyebrow from "@/components/ui/eyebrow";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
+import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
+import { useProducts } from "@/lib/api";
+import { AT_A_GLANCE, ORGANIZATION_ID, organizationSchema } from "@/lib/site";
 
 const businessActivities = [
   { icon: Package, title: "Import & Brand Representation", desc: "Exclusive brand agency and import operations for leading international brands." },
@@ -237,22 +240,37 @@ const AboutPage = () => {
   const { scrollYProgress } = useScroll();
   const bgY = useTransform(scrollYProgress, [0, 1], ["-50px", "50px"]);
 
+  // "At a glance": the shared facts plus the live range.
+  const { data: allProducts = [] } = useProducts();
+  const suppliedCategories = useSuppliedCategories();
+  const brandCount = new Set(allProducts.map((p) => p.brand_id).filter(Boolean)).size;
+  const glance: [string, string][] = [
+    ...AT_A_GLANCE.slice(0, 2),
+    ...(allProducts.length
+      ? [["Range", `${allProducts.length} products in ${suppliedCategories.length} categories, from ${brandCount} brands`] as [string, string]]
+      : []),
+    ...AT_A_GLANCE.slice(2),
+  ];
+
   return (
     <div className="smooth-scroll overflow-x-hidden">
       <Seo
         title="About Olive Foods: Sri Lanka's Premium Food Import Partner"
         description="Thirty-plus years of food-industry experience. Olive Foods sources globally and distributes island-wide to Sri Lanka's hotels, restaurants and retailers, built on relationships, not transactions."
         path="/about"
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "AboutPage",
-          name: "About Olive Foods",
-          url: `${SITE_URL}/about`,
-          description:
-            "Olive Foods (Pvt) Ltd is a Colombo-based importer and distributor of premium food and consumer brands, supplying Sri Lanka's hotels, restaurants, supermarkets and retailers island-wide.",
-          isPartOf: { "@id": `${SITE_URL}/#website` },
-          mainEntity: { "@id": `${SITE_URL}/#organization` },
-        }}
+        schema={[
+          {
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            name: "About Olive Foods",
+            url: `${SITE_URL}/about`,
+            description:
+              "Olive Foods (Pvt) Ltd is a Colombo-based importer and distributor of premium food and consumer brands, supplying Sri Lanka's hotels, restaurants, supermarkets and retailers island-wide.",
+            isPartOf: { "@id": `${SITE_URL}/#website` },
+            mainEntity: { "@id": ORGANIZATION_ID },
+          },
+          organizationSchema(suppliedCategories.map((c) => c.name)),
+        ]}
       />
       <ImmersiveBackground />
       <ScrollFloatingElement />
@@ -333,6 +351,20 @@ const AboutPage = () => {
                 </div>
               ))}
             </motion.div>
+
+            {/* At a glance — the same facts as plain sentences, plus the live
+                range. Readers skim it; search engines and AI assistants quote it. */}
+            <div className="mt-16 max-w-4xl">
+              <h3 className="font-display text-2xl font-bold text-foreground mb-5">Olive Foods at a glance</h3>
+              <dl className="divide-y divide-border border-y border-border font-body text-sm">
+                {glance.map(([label, value]) => (
+                  <div key={label} className="grid sm:grid-cols-[180px_1fr] gap-1 sm:gap-6 py-3">
+                    <dt className="text-muted-foreground">{label}</dt>
+                    <dd className="text-foreground">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           </div>
         </section>
       </div>

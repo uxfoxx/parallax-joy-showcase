@@ -3,17 +3,17 @@ import { ArrowUpRight } from "lucide-react";
 import Seo, { SITE_URL } from "@/components/Seo";
 import PageLayout from "@/components/PageLayout";
 import PageHero from "@/components/PageHero";
-import { useCategories } from "@/lib/api";
 import { categorySlug } from "@/lib/categories";
+import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
 
 /**
  * Category hub: /categories. Lists every category landing page so crawlers (and
- * the /categories/:slug pages) are linked, not orphaned. Not surfaced in the
- * main navigation — reachable by direct URL and via the sitemap.
+ * the /categories/:slug pages) are linked, not orphaned. Only categories that
+ * have products — linking an empty one would hand Google a thin page it
+ * reports as a soft 404.
  */
 const CategoriesPage = () => {
-  const { data: categories = [] } = useCategories();
-  const sorted = [...categories].sort((a, b) => a.name.localeCompare(b.name));
+  const sorted = [...useSuppliedCategories()].sort((a, b) => a.name.localeCompare(b.name));
 
   const schema = {
     "@context": "https://schema.org",
@@ -57,13 +57,14 @@ const CategoriesPage = () => {
           <div className="max-w-5xl mx-auto px-6 lg:px-8">
             <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {sorted.map((c) => (
-                <li key={c.id}>
+                <li key={c.name}>
                   <Link
                     to={`/categories/${categorySlug(c.name)}`}
                     className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-card px-5 py-4 hover:border-accent/40 hover:bg-accent/5 transition-colors"
                   >
                     <span className="font-body font-semibold text-foreground group-hover:text-accent transition-colors">
                       {c.name}
+                      <span className="ml-2 font-normal text-xs text-muted-foreground">{c.count}</span>
                     </span>
                     <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-accent transition-colors shrink-0" />
                   </Link>

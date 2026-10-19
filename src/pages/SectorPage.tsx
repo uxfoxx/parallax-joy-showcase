@@ -1,4 +1,5 @@
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import NotFound from "@/pages/NotFound";
 import { motion } from "framer-motion";
 import { FileText, ChevronDown, Check, ArrowRight } from "lucide-react";
 import Seo, { SITE_URL } from "@/components/Seo";
@@ -6,16 +7,11 @@ import PageLayout from "@/components/PageLayout";
 import PageHero from "@/components/PageHero";
 import ProductCard from "@/components/ProductCard";
 import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
-import { useProducts, type Product } from "@/lib/api";
+import { useProducts } from "@/lib/api";
+import { productCategories } from "@/hooks/useSuppliedCategories";
 import { categorySlug, faqSchema } from "@/lib/categories";
 import { SECTORS, sectorBySlug, sectorFaqs } from "@/lib/sectors";
 import { quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
-
-/** The generated DB types predate the `categories` array column. */
-const productCategories = (p: Product): string[] => {
-  const cats = (p as Product & { categories?: string[] | null }).categories;
-  return cats?.length ? cats : p.category ? [p.category] : [];
-};
 
 /** Gold-italic the "supplier"/"distributor" word, matching the category pages. */
 const styledHeading = (heading: string) =>
@@ -39,7 +35,9 @@ const SectorPage = () => {
   const sector = slug ? sectorBySlug(slug) : undefined;
   const { data: allProducts = [], isLoading } = useProducts();
 
-  if (!sector) return <Navigate to="/products" replace />;
+  // Unknown slug → the real (noindex) 404 page, not a redirect to /products
+  // (Google reports redirects to an unrelated page as "Soft 404").
+  if (!sector) return <NotFound />;
 
   const inSector = allProducts.filter((p) => productCategories(p).some((c) => sector.categories.includes(c)));
   const featuredFirst = [...inSector].sort((a, b) => Number(b.featured) - Number(a.featured));

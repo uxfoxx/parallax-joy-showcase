@@ -28,10 +28,12 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": ["Organization", "WholesaleStore"],
       "@id": "https://www.olivefoods.lk/#organization",
       "name": "Olive Foods",
       "legalName": "Olive Foods (Pvt) Ltd",
+      "alternateName": "Olive Foods Sri Lanka",
+      "slogan": "Quality You Can Trust. Excellence You Can Taste.",
       "url": "https://www.olivefoods.lk/",
       "logo": "https://www.olivefoods.lk/olive-foods-hero-logo.svg",
       "image": "https://www.olivefoods.lk/olive-foods-hero-logo.svg",
@@ -42,9 +44,15 @@
         "@type": "PostalAddress",
         "streetAddress": "292 Sea Street, Colombo 11",
         "addressLocality": "Colombo",
+        "addressRegion": "Western Province",
         "postalCode": "01100",
         "addressCountry": "LK"
       },
+      "hasMap": "https://www.google.com/maps/search/?api=1&query=292+Sea+Street%2C+Colombo+11%2C+Sri+Lanka",
+      "openingHoursSpecification": [
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:30", "closes": "17:30" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "08:30", "closes": "13:00" }
+      ],
       "areaServed": { "@type": "Country", "name": "Sri Lanka" },
       "contactPoint": {
         "@type": "ContactPoint",
@@ -68,17 +76,10 @@
     }
     </script>
 
-    <!-- Warm up the TLS handshakes to Supabase (images + data) and Google
-         Fonts so they overlap with HTML parsing instead of blocking later. -->
+    <!-- Warm up the TLS handshake to Supabase (images + data) so it overlaps
+         with HTML parsing instead of blocking later. Fonts are self-hosted:
+         the build preloads them from /assets/ (vite.config.ts). -->
     <link rel="preconnect" href="https://vqvspkuhqthvbtsgfgbo.supabase.co" crossorigin />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Fonts loaded here (not via a render-blocking CSS @import) so the
-         request starts during HTML parse. display=swap avoids invisible text. -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
-    />
 
   <!-- No hero image preload here: this file is the template for EVERY
        prerendered page, so a preload made product/brand/contact pages
@@ -106,7 +107,7 @@
         display: flex; align-items: center; justify-content: center;
         background: hsl(150 40% 6%);
         color: #fff;
-        font-family: 'Sora', system-ui, -apple-system, sans-serif;
+        font-family: 'Sora Variable', 'Sora', system-ui, -apple-system, sans-serif;
         overflow: hidden;
         transition: opacity 700ms cubic-bezier(0.22,1,0.36,1);
         will-change: opacity;

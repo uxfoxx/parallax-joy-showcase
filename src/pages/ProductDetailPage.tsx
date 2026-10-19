@@ -1,9 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import Seo, { SITE_URL } from "@/components/Seo";
-import { categorySlug } from "@/lib/categories";
+import { categorySlug, faqSchema } from "@/lib/categories";
+import { isHouseBrand } from "@/lib/brands";
+import { packSize, productFaqs, storageFor, variantGroupName, variantLabel, variantsOf } from "@/lib/products";
+import { productCategories } from "@/hooks/useSuppliedCategories";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ArrowLeft, Package, Share2, Tag, Building2, ChevronLeft, ChevronRight, Sparkles, Box, Hash, FileText, Phone, Check } from "lucide-react";
+import { ArrowLeft, Package, Share2, Tag, Building2, ChevronLeft, ChevronRight, ChevronDown, Sparkles, Box, Hash, FileText, Phone, Check, Ruler, Snowflake, Layers } from "lucide-react";
 import { toast } from "sonner";
 import PageLayout from "@/components/PageLayout";
 import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
@@ -100,12 +103,31 @@ const ProductDetailPage = () => {
     (product.description || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 160) ||
     `${product.name}${brandName ? ` by ${brandName}` : ""}, imported and distributed across Sri Lanka by Olive Foods.`;
 
+  const ownRange = !brandName || isHouseBrand(brandName);
+  const size = packSize(product.name);
+  const storage = storageFor(productCategories(product));
+  const faqs = productFaqs(product.name, brandName);
+  // Other pack sizes / versions of this product, declared as one ProductGroup.
+  const variants = variantsOf(product, allProducts);
+  const family = variants.length
+    ? [product, ...variants].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+    : [];
+  // Same @id and group ID on every variant's page: taken from the family's first member.
+  const groupId = family.length ? family[0].slug : "";
+  const productId = `${SITE_URL}/products/${product.slug}#product`;
+  // The sentence search engines and AI assistants quote — answer first.
+  const answer = ownRange
+    ? `${product.name} is supplied by Olive Foods across Sri Lanka, delivered island-wide to hotels, restaurants, cafés and retailers from Colombo.`
+    : `${product.name} by ${brandName} is available in Sri Lanka from Olive Foods, imported and supplied island-wide to hotels, restaurants, cafés and retailers${storage ? ", stored and delivered frozen under cold chain" : ""}.`;
+
   // NB: no origin here — product↔country associations are admin-only,
   // deliberately not shown anywhere on the public site.
   const specs = [
-    { icon: Tag, label: "Category", value: product.category },
-    { icon: Hash, label: "SKU", value: product.sku },
-    { icon: Building2, label: "Brand", value: brandName, link: `/brands/${brandSlug}` },
+    { icon: Tag, label: "Category", value: product.category, link: product.category ? `/categories/${categorySlug(product.category)}` : undefined },
+    ...(brandName ? [{ icon: Building2, label: "Brand", value: brandName, link: `/brands/${brandSlug}` }] : []),
+    ...(size ? [{ icon: Ruler, label: "Pack size", value: size }] : []),
+    ...(storage ? [{ icon: Snowflake, label: "Storage", value: storage }] : []),
+    ...(product.sku ? [{ icon: Hash, label: "SKU", value: product.sku }] : []),
   ];
 
   const enquiry: EnquiryTarget = { kind: "product", name: product.name, sku: product.sku, path: `/products/${product.slug}` };
@@ -122,7 +144,9 @@ const ProductDetailPage = () => {
   return (
     <PageLayout enquiry={enquiry}>
       <Seo
-        title={`${product.name}${brandName ? ` by ${brandName}` : ""}, Sri Lanka`}
+        // Own-range items read "Almond Milk Supplier in Sri Lanka", not
+        // "Almond Milk by Olive Foods" (which implies Olive Foods makes it).
+        title={ownRange ? `${product.name} Supplier in Sri Lanka` : `${product.name} by ${brandName}, Sri Lanka`}
         description={plainDesc}
         path={`/products/${product.slug}`}
         image={product.image_url || undefined}
@@ -131,14 +155,28 @@ const ProductDetailPage = () => {
           {
             "@context": "https://schema.org",
             "@type": "Product",
-            "@id": `${SITE_URL}/products/${product.slug}#product`,
+            "@id": productId,
             name: product.name,
             description: plainDesc,
             ...(product.image_url ? { image: product.image_url } : {}),
             ...(product.sku ? { sku: product.sku } : {}),
-            ...(brandName ? { brand: { "@type": "Brand", name: brandName } } : {}),
+            ...(size ? { size } : {}),
+            ...(family.length
+              ? { inProductGroupWithID: groupId, isVariantOf: { "@id": `${SITE_URL}/products/${groupId}#group` } }
+              : {}),
+            // Linked to the brand page's entity (same @id) so the brand, the
+            // product and the seller (Olive Foods) connect into one graph.
+            ...(brandName ? { brand: { "@type": "Brand", "@id": `${SITE_URL}/brands/${brandSlug}#brand`, name: brandName } } : {}),
             category: product.category,
             url: `${SITE_URL}/products/${product.slug}`,
+            ...(size || storage
+              ? {
+                  additionalProperty: [
+                    ...(size ? [{ "@type": "PropertyValue", name: "Pack size", value: size }] : []),
+                    ...(storage ? [{ "@type": "PropertyValue", name: "Storage", value: storage }] : []),
+                  ],
+                }
+              : {}),
             offers: {
               "@type": "Offer",
               availability: "https://schema.org/InStock",
@@ -161,6 +199,29 @@ const ProductDetailPage = () => {
               { "@type": "ListItem", position: product.category ? 4 : 3, name: product.name, item: `${SITE_URL}/products/${product.slug}` },
             ],
           },
+          faqSchema(faqs),
+          ...(family.length
+            ? [
+                {
+                  // Multi-page variants (Google's "product variants" markup):
+                  // this page's product in full above, its siblings by URL.
+                  "@context": "https://schema.org",
+                  "@type": "ProductGroup",
+                  "@id": `${SITE_URL}/products/${groupId}#group`,
+                  name: variantGroupName(product.name),
+                  productGroupID: groupId,
+                  ...(brandName ? { brand: { "@id": `${SITE_URL}/brands/${brandSlug}#brand` } } : {}),
+                  // Only claim "size" when every variant has one; a percentage
+                  // (fat or fruit content) isn't a property we can name.
+                  ...(family.every((p) => packSize(p.name)) ? { variesBy: "https://schema.org/size" } : {}),
+                  hasVariant: family.map((p) =>
+                    p.id === product.id
+                      ? { "@id": productId }
+                      : { "@type": "Product", name: p.name, url: `${SITE_URL}/products/${p.slug}` },
+                  ),
+                },
+              ]
+            : []),
         ]}
       />
       {/* Category Hero Bar */}
@@ -293,6 +354,11 @@ const ProductDetailPage = () => {
                 transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
               />
 
+              {/* Answer first */}
+              <motion.p className="font-body text-base text-muted-foreground leading-relaxed mb-6" variants={fadeUp}>
+                {answer}
+              </motion.p>
+
               {/* Category Pill */}
               <motion.div className="flex flex-wrap gap-2 mb-8" variants={fadeUp}>
                 {product.category && (
@@ -369,6 +435,39 @@ const ProductDetailPage = () => {
                   ))}
                 </div>
               </motion.div>
+
+              {/* Other versions of this product */}
+              {variants.length > 0 && (
+                <motion.div className="mb-8" variants={fadeUp}>
+                  <Eyebrow>Other versions</Eyebrow>
+                  <h3 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-accent" />
+                    Also available as
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {family.map((p) =>
+                      p.id === product.id ? (
+                        <span
+                          key={p.id}
+                          aria-current="page"
+                          className="font-body text-xs font-medium px-3 py-1.5 rounded-full bg-accent text-accent-foreground"
+                        >
+                          {variantLabel(p.name)}
+                        </span>
+                      ) : (
+                        <Link
+                          key={p.id}
+                          to={`/products/${p.slug}`}
+                          aria-label={p.name}
+                          className="font-body text-xs font-medium px-3 py-1.5 rounded-full border border-border text-foreground hover:border-accent hover:text-accent transition-colors"
+                        >
+                          {variantLabel(p.name)}
+                        </Link>
+                      ),
+                    )}
+                  </div>
+                </motion.div>
+              )}
 
               {/* Tags Section */}
               {(product.tags ?? []).length > 0 && (
@@ -464,6 +563,24 @@ const ProductDetailPage = () => {
                 </Link>
               </motion.div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ — native <details> so the answers are in the HTML (FAQPage above). */}
+      <section className="bg-background pb-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <h2 className="font-display text-xl font-bold text-foreground mb-3">Buying {product.name} in Sri Lanka</h2>
+          <div className="divide-y divide-border border-y border-border">
+            {faqs.map((f) => (
+              <details key={f.q} className="group py-4">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-body font-medium text-foreground [&::-webkit-details-marker]:hidden">
+                  {f.q}
+                  <ChevronDown className="w-4 h-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" />
+                </summary>
+                <p className="mt-2 font-body text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>

@@ -167,21 +167,26 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
               variants={fadeUp}
               className="flex items-center gap-4 rounded-2xl border border-border bg-gradient-to-br from-forest-deep/[0.05] to-accent/[0.06] p-4"
             >
-              {/* Brand-logo medallion */}
-              <Link
-                to={brandSlug ? `/brands/${brandSlug}` : "#"}
-                onClick={onClose}
-                className="shrink-0"
-                aria-label={brandName || "Brand"}
-              >
-                <div className="w-16 h-16 rounded-full border border-border bg-background shadow-sm flex items-center justify-center overflow-hidden">
-                  {brandLogo ? (
-                    <img src={cdnImg(brandLogo, 140)} alt={brandName} loading="lazy" decoding="async" className="w-12 h-12 object-contain" />
-                  ) : (
-                    <span className="font-display text-lg font-bold text-forest-mid">{initials}</span>
-                  )}
-                </div>
-              </Link>
+              {/* Brand-logo medallion — a link only when there is a brand page
+                  (it used to fall back to a dead href="#"). */}
+              {(() => {
+                const medallion = (
+                  <div className="w-16 h-16 rounded-full border border-border bg-background shadow-sm flex items-center justify-center overflow-hidden">
+                    {brandLogo ? (
+                      <img src={cdnImg(brandLogo, 140)} alt={brandName} loading="lazy" decoding="async" className="w-12 h-12 object-contain" />
+                    ) : (
+                      <span className="font-display text-lg font-bold text-forest-mid">{initials}</span>
+                    )}
+                  </div>
+                );
+                return brandSlug ? (
+                  <Link to={`/brands/${brandSlug}`} onClick={onClose} className="shrink-0" aria-label={brandName || "Brand"}>
+                    {medallion}
+                  </Link>
+                ) : (
+                  <div className="shrink-0">{medallion}</div>
+                );
+              })()}
 
               <div className="min-w-0">
                 {brandName ? (
@@ -250,6 +255,17 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
                 </p>
               </motion.div>
             )}
+
+            {/* Through to the full product page (specs, quote, WhatsApp). */}
+            <motion.div variants={fadeUp}>
+              <Link
+                to={`/products/${product.slug}`}
+                onClick={onClose}
+                className="inline-flex items-center gap-1.5 font-body text-sm font-semibold text-accent hover:underline"
+              >
+                Full product details &amp; quote <ArrowUpRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
 
             {/* More from brand */}
             {relatedProducts.length > 0 && (

@@ -31,7 +31,7 @@ import { createHash } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import {
   ROOT, SITE, DIST, ROUTES_FILE, INDEXNOW_FILE, STATE_PATH, STATIC_PAGES, ROUTE_PATTERNS,
-  EXCLUDED_ROUTES, SITEMAP_GROUPS, ensureDir, xml, absUrl, distFileFor, w3cNow, CACHE,
+  EXCLUDED_ROUTES, HUB_PAGES, SITEMAP_GROUPS, ensureDir, xml, absUrl, distFileFor, w3cNow, CACHE,
 } from "./config.mjs";
 
 const MAX_URLS_PER_SITEMAP = 45000; // protocol limit: 50,000 URLs / 50 MB per file
@@ -100,9 +100,13 @@ function analyse(html) {
   const jsonld = [...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)].map((m) => m[1].trim());
   const types = new Set();
   let invalidJsonLd = 0;
+  let group = null; // the ProductGroup this page declares itself a variant of
   for (const block of jsonld) {
     try {
-      for (const node of [].concat(JSON.parse(block))) for (const t of [].concat(node?.["@type"] ?? [])) types.add(t);
+      for (const node of [].concat(JSON.parse(block))) {
+        for (const t of [].concat(node?.["@type"] ?? [])) types.add(t);
+        if (node?.["@type"] === "ProductGroup") group = node["@id"] ?? null;
+      }
     } catch {
       invalidJsonLd++;
     }
@@ -115,7 +119,10 @@ function analyse(html) {
     .replace(/<(script|style|svg|noscript|template)\b[\s\S]*?<\/\1>/gi, " ")
     .replace(/<(nav|footer)\b[\s\S]*?<\/\1>/gi, " ");
   const text = decode(body.replace(/<[^>]+>/g, " ")).replace(/\d+/g, "#").replace(/\s+/g, " ").trim();
+  // Every link on the page, nav and footer included (for the link audit).
+  const links = [...html.matchAll(/<a\b[^>]*?\shref="([^"]*)"/gi)].map((m) => decode(m[1]));
   return {
+    links,
     title: decode((head.match(/<title[^>]*>([\s\S]*?)<\/title>/i) ?? [])[1] ?? "").trim(),
     description: meta("description"),
     robots,
@@ -123,6 +130,7 @@ function analyse(html) {
     jsonld,
     types,
     invalidJsonLd,
+    group,
     text,
   };
 }
@@ -145,6 +153,7 @@ const heroAsset = (() => {
 })();
 
 const included = [];
+const audited = []; // prerendered, indexable pages — input to the indexability audit
 const statePages = {};
 const titles = new Map();
 const stats = { baseline: 0, new: 0, changed: 0, unchanged: 0, unrendered: 0 };
@@ -193,6 +202,7 @@ for (const r of routes) {
   if (status !== "unchanged") changedLocs.push(r.loc);
   statePages[r.loc] = { hash, lastmod, kind: r.kind, ...idPart };
   included.push({ r, lastmod });
+  audited.push({ loc: r.loc, kind: r.kind, links: a.links, text: a.text, group: a.group });
 }
 
 for (const [title, locs] of titles)
@@ -324,16 +334,44 @@ writeFileSync(INDEXNOW_FILE, JSON.stringify({ generatedAt: NOW, urls: indexnow }
 try {
   const app = readFileSync(resolve(ROOT, "src/App.tsx"), "utf8");
   const declared = [...app.matchAll(/<Route\b[^>]*\bpath="(\/[^"]*)"/g)].map((m) => m[1]);
-  const covered = new Set([...STATIC_PAGES, ...Object.values(ROUTE_PATTERNS)]);
+  const covered = new Set([...STATIC_PAGES, ...Object.values(ROUTE_PATTERNS), ...Object.values(HUB_PAGES)]);
   for (const path of declared)
     if (!covered.has(path) && !(path in EXCLUDED_ROUTES))
       warnings.push(
         `app route ${path} is public but not in the sitemap — add it to scripts/seo/config.mjs (STATIC_PAGES / ROUTE_PATTERNS) or EXCLUDED_ROUTES`,
       );
   for (const [kind, pattern] of Object.entries(ROUTE_PATTERNS))
-    if (!routes.some((r) => r.kind === kind)) warnings.push(`no ${kind} URLs collected for ${pattern} (data unavailable?)`);
+    // Kinds with a hub (guides) are optional: none published is not a fault.
+    if (!(kind in HUB_PAGES) && !routes.some((r) => r.kind === kind)) warnings.push(`no ${kind} URLs collected for ${pattern} (data unavailable?)`);
 } catch {
   warnings.push("could not read src/App.tsx for the route coverage check");
+}
+// ─── nginx route check: production must serve every app route ───
+// deploy/nginx-olivefoods.conf answers a real 404 for any path outside its
+// list of app routes (so Google never sees a "Soft 404"). A route added to
+// src/App.tsx but not to that list would 404 in production — so this one
+// fails the build outright, SEO_STRICT or not.
+try {
+  const conf = readFileSync(resolve(ROOT, "deploy/nginx-olivefoods.conf"), "utf8");
+  const app = readFileSync(resolve(ROOT, "src/App.tsx"), "utf8");
+  const pattern = conf.match(/location ~\* "(\^\/\([^"]+)"/)?.[1];
+  if (!pattern) {
+    warnings.push("nginx route check: no app-route location found in deploy/nginx-olivefoods.conf");
+  } else {
+    const served = new RegExp(pattern, "i");
+    const samples = new Set([
+      ...[...app.matchAll(/<Route\b[^>]*\bpath="(\/[^"]*)"/g)].map((m) => m[1].replace(/:[^/]+/g, "sample")),
+      "/admin/products", // nested admin routes are relative in App.tsx
+      ...routes.map((r) => r.loc),
+      ...Object.keys(redirects),
+    ]);
+    const missing = [...samples].filter((p) => !served.test(p));
+    for (const p of missing)
+      errors.push(`nginx route check: ${p} would get a 404 in production — add it to the app-route location in deploy/nginx-olivefoods.conf`);
+    if (missing.length) process.exitCode = 1;
+  }
+} catch (e) {
+  warnings.push(`nginx route check skipped: ${e.message}`);
 }
 try {
   const robots = readFileSync(resolve(DIST, "robots.txt"), "utf8");
@@ -341,6 +379,104 @@ try {
 } catch {
   warnings.push("no robots.txt in dist/");
 }
+
+// ─── Indexability audit — the reasons Search Console gives for not indexing ───
+// 1) Internal links. Every link should reach an indexable page directly;
+//    anything else is crawl spent on "Page with redirect", "Blocked by
+//    robots.txt", "Excluded by noindex" or soft-404 URLs.
+const listed = new Set(included.map((e) => e.r.loc));
+const host = new URL(SITE).hostname;
+const linkIssues = new Map(); // "problem|target" → pages that link to it
+const flagLink = (problem, target, from) => {
+  const key = `${problem}|${target}`;
+  (linkIssues.get(key) ?? linkIssues.set(key, new Set()).get(key)).add(from);
+};
+for (const page of audited) {
+  for (const href of page.links) {
+    if (!href || /^(mailto:|tel:|javascript:)/i.test(href)) continue;
+    if (href.startsWith("#")) {
+      flagLink("dead link", href, page.loc);
+      continue;
+    }
+    let u;
+    try {
+      u = new URL(href, SITE);
+    } catch {
+      flagLink("malformed link", href, page.loc);
+      continue;
+    }
+    if (u.hostname !== host) {
+      if (/(^|\.)olivefoods\.lk$/i.test(u.hostname)) flagLink(`goes via ${u.origin} (301 to ${SITE})`, href, page.loc);
+      continue; // external site
+    }
+    if (u.protocol !== "https:") flagLink("http:// link (301)", href, page.loc);
+    const path = u.pathname;
+    if (path.startsWith("/assets/") || /\.[a-z0-9]{2,5}$/i.test(path)) continue; // files
+    if (path !== "/" && path.endsWith("/")) flagLink("trailing slash (301 redirect)", path, page.loc);
+    else if (path === "/admin" || path.startsWith("/admin/")) flagLink("blocked by robots.txt", path, page.loc);
+    else if (listed.has(path)) continue; // query variants of listed pages are canonicalised — fine
+    else if (redirects[path]) flagLink(`renamed URL (redirects to ${redirects[path]})`, path, page.loc);
+    else flagLink("not an indexable page (not found / noindex)", path, page.loc);
+  }
+}
+for (const [key, from] of linkIssues) {
+  const [problem, target] = key.split("|");
+  const pages = [...from];
+  warnings.push(`internal link, ${problem}: ${target} — on ${pages.length} page${pages.length === 1 ? "" : "s"} (e.g. ${pages.slice(0, 2).join(", ")})`);
+}
+
+// 2) Near-duplicates and thin pages ("Duplicate, Google chose different
+//    canonical", "Crawled – currently not indexed"). Compared within each page
+//    kind after discounting template text: 5-word shingles found on a quarter
+//    or more of a kind's pages are boilerplate, as search engines treat them;
+//    what remains is each page's own content.
+const SHINGLE = 5;
+const THIN_BELOW = 25; // own shingles
+// Pages that are lists of links by design (the HTML site map) aren't judged on prose.
+const NOT_PROSE = new Set(["/site-map"]);
+// Jaccard similarity of own content. Calibrated on the real catalogue
+// (2026-10-19): pack-size/percentage variants of one product score 64–71%,
+// every other pair of pages stays under 50%.
+const DUPLICATE_AT = 0.6;
+const shingles = (text) => {
+  const w = text.toLowerCase().split(/\s+/).filter(Boolean);
+  const set = new Set();
+  for (let i = 0; i + SHINGLE <= w.length; i++) set.add(w.slice(i, i + SHINGLE).join(" "));
+  return set;
+};
+const nearDuplicates = [];
+const variantPairs = []; // near-duplicates already declared as one ProductGroup
+const thinPages = [];
+const byKind = new Map();
+for (const p of audited) (byKind.get(p.kind) ?? byKind.set(p.kind, []).get(p.kind)).push(p);
+for (const pages of byKind.values()) {
+  if (pages.length < 2) continue;
+  const sets = pages.map((p) => shingles(p.text));
+  const df = new Map();
+  for (const s of sets) for (const sh of s) df.set(sh, (df.get(sh) ?? 0) + 1);
+  const boilerplateAt = Math.max(3, Math.ceil(pages.length * 0.25));
+  const own = sets.map((s) => new Set([...s].filter((sh) => df.get(sh) < boilerplateAt)));
+  pages.forEach((p, i) => {
+    if (own[i].size < THIN_BELOW && !NOT_PROSE.has(p.loc)) thinPages.push({ loc: p.loc, own: own[i].size });
+  });
+  for (let i = 0; i < pages.length; i++)
+    for (let j = i + 1; j < pages.length; j++) {
+      const [small, big] = own[i].size <= own[j].size ? [own[i], own[j]] : [own[j], own[i]];
+      if (!small.size) continue;
+      let shared = 0;
+      for (const sh of small) if (big.has(sh)) shared++;
+      const similarity = shared / (own[i].size + own[j].size - shared);
+      if (similarity < DUPLICATE_AT) continue;
+      const pair = { a: pages[i].loc, b: pages[j].loc, similarity };
+      (pages[i].group && pages[i].group === pages[j].group ? variantPairs : nearDuplicates).push(pair);
+    }
+}
+nearDuplicates.sort((x, y) => y.similarity - x.similarity);
+thinPages.sort((x, y) => x.own - y.own);
+writeFileSync(
+  resolve(CACHE, "audit.json"),
+  JSON.stringify({ generatedAt: NOW, linkIssues: [...linkIssues.keys()], nearDuplicates, variantPairs, thinPages }, null, 2),
+);
 
 // ─── Report ───
 const list = (label, items) => {
@@ -357,6 +493,19 @@ console.log(
     Object.entries(stats).filter(([, n]) => n).map(([k, n]) => `${n} ${k}`).join(", "),
 );
 console.log(`[sitemap] redirects: ${Object.keys(redirects).length} (${stubs} stubs written); IndexNow queue: ${indexnow.length} URLs`);
+if (variantPairs.length)
+  console.log(
+    `[sitemap] ${variantPairs.length} near-identical variant pair(s) declared as ProductGroups (fine; a description per variant would still help): ` +
+      variantPairs.map((d) => `${d.a.split("/").pop()} ≈ ${d.b.split("/").pop()}`).join(", "),
+  );
 list("error(s)", errors);
 list("warning(s)", warnings);
+list(
+  "near-duplicate page pair(s) — Google may pick one as canonical for the other; give each its own copy",
+  nearDuplicates.map((d) => `${Math.round(d.similarity * 100)}%  ${d.a}  ≈  ${d.b}`),
+);
+list(
+  "thin page(s) — little content of their own (risk: 'Crawled – currently not indexed')",
+  thinPages.map((t) => `${t.loc} (${t.own} own phrases)`),
+);
 if (errors.length && process.env.SEO_STRICT === "1") process.exitCode = 1;

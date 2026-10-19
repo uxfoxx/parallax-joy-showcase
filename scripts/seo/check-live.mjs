@@ -96,6 +96,29 @@ if (sample) {
     problems.push(`trailing slash: ${sample}/ → HTTP ${res.status} ${res.location ?? ""} (expected 301 → ${sample})`);
 }
 
+// The other cases Search Console reports on: what a crawler gets for a URL
+// that isn't a page, for the SPA shell and the homepage file, and for every
+// non-canonical origin (one hop to https://www, never a chain).
+const expectations = [
+  ["unknown URL (Soft 404 if 200)", `${SITE}/this-page-does-not-exist-${Date.now()}`, 404],
+  ["SPA shell", `${SITE}/200.html`, 404],
+  ["dotfile", `${SITE}/.env`, 404],
+  ["homepage file", `${SITE}/index.html`, 301, `${SITE}/`],
+  ["http://www", "http://www.olivefoods.lk/about", 301, `${SITE}/about`],
+  ["bare domain", "https://olivefoods.lk/about", 301, `${SITE}/about`],
+  ["http:// bare domain", "http://olivefoods.lk/about", 301, `${SITE}/about`],
+];
+await pool(expectations, async ([label, url, status, location]) => {
+  try {
+    const res = await get(url);
+    if (res.status !== status || (location && res.location !== location))
+      problems.push(`${label}: ${url} → HTTP ${res.status}${res.location ? ` ${res.location}` : ""} (expected ${status}${location ? ` → ${location}` : ""})`);
+  } catch (e) {
+    const bare = new URL(url).hostname === "olivefoods.lk";
+    problems.push(`${label}: ${url} → ${e.message}${bare ? " (the bare domain still has a dead A record at nic.lk — Search Console reports this as a server error)" : ""}`);
+  }
+});
+
 console.log(
   `[seo:check] ${ok}/${urls.length} URLs OK across ${childUrls.length} sitemaps, ${images} images, ${Object.keys(redirects).length} redirects`,
 );

@@ -1,4 +1,5 @@
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import NotFound from "@/pages/NotFound";
 import { motion } from "framer-motion";
 import { FileText, ChevronDown } from "lucide-react";
 import Seo, { SITE_URL } from "@/components/Seo";
@@ -9,6 +10,8 @@ import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
 import { useCategories, useProducts } from "@/lib/api";
 import { categoryFromSlug, categorySeo, categoryFaqs, faqSchema, lowerCategory } from "@/lib/categories";
 import { quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
+import RelatedGuides from "@/components/RelatedGuides";
+import categoryIntros from "@/data/category-intros.json";
 
 /**
  * SEO landing page for a product category: /categories/:slug.
@@ -28,11 +31,17 @@ const CategoryPage = () => {
 
   // Wait for categories to resolve before deciding a slug is invalid.
   if (catsLoading) return <PageLayout>{null}</PageLayout>;
-  if (!name) return <Navigate to="/products" replace />;
+  // Unknown slug → the real (noindex) 404 page. Redirecting to /products here
+  // is what Google reports as a "Soft 404" (redirect to an unrelated page).
+  if (!name) return <NotFound />;
+  // A category with no products is thin — keep it for visitors, out of search.
+  const empty = !prodLoading && products.length === 0;
 
   const category = categories.find((c) => c.name === name);
   const seo = categorySeo(name);
-  const intro = category?.description?.trim() || seo.intro;
+  // The admin description wins; then a reviewed intro (src/data/category-intros.json,
+  // drafted in content/drafts/); then the generic template.
+  const intro = category?.description?.trim() || (categoryIntros as Record<string, string>)[name] || seo.intro;
   const path = `/categories/${slug}`;
   const brandNames = [...new Set(products.map((p) => p.brands?.name).filter((b): b is string => !!b))].sort();
   const faqs = categoryFaqs(name, brandNames);
@@ -72,7 +81,7 @@ const CategoryPage = () => {
 
   return (
     <PageLayout enquiry={enquiry}>
-      <Seo title={`${seo.title} | Olive Foods`} description={seo.description} path={path} schema={schema} />
+      <Seo title={`${seo.title} | Olive Foods`} description={seo.description} path={path} schema={schema} noindex={empty} />
       <PageHero
         eyebrow={`Olive Foods / Categories / ${name}`}
         title={
@@ -176,6 +185,8 @@ const CategoryPage = () => {
                 ))}
               </div>
             </div>
+
+            <RelatedGuides category={name} className="mt-14 max-w-3xl" />
           </div>
         </section>
       </div>

@@ -21,6 +21,26 @@ const siteVerification = (env: Record<string, string>): Plugin => ({
   },
 });
 
+/**
+ * Preloads the Latin variable-font files (Sora + Inter) so the browser fetches
+ * them alongside the CSS instead of discovering them after it parses. Only the
+ * Latin subsets: the others are behind unicode-range and almost never used.
+ * Build only — the file names carry a content hash.
+ */
+const preloadFonts = (): Plugin => ({
+  name: "preload-fonts",
+  apply: "build",
+  transformIndexHtml(_html, ctx) {
+    return Object.keys(ctx.bundle ?? {})
+      .filter((f) => /\/(sora|inter)-latin-wght-normal-[\w-]+\.woff2$/.test(f))
+      .map((f) => ({
+        tag: "link",
+        attrs: { rel: "preload", href: `/${f}`, as: "font", type: "font/woff2", crossorigin: "" },
+        injectTo: "head-prepend" as const,
+      }));
+  },
+});
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "VITE_");
@@ -33,7 +53,7 @@ export default defineConfig(({ mode }) => {
         overlay: false,
       },
     },
-    plugins: [react(), siteVerification(env), mode === "development" && componentTagger()].filter(Boolean),
+    plugins: [react(), siteVerification(env), preloadFonts(), mode === "development" && componentTagger()].filter(Boolean),
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),

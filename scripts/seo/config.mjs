@@ -31,14 +31,17 @@ export const STATE_PATH = "/sitemap-state.json";
 
 // ─── Route registry ───
 /** Fixed public pages, in sitemap order. */
-export const STATIC_PAGES = ["/", "/about", "/products", "/brands", "/categories", "/contact"];
+export const STATIC_PAGES = ["/", "/about", "/products", "/brands", "/categories", "/contact", "/site-map"];
 /** Data-driven page kinds → the app route that renders them. */
 export const ROUTE_PATTERNS = {
   sector: "/supply/:slug",
   category: "/categories/:slug",
   product: "/products/:slug",
   brand: "/brands/:slug",
+  guide: "/guides/:slug",
 };
+/** Hub pages that exist only while their kind has pages (emitted by collect-routes). */
+export const HUB_PAGES = { guide: "/guides" };
 /** Public routes in src/App.tsx that are deliberately NOT in the sitemap. */
 export const EXCLUDED_ROUTES = {
   "/profile/:slug": "personal e-business cards (noindex)",
@@ -46,7 +49,7 @@ export const EXCLUDED_ROUTES = {
   "/admin/login": "admin panel",
 };
 /** Child sitemap per kind, in index order. Unknown future kinds get their own file automatically. */
-export const SITEMAP_GROUPS = ["page", "sector", "category", "product", "brand"];
+export const SITEMAP_GROUPS = ["page", "sector", "category", "product", "brand", "guide"];
 
 // ─── Helpers ───
 export const supabaseClient = () => {
@@ -60,6 +63,23 @@ export const categorySlug = (name) =>
   name.toLowerCase().trim().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
 export const readSectors = () => JSON.parse(readFileSync(resolve(ROOT, "src/data/sectors.json"), "utf8"));
+/** Brand profiles keyed by slug (src/data/brand-profiles.json). */
+export const readBrandProfiles = () => {
+  try {
+    return JSON.parse(readFileSync(resolve(ROOT, "src/data/brand-profiles.json"), "utf8"));
+  } catch {
+    return {};
+  }
+};
+
+/** Published buying guides (src/data/guides.json; drafts live in content/drafts/). */
+export const readGuides = () => {
+  try {
+    return JSON.parse(readFileSync(resolve(ROOT, "src/data/guides.json"), "utf8"));
+  } catch {
+    return [];
+  }
+};
 
 export const ensureDir = (p) => mkdirSync(p, { recursive: true });
 
