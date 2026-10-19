@@ -76,17 +76,10 @@
     }
     </script>
 
-    <!-- Warm up the TLS handshakes to Supabase (images + data) and Google
-         Fonts so they overlap with HTML parsing instead of blocking later. -->
+    <!-- Warm up the TLS handshake to Supabase (images + data) so it overlaps
+         with HTML parsing instead of blocking later. Fonts are self-hosted:
+         the build preloads them from /assets/ (vite.config.ts). -->
     <link rel="preconnect" href="https://vqvspkuhqthvbtsgfgbo.supabase.co" crossorigin />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Fonts loaded here (not via a render-blocking CSS @import) so the
-         request starts during HTML parse. display=swap avoids invisible text. -->
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
-    />
 
   <!-- No hero image preload here: this file is the template for EVERY
        prerendered page, so a preload made product/brand/contact pages
@@ -114,7 +107,7 @@
         display: flex; align-items: center; justify-content: center;
         background: hsl(150 40% 6%);
         color: #fff;
-        font-family: 'Sora', system-ui, -apple-system, sans-serif;
+        font-family: 'Sora Variable', 'Sora', system-ui, -apple-system, sans-serif;
         overflow: hidden;
         transition: opacity 700ms cubic-bezier(0.22,1,0.36,1);
         will-change: opacity;

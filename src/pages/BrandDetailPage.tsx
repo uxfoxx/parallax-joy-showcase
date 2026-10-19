@@ -8,6 +8,7 @@ import ProductCard from "@/components/ProductCard";
 import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
 import { useBrand, useProducts } from "@/lib/api";
 import { categorySlug, faqSchema } from "@/lib/categories";
+import RelatedGuides from "@/components/RelatedGuides";
 import { brandFaqs, brandProfile, isHouseBrand, listOf } from "@/lib/brands";
 import { productCategories } from "@/hooks/useSuppliedCategories";
 import { quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
@@ -251,6 +252,8 @@ const BrandDetailPage = () => {
               ))}
             </div>
           </div>
+
+          <RelatedGuides brand={brand.slug} className="mt-14 max-w-3xl" />
         </div>
       </section>
     </PageLayout>

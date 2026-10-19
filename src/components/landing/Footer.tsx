@@ -8,6 +8,7 @@ import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
 import { categorySlug } from "@/lib/categories";
 import { SECTORS } from "@/lib/sectors";
 import { SOCIAL_PROFILES } from "@/lib/site";
+import { GUIDES } from "@/lib/guides";
 
 type FooterStat = { value?: number; suffix?: string; text?: string; label: string };
 
@@ -38,6 +39,8 @@ const quickLinks = [
   { label: "Products", href: "/products" },
   { label: "Our Products", href: "/products?our=true" },
   { label: "Contact", href: "/contact" },
+  ...(GUIDES.length ? [{ label: "Guides", href: "/guides" }] : []),
+  { label: "Site map", href: "/site-map" },
 ];
 
 // Sector + category landing pages aren't in the main nav; these footer links

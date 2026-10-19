@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Sora", "sans-serif"],
-        body: ["Inter", "sans-serif"],
+        display: ["Sora Variable", "Sora", "sans-serif"],
+        body: ["Inter Variable", "Inter", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

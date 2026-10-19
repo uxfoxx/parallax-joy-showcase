@@ -65,6 +65,8 @@ const PAGE_WAIT = {
   "/products": hasProductImages,
   "/brands": 'a[href^="/brands/"]',
   "/categories": 'a[href^="/categories/"]',
+  // Every product is listed; wait until the catalogue has loaded.
+  "/site-map": () => document.querySelectorAll('a[href^="/products/"]').length >= 20,
 };
 // Data-driven kinds. Sector pages show a product grid, like category pages.
 // A future kind with no entry here falls back to detailReady.

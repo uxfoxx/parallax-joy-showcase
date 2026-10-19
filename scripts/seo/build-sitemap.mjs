@@ -31,7 +31,7 @@ import { createHash } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import {
   ROOT, SITE, DIST, ROUTES_FILE, INDEXNOW_FILE, STATE_PATH, STATIC_PAGES, ROUTE_PATTERNS,
-  EXCLUDED_ROUTES, SITEMAP_GROUPS, ensureDir, xml, absUrl, distFileFor, w3cNow, CACHE,
+  EXCLUDED_ROUTES, HUB_PAGES, SITEMAP_GROUPS, ensureDir, xml, absUrl, distFileFor, w3cNow, CACHE,
 } from "./config.mjs";
 
 const MAX_URLS_PER_SITEMAP = 45000; // protocol limit: 50,000 URLs / 50 MB per file
@@ -334,14 +334,15 @@ writeFileSync(INDEXNOW_FILE, JSON.stringify({ generatedAt: NOW, urls: indexnow }
 try {
   const app = readFileSync(resolve(ROOT, "src/App.tsx"), "utf8");
   const declared = [...app.matchAll(/<Route\b[^>]*\bpath="(\/[^"]*)"/g)].map((m) => m[1]);
-  const covered = new Set([...STATIC_PAGES, ...Object.values(ROUTE_PATTERNS)]);
+  const covered = new Set([...STATIC_PAGES, ...Object.values(ROUTE_PATTERNS), ...Object.values(HUB_PAGES)]);
   for (const path of declared)
     if (!covered.has(path) && !(path in EXCLUDED_ROUTES))
       warnings.push(
         `app route ${path} is public but not in the sitemap — add it to scripts/seo/config.mjs (STATIC_PAGES / ROUTE_PATTERNS) or EXCLUDED_ROUTES`,
       );
   for (const [kind, pattern] of Object.entries(ROUTE_PATTERNS))
-    if (!routes.some((r) => r.kind === kind)) warnings.push(`no ${kind} URLs collected for ${pattern} (data unavailable?)`);
+    // Kinds with a hub (guides) are optional: none published is not a fault.
+    if (!(kind in HUB_PAGES) && !routes.some((r) => r.kind === kind)) warnings.push(`no ${kind} URLs collected for ${pattern} (data unavailable?)`);
 } catch {
   warnings.push("could not read src/App.tsx for the route coverage check");
 }
@@ -431,6 +432,8 @@ for (const [key, from] of linkIssues) {
 //    what remains is each page's own content.
 const SHINGLE = 5;
 const THIN_BELOW = 25; // own shingles
+// Pages that are lists of links by design (the HTML site map) aren't judged on prose.
+const NOT_PROSE = new Set(["/site-map"]);
 // Jaccard similarity of own content. Calibrated on the real catalogue
 // (2026-10-19): pack-size/percentage variants of one product score 64–71%,
 // every other pair of pages stays under 50%.
@@ -454,7 +457,7 @@ for (const pages of byKind.values()) {
   const boilerplateAt = Math.max(3, Math.ceil(pages.length * 0.25));
   const own = sets.map((s) => new Set([...s].filter((sh) => df.get(sh) < boilerplateAt)));
   pages.forEach((p, i) => {
-    if (own[i].size < THIN_BELOW) thinPages.push({ loc: p.loc, own: own[i].size });
+    if (own[i].size < THIN_BELOW && !NOT_PROSE.has(p.loc)) thinPages.push({ loc: p.loc, own: own[i].size });
   });
   for (let i = 0; i < pages.length; i++)
     for (let j = i + 1; j < pages.length; j++) {

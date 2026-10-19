@@ -13,7 +13,8 @@
  */
 import { writeFileSync } from "node:fs";
 import {
-  CACHE, ROUTES_FILE, STATIC_PAGES, ensureDir, supabaseClient, categorySlug, readSectors, readBrandProfiles,
+  CACHE, ROUTES_FILE, STATIC_PAGES, HUB_PAGES, ensureDir, supabaseClient, categorySlug, readSectors, readBrandProfiles,
+  readGuides,
 } from "./config.mjs";
 
 const routes = [];
@@ -27,6 +28,12 @@ const imagesOf = (...urls) => [...new Set(urls.filter(Boolean))].map((loc) => ({
 
 for (const loc of STATIC_PAGES) add({ loc, kind: "page" });
 for (const s of readSectors()) add({ loc: `/supply/${s.slug}`, kind: "sector", id: s.slug });
+// Buying guides: the hub exists only once there is a guide to list.
+const guides = readGuides();
+if (guides.length) {
+  add({ loc: HUB_PAGES.guide, kind: "guide" });
+  for (const g of guides) add({ loc: `/guides/${g.slug}`, kind: "guide", id: g.slug, seed: g.published });
+}
 
 const supabase = supabaseClient();
 if (!supabase) {

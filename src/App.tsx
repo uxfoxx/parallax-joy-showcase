@@ -16,6 +16,9 @@ import ProductDetailPage from "./pages/ProductDetailPage.tsx";
 import CategoriesPage from "./pages/CategoriesPage.tsx";
 import CategoryPage from "./pages/CategoryPage.tsx";
 import SectorPage from "./pages/SectorPage.tsx";
+import SiteMapPage from "./pages/SiteMapPage.tsx";
+import GuidesPage from "./pages/GuidesPage.tsx";
+import GuidePage from "./pages/GuidePage.tsx";
 import ProfileLinkPage from "./pages/ProfileLinkPage.tsx";
 
 import ContactPage from "./pages/ContactPage.tsx";
@@ -103,6 +106,9 @@ const AppRoutes = () => {
               <Route path="/categories/:slug" element={<CategoryPage />} />
               {/* SEO buyer-sector landing pages ("hotel food supplier…") — same policy as categories. */}
               <Route path="/supply/:slug" element={<SectorPage />} />
+              <Route path="/site-map" element={<SiteMapPage />} />
+              <Route path="/guides" element={<GuidesPage />} />
+              <Route path="/guides/:slug" element={<GuidePage />} />
               <Route path="/profile/:slug" element={<ProfileLinkPage />} />
 
               <Route path="/admin/login" element={<AdminLogin />} />

@@ -10,6 +10,8 @@ import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
 import { useCategories, useProducts } from "@/lib/api";
 import { categoryFromSlug, categorySeo, categoryFaqs, faqSchema, lowerCategory } from "@/lib/categories";
 import { quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
+import RelatedGuides from "@/components/RelatedGuides";
+import categoryIntros from "@/data/category-intros.json";
 
 /**
  * SEO landing page for a product category: /categories/:slug.
@@ -37,7 +39,9 @@ const CategoryPage = () => {
 
   const category = categories.find((c) => c.name === name);
   const seo = categorySeo(name);
-  const intro = category?.description?.trim() || seo.intro;
+  // The admin description wins; then a reviewed intro (src/data/category-intros.json,
+  // drafted in content/drafts/); then the generic template.
+  const intro = category?.description?.trim() || (categoryIntros as Record<string, string>)[name] || seo.intro;
   const path = `/categories/${slug}`;
   const brandNames = [...new Set(products.map((p) => p.brands?.name).filter((b): b is string => !!b))].sort();
   const faqs = categoryFaqs(name, brandNames);
@@ -181,6 +185,8 @@ const CategoryPage = () => {
                 ))}
               </div>
             </div>
+
+            <RelatedGuides category={name} className="mt-14 max-w-3xl" />
           </div>
         </section>
       </div>
