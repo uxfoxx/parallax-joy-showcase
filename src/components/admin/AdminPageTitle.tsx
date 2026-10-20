@@ -21,8 +21,11 @@ export function AdminPageTitle({ title, description, icon }: { title?: string; d
         </span>
       )}
       <div className="min-w-0">
-        <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">{title ?? item?.title}</h1>
+        {item && <p className="font-display text-[10.5px] font-semibold uppercase tracking-[0.22em] text-accent">· {item.group}</p>}
+        <h1 className="mt-0.5 font-display text-2xl font-bold tracking-tight text-foreground">{title ?? item?.title}</h1>
         {desc && <p className="mt-0.5 max-w-2xl font-body text-sm text-muted-foreground">{desc}</p>}
+        {/* Brand divider: accent → transparent hairline. */}
+        <span aria-hidden className="mt-3 block h-px w-24 bg-gradient-to-r from-accent to-transparent" />
       </div>
     </div>
   );

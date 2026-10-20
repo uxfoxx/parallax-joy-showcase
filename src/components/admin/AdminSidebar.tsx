@@ -18,7 +18,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import mark from "@/assets/olive-mark.svg";
+import { BrandLogo } from "./BrandLogo";
 import { ADMIN_NAV, navItemFor } from "./nav";
 
 /** Enquiries from the last 7 days — the sidebar badge. */
@@ -48,16 +48,24 @@ export function AdminSidebar() {
 
   return (
     <Sidebar collapsible="icon" className="border-r-0">
-      <SidebarHeader className="px-3 pb-2 pt-4">
-        <Link to="/admin" className="flex items-center gap-2.5 rounded-lg px-1 py-1 outline-none ring-sidebar-ring focus-visible:ring-2" onClick={() => setOpenMobile(false)}>
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-sidebar-accent ring-1 ring-sidebar-border">
-            <img src={mark} alt="" className="h-6 w-6" width={24} height={24} />
-          </span>
-          {!collapsed && (
-            <span className="min-w-0 leading-tight">
-              <span className="block font-display text-[15px] font-bold tracking-tight text-sidebar-accent-foreground">Olive Foods</span>
-              <span className="block font-body text-[10.5px] font-semibold uppercase tracking-[0.2em] text-sidebar-primary">Admin</span>
-            </span>
+      <SidebarHeader className={collapsed ? "px-2 pb-2 pt-3" : "px-3 pb-3 pt-4"}>
+        {/* Brand guidelines: on forest grounds the logo sits on a cream chip. */}
+        <Link
+          to="/admin"
+          aria-label="Olive Foods admin — dashboard"
+          className="flex items-center gap-3 rounded-lg outline-none ring-sidebar-ring focus-visible:ring-2"
+          onClick={() => setOpenMobile(false)}
+        >
+          {collapsed ? (
+            <BrandLogo variant="mark" chip className="h-9 w-9" imgClassName="h-7 w-7" />
+          ) : (
+            <>
+              <BrandLogo chip imgClassName="h-[60px]" />
+              <span className="min-w-0 leading-tight">
+                <span className="block font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-sidebar-primary">· Admin</span>
+                <span className="mt-1 block font-body text-[12.5px] text-sidebar-foreground/60">olivefoods.lk</span>
+              </span>
+            </>
           )}
         </Link>
       </SidebarHeader>
@@ -65,7 +73,7 @@ export function AdminSidebar() {
       <SidebarContent className="gap-0 px-1">
         {ADMIN_NAV.map((group) => (
           <SidebarGroup key={group.label} className="py-1.5">
-            <SidebarGroupLabel className="font-body text-[10.5px] font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/45">
+            <SidebarGroupLabel className="font-display text-[10.5px] font-semibold uppercase tracking-[0.2em] text-sidebar-primary/70">
               {group.label}
             </SidebarGroupLabel>
             <SidebarGroupContent>

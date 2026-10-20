@@ -6,13 +6,13 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { navItemFor } from "@/components/admin/nav";
 import Seo from "@/components/Seo";
-import mark from "@/assets/olive-mark.svg";
+import { BrandLogo } from "@/components/admin/BrandLogo";
 
 /** Branded holding screen while the admin check runs. */
 function AdminSplash() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-forest-deep">
-      <img src={mark} alt="" className="h-12 w-12 animate-pulse" width={48} height={48} />
+    <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-forest-deep">
+      <BrandLogo chip className="animate-pulse p-4" imgClassName="h-24" />
       <p className="font-body text-sm text-primary-foreground/60">Opening the admin…</p>
     </div>
   );

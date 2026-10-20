@@ -32,7 +32,7 @@ function StatCard({ icon: Icon, label, value, sub, to, delay = 0 }: { icon: Luci
   return (
     <Link
       to={to}
-      className={cn("group relative overflow-hidden rounded-2xl border border-border bg-card p-5 transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-[0_14px_32px_-22px_hsl(150_40%_10%/0.45)]", ease)}
+      className={cn("group relative overflow-hidden rounded-lg border border-border/80 bg-card p-5 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-float", ease)}
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="flex items-center justify-between">
@@ -50,7 +50,7 @@ function StatCard({ icon: Icon, label, value, sub, to, delay = 0 }: { icon: Luci
 
 function Panel({ title, action, children, className, delay = 0 }: { title: string; action?: React.ReactNode; children: React.ReactNode; className?: string; delay?: number }) {
   return (
-    <section className={cn("rounded-2xl border border-border bg-card p-5 sm:p-6", ease, className)} style={{ animationDelay: `${delay}ms` }}>
+    <section className={cn("rounded-lg border border-border/80 bg-card p-5 shadow-card sm:p-6", ease, className)} style={{ animationDelay: `${delay}ms` }}>
       <header className="mb-4 flex items-center justify-between gap-3">
         <h2 className="font-display text-base font-semibold text-foreground">{title}</h2>
         {action}
@@ -160,13 +160,15 @@ const AdminDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome banner */}
-      <section className={cn("relative overflow-hidden rounded-3xl bg-forest-deep px-6 py-7 text-primary-foreground sm:px-8 sm:py-8", ease)}>
-        <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[radial-gradient(circle,hsl(75_40%_45%/0.35),transparent_70%)]" />
-        <div aria-hidden className="pointer-events-none absolute -bottom-32 left-1/3 h-72 w-72 rounded-full bg-[radial-gradient(circle,hsl(140_50%_25%/0.5),transparent_70%)]" />
+      {/* Brand "forest wash" band: forest-deep → forest-mid → olive accent. */}
+      <section className={cn("relative overflow-hidden rounded-lg bg-[linear-gradient(120deg,hsl(150_40%_10%)_0%,hsl(140_50%_19%)_58%,hsl(75_38%_45%)_130%)] px-6 py-7 text-primary-foreground shadow-card sm:px-8 sm:py-8", ease)}>
+        <div aria-hidden className="pointer-events-none absolute -right-20 -top-28 h-80 w-80 rounded-full bg-[radial-gradient(circle,hsl(75_40%_60%/0.22),transparent_70%)]" />
         <div className="relative flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="font-body text-xs font-semibold uppercase tracking-[0.2em] text-gold-light">{greeting()}</p>
-            <h1 className="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">Here's olivefoods.lk today</h1>
+            <p className="font-display text-[11px] font-semibold uppercase tracking-[0.24em] text-gold-light">· {greeting()}</p>
+            <h1 className="mt-2 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+              Here's <span className="text-gradient-gold-dark">olivefoods.lk</span> today
+            </h1>
             <p className="mt-2 max-w-xl font-body text-sm text-primary-foreground/70">
               {total} products from {brands?.length ?? "…"} brands in {categories?.length ?? "…"} categories
               {newEnquiries ? ` · ${newEnquiries} new ${newEnquiries === 1 ? "enquiry" : "enquiries"} this week` : ""}.
@@ -174,7 +176,7 @@ const AdminDashboard = () => {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <LiveNow />
-            <Link to="/admin/analytics" className="inline-flex h-9 items-center gap-1.5 rounded-full bg-gold px-4 font-body text-xs font-semibold text-forest-deep transition-colors hover:bg-gold-light">
+            <Link to="/admin/analytics" className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[linear-gradient(90deg,hsl(var(--gold)),hsl(var(--gold-light)))] px-4 font-body text-xs font-semibold text-forest-deep shadow-[0_6px_18px_-8px_hsl(75_40%_45%/0.8)] transition-transform hover:-translate-y-0.5">
               <Activity className="h-3.5 w-3.5" /> Analytics
             </Link>
             <a href="/" target="_blank" rel="noopener noreferrer" className="inline-flex h-9 items-center gap-1.5 rounded-full px-4 font-body text-xs font-semibold text-primary-foreground ring-1 ring-primary-foreground/25 transition-colors hover:bg-primary-foreground/10">
