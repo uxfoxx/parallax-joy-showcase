@@ -39,7 +39,9 @@ const AdminLayout = () => {
       {/* h-screen (not min-h-screen) + an internally-scrolling <main> keeps the
        * window itself from scrolling. Radix dialogs lock scroll on <main>, so
        * opening/closing an edit dialog no longer jumps the admin to the top. */}
-      <div className="h-screen overflow-hidden flex w-full">
+      {/* Analytics never starts on /admin, but if a session wanders in from the
+          public site, nothing in the admin panel is ever recorded. */}
+      <div data-clarity-mask="true" className="h-screen overflow-hidden flex w-full">
         <AdminSidebar />
         <div className="flex-1 flex flex-col min-h-0">
           <header className="h-14 shrink-0 flex items-center border-b border-border px-4">
