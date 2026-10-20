@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Seo from "@/components/Seo";
-import mark from "@/assets/olive-mark.svg";
+import { BRAND_TAGLINE, BrandLogo } from "@/components/admin/BrandLogo";
 import spread from "@/assets/hero/hero-spread-portrait.webp";
 
 const AdminLogin = () => {
@@ -48,17 +48,14 @@ const AdminLogin = () => {
 
       {/* Brand panel */}
       <aside className="relative hidden overflow-hidden bg-forest-deep lg:block">
-        <img src={spread} alt="" className="absolute inset-0 h-full w-full object-cover opacity-55" />
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-forest-deep via-forest-deep/70 to-forest-deep/20" />
+        <img src={spread} alt="" className="absolute inset-0 h-full w-full object-cover opacity-50" />
+        {/* Brand "forest wash": forest-deep → forest-mid → olive accent. */}
+        <div aria-hidden className="absolute inset-0 bg-[linear-gradient(160deg,hsl(150_40%_10%/0.92)_0%,hsl(140_50%_19%/0.78)_55%,hsl(75_38%_45%/0.55)_100%)]" />
         <div className="relative flex h-full flex-col justify-between p-10 xl:p-14">
-          <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-foreground/10 ring-1 ring-primary-foreground/20 backdrop-blur">
-              <img src={mark} alt="" className="h-7 w-7" width={28} height={28} />
-            </span>
-            <span className="leading-tight">
-              <span className="block font-display text-lg font-bold text-primary-foreground">Olive Foods</span>
-              <span className="block font-body text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-light">Admin</span>
-            </span>
+          <div className="flex items-center gap-4">
+            {/* On forest grounds the logo sits on a cream chip (brand guidelines §02). */}
+            <BrandLogo chip className="p-3" imgClassName="h-20" />
+            <span className="font-display text-[11px] font-semibold uppercase tracking-[0.24em] text-gold-light">· Admin</span>
           </div>
           <div className="max-w-md animate-in fade-in slide-in-from-bottom-3 duration-700">
             <p className="font-display text-4xl font-bold leading-[1.08] tracking-tight text-primary-foreground xl:text-5xl">
@@ -68,6 +65,8 @@ const AdminLogin = () => {
             <p className="mt-4 font-body text-[15px] leading-relaxed text-primary-foreground/70">
               The catalogue, brands, homepage showcase, enquiries and the site's analytics — all behind this sign-in.
             </p>
+            <span aria-hidden className="mt-8 block h-px w-28 bg-gradient-to-r from-gold-light to-transparent" />
+            <p className="mt-4 font-display text-sm font-semibold text-gold-light">{BRAND_TAGLINE}</p>
           </div>
           <p className="font-body text-xs text-primary-foreground/45">Olive Foods (Pvt) Ltd · 292 Sea Street, Colombo 11</p>
         </div>
@@ -76,14 +75,9 @@ const AdminLogin = () => {
       {/* Form */}
       <main className="flex items-center justify-center px-5 py-12 sm:px-8">
         <div className="w-full max-w-[400px] animate-in fade-in slide-in-from-bottom-2 duration-500">
-          <div className="mb-8 flex items-center gap-3 lg:hidden">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-forest-deep">
-              <img src={mark} alt="" className="h-7 w-7" width={28} height={28} />
-            </span>
-            <span className="leading-tight">
-              <span className="block font-display text-lg font-bold text-foreground">Olive Foods</span>
-              <span className="block font-body text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">Admin</span>
-            </span>
+          <div className="mb-8 flex items-end gap-3 lg:hidden">
+            <BrandLogo imgClassName="h-20" />
+            <span className="pb-1 font-display text-[11px] font-semibold uppercase tracking-[0.24em] text-accent">· Admin</span>
           </div>
 
           <h1 className="font-display text-3xl font-bold tracking-tight text-foreground">Welcome back</h1>
