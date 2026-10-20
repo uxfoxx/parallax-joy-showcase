@@ -4,12 +4,10 @@ import { MessageCircle, Check, CheckCheck, Sparkles } from "lucide-react";
 import MagneticButton from "@/components/motion/MagneticButton";
 import SplitText from "@/components/motion/SplitText";
 import Eyebrow from "@/components/ui/eyebrow";
+import { WHATSAPP_DISPLAY, whatsappHref } from "@/lib/contact";
 
-// WhatsApp constants
-const PHONE = "94112071717";
 const ENQUIRE_MSG = "Hi Olive Foods, I'd like to enquire about supplying my business.";
-const waLink = (msg: string) =>
-  `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
+const waLink = whatsappHref;
 
 /**
  * "How to order via WhatsApp" — creative animated landing section.
@@ -322,7 +320,7 @@ const WhatsAppOrderSection = () => {
                 </a>
               </MagneticButton>
               <p className="font-body text-xs text-white/55 mt-3 ml-1">
-                Tap to open WhatsApp · +94 11 207 1717
+                Tap to open WhatsApp · {WHATSAPP_DISPLAY}
               </p>
             </motion.div>
           </div>

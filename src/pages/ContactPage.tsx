@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Seo, { SITE_URL } from "@/components/Seo";
 import { track } from "@/lib/analytics";
 import { openingHoursSchema } from "@/lib/site";
+import { WHATSAPP_DISPLAY, whatsappHref, whatsappMessage } from "@/lib/contact";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Mail, Phone, MapPin, MessageCircle, Send, Clock, CheckCircle2, Loader2 } from "lucide-react";
@@ -51,7 +52,7 @@ const contactPageSchema = {
 const contactInfo = [
   { icon: Mail, label: "Email", value: "info@olivefoods.lk", href: "mailto:info@olivefoods.lk" },
   { icon: Phone, label: "Phone", value: "+94 11 207 1717", href: "tel:+94112071717" },
-  { icon: MessageCircle, label: "WhatsApp", value: "+94 11 207 1717", href: "https://wa.me/94112071717" },
+  { icon: MessageCircle, label: "WhatsApp", value: WHATSAPP_DISPLAY, href: whatsappHref(whatsappMessage()) },
   { icon: MapPin, label: "Office", value: "292 Sea Street, Colombo 11, Colombo, Sri Lanka 01100", href: "https://www.google.com/maps/dir/?api=1&destination=292+Sea+Street%2C+Colombo+11%2C+Sri+Lanka" },
 ];
 

@@ -68,7 +68,7 @@ const FACTS = `## At a glance
 ${company.atAGlance.map(([k, v]) => `- ${k}: ${v}`).join("\n")}`;
 
 const HOW_TO_ORDER = `## How to order
-Olive Foods sells to businesses (hotels, restaurants, cafés, caterers, supermarkets, retailers). Send a quote request with the products and quantities you need — ${SITE}/contact, +94 11 207 1717 (phone or WhatsApp) or info@olivefoods.lk — and the team replies with trade pricing and delivery details, usually within one business day.`;
+Olive Foods sells to businesses (hotels, restaurants, cafés, caterers, supermarkets, retailers). Send a quote request with the products and quantities you need — ${SITE}/contact, +94 11 207 1717 (phone), +94 77 330 0700 (WhatsApp) or info@olivefoods.lk — and the team replies with trade pricing and delivery details, usually within one business day.`;
 
 try {
   const [brandsRes, productsRes, categoriesRes] = await Promise.all([

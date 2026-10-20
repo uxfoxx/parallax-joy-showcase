@@ -92,9 +92,12 @@ rsync -az --delete --exclude ".secrets/" --exclude ".data/" --exclude "node_modu
 "${SSH[@]}" "mkdir -p ${DEPLOY_PATH}/shared/insights/secrets ${DEPLOY_PATH}/shared/insights/data && chmod 700 ${DEPLOY_PATH}/shared/insights ${DEPLOY_PATH}/shared/insights/secrets"
 # The keys exist only on the machine that set them up. Deploying from anywhere
 # else simply keeps the server's copies (no --delete).
+# (macOS's rsync has no --chmod: -a carries the local 600 modes, then chmod
+# makes sure.)
 if [[ -d "$ROOT/deploy/insights/.secrets" ]]; then
-  rsync -az --chmod=F600 -e "$RSYNC_E" \
+  rsync -az -e "$RSYNC_E" \
     "$ROOT/deploy/insights/.secrets/" "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/shared/insights/secrets/"
+  "${SSH[@]}" "chmod 600 ${DEPLOY_PATH}/shared/insights/secrets/*"
 fi
 
 echo "▶  Keeping recent assets reachable…"
