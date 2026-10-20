@@ -52,6 +52,11 @@ export default defineConfig(({ mode }) => {
       hmr: {
         overlay: false,
       },
+      // Admin analytics: run `node deploy/insights/server.mjs` alongside the dev
+      // server (production: nginx proxies /api/insights/ to the same service).
+      proxy: {
+        "/api/insights": "http://127.0.0.1:4101",
+      },
     },
     plugins: [react(), siteVerification(env), preloadFonts(), mode === "development" && componentTagger()].filter(Boolean),
     resolve: {

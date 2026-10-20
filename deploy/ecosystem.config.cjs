@@ -32,5 +32,33 @@ module.exports = {
       out_file: "shared/logs/pm2-out.log",
       time: true,
     },
+    {
+      // Admin analytics data (/admin/analytics → nginx /api/insights/). Holds
+      // the read-only GA4 / Search Console / Clarity / Bing keys server-side;
+      // see insights/server.mjs. No npm dependencies. Secrets and its cache
+      // live under shared/ so they survive releases.
+      name: "olivefoods-insights",
+      namespace: "olivefoods",
+      cwd: __dirname,
+      script: "insights/server.mjs",
+      interpreter: "node",
+      instances: 1,
+      exec_mode: "fork",
+      max_memory_restart: "120M",
+      env: {
+        NODE_ENV: "production",
+        INSIGHTS_HOST: "127.0.0.1",
+        INSIGHTS_PORT: "4101",
+        INSIGHTS_SECRETS: `${__dirname}/shared/insights/secrets`,
+        INSIGHTS_DATA: `${__dirname}/shared/insights/data`,
+        GA4_PROPERTY: "559765187",
+        GSC_SITE: "sc-domain:olivefoods.lk",
+        SITE_URL: "https://www.olivefoods.lk",
+        BING_SITE: "https://olivefoods.lk/",
+      },
+      error_file: "shared/logs/insights-error.log",
+      out_file: "shared/logs/insights-out.log",
+      time: true,
+    },
   ],
 };

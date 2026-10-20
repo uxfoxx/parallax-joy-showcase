@@ -50,6 +50,13 @@ the other two.
 serves bytes, and its `Cache-Control` is hidden and replaced per location. That is
 why `deploy/ecosystem.config.cjs` passes no `--maxage`/`--immutable` flags.
 
+A second pm2 app, **`olivefoods-insights`** (127.0.0.1:4101, nginx
+`/api/insights/`), feeds the admin's Analytics page from GA4, Search Console,
+Clarity, Bing and PageSpeed. It has no npm dependencies and answers only admins.
+Its read-only keys live in `shared/insights/secrets/` (copied from the deploying
+Mac's `deploy/insights/.secrets/`, never committed) and its cache in
+`shared/insights/data/`, so both survive releases. See `deploy/insights/server.mjs`.
+
 ## Directory layout
 
 ```
@@ -57,7 +64,9 @@ why `deploy/ecosystem.config.cjs` passes no `--maxage`/`--immutable` flags.
 ├── releases/<timestamp>/    each deploy, 5 kept
 ├── current -> releases/…    the symlink sirv serves
 ├── server/                  sirv runtime (npm ci'd from deploy/server/)
+├── insights/                admin analytics service (from deploy/insights/)
 ├── shared/logs/             pm2 stdout/stderr
+├── shared/insights/         analytics keys (secrets/, 700) and cache (data/)
 ├── ecosystem.config.cjs     pm2 process definition
 └── nginx.conf               staged vhost, installed by the helper below
 ```
@@ -68,9 +77,9 @@ why `deploy/ecosystem.config.cjs` passes no `--maxage`/`--immutable` flags.
    The build includes the SEO pipeline (see below) and Puppeteer prerendering.
 2. Uploads to a **new** `releases/<timestamp>/` — the running site is untouched.
 3. Flips `current` with an atomic `mv -T` rename.
-4. `pm2 reload olivefoods`. **This is mandatory, not tidiness:** sirv builds its
-   file manifest at startup, so a symlink flip alone would keep serving the old
-   release's file list.
+4. `pm2 startOrReload ecosystem.config.cjs` (sirv and `olivefoods-insights`).
+   **This is mandatory, not tidiness:** sirv builds its file manifest at startup,
+   so a symlink flip alone would keep serving the old release's file list.
 5. Installs this project's nginx config, smoke-tests the live URL, and **rolls
    back to the previous release automatically if it fails**.
 6. Notifies IndexNow (Bing → ChatGPT search/Copilot, Yandex…) of the pages that
