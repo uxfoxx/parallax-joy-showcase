@@ -241,8 +241,8 @@ const AdminProductCard = ({
 );
 
 const AdminProducts = () => {
-  const { data: products, isLoading } = useProducts();
-  const { data: brands } = useBrands();
+  const { data: products, isLoading } = useProducts(undefined, { raw: true });
+  const { data: brands } = useBrands({ raw: true });
   const { data: categories } = useCategories();
   const createProduct = useCreateProduct();
   const updateProduct = useUpdateProduct();

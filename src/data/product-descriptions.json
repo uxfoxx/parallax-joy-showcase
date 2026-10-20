@@ -1,0 +1,65 @@
+{
+  "lamb-leg---bone-in": {
+    "description": "Whole frozen lamb leg on the bone, for roasting whole, slow-braising or cutting into curry pieces. Cooking on the bone keeps the meat moist and gives a richer gravy, so it suits carvery stations, Sunday roasts and festive menus."
+  },
+  "lamb-leg-boneless": {
+    "description": "Frozen boneless lamb leg, ready to roll and tie for an even roast, butterfly for the grill, or dice for curries and kebabs. With the bone already out, there is little trim and every portion carves cleanly."
+  },
+  "lamb-sq-cut-shoulder-slices": {
+    "description": "Square-cut lamb shoulder sliced into chops. Shoulder carries more marbling than leg, so these slices stay juicy on the grill or barbecue and turn tender when braised or cooked in a curry."
+  },
+  "mutton-cube": {
+    "description": "Frozen diced mutton, cut into cubes ready for curries, stews, biryani and kebabs. Mutton has a deeper flavour than lamb and rewards long, slow cooking."
+  },
+  "mutton-leg-bone-in": {
+    "description": "Frozen mutton leg on the bone for slow roasting, braising and curries. The bone adds flavour to the gravy and keeps the meat moist through long cooking, which suits biryani and celebration menus."
+  },
+  "mutton-leg-boneless": {
+    "description": "Frozen boneless mutton leg for dicing into curries and biryani, mincing, or rolling and slow-roasting. Lean leg meat with the bone removed, so portioning is quick and waste is low."
+  },
+  "pasta": {
+    "description": "Mezzi gomiti, or half elbows, are short curved pasta tubes: the classic shape for macaroni and cheese, baked pasta and cold pasta salads. The hollow centre fills with cheese and cream sauces."
+  },
+  "premium-cooking-cream": {
+    "description": "Mavee's Premium Cooking Cream for savoury cooking: creamy pasta sauces, soups, curries, gravies and gratins. Made for hot dishes, it adds body and a rich finish to sauces in hotel, restaurant and café kitchens."
+  },
+  "silver-sweetened-whipping-cream": {
+    "description": "Mavee's Silver Sweetened Whipping Cream, a ready-sweetened whipping cream for cake decoration, piping, fillings and desserts in bakeries, pastry kitchens and cafés."
+  },
+  "smooth-sweetened-whipping-cream": {
+    "description": "Mavee's Smooth Sweetened Whipping Cream, a ready-sweetened whipping cream for frosting cakes, filling pastries and topping desserts and drinks.",
+    "replaces": "Mavees Smooth Sweetened Whipping Cream"
+  },
+  "azizaa-basmati-rice-5kg": {
+    "description": "Azizaa basmati rice in a 5 kg bag, a handy size for restaurants, cafés, smaller kitchens and retail shelves. Long, fragrant grains that cook separate and fluffy for biryani, pilaf, fried rice and curries. Also available in a 20 kg bag.",
+    "replaces": "Fragrant long-grain rice known for its delicate aroma, commonly used as a base for curries and traditional Middle Eastern dishes."
+  },
+  "azizaa-basmati-rice-20kg": {
+    "description": "Azizaa basmati rice in a 20 kg bag for hotels, caterers and high-volume kitchens: the same long, fragrant grain as the 5 kg pack, in a size made for buffets, banquets and daily biryani service.",
+    "replaces": "Versatile aromatic long-grain rice suitable for high-volume catering, providing a light and fluffy consistency for various ethnic cuisines."
+  },
+  "generic-aluminium-container-with-lid-750ml": {
+    "description": "750 ml rectangular aluminium container with a lid, sized for a single takeaway meal: a rice and curry portion, a pasta bake or an individual dessert. Also available in 1,200 ml for sharing portions.",
+    "replaces": "Rectangular foil tray with a matching lid, used for reheating, storing, and transporting hot prepared food items."
+  },
+  "generic-aluminium-container-with-lid-1200ml": {
+    "description": "1,200 ml aluminium container with a lid for family-size takeaway orders, sharing portions and catering: larger servings of rice, biryani, pasta bakes and curries. Also available in 750 ml for single meals.",
+    "replaces": "Large capacity aluminium tray featuring a secure lid for bulk food storage, catering service, and takeaway meals."
+  },
+  "generic-cheese-slice-128s": {
+    "description": "Processed cheese slices in a 128-slice pack for high-volume kitchens: quick-service burger lines, breakfast sandwiches, toasties and room service. The slices melt evenly. A 90-slice pack is also available.",
+    "replaces": "Conveniently pre-sliced processed cheese designed for high-volume foodservice applications like breakfast sandwiches and fast-food style burgers."
+  },
+  "generic-cheese-slice-90s": {
+    "description": "Processed cheese slices in a 90-slice pack, a practical size for cafés, sandwich counters and smaller kitchens: burgers, melts, wraps and breakfast plates. For busier kitchens there is a 128-slice pack.",
+    "replaces": "Individual processed cheese slices with a smooth texture, ideal for quick melting in professional kitchens and cafeteria service."
+  },
+  "albertos-albertos-flour-tortilla-wraps-10-6s": {
+    "description": "Soft 10-inch flour tortillas in packs of six, for burritos, large wraps and quesadillas. Warm them briefly on a dry pan before filling so they fold without cracking. A 6-inch pack of eight is also available for tacos.",
+    "replaces": "Soft ten-inch flour tortillas ideal for wrapping large burritos, creating soft tacos, or making grilled quesadillas for Mexican-style dining."
+  },
+  "albertos-albertos-tortilla-wraps-6-8s": {
+    "description": "Soft 6-inch flour tortillas in packs of eight, for street-style tacos, fajitas and smaller wraps. A few seconds on a hot pan keeps them soft and pliable for folding. For burritos there is a 10-inch pack of six.",
+    "replaces": "Small six-inch flour tortillas perfect for serving street-style tacos, fajitas, or individual snacks and appetizers in professional kitchens."
+  }
+}

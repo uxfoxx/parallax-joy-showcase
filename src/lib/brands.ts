@@ -16,6 +16,13 @@ export type BrandProfile = {
   website?: string;
   /** Genuine alternative spellings people search for (Brand alternateName). */
   aliases?: string[];
+  /** Reviewed short description: stands in for the admin one (see lib/copy.ts). */
+  summary?: string;
+  /** The admin description `summary` was written to replace. */
+  replaces?: string;
+  /** Used only while the admin's Origin / Established fields are empty. */
+  origin?: string;
+  established?: number;
 };
 
 const profiles = data as Record<string, BrandProfile>;

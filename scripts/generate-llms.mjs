@@ -18,12 +18,16 @@
  */
 import { writeFileSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { DIST, ROOT, SITE, supabaseClient, categorySlug, readSectors, readBrandProfiles, readGuides } from "./seo/config.mjs";
+import {
+  DIST, ROOT, SITE, supabaseClient, categorySlug, readSectors, readBrandProfiles, readGuides, readProductCopy, readCategoryIntros, copyApplies,
+} from "./seo/config.mjs";
 
 const company = JSON.parse(readFileSync(resolve(ROOT, "src/data/company.json"), "utf8"));
 const sectors = readSectors();
 const profiles = readBrandProfiles();
 const guides = readGuides();
+const productCopy = readProductCopy();
+const categoryIntros = readCategoryIntros();
 
 /** Must match packSize() in src/lib/products.ts. */
 const UNITS = { kg: "kg", gr: "g", gm: "g", g: "g", ml: "ml", ltr: "L", l: "L", gal: "gal", oz: "oz", cm: "cm", mm: "mm" };
@@ -73,8 +77,21 @@ try {
     supabase.from("categories").select("name, description").order("name"),
   ]);
   for (const r of [brandsRes, productsRes, categoriesRes]) if (r.error) throw r.error;
-  const brands = brandsRes.data ?? [];
-  const products = (productsRes.data ?? []).filter((p) => p.slug);
+  // The same reviewed copy the pages show (src/lib/copy.ts).
+  const brands = (brandsRes.data ?? []).map((b) => {
+    const p = profiles[b.slug] ?? {};
+    return {
+      ...b,
+      description: p.summary && copyApplies(b.description, p.replaces) ? p.summary : b.description,
+      origin: b.origin?.trim() || p.origin || b.origin,
+    };
+  });
+  const products = (productsRes.data ?? [])
+    .filter((p) => p.slug)
+    .map((p) => {
+      const c = productCopy[p.slug];
+      return c && copyApplies(p.description, c.replaces) ? { ...p, description: c.description } : p;
+    });
   const brandById = new Map(brands.map((b) => [b.id, b]));
 
   // Only what has a page: categories and brands with products (or a profile).
@@ -164,7 +181,7 @@ ${[...importedBrands, ...(ownRange ? [ownRange] : [])].map(brandBlock).join("\n\
   const categoriesFull = `## Products by category
 ${liveCategories
   .map((c) => {
-    const intro = plain(c.description);
+    const intro = plain(c.description) || categoryIntros[c.name] || "";
     return [
       `### ${c.name}`,
       `${SITE}/categories/${categorySlug(c.name)}`,

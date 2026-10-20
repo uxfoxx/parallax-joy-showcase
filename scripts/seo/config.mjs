@@ -72,6 +72,34 @@ export const readBrandProfiles = () => {
   }
 };
 
+/** Reviewed product descriptions keyed by slug (src/data/product-descriptions.json). */
+export const readProductCopy = () => {
+  try {
+    return JSON.parse(readFileSync(resolve(ROOT, "src/data/product-descriptions.json"), "utf8"));
+  } catch {
+    return {};
+  }
+};
+
+/** Category intros keyed by category name (src/data/category-intros.json). */
+export const readCategoryIntros = () => {
+  try {
+    return JSON.parse(readFileSync(resolve(ROOT, "src/data/category-intros.json"), "utf8"));
+  } catch {
+    return {};
+  }
+};
+
+/** Must match plain() in src/lib/copy.ts. */
+export const plainText = (s) =>
+  (s ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+
+/** Must match copyApplies() in src/lib/copy.ts: the admin text wins once edited. */
+export const copyApplies = (current, replaces) => {
+  const now = plainText(current);
+  return !now || (replaces !== undefined && now === plainText(replaces));
+};
+
 /** Published buying guides (src/data/guides.json; drafts live in content/drafts/). */
 export const readGuides = () => {
   try {
