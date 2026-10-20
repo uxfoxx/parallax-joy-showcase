@@ -39,7 +39,7 @@ const ProductCard = ({ product, variant = "light", index = 0, columns = 3 }: Pro
       imageInset={!!product.featured}
       badge={
         product.featured ? (
-          <Badge className="bg-accent text-white font-body text-[10px] tracking-[0.14em] uppercase shadow-md border-0">
+          <Badge className="bg-accent text-accent-foreground font-body text-[11px] tracking-[0.14em] uppercase shadow-md border-0">
             Featured
           </Badge>
         ) : undefined

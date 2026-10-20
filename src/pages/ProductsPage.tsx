@@ -104,7 +104,7 @@ const FilterPanel = ({
               <span className="flex items-center gap-2">
                 Categories
                 {selectedCategories.length > 0 && (
-                  <span className="w-5 h-5 rounded-full bg-accent text-white text-[10px] font-semibold flex items-center justify-center">
+                  <span className="w-5 h-5 rounded-full bg-accent text-accent-foreground text-[10px] font-semibold flex items-center justify-center">
                     {selectedCategories.length}
                   </span>
                 )}
@@ -153,7 +153,7 @@ const FilterPanel = ({
               <span className="flex items-center gap-2">
                 Brands
                 {selectedBrands.length > 0 && (
-                  <span className="w-5 h-5 rounded-full bg-accent text-white text-[10px] font-semibold flex items-center justify-center">
+                  <span className="w-5 h-5 rounded-full bg-accent text-accent-foreground text-[10px] font-semibold flex items-center justify-center">
                     {selectedBrands.length}
                   </span>
                 )}
@@ -404,7 +404,7 @@ const ProductsPage = () => {
       <div data-navbar-theme="light">
         <section
           ref={contentRef}
-          className="relative py-16 lg:py-24 bg-background/90 backdrop-blur-sm overflow-hidden"
+          className="relative py-10 sm:py-16 lg:py-24 bg-background/90 backdrop-blur-sm overflow-hidden"
         >
           {/* Parallax orbs */}
           <motion.div
@@ -423,12 +423,14 @@ const ProductsPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="flex items-center gap-3 mb-4"
+              className="flex flex-wrap items-center gap-3 mb-4"
             >
-              {/* Search */}
-              <div className="relative flex-1">
+              {/* Search — full width on phones, the sort menu wraps below it */}
+              <div className="relative basis-full sm:basis-0 sm:flex-1">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                 <Input
+                  type="search"
+                  aria-label="Search products"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search products, brands, categories…"
@@ -436,8 +438,10 @@ const ProductsPage = () => {
                 />
                 {query && (
                   <button
+                    type="button"
                     onClick={() => setQuery("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="Clear search"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -446,7 +450,7 @@ const ProductsPage = () => {
 
               {/* Sort */}
               <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortBy)}>
-                <SelectTrigger className="h-11 w-[150px] rounded-xl font-body text-sm border-border bg-card/90 shrink-0">
+                <SelectTrigger aria-label="Sort products" className="h-11 w-[160px] rounded-xl font-body text-sm border-border bg-card/90 shrink-0">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -480,9 +484,10 @@ const ProductsPage = () => {
               <Separator className="flex-1" />
             </div>
 
+            <h2 className="sr-only">Products</h2>
             {/* ── Product Grid ── */}
             {isLoading ? (
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-6 sm:gap-4">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="rounded-xl bg-muted animate-pulse aspect-[4/5]" />
                 ))}
@@ -494,7 +499,7 @@ const ProductsPage = () => {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3"
+                  className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-6 sm:gap-4"
                 >
                   {paginatedItems.map((product, i) => (
                     <ProductCard

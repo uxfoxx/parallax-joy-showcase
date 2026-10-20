@@ -176,6 +176,17 @@ const HeroSection = () => {
             "radial-gradient(ellipse 55% 45% at 50% 50%, hsl(36 18% 94% / 0.82), hsl(36 18% 94% / 0.45) 55%, transparent 80%)",
         }}
       />
+      {/* Phones: the type column covers most of a portrait screen, beyond the
+          reach of the centre vignette, so the headline sat on busy food.
+          A soft wash behind the whole column keeps it readable. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none md:hidden"
+        style={{
+          background:
+            "linear-gradient(180deg, hsl(36 18% 94% / 0.5), hsl(36 18% 94% / 0.8) 28%, hsl(36 18% 94% / 0.8) 78%, hsl(36 18% 94% / 0.45))",
+        }}
+      />
       {/* Top + bottom edge fades for nav + scroll-cue legibility */}
       <div
         aria-hidden
@@ -225,13 +236,13 @@ const HeroSection = () => {
           transition={{ duration: 0.7, delay: 0.1, ease: EASE_OUT_EXPO }}
           className="mb-7 flex justify-center"
         >
-          <Eyebrow variant="pill" tone="primary" withDot>
+          <Eyebrow variant="pill" tone="accent" withDot className="bg-background/70">
             Premium Food Distribution · Sri Lanka
           </Eyebrow>
         </motion.div>
 
         <h1 className="font-display text-[34px] sm:text-5xl lg:text-6xl xl:text-[68px] font-bold leading-[1.05] tracking-[-0.025em] text-foreground mb-8">
-          <span className="block overflow-hidden">
+          <span className="block overflow-hidden pb-[0.1em] -mb-[0.1em] pr-[0.14em] -mr-[0.14em]">
             <SplitText
               text="Every great meal"
               by="word"
@@ -242,7 +253,7 @@ const HeroSection = () => {
               as="span"
             />
           </span>
-          <span className="block overflow-hidden">
+          <span className="block overflow-hidden pb-[0.1em] -mb-[0.1em] pr-[0.14em] -mr-[0.14em]">
             <SplitText
               text="starts with the right"
               by="word"
@@ -253,7 +264,7 @@ const HeroSection = () => {
               as="span"
             />
           </span>
-          <span className="block overflow-hidden">
+          <span className="block overflow-hidden pb-[0.1em] -mb-[0.1em] pr-[0.14em] -mr-[0.14em]">
             <SplitText
               text="ingredients."
               by="word"
@@ -302,19 +313,19 @@ const HeroSection = () => {
           className="flex flex-wrap items-center justify-center gap-3"
         >
           <MagneticButton>
-            <Link to="/products" className="inline-block group">
-              <Button variant="brand" size="pill" className="font-body">
+            <Button asChild variant="brand" size="pill" className="font-body group">
+              <Link to="/products">
                 Explore Products
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </MagneticButton>
           <MagneticButton>
-            <Link to="/about">
-              <Button variant="brandOutline" size="pill" className="font-body">
+            <Button asChild variant="brandOutline" size="pill" className="font-body">
+              <Link to="/about">
                 Our story
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </MagneticButton>
         </motion.div>
       </motion.div>
@@ -327,7 +338,7 @@ const HeroSection = () => {
         transition={{ duration: 0.7, delay: 1.5 }}
         className="absolute bottom-7 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-3 pointer-events-none"
       >
-        <span className="font-body text-[11px] md:text-[10px] text-foreground/55 tracking-[0.4em] uppercase">
+        <span className="font-body text-[11px] text-foreground/70 tracking-[0.4em] uppercase">
           Scroll
         </span>
         <div className="relative h-12 w-px overflow-hidden">

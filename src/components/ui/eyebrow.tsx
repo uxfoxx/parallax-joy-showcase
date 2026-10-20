@@ -78,7 +78,7 @@ const Eyebrow = forwardRef<HTMLSpanElement, EyebrowProps>(
       <span
         ref={ref}
         className={cn(
-          "font-body text-[11px] md:text-[10px] font-semibold tracking-[0.3em] uppercase",
+          "font-body text-[11px] font-semibold tracking-[0.3em] uppercase",
           toneText[tone],
           className,
         )}

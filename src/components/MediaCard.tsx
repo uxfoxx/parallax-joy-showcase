@@ -83,7 +83,7 @@ const MediaCard = ({
             {!imgLoaded && <div className="absolute inset-0 bg-muted animate-pulse" />}
             <CurtainImage
               wrapperClassName={
-                imageInset ? "absolute inset-6 md:inset-8" : "absolute inset-0"
+                imageInset ? "absolute inset-3 sm:inset-6 md:inset-8" : "absolute inset-0"
               }
               wrapperStyle={{ width: "auto", height: "auto" }}
               src={srcTier === 0 ? cdnImg(image!, 600) : image!}

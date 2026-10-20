@@ -75,7 +75,7 @@ const ValueEntry = ({
       index % 2 === 0 ? "sm:pr-12" : "sm:pl-12 sm:border-l sm:border-border"
     } ${index > 0 ? "border-t border-border" : ""} ${index === 1 ? "sm:border-t-0" : ""}`}
   >
-    <p className="font-body text-[11px] font-semibold tracking-[0.24em] uppercase tabular-nums text-accent/60 transition-colors duration-300 group-hover:text-accent">
+    <p className="font-body text-[11px] font-semibold tracking-[0.24em] uppercase tabular-nums text-accent transition-colors duration-300 group-hover:text-accent">
       {String(index + 1).padStart(2, "0")}
     </p>
     <h4 className="mt-3 font-display text-xl lg:text-2xl font-bold text-foreground tracking-tight leading-snug transition-colors duration-300 group-hover:text-accent">
@@ -247,7 +247,7 @@ const CompanyPhilosophy = () => {
                   </div>
 
                   <div className="flex-1 pt-1.5">
-                    <p className="font-body text-[10px] font-semibold tracking-[0.24em] uppercase tabular-nums text-accent/70 mb-1">
+                    <p className="font-body text-[11px] font-semibold tracking-[0.24em] uppercase tabular-nums text-accent mb-1">
                       {String(i + 1).padStart(2, "0")} / {String(approachItems.length).padStart(2, "0")}
                     </p>
                     <h4 className="font-display text-base lg:text-lg font-semibold text-foreground tracking-tight leading-snug transition-colors duration-300 group-hover:text-accent">
@@ -300,7 +300,7 @@ const CompanyPhilosophy = () => {
           >
             Our Team <span className="text-gradient-gold">Values</span>
           </motion.h3>
-          <div className="grid sm:grid-cols-2 border-y border-border">
+          <div className="grid grid-cols-1 sm:grid-cols-2 border-y border-border">
             {coreValues.map((value, i) => (
               <ValueEntry key={value.title} value={value} index={i} />
             ))}

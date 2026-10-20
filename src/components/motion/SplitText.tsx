@@ -31,9 +31,23 @@ const tokenVariants: Variants = {
   }),
 };
 
+/** Each token's reveal mask. It clips vertically only (the words slide up into
+ *  view), so italic overhangs aren't cut off — they lost their last letter
+ *  ("partne|") — and word spacing is untouched. The padding/negative-margin
+ *  pair gives descenders room without moving the baseline. Browsers without
+ *  `overflow: clip` simply show the slide unmasked. */
+const MASK: CSSProperties = {
+  display: "inline-block",
+  overflowX: "visible",
+  overflowY: "clip",
+  paddingBottom: "0.12em",
+  marginBottom: "-0.12em",
+};
+
 /**
  * Word- or letter-level reveal driven by `whileInView`.
- * Content is `aria-label`ed so screen readers get the flat text.
+ * Screen readers get the flat text from a visually hidden copy; the animated
+ * tokens are aria-hidden. (aria-label isn't allowed on a plain span.)
  */
 const SplitText = ({
   text,
@@ -64,22 +78,18 @@ const SplitText = ({
     <Component
       className={className}
       style={style}
-      aria-label={text}
       variants={containerVariants}
       initial="hidden"
       whileInView="show"
       viewport={{ once: !retrigger, margin: "0px" }}
     >
+      <span className="sr-only">{text}</span>
       {tokens.map((token, i) => {
         if (/^\s+$/.test(token)) {
           return <span key={i} aria-hidden>{token}</span>;
         }
         return (
-          <span
-            key={i}
-            aria-hidden
-            style={{ display: "inline-block", overflow: "hidden" }}
-          >
+          <span key={i} aria-hidden style={MASK}>
             <motion.span
               variants={tokenVariants}
               custom={delay + i * stagger}

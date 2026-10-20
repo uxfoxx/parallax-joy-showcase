@@ -42,7 +42,7 @@ const BrandCard = ({ brand, prodCount, variant = "light", index = 0, columns = 3
       badge={
         <Badge
           variant="outline"
-          className="bg-background/80 backdrop-blur-sm font-body text-[10px] tracking-wider uppercase text-foreground border-border shadow-sm"
+          className="bg-background/80 backdrop-blur-sm font-body text-[11px] tracking-wider uppercase text-foreground border-border shadow-sm"
         >
           {prodCount} product{prodCount !== 1 ? "s" : ""}
         </Badge>

@@ -22,10 +22,19 @@
     --secondary-foreground: 140 30% 10%;
 
     --muted: 80 15% 94%;
-    --muted-foreground: 140 10% 45%;
+    /* 38% (was 45%): the old grey measured 4.38:1 on white, just under WCAG
+     * AA's 4.5:1 for body text, and it is used for most secondary copy. */
+    --muted-foreground: 140 12% 38%;
 
     --accent: 75 38% 45%;
     --accent-foreground: 140 30% 10%;
+    /* The brand olive is 2.98:1 on white — fine for fills and for text on the
+     * dark sections, unreadable as text on light ones. No single olive passes
+     * on both, so `text-accent` reads --accent-fg: this darker ink (≈6:1 on
+     * white) by default, switched back to the bright olive on dark surfaces
+     * (`.dark`, [data-navbar-theme="dark"], the navbar when it is dark). */
+    --accent-ink: 75 55% 27%;
+    --accent-fg: var(--accent-ink);
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -88,8 +97,24 @@
 }
 
 @layer base {
+  /* Dark surfaces get the bright olive back for accent text (see --accent-fg). */
+  .dark,
+  [data-navbar-theme="dark"] {
+    --accent-fg: var(--accent);
+  }
+  /* …and a light section nested inside a dark one gets the ink again. */
+  [data-navbar-theme="dark"] [data-navbar-theme="light"] {
+    --accent-fg: var(--accent-ink);
+  }
+
   * {
     @apply border-border;
+  }
+
+  /* Search fields have their own clear button; hide WebKit's duplicate. */
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
   }
 
   html {
@@ -159,6 +184,29 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+  /* A gradient is painted only inside the box, and italic glyphs lean past
+   * its right edge: the last letter was clipped ("partne|"). Pad the box and
+   * pull the margin back so the layout doesn't move. */
+  /* On dark sections the forest gradient is dark-on-dark (the hero highlight
+   * words — "import", "trusted", "makers" — nearly vanished): use the light
+   * stops there, and the dark ones again inside a light block. */
+  [data-navbar-theme="dark"] .text-gradient-gold {
+    background-image: linear-gradient(135deg, hsl(82 52% 58%), hsl(110 42% 60%) 50%, hsl(140 42% 58%));
+  }
+  [data-navbar-theme="dark"] [data-navbar-theme="light"] .text-gradient-gold {
+    background-image: linear-gradient(135deg, hsl(140 50% 20%), hsl(112 45% 24%) 50%, hsl(82 50% 28%));
+  }
+  /* Italic only: upright words don't overhang, and the negative margin would
+   * swallow their own word spacing (e.g. `mr-[0.25em]` → "Handpickedfor"). */
+  .italic.text-gradient-gold,
+  .italic .text-gradient-gold,
+  .italic.text-gradient-gold-dark,
+  .italic .text-gradient-gold-dark {
+    padding-inline-end: 0.14em;
+    margin-inline-end: -0.14em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   .glow-border {

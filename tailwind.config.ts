@@ -13,6 +13,12 @@ export default {
       },
     },
     extend: {
+      // `text-accent` uses the surface-aware olive (index.css --accent-fg) so
+      // accent copy stays readable on light and dark sections; `bg-accent`,
+      // borders and rings keep the brand olive.
+      textColor: {
+        accent: { DEFAULT: "hsl(var(--accent-fg))" },
+      },
       fontFamily: {
         display: ["Sora Variable", "Sora", "sans-serif"],
         body: ["Inter Variable", "Inter", "sans-serif"],

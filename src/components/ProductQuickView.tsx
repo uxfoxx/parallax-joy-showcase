@@ -61,7 +61,7 @@ const ProductQuickView = ({ product, open, onOpenChange }: ProductQuickViewProps
             {/* Top badges */}
             <div className="absolute top-4 left-4 right-4 flex items-start justify-between">
               {product.featured && (
-                <Badge className="bg-accent text-white font-body text-xs shadow-md">Featured</Badge>
+                <Badge className="bg-accent text-accent-foreground font-body text-xs shadow-md">Featured</Badge>
               )}
               <Badge variant="outline" className="bg-background/90 backdrop-blur-sm font-body text-xs text-foreground border-border shadow-sm ml-auto">
                 {product.category}

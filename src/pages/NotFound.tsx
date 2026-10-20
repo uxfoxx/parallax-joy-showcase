@@ -25,7 +25,7 @@ const NotFound = () => {
       <ImmersiveBackground />
       <Navbar />
 
-      <div
+      <main
         data-navbar-theme="dark"
         className="flex-1 flex items-center justify-center relative min-h-screen"
       >
@@ -141,24 +141,27 @@ const NotFound = () => {
             transition={{ delay: 0.55, duration: 0.5 }}
             className="flex flex-wrap gap-4 justify-center"
           >
-            <Link to="/">
-              <Button className="shine-sweep bg-primary-foreground text-forest-deep hover:bg-primary-foreground/90 font-body font-semibold rounded-lg px-8 h-12 text-base gap-2 border border-white/15">
+            <Button
+              asChild
+              className="shine-sweep bg-primary-foreground text-forest-deep hover:bg-primary-foreground/90 font-body font-semibold rounded-lg px-8 h-12 text-base gap-2 border border-white/15"
+            >
+              <Link to="/">
                 <Home className="w-4 h-4" />
                 Go Home
-              </Button>
-            </Link>
-            <button onClick={() => window.history.back()}>
-              <Button
-                variant="outline"
-                className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 font-body rounded-lg px-8 h-12 text-base gap-2 backdrop-blur-sm"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Go Back
-              </Button>
-            </button>
+              </Link>
+            </Button>
+            {/* bg-transparent: the outline variant's white fill hid the white label. */}
+            <Button
+              variant="outline"
+              onClick={() => window.history.back()}
+              className="bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground font-body rounded-lg px-8 h-12 text-base gap-2 backdrop-blur-sm"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Go Back
+            </Button>
           </motion.div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

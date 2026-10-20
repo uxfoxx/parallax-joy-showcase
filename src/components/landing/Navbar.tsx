@@ -1,16 +1,20 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import logoSvg from "@/assets/olive-mark.svg";
 import ProductsMegaMenu from "@/components/landing/ProductsMegaMenu";
-import { useCategories } from "@/lib/api";
+import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
+import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
+import { categorySlug } from "@/lib/categories";
+import { PHONE_DISPLAY, PHONE_TEL, whatsappHref, whatsappMessage } from "@/lib/contact";
 
 const links = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Products", href: "/products" },
+  { label: "Brands", href: "/brands" },
 ];
 
 const Navbar = () => {
@@ -18,7 +22,7 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const location = useLocation();
-  const { data: categories = [] } = useCategories();
+  const topCategories = useSuppliedCategories().slice(0, 6);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -35,6 +39,14 @@ const Navbar = () => {
   }, [mobileOpen]);
 
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
+
+  // While the full-screen menu is open the page behind it must not scroll.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [mobileOpen]);
 
   // Section-theme detection — deterministic hit-test at a fixed line just under
   // the navbar (rAF-throttled on scroll). The old IntersectionObserver picked a
@@ -72,7 +84,9 @@ const Navbar = () => {
   // `isDark` tracks the section underneath the navbar. The bar *matches* it —
   // dark section → near-black bar, light section → light bar — as a frosted
   // glass strip spanning edge-to-edge.
-  const isDark = theme === "dark";
+  // The bar goes dark under dark sections, and always while the menu is open
+  // (the menu itself is dark, and a light bar made its close button faint).
+  const isDark = theme === "dark" || mobileOpen;
 
   // NB: the dark-bar colour bakes its alpha INTO the arbitrary value
   // (`hsl(… / 0.75)`) — the `/75` opacity modifier does NOT work on an
@@ -90,17 +104,20 @@ const Navbar = () => {
 
   return (
     <>
-      <motion.nav
+      <motion.header
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+        // Accent text follows the bar: bright olive on the dark bar, the darker
+        // text-safe olive on the light one (see --accent-fg in index.css).
+        style={{ ["--accent-fg" as string]: isDark ? "var(--accent)" : "var(--accent-ink)" }}
         className={`fixed top-0 inset-x-0 z-50 backdrop-blur-xl backdrop-saturate-150 transition-colors duration-500 ${barBg}`}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-[1fr_auto_1fr] items-center h-16">
             {/* Left — logo */}
             <div className="flex items-center">
-              <Link to="/" className="group inline-flex items-center shrink-0">
+              <Link to="/" aria-label="Olive Foods home" className="group inline-flex items-center shrink-0">
                 <motion.img
                   src={logoSvg}
                   alt="Olive Foods"
@@ -115,7 +132,7 @@ const Navbar = () => {
             </div>
 
             {/* Center — links */}
-            <nav className="hidden md:flex items-center gap-9 justify-center">
+            <nav aria-label="Main" className="hidden md:flex items-center gap-9 justify-center">
               {links.map((link) => {
                 const isActive =
                   link.href === "/"
@@ -145,8 +162,10 @@ const Navbar = () => {
               })}
             </nav>
 
-            {/* Right — contact + mobile toggle */}
-            <div className="flex items-center justify-end gap-2">
+            {/* Right — contact + mobile toggle. col-start-3: on phones the centre
+                nav is display:none, so without it this cell slid into the middle
+                column and the menu button sat in the centre of the bar. */}
+            <div className="col-start-3 flex items-center justify-end gap-2">
               <Link
                 to="/contact"
                 className={`hidden md:inline-flex items-center h-9 px-4 rounded-md border font-body text-[12px] font-semibold uppercase tracking-[0.2em] transition-colors duration-300 ${
@@ -162,96 +181,105 @@ const Navbar = () => {
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setMobileOpen(!mobileOpen)}
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
-                className={`md:hidden w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-500 ${
+                aria-expanded={mobileOpen}
+                aria-controls="mobile-menu"
+                className={`md:hidden w-11 h-11 -mr-2 rounded-full flex items-center justify-center transition-colors duration-500 ${
                   isDark ? "text-primary-foreground hover:bg-white/10" : "text-foreground hover:bg-foreground/[0.06]"
                 }`}
               >
-                {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+                {mobileOpen ? <X size={22} /> : <Menu size={22} />}
               </motion.button>
             </div>
           </div>
         </div>
-      </motion.nav>
+      </motion.header>
 
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menu"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            onClick={(e) => { if (e.target === e.currentTarget) setMobileOpen(false); }}
-            role="button"
-            aria-label="Close menu"
-            className="fixed inset-0 z-40 bg-forest-deep/98 backdrop-blur-2xl flex flex-col items-center justify-center gap-8"
+            style={{ ["--accent-fg" as string]: "var(--accent)" }}
+            // Scrolls on short phones instead of cutting the menu off; the bar
+            // (z-50) stays on top with its close button.
+            className="fixed inset-0 z-[45] bg-forest-deep/[0.98] backdrop-blur-2xl overflow-y-auto overscroll-contain"
           >
-            {links.map((link, i) => (
-              <motion.div
-                key={link.label}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ delay: i * 0.1, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <Link
-                  to={link.href}
-                  className="font-display text-4xl font-bold text-primary-foreground hover:text-accent transition-colors duration-300"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {link.label}
-                </Link>
+            <nav aria-label="Menu" className="min-h-full flex flex-col justify-center gap-7 px-6 pt-24 pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
+              {links.map((link, i) => {
+                const active = link.href === "/" ? location.pathname === "/" : location.pathname.startsWith(link.href);
+                return (
+                  <motion.div
+                    key={link.label}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 16 }}
+                    transition={{ delay: i * 0.07, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <Link
+                      to={link.href}
+                      aria-current={active ? "page" : undefined}
+                      className={`font-display text-4xl font-bold transition-colors duration-300 ${active ? "text-accent" : "text-primary-foreground hover:text-accent"}`}
+                    >
+                      {link.label}
+                    </Link>
 
-                {/* Products sub-links (categories + browse) — hover doesn't
-                    exist on touch, so surface the shortcuts inline. */}
-                {link.label === "Products" && (
-                  <div className="mt-4 flex flex-col items-center gap-3">
-                    {categories.length > 0 && (
-                      <div className="flex flex-wrap justify-center gap-2 max-w-[19rem]">
-                        {categories.slice(0, 6).map((c) => (
+                    {/* Category shortcuts — hover menus don't exist on touch. */}
+                    {link.label === "Products" && topCategories.length > 0 && (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {topCategories.map((c) => (
                           <Link
-                            key={c.id}
-                            to={`/products?category=${encodeURIComponent(c.name)}`}
-                            onClick={() => setMobileOpen(false)}
-                            className="rounded-full border border-white/20 px-3 py-1 font-body text-xs text-primary-foreground/70 hover:border-accent/50 hover:text-accent transition-colors"
+                            key={c.name}
+                            to={`/categories/${categorySlug(c.name)}`}
+                            className="inline-flex items-center h-9 rounded-full border border-white/20 px-3.5 font-body text-sm text-primary-foreground/80 hover:border-accent/60 hover:text-accent transition-colors"
                           >
                             {c.name}
                           </Link>
                         ))}
+                        <Link
+                          to="/categories"
+                          className="inline-flex items-center h-9 px-2 font-body text-sm font-semibold text-accent hover:underline"
+                        >
+                          All categories
+                        </Link>
                       </div>
                     )}
-                    <div className="flex items-center gap-4">
-                      {[
-                        { label: "All", to: "/products" },
-                        { label: "Featured", to: "/products?featured=true" },
-                        { label: "Brands", to: "/brands" },
-                      ].map((o) => (
-                        <Link
-                          key={o.label}
-                          to={o.to}
-                          onClick={() => setMobileOpen(false)}
-                          className="font-body text-[11px] uppercase tracking-[0.2em] text-primary-foreground/55 hover:text-accent transition-colors"
-                        >
-                          {o.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            ))}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ delay: 0.4, duration: 0.4 }}
-              className="mt-8"
-            >
-              <Link to="/contact" onClick={() => setMobileOpen(false)}>
-                <Button className="bg-transparent text-white hover:bg-white/10 font-body font-semibold rounded-md px-10 py-6 text-lg border-2 border-white/70">
-                  Contact Us
+                  </motion.div>
+                );
+              })}
+
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                transition={{ delay: 0.32, duration: 0.4 }}
+                className="mt-4 grid grid-cols-2 gap-3"
+              >
+                <Button asChild className="col-span-2 h-12 bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold text-base rounded-md">
+                  <Link to="/contact">Contact us</Link>
                 </Button>
-              </Link>
-            </motion.div>
+                <a
+                  href={PHONE_TEL}
+                  className="inline-flex items-center justify-center gap-2 h-12 rounded-md border border-white/25 font-body text-sm font-medium text-primary-foreground hover:bg-white/10 transition-colors"
+                >
+                  <Phone className="w-4 h-4" /> Call
+                </a>
+                <a
+                  href={whatsappHref(whatsappMessage())}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 h-12 rounded-md border border-[#25D366]/50 font-body text-sm font-medium text-primary-foreground hover:bg-white/10 transition-colors"
+                >
+                  <WhatsAppIcon className="w-4 h-4 text-[#25D366]" /> WhatsApp
+                </a>
+                <p className="col-span-2 text-center font-body text-xs text-primary-foreground/60">{PHONE_DISPLAY}</p>
+              </motion.div>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>

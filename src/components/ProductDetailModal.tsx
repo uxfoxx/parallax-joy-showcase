@@ -128,7 +128,7 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
             </AnimatePresence>
 
             {allImages.length > 0 && (
-              <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-foreground/50 backdrop-blur-md text-background text-[10px] font-body opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-foreground/50 backdrop-blur-md text-background text-[11px] font-body opacity-0 group-hover:opacity-100 transition-opacity">
                 Zoom
               </div>
             )}
@@ -247,7 +247,7 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
             {/* Description */}
             {plainDesc && (
               <motion.div variants={fadeUp}>
-                <p className="font-body text-[10px] font-semibold tracking-[0.22em] uppercase text-accent/70 mb-2">
+                <p className="font-body text-[11px] font-semibold tracking-[0.22em] uppercase text-accent mb-2">
                   About this product
                 </p>
                 <p className="font-body text-sm text-muted-foreground leading-relaxed">

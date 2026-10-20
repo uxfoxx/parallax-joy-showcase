@@ -58,8 +58,9 @@ const BrandsPage = () => {
           />
 
           <div className="max-w-6xl mx-auto px-6 relative z-10">
+            <h2 className="sr-only">All brands</h2>
             {isLoading ? (
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-6 sm:gap-6">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="rounded-2xl bg-muted animate-pulse aspect-[4/5]" />
                 ))}
@@ -69,7 +70,7 @@ const BrandsPage = () => {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="grid sm:grid-cols-2 md:grid-cols-3 gap-6"
+                className="grid grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-6 sm:gap-6"
               >
                 {brands.map((brand, i) => (
                   <BrandCard

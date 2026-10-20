@@ -56,7 +56,7 @@ const FilterChip = ({ def }: { def: FilterDef }) => {
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
-            className={`flex items-center gap-1.5 py-1.5 font-body text-xs font-medium transition-colors ${
+            className={`flex items-center gap-1.5 h-9 sm:h-8 font-body text-[13px] sm:text-xs font-medium transition-colors ${
               isActive ? "pl-3 pr-2 hover:bg-accent/15" : "px-3 hover:text-accent"
             }`}
           >
@@ -85,7 +85,7 @@ const FilterChip = ({ def }: { def: FilterDef }) => {
                     <CommandItem key={opt.value} value={opt.label} onSelect={() => toggle(opt.value)}>
                       <span
                         className={`flex h-4 w-4 items-center justify-center rounded border transition-colors ${
-                          checked ? "bg-accent border-accent text-white" : "border-muted-foreground/40"
+                          checked ? "bg-accent border-accent text-accent-foreground" : "border-muted-foreground/40"
                         }`}
                       >
                         {checked && <Check className="h-3 w-3" strokeWidth={3} />}
@@ -103,7 +103,7 @@ const FilterChip = ({ def }: { def: FilterDef }) => {
                 def.onApply(pending);
                 setOpen(false);
               }}
-              className="w-full h-9 rounded-md bg-accent text-white font-body text-sm font-semibold hover:bg-accent/90 transition-colors"
+              className="w-full h-9 rounded-md bg-accent text-accent-foreground font-body text-sm font-semibold hover:bg-accent/90 transition-colors"
             >
               Apply
             </button>
@@ -115,7 +115,7 @@ const FilterChip = ({ def }: { def: FilterDef }) => {
         <button
           aria-label={`Remove ${def.label} filter`}
           onClick={() => def.onApply([])}
-          className="px-2 py-1.5 text-accent/70 hover:text-accent hover:bg-accent/15 transition-colors"
+          className="flex items-center justify-center w-9 h-9 sm:w-8 sm:h-8 text-accent/80 hover:text-accent hover:bg-accent/15 transition-colors"
         >
           <X className="w-3.5 h-3.5" />
         </button>

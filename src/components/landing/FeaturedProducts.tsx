@@ -193,7 +193,7 @@ const FeaturedProducts = () => {
               <span className="text-foreground font-semibold">
                 {String(current + 1).padStart(2, "0")}
               </span>
-              <span className="mx-2 text-muted-foreground/40">/</span>
+              <span className="mx-2 text-muted-foreground">/</span>
               <span className="text-muted-foreground">
                 {String(count).padStart(2, "0")}
               </span>
@@ -201,6 +201,7 @@ const FeaturedProducts = () => {
           )}
 
           <Carousel
+            aria-label="Featured products"
             setApi={setApi}
             opts={{ align: "start", loop: true }}
             className="w-full cursor-grab active:cursor-grabbing"
@@ -217,7 +218,7 @@ const FeaturedProducts = () => {
 
         {/* Progress strip — per-slide track, active fills 0→100% over autoplay. */}
         {count > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-8">
+          <div className="flex items-center justify-center gap-1.5 mt-6">
             {Array.from({ length: count }).map((_, i) => {
               const isActive = i === current;
               const isAutoplaying = isActive && !hovered && !userInteracted;
@@ -229,21 +230,25 @@ const FeaturedProducts = () => {
                     setUserInteracted(true);
                   }}
                   aria-label={`Go to slide ${i + 1}`}
-                  className={`relative h-[3px] rounded-full overflow-hidden transition-all duration-300 ${
-                    isActive
-                      ? "w-12 bg-border"
-                      : "w-6 bg-border/70 hover:bg-foreground/30"
-                  }`}
+                  aria-current={isActive ? "true" : undefined}
+                  // 24px-tall hit area around the 3px bar (it was a 3px target).
+                  className="group flex items-center h-6"
                 >
-                  {isActive && (
-                    <span
-                      key={`fill-${current}-${userInteracted}`}
-                      className={`absolute inset-0 bg-primary rounded-full ${
-                        isAutoplaying ? "animate-progress-bar" : ""
-                      }`}
-                      style={{ transformOrigin: "left" }}
-                    />
-                  )}
+                  <span
+                    className={`relative block h-[3px] rounded-full overflow-hidden transition-all duration-300 ${
+                      isActive ? "w-12 bg-border" : "w-6 bg-border group-hover:bg-foreground/30"
+                    }`}
+                  >
+                    {isActive && (
+                      <span
+                        key={`fill-${current}-${userInteracted}`}
+                        className={`absolute inset-0 bg-primary rounded-full ${
+                          isAutoplaying ? "animate-progress-bar" : ""
+                        }`}
+                        style={{ transformOrigin: "left" }}
+                      />
+                    )}
+                  </span>
                 </button>
               );
             })}
@@ -259,12 +264,12 @@ const FeaturedProducts = () => {
           className="text-center mt-12"
         >
           <MagneticButton>
-            <Link to="/products">
-              <Button variant="brand" size="pill" className="font-body group">
+            <Button asChild variant="brand" size="pill" className="font-body group">
+              <Link to="/products">
                 Browse Products
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </MagneticButton>
         </motion.div>
       </div>

@@ -392,7 +392,7 @@ const LocationsSection = () => {
                 </span>
                 {status.label}
               </div>
-              <span className="font-body text-[10.5px] tracking-[0.28em] uppercase text-primary-foreground/40">
+              <span className="hidden sm:inline font-body text-[11px] tracking-[0.24em] uppercase text-primary-foreground/60">
                 Local · UTC+5:30
               </span>
             </div>
@@ -468,13 +468,13 @@ const LocationsSection = () => {
             </div>
 
             {/* CTA */}
-            <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="inline-block">
-              <Button variant="hero" size="pill" className="font-body group">
+            <Button asChild variant="hero" size="pill" className="font-body group">
+              <a href={MAPS_URL} target="_blank" rel="noopener noreferrer">
                 <Navigation className="w-4 h-4 mr-1" />
                 Get Directions
                 <ArrowUpRight className="ml-1 w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Button>
-            </a>
+              </a>
+            </Button>
           </motion.div>
 
           {/* ── RIGHT: Map card with overlay pin ── */}
@@ -541,17 +541,18 @@ const LocationsSection = () => {
 
             {/* Bottom-left coordinates chip + bottom-right open-in-maps link */}
             <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-3">
-              <div className="font-body text-[10.5px] tracking-[0.28em] uppercase text-primary-foreground/65 leading-tight">
+              {/* Dark backing: these sat as light text on light map tiles. */}
+              <div className="hidden sm:block rounded-lg bg-forest-deep/80 backdrop-blur-md px-3 py-2 font-body text-[11px] tracking-[0.22em] uppercase text-primary-foreground/85 leading-tight">
                 <div>06°55′N · 79°51′E</div>
-                <div className="text-primary-foreground/40">Colombo · Western Province</div>
+                <div className="text-primary-foreground/65">Colombo · Western Province</div>
               </div>
               <a
                 href={MAPS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-primary-foreground/[0.08] backdrop-blur-md border border-primary-foreground/15 hover:bg-primary-foreground/[0.14] transition-colors"
+                className="ml-auto inline-flex items-center gap-1.5 px-3.5 h-10 rounded-full bg-forest-deep/85 backdrop-blur-md border border-primary-foreground/15 hover:bg-forest-deep transition-colors"
               >
-                <span className="font-body text-[11px] font-semibold text-primary-foreground/95">
+                <span className="font-body text-xs font-semibold text-primary-foreground">
                   Open in Maps
                 </span>
                 <ArrowUpRight className="w-3.5 h-3.5 text-primary-foreground/95" />

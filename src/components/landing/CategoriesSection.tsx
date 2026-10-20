@@ -1,7 +1,10 @@
 import { motion, useMotionValue, useTransform, useSpring, useScroll } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useCategories } from "@/lib/api";
+import { useCategories, useProducts } from "@/lib/api";
+import { categorySlug } from "@/lib/categories";
+import { productCategories } from "@/hooks/useSuppliedCategories";
+import { isHouseBrand, listOf } from "@/lib/brands";
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
 import SplitText from "@/components/motion/SplitText";
@@ -30,7 +33,7 @@ const CategoryRow = ({
       onMouseLeave={() => setHovered(false)}
       className="relative group"
     >
-      <Link to={`/products?category=${encodeURIComponent(name)}`}>
+      <Link to={`/categories/${categorySlug(name)}`}>
         {/* Hover background */}
         <motion.div
           animate={{ opacity: hovered ? 1 : 0 }}
@@ -48,6 +51,7 @@ const CategoryRow = ({
         <div className="relative flex items-center gap-5 md:gap-8 px-5 md:px-8 py-5 md:py-7">
           {/* Number */}
           <motion.span
+            aria-hidden
             animate={{ color: hovered ? "hsl(var(--foreground) / 0.14)" : "hsl(var(--foreground) / 0.07)" }}
             transition={{ duration: 0.25 }}
             className="font-display text-5xl md:text-6xl lg:text-7xl font-black select-none leading-none w-16 md:w-20 shrink-0 tabular-nums"
@@ -65,7 +69,7 @@ const CategoryRow = ({
               {name}
             </motion.h3>
             <motion.p
-              animate={{ opacity: hovered ? 1 : 0.55, y: hovered ? 0 : 3 }}
+              animate={{ y: hovered ? 0 : 2 }}
               transition={{ duration: 0.3 }}
               className="font-body text-sm text-muted-foreground mt-1.5 leading-relaxed max-w-lg"
             >
@@ -109,6 +113,16 @@ const CategoriesSection = () => {
     .sort((a, b) => ((a as any).homepage_order ?? 0) - ((b as any).homepage_order ?? 0));
   // Falls back to the first 5 categories (alphabetical) until curated in Admin → Categories.
   const categories = (featured.length > 0 ? featured : allCategories).slice(0, 5);
+
+  // Real facts per row (product count + brands) instead of one stock line.
+  const { data: products = [] } = useProducts();
+  const summary = (name: string) => {
+    const inCat = products.filter((p) => productCategories(p).includes(name));
+    const brands = [...new Set(inCat.map((p) => p.brands?.name).filter((b): b is string => !!b && !isHouseBrand(b)))];
+    if (!inCat.length) return "";
+    const count = `${inCat.length} product${inCat.length === 1 ? "" : "s"}`;
+    return brands.length ? `${count} from ${listOf(brands.slice(0, 3))}${brands.length > 3 ? " and more" : ""}` : count;
+  };
 
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -196,7 +210,7 @@ const CategoriesSection = () => {
             <CategoryRow
               key={cat.id}
               name={cat.name}
-              desc={cat.description || "Premium imported products from global suppliers."}
+              desc={summary(cat.name)}
               index={i}
             />
           ))}
@@ -211,12 +225,12 @@ const CategoriesSection = () => {
           className="mt-12"
         >
           <MagneticButton>
-            <Link to="/products">
-              <Button variant="brand" size="pill" className="font-body group">
-                View All Products
+            <Button asChild variant="brand" size="pill" className="font-body group">
+              <Link to="/categories">
+                All categories
                 <ArrowRight className="ml-2 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </MagneticButton>
         </motion.div>
       </div>

@@ -47,7 +47,7 @@ const origins: Origin[] = [
   {
     key: "belgium", country: "Belgium", flag: "🇧🇪",
     region: "Western Europe",
-    brands: ["BON VEGATO", "HUNGRITOS"],
+    brands: ["Damaco", "DIRA"],
     pos: { x: 524, y: 118 },
   },
   {
@@ -65,37 +65,37 @@ const origins: Origin[] = [
   {
     key: "india", country: "India", flag: "🇮🇳",
     region: "South Asia",
-    brands: ["AZIZAA"],
+    brands: ["Azizaa", "Hungritos", "Mavee's", "Bon Vegato"],
     pos: { x: 717, y: 189 },
   },
   {
     key: "china", country: "China", flag: "🇨🇳",
     region: "East Asia",
-    brands: ["Wai Wai", "Fletcher"],
+    brands: ["Acroyali", "Fletcher"],
     pos: { x: 792, y: 153 },
   },
   {
     key: "thailand", country: "Thailand", flag: "🇹🇭",
     region: "South-East Asia",
-    brands: ["Hungritos"],
+    brands: ["Mae Ploy", "Tiparos", "Wai Wai", "Mahachai"],
     pos: { x: 778, y: 208 },
   },
   {
     key: "singapore", country: "Singapore", flag: "🇸🇬",
     region: "South-East Asia",
-    brands: ["BON VEGATO", "ABC"],
+    brands: [],
     pos: { x: 786, y: 247 },
   },
   {
     key: "australia", country: "Australia", flag: "🇦🇺",
     region: "Oceania",
-    brands: ["WAGU"],
+    brands: [],
     pos: { x: 875, y: 319 },
   },
   {
     key: "brazil", country: "Brazil", flag: "🇧🇷",
     region: "South America",
-    brands: ["Imported"],
+    brands: [],
     pos: { x: 470, y: 248 },
   },
 ];
@@ -312,7 +312,7 @@ const StatsSection = () => {
             >
               Every origin is a relationship, built over thirty-plus
               years between our team and the producers we source from.
-              Hover any country to see what we bring in.
+              Select a country to see the brands we bring in from it.
             </motion.p>
           </div>
 
@@ -373,7 +373,7 @@ const StatsSection = () => {
             className="relative"
           >
             {/* Top-left coordinate label — adds editorial detail. */}
-            <div className="absolute -top-2 left-0 font-body text-[10px] tracking-[0.3em] uppercase text-muted-foreground/70 select-none pointer-events-none">
+            <div className="absolute -top-2 left-0 font-body text-[11px] tracking-[0.3em] uppercase text-muted-foreground select-none pointer-events-none">
               06°55′N · 79°51′E · Colombo
             </div>
 
@@ -445,8 +445,9 @@ const StatsSection = () => {
             <svg
               viewBox="430 70 510 320"
               className="w-full h-auto mt-6"
-              role="img"
-              aria-label="Global sourcing map: eight origin countries connected to Sri Lanka"
+              // group, not img: the country pins inside are focusable buttons.
+              role="group"
+              aria-label={`Sourcing map: ${origins.length} origin countries connected to Sri Lanka`}
             >
               <defs>
                 {/* Gold glow for the active arc */}
@@ -582,6 +583,7 @@ const StatsSection = () => {
                     <motion.circle
                       cx={o.pos.x}
                       cy={o.pos.y}
+                      initial={{ r: 3 }}
                       animate={{ r: isActive ? 5.5 : 3 }}
                       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                       fill={
@@ -649,10 +651,10 @@ const StatsSection = () => {
                 >
                   {/* Region + index */}
                   <div className="flex items-center justify-between mb-4">
-                    <p className="font-body text-[10px] tracking-[0.32em] uppercase text-muted-foreground">
+                    <p className="font-body text-[11px] tracking-[0.32em] uppercase text-muted-foreground">
                       {current.region}
                     </p>
-                    <p className="font-body text-[10px] tracking-[0.22em] uppercase text-muted-foreground tabular-nums">
+                    <p className="font-body text-[11px] tracking-[0.22em] uppercase text-muted-foreground tabular-nums">
                       {String(active + 1).padStart(2, "0")} / {String(origins.length).padStart(2, "0")}
                     </p>
                   </div>
@@ -680,20 +682,24 @@ const StatsSection = () => {
                     <CountrySilhouette shapeKey={current.key} reduced={reduced} />
                   </div>
 
-                  {/* Brands sourced from this country */}
-                  <p className="font-body text-[10px] tracking-[0.32em] uppercase text-muted-foreground mb-3">
-                    Brands sourced
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {current.brands.map((b) => (
-                      <span
-                        key={b}
-                        className="rounded-full border border-border bg-background/40 px-2.5 py-1 font-body text-[11px] text-muted-foreground"
-                      >
-                        {b}
-                      </span>
-                    ))}
-                  </div>
+                  {/* Brands sourced from this country — only when we can name them. */}
+                  {current.brands.length > 0 && (
+                    <>
+                      <p className="font-body text-[11px] tracking-[0.28em] uppercase text-muted-foreground mb-3">
+                        Brands sourced
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {current.brands.map((b) => (
+                          <span
+                            key={b}
+                            className="rounded-full border border-border bg-background/40 px-2.5 py-1 font-body text-xs text-foreground/80"
+                          >
+                            {b}
+                          </span>
+                        ))}
+                      </div>
+                    </>
+                  )}
 
                 </motion.div>
               </AnimatePresence>

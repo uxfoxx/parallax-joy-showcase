@@ -164,7 +164,7 @@ const WhoWeServe = () => {
                     />
                   )}
                   <span className="flex items-center gap-3">
-                    <span className="font-display text-[11px] tabular-nums tracking-[0.22em] text-muted-foreground/70">
+                    <span className="font-display text-[11px] tabular-nums tracking-[0.22em] text-muted-foreground">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span className="font-body text-[15px] font-medium tracking-tight">
@@ -173,7 +173,7 @@ const WhoWeServe = () => {
                   </span>
                   <s.icon
                     className={`w-4 h-4 transition-colors ${
-                      isActive ? "text-primary" : "text-muted-foreground/60 group-hover:text-foreground"
+                      isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
                     }`}
                     strokeWidth={1.7}
                   />
@@ -201,7 +201,7 @@ const WhoWeServe = () => {
             className="relative"
           >
             <div className="flex items-center justify-between mb-6">
-              <span className="font-display text-[44px] lg:text-[56px] font-black leading-none text-primary/15 tabular-nums">
+              <span aria-hidden className="font-display text-[44px] lg:text-[56px] font-black leading-none text-primary/15 tabular-nums">
                 {String(active + 1).padStart(2, "0")}
               </span>
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -277,6 +277,7 @@ const AboutPage = () => {
       <Navbar />
       <FloatingWhatsApp />
 
+      <main>
       <PageHero
         eyebrow="Olive Foods / About"
         title={<>Sri Lanka's <span className="text-gradient-gold italic">trusted</span> import partner.</>}
@@ -358,7 +359,7 @@ const AboutPage = () => {
               <h3 className="font-display text-2xl font-bold text-foreground mb-5">Olive Foods at a glance</h3>
               <dl className="divide-y divide-border border-y border-border font-body text-sm">
                 {glance.map(([label, value]) => (
-                  <div key={label} className="grid sm:grid-cols-[180px_1fr] gap-1 sm:gap-6 py-3">
+                  <div key={label} className="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-1 sm:gap-6 py-3">
                     <dt className="text-muted-foreground">{label}</dt>
                     <dd className="text-foreground">{value}</dd>
                   </div>
@@ -582,7 +583,7 @@ const AboutPage = () => {
             </motion.h2>
             <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="font-body text-muted-foreground text-lg leading-relaxed">Tell us what your operation needs, single venue or national chain. We'd like to understand before we quote a price.</motion.p>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-wrap gap-4 justify-center">
-              <Link to="/contact"><Button className="shine-sweep bg-accent text-white hover:bg-accent/90 font-body font-semibold rounded-lg px-8 h-12 text-base">Contact Us</Button></Link>
+              <Link to="/contact"><Button className="shine-sweep bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold rounded-lg px-8 h-12 text-base">Contact Us</Button></Link>
               <Link to="/products"><Button variant="outline" className="border-border text-foreground hover:bg-foreground/5 font-body rounded-lg px-8 h-12 text-base">Explore Products</Button></Link>
             </motion.div>
           </div>
@@ -590,9 +591,13 @@ const AboutPage = () => {
       </div>
 
       <SectionTransition />
+      </main>
+
 
       <div data-navbar-theme="dark">
+
         <Footer />
+
       </div>
     </div>
   );

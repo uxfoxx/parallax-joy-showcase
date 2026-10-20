@@ -55,7 +55,7 @@ const LogoStrip = () => {
                   {inner}
                 </a>
               ) : (
-                <span key={logo.id} aria-label={logo.name} className={tileClass}>
+                <span key={logo.id} className={tileClass}>
                   {inner}
                 </span>
               );

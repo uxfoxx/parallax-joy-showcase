@@ -110,7 +110,7 @@ const SectorPage = () => {
             <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-6">
               What {sector.audience} need from a supplier
             </h2>
-            <div className="grid sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {sector.needs.map((n) => (
                 <div key={n.title} className="rounded-xl border border-border bg-card p-5">
                   <p className="font-display font-semibold text-foreground flex items-start gap-2">
@@ -147,7 +147,7 @@ const SectorPage = () => {
               </Link>
             </div>
             {isLoading ? (
-              <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-6 sm:gap-4">
                 {[...Array(8)].map((_, i) => (
                   <div key={i} className="rounded-xl bg-muted animate-pulse aspect-[4/5]" />
                 ))}
@@ -157,7 +157,7 @@ const SectorPage = () => {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3"
+                className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-6 sm:gap-4"
               >
                 {showcase.map((product, i) => (
                   <ProductCard key={product.id} product={product} index={i} columns={4} />
