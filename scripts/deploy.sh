@@ -85,6 +85,18 @@ rsync -az -e "$RSYNC_E" \
 echo "▶  Installing server runtime (sirv)…"
 "${SSH[@]}" "${NVM} cd ${DEPLOY_PATH}/server && npm ci --omit=dev --silent"
 
+echo "▶  Syncing the admin analytics service…"
+# Code only — its keys (.secrets) and cache (.data) never travel with it.
+rsync -az --delete --exclude ".secrets/" --exclude ".data/" --exclude "node_modules/" -e "$RSYNC_E" \
+  "$ROOT/deploy/insights/" "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/insights/"
+"${SSH[@]}" "mkdir -p ${DEPLOY_PATH}/shared/insights/secrets ${DEPLOY_PATH}/shared/insights/data && chmod 700 ${DEPLOY_PATH}/shared/insights ${DEPLOY_PATH}/shared/insights/secrets"
+# The keys exist only on the machine that set them up. Deploying from anywhere
+# else simply keeps the server's copies (no --delete).
+if [[ -d "$ROOT/deploy/insights/.secrets" ]]; then
+  rsync -az --chmod=F600 -e "$RSYNC_E" \
+    "$ROOT/deploy/insights/.secrets/" "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/shared/insights/secrets/"
+fi
+
 echo "▶  Keeping recent assets reachable…"
 # Search engines often render a page well after fetching its HTML. If this
 # deploy deleted the JavaScript/CSS that older HTML references, that render
@@ -103,7 +115,8 @@ echo "▶  Activating release…"
 echo "▶  Reloading ${APP_NAME}…"
 # sirv builds its file manifest at startup, so the symlink flip alone would keep
 # serving the previous release's file list. The reload is mandatory, not tidiness.
-"${SSH[@]}" "${NVM} cd ${DEPLOY_PATH} && (pm2 reload ${APP_NAME} --update-env || pm2 start ecosystem.config.cjs) && pm2 save --force" >/dev/null
+# startOrReload also starts/restarts olivefoods-insights from the same file.
+"${SSH[@]}" "${NVM} cd ${DEPLOY_PATH} && pm2 startOrReload ecosystem.config.cjs --update-env && pm2 save --force" >/dev/null
 
 echo "▶  Applying nginx config…"
 "${SSH[@]}" "sudo /usr/local/sbin/reload-site-nginx ${APP_NAME}"

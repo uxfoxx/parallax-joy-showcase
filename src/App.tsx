@@ -37,6 +37,7 @@ const AdminFeatured = lazy(() => import("./pages/admin/AdminFeatured.tsx"));
 const AdminSubmissions = lazy(() => import("./pages/admin/AdminSubmissions.tsx"));
 const AdminPartners = lazy(() => import("./pages/admin/AdminPartners.tsx"));
 const AdminBusinessProfiles = lazy(() => import("./pages/admin/AdminBusinessProfiles.tsx"));
+const AdminAnalytics = lazy(() => import("./pages/admin/AdminAnalytics.tsx"));
 
 const RouteFallback = () => (
   <div className="min-h-screen flex items-center justify-center font-body text-sm text-muted-foreground">Loading…</div>
@@ -123,6 +124,7 @@ const AppRoutes = () => {
                 <Route path="business-profiles" element={<AdminBusinessProfiles />} />
                 <Route path="featured" element={<AdminFeatured />} />
                 <Route path="submissions" element={<AdminSubmissions />} />
+                <Route path="analytics" element={<AdminAnalytics />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

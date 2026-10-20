@@ -39,3 +39,8 @@ deploy/server/current
 
 # SEO build intermediates (scripts/seo)
 .seo-cache/
+
+# Admin analytics service (deploy/insights): keys and caches, never committed
+deploy/insights/.secrets/
+deploy/insights/.data/
+deploy/insights/node_modules/

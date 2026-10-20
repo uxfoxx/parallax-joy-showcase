@@ -1,0 +1,9 @@
+{
+  "name": "olivefoods-insights",
+  "private": true,
+  "type": "module",
+  "description": "Admin analytics data service for olivefoods.lk (GA4, Search Console, Clarity, Bing, PageSpeed). No dependencies; see server.mjs.",
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}
