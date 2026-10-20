@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus, Pencil, Trash2, Search, Home } from "lucide-react";
+import { AdminPageTitle } from "@/components/admin/AdminPageTitle";
 import { toast } from "sonner";
 import XlsxSyncBar from "@/components/admin/XlsxSyncBar";
 import type { SheetColumn } from "@/lib/xlsxSheet";
@@ -87,8 +88,8 @@ const AdminCategories = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl font-bold text-foreground">Categories</h1>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <AdminPageTitle />
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button onClick={openCreate} className="gap-2 font-body"><Plus className="w-4 h-4" /> Add Category</Button>

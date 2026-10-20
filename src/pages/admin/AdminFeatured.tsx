@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Star, Package, ExternalLink } from "lucide-react";
+import { AdminPageTitle } from "@/components/admin/AdminPageTitle";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -78,7 +79,7 @@ const AdminFeatured = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-bold text-foreground">Product Showcase</h1>
+      <AdminPageTitle />
 
       <Tabs defaultValue="featured" className="space-y-4">
         <TabsList className="font-body">

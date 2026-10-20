@@ -55,14 +55,15 @@
     --gold-light: 75 40% 60%;
     --gold-deep: 75 50% 32%;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Admin sidebar (the only Sidebar on the site): brand forest with olive accents. */
+    --sidebar-background: 150 40% 8%;
+    --sidebar-foreground: 60 15% 88%;
+    --sidebar-primary: 75 40% 60%;
+    --sidebar-primary-foreground: 150 40% 8%;
+    --sidebar-accent: 150 30% 13%;
+    --sidebar-accent-foreground: 60 20% 97%;
+    --sidebar-border: 150 25% 15%;
+    --sidebar-ring: 75 40% 60%;
   }
 
   .dark {
@@ -394,4 +395,33 @@
   .animate-gradient {
     animation: none !important;
   }
+}
+
+/* ─── Admin panel ───────────────────────────────────────────────────────────
+   Scoped to AdminLayout's .admin-shell so the public site is untouched. Gives
+   every admin table (shadcn <Table>) the same calm header, row hover and
+   numerals without editing each page. */
+.admin-shell table thead tr {
+  background: hsl(var(--muted) / 0.6);
+}
+.admin-shell table thead tr:hover {
+  background: hsl(var(--muted) / 0.6);
+}
+.admin-shell table thead th {
+  height: 2.5rem;
+  font-family: "Inter Variable", system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+.admin-shell table tbody tr {
+  transition: background-color 0.15s ease;
+}
+.admin-shell table tbody tr:hover {
+  background: hsl(var(--primary) / 0.035);
+}
+.admin-shell table td {
+  font-variant-numeric: tabular-nums;
 }
