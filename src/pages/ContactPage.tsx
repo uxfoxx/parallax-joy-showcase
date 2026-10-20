@@ -157,6 +157,7 @@ const ContactPage = () => {
             <div className="grid lg:grid-cols-[1.2fr_1fr] gap-6 lg:gap-20">
               {/* Form */}
               <motion.form
+                data-clarity-mask="true"
                 onSubmit={handleSubmit}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}

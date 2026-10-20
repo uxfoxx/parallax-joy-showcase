@@ -45,6 +45,7 @@ import ScrollProgressBar from "@/components/ScrollProgressBar";
 import { ProductModalProvider } from "@/lib/productModal";
 import ProductDetailModal from "@/components/ProductDetailModal";
 import { trackPageView } from "@/lib/analytics";
+import AnalyticsConsent from "@/components/AnalyticsConsent";
 
 /* Cache responses for 5 minutes so navigating between pages doesn't refetch
  * and flash empty/loading states (the visitor's "have to reload twice for
@@ -84,6 +85,7 @@ const AppRoutes = () => {
     <>
       <ScrollProgressBar />
       <ProductDetailModal />
+      <AnalyticsConsent />
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={location.pathname}
