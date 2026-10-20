@@ -1,6 +1,7 @@
 import { useLocation, useMatch } from "react-router-dom";
 import { useProducts } from "@/lib/api";
 import { SITE_URL } from "@/components/Seo";
+import { whatsappHref } from "@/lib/contact";
 
 /** Official WhatsApp glyph (phone-receiver inside a speech bubble). */
 export const WhatsAppIcon =({ className = "" }: { className?: string }) => (
@@ -38,7 +39,7 @@ const FloatingWhatsApp = ({ hideOnMobile = false }: { hideOnMobile?: boolean }) 
       className={`fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-4 sm:right-6 z-40 print:hidden ${hideOnMobile ? "max-md:hidden" : ""}`}
     >
     <a
-      href={`https://wa.me/94112071717?text=${encodeURIComponent(message)}`}
+      href={whatsappHref(message)}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"

@@ -6,7 +6,9 @@ import { SITE_URL } from "@/components/Seo";
 
 export const PHONE_DISPLAY = "+94 11 207 1717";
 export const PHONE_TEL = "tel:+94112071717";
-export const WHATSAPP_NUMBER = "94112071717";
+/** WhatsApp is a mobile number, separate from the office landline above. */
+export const WHATSAPP_NUMBER = "94773300700";
+export const WHATSAPP_DISPLAY = "+94 77 330 0700";
 
 /** What a visitor is enquiring about: one product, a whole category, or
  *  supply for a buyer sector (hotels, restaurants…). */

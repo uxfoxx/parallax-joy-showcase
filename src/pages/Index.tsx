@@ -85,7 +85,7 @@ const Index = () => {
           <OurPartnersHexagon />
         </div>
         <SectionTransition />
-        <div data-navbar-theme="dark">
+        <div data-navbar-theme="light">
           <LocationsSection />
         </div>
         <SectionTransition />
