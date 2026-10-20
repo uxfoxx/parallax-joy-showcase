@@ -171,6 +171,21 @@ const LocationsSection = () => {
   const status = openStatus(now.day, now.hour);
   const shown = reduced || mapInView;
 
+  // The map ignores the pointer until it's clicked, so scrolling over it scrolls
+  // the page and Google never shows its "use ctrl + scroll to zoom" overlay (or
+  // the "use two fingers" one on phones). Desktop: click to drag/zoom; it lets
+  // go again when the pointer leaves. Touch screens: it stays a static map
+  // (Directions and "Open in Google Maps" cover the rest).
+  const [mapActive, setMapActive] = useState(false);
+  const [finePointer, setFinePointer] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const update = () => setFinePointer(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
   return (
     <section id="find-us" aria-labelledby="find-us-title" className="relative isolate overflow-hidden bg-[hsl(150_40%_5%)] lg:flex lg:min-h-[820px] lg:flex-col lg:justify-center lg:py-20">
       {/* ── Heading ── */}
@@ -196,7 +211,7 @@ const LocationsSection = () => {
       </div>
 
       {/* ── Map: a band on phones, the whole section from lg ── */}
-      <div ref={mapRef} className="relative h-[460px] sm:h-[540px] lg:absolute lg:inset-0 lg:z-0 lg:h-auto">
+      <div ref={mapRef} onPointerLeave={() => setMapActive(false)} className="group/map relative h-[460px] sm:h-[540px] lg:absolute lg:inset-0 lg:z-0 lg:h-auto">
         <motion.div
           className="absolute inset-0 bg-[hsl(150_30%_9%)]"
           initial={false}
@@ -214,9 +229,26 @@ const LocationsSection = () => {
             referrerPolicy="no-referrer-when-downgrade"
             allowFullScreen
             className="absolute inset-0 h-full w-full border-0"
-            style={{ filter: "invert(0.9) hue-rotate(180deg) saturate(0.9) brightness(0.98) contrast(0.92)" }}
+            style={{
+              filter: "invert(0.9) hue-rotate(180deg) saturate(0.9) brightness(0.98) contrast(0.92)",
+              pointerEvents: mapActive ? "auto" : "none",
+            }}
           />
+          {finePointer && !mapActive && (
+            <button
+              type="button"
+              onClick={() => setMapActive(true)}
+              aria-label="Use the map: drag to move, scroll to zoom"
+              className="absolute inset-0 cursor-grab"
+            />
+          )}
         </motion.div>
+        {/* Hint, desktop only, while the map is idle and hovered. */}
+        {finePointer && !mapActive && (
+          <span className="pointer-events-none absolute bottom-16 left-1/2 z-10 -translate-x-1/2 rounded-full border border-primary-foreground/10 bg-[hsl(150_40%_7%/0.8)] px-3 py-1.5 font-body text-[11px] font-medium text-primary-foreground/80 opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover/map:opacity-100">
+            Click the map to move around
+          </span>
+        )}
 
         {/* Washes for legibility. They stop short of the bottom edge, where
             Google's logo and attribution live. */}

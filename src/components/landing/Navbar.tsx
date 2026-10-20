@@ -62,7 +62,9 @@ const Navbar = () => {
       for (const s of sections) {
         const r = s.getBoundingClientRect();
         if (r.top <= LINE && r.bottom > LINE) {
-          const t = s.getAttribute("data-navbar-theme");
+          // A section can ask for a bar that differs from its own content theme
+          // (the hero is light inside but wants the dark bar on top of it).
+          const t = s.getAttribute("data-navbar-bar") ?? s.getAttribute("data-navbar-theme");
           if (t === "light" || t === "dark") setTheme((prev) => (prev === t ? prev : t));
           break;
         }
