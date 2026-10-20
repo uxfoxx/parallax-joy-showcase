@@ -1,13 +1,16 @@
-import { useState, useEffect } from "react";
-import { Menu, X, Phone } from "lucide-react";
+import { useState, useEffect, useMemo, type FormEvent } from "react";
+import { Menu, X, Phone, Search, ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import logoSvg from "@/assets/olive-mark.svg";
 import ProductsMegaMenu from "@/components/landing/ProductsMegaMenu";
 import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
 import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
 import { categorySlug } from "@/lib/categories";
+import { useProducts } from "@/lib/api";
+import { searchProducts } from "@/lib/products";
+import { cdnImg, fallbackToOriginal } from "@/lib/img";
 import { PHONE_DISPLAY, PHONE_TEL, whatsappHref, whatsappMessage } from "@/lib/contact";
 
 const links = [
@@ -22,7 +25,20 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const location = useLocation();
-  const topCategories = useSuppliedCategories().slice(0, 6);
+  const navigate = useNavigate();
+  const categories = useSuppliedCategories();
+  const { data: products = [] } = useProducts();
+  // Phone menu: product search + every category (first few until expanded).
+  const [menuQuery, setMenuQuery] = useState("");
+  const [allCats, setAllCats] = useState(false);
+  const menuResults = useMemo(() => (menuQuery.trim() ? searchProducts(products, menuQuery).slice(0, 5) : []), [products, menuQuery]);
+  const onMenuSearch = (e: FormEvent) => {
+    e.preventDefault();
+    const q = menuQuery.trim();
+    if (!q) return;
+    setMobileOpen(false);
+    navigate(`/products?q=${encodeURIComponent(q)}`);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -38,7 +54,10 @@ const Navbar = () => {
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen]);
 
-  useEffect(() => { setMobileOpen(false); }, [location.pathname]);
+  useEffect(() => { setMobileOpen(false); }, [location.pathname, location.search]);
+  useEffect(() => {
+    if (!mobileOpen) { setMenuQuery(""); setAllCats(false); }
+  }, [mobileOpen]);
 
   // While the full-screen menu is open the page behind it must not scroll.
   useEffect(() => {
@@ -231,24 +250,84 @@ const Navbar = () => {
                       {link.label}
                     </Link>
 
-                    {/* Category shortcuts — hover menus don't exist on touch. */}
-                    {link.label === "Products" && topCategories.length > 0 && (
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {topCategories.map((c) => (
-                          <Link
-                            key={c.name}
-                            to={`/categories/${categorySlug(c.name)}`}
-                            className="inline-flex items-center h-9 rounded-full border border-white/20 px-3.5 font-body text-sm text-primary-foreground/80 hover:border-accent/60 hover:text-accent transition-colors"
-                          >
-                            {c.name}
-                          </Link>
-                        ))}
-                        <Link
-                          to="/categories"
-                          className="inline-flex items-center h-9 px-2 font-body text-sm font-semibold text-accent hover:underline"
-                        >
-                          All categories
-                        </Link>
+                    {/* Product search + every category — hover menus don't exist on touch. */}
+                    {link.label === "Products" && (
+                      <div className="mt-4 space-y-4">
+                        <form onSubmit={onMenuSearch} role="search" className="relative">
+                          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-primary-foreground/50" />
+                          <input
+                            type="search"
+                            value={menuQuery}
+                            onChange={(e) => setMenuQuery(e.target.value)}
+                            placeholder={products.length ? `Search ${products.length} products…` : "Search products…"}
+                            aria-label="Search products"
+                            enterKeyHint="search"
+                            className="h-12 w-full rounded-xl border border-white/15 bg-white/[0.06] pl-10 pr-4 font-body text-base text-primary-foreground outline-none placeholder:text-primary-foreground/40 focus:border-accent/60 [&::-webkit-search-cancel-button]:hidden"
+                          />
+                        </form>
+                        {menuQuery.trim() && (
+                          <ul className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.03]" aria-live="polite">
+                            {menuResults.length ? (
+                              <>
+                                {menuResults.map((p) => (
+                                  <li key={p.id} className="border-b border-white/[0.06] last:border-0">
+                                    <Link to={`/products/${p.slug}`} className="flex items-center gap-3 px-3 py-2.5">
+                                      <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[hsl(42_33%_96%)]">
+                                        {p.image_url && <img src={cdnImg(p.image_url, 80)} onError={fallbackToOriginal(p.image_url)} alt="" className="h-full w-full object-contain p-1" />}
+                                      </span>
+                                      <span className="min-w-0">
+                                        <span className="block truncate font-body text-sm font-semibold text-primary-foreground">{p.name}</span>
+                                        <span className="block truncate font-body text-xs text-primary-foreground/50">{p.brands?.name}</span>
+                                      </span>
+                                    </Link>
+                                  </li>
+                                ))}
+                                <li>
+                                  <button type="button" onClick={onMenuSearch} className="flex w-full items-center justify-center gap-1.5 py-3 font-body text-sm font-semibold text-accent">
+                                    See all results <ArrowRight className="h-4 w-4" />
+                                  </button>
+                                </li>
+                              </>
+                            ) : (
+                              <li className="px-4 py-3 font-body text-sm text-primary-foreground/60">
+                                No match. <Link to="/contact" className="font-semibold text-accent">Ask us to source it</Link>
+                              </li>
+                            )}
+                          </ul>
+                        )}
+                        {categories.length > 0 && (
+                          <div>
+                            <p className="mb-2 font-body text-[11px] font-semibold uppercase tracking-[0.22em] text-primary-foreground/45">Categories · {categories.length}</p>
+                            <div className="flex flex-wrap gap-2">
+                              {(allCats ? categories : categories.slice(0, 8)).map((c) => (
+                                <Link
+                                  key={c.name}
+                                  to={`/categories/${categorySlug(c.name)}`}
+                                  className="inline-flex h-9 items-center gap-1.5 rounded-full border border-white/20 px-3.5 font-body text-sm text-primary-foreground/80 transition-colors hover:border-accent/60 hover:text-accent"
+                                >
+                                  {c.name}
+                                  <span className="text-xs text-primary-foreground/40">{c.count}</span>
+                                </Link>
+                              ))}
+                              {categories.length > 8 && (
+                                <button
+                                  type="button"
+                                  onClick={() => setAllCats((v) => !v)}
+                                  aria-expanded={allCats}
+                                  className="inline-flex h-9 items-center gap-1 px-2 font-body text-sm font-semibold text-accent"
+                                >
+                                  {allCats ? "Show fewer" : `All ${categories.length}`}
+                                  <ChevronDown className={`h-4 w-4 transition-transform ${allCats ? "rotate-180" : ""}`} />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                        <div className="flex flex-wrap gap-x-5 gap-y-2 font-body text-sm font-semibold">
+                          <Link to="/brands" className="text-accent hover:underline">All brands</Link>
+                          <Link to="/products?featured=true" className="text-accent hover:underline">Featured picks</Link>
+                          <Link to="/categories" className="text-accent hover:underline">Category overview</Link>
+                        </div>
                       </div>
                     )}
                   </motion.div>

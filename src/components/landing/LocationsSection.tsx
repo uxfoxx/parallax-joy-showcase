@@ -6,6 +6,8 @@ import Eyebrow from "@/components/ui/eyebrow";
 import SplitText from "@/components/motion/SplitText";
 import mark from "@/assets/olive-mark.svg";
 import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
+import { HOURS, fmtHour, openStatus, useColomboNow } from "@/lib/hours";
+import StatusPill from "@/components/StatusPill";
 
 /**
  * "Where to find us" — a full-bleed Google map with the details floating over
@@ -37,60 +39,23 @@ const DIRECTIONS_URL = "https://www.google.com/maps/dir/?api=1&destination=292+S
 const MAPS_URL = "https://www.google.com/maps/search/?api=1&query=292+Sea+Street%2C+Colombo+11%2C+Sri+Lanka";
 const MAP_EMBED = "https://www.google.com/maps?q=292%20Sea%20Street%2C%20Colombo%2011%2C%20Sri%20Lanka&z=16&output=embed";
 
-const DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-/** Opening hours in Colombo time (src/data/company.json). Day 0 = Monday. */
-const HOURS: { label: string; days: number[]; open?: number; close?: number }[] = [
-  { label: "Mon – Fri", days: [0, 1, 2, 3, 4], open: 8.5, close: 17.5 },
-  { label: "Saturday", days: [5], open: 8.5, close: 13 },
-  { label: "Sunday", days: [6] },
-];
-
-const fmtHour = (h: number) => {
-  const hh = Math.floor(h);
-  const mm = Math.round((h - hh) * 60);
-  return `${((hh + 11) % 12) + 1}:${String(mm).padStart(2, "0")} ${hh < 12 ? "AM" : "PM"}`;
-};
-
-/** Current day (0 = Monday) and decimal hour in Asia/Colombo (UTC+5:30). */
-function colomboNow() {
-  const lk = new Date(Date.now() + 5.5 * 3_600_000);
-  return { day: (lk.getUTCDay() + 6) % 7, hour: lk.getUTCHours() + lk.getUTCMinutes() / 60 };
-}
-
-function openStatus(day: number, hour: number) {
-  const today = HOURS.find((h) => h.days.includes(day));
-  if (today?.open != null && today.close != null) {
-    if (hour >= today.open && hour < today.close) {
-      const left = today.close - hour;
-      return { open: true, label: left < 1 ? `Closes in ${Math.round(left * 60)} min` : `Open · closes ${fmtHour(today.close)}` };
-    }
-    if (hour < today.open) return { open: false, label: `Opens ${fmtHour(today.open)} today` };
-  }
-  for (let i = 1; i <= 7; i++) {
-    const d = (day + i) % 7;
-    const h = HOURS.find((x) => x.days.includes(d));
-    if (h?.open != null) return { open: false, label: `Opens ${fmtHour(h.open)} ${i === 1 ? "tomorrow" : DAY_NAMES[d]}` };
-  }
-  return { open: false, label: "Closed" };
-}
+/**
+ * The embed's own corner UI (top-left: an "Open in Maps" box, or on frames
+ * wider than ~400px an address card ~110px tall; bottom-left: the satellite
+ * thumbnail) looks like stray UI on a dark map, so the iframe is oversized to
+ * the left and top (--crop-x / --crop-y, set on the map wrapper) and those
+ * corners fall outside the frame. Phones crop more from the top: their frame
+ * is wide enough to get the tall address card, and their top wash is short.
+ * The bottom and right edges are never cropped: Google's logo and attribution
+ * live there. Cropping moves the map's centre — and so Google's pin — half
+ * the crop up and left, which is where PIN_X/PIN_Y put the overlays that
+ * point at it.
+ */
+const CROP_VARS = "[--crop-x:64px] [--crop-y:124px] lg:[--crop-y:64px]";
+const PIN_X = "calc(50% - var(--crop-x) / 2)";
+const PIN_Y = "calc(50% - var(--crop-y) / 2)";
 
 const ease = [0.22, 1, 0.36, 1] as const;
-
-function StatusPill({ open, label, reduced, compact = false }: { open: boolean; label: string; reduced: boolean; compact?: boolean }) {
-  return (
-    <span
-      className={`inline-flex items-center gap-2 rounded-full border font-body font-semibold ${
-        compact ? "px-2 py-0.5 text-[11px]" : "px-3 py-1.5 text-xs"
-      } ${open ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300" : "border-amber-400/30 bg-amber-400/10 text-amber-300"}`}
-    >
-      <span className="relative flex h-2 w-2">
-        {!reduced && <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 ${open ? "bg-emerald-400" : "bg-amber-400"}`} />}
-        <span className={`relative inline-flex h-2 w-2 rounded-full ${open ? "bg-emerald-400" : "bg-amber-400"}`} />
-      </span>
-      {label}
-    </span>
-  );
-}
 
 function ContactRow({ icon: Icon, label, value, href, copy }: { icon: ComponentType<{ className?: string }>; label: string; value: string; href: string; copy: string }) {
   const [copied, setCopied] = useState(false);
@@ -163,11 +128,7 @@ const LocationsSection = () => {
   const reduced = !!useReducedMotion();
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInView = useInView(mapRef, { once: true, margin: "-20% 0px" });
-  const [now, setNow] = useState(colomboNow);
-  useEffect(() => {
-    const id = window.setInterval(() => setNow(colomboNow()), 60_000);
-    return () => window.clearInterval(id);
-  }, []);
+  const now = useColomboNow();
   const status = openStatus(now.day, now.hour);
   const shown = reduced || mapInView;
 
@@ -211,9 +172,9 @@ const LocationsSection = () => {
       </div>
 
       {/* ── Map: a band on phones, the whole section from lg ── */}
-      <div ref={mapRef} onPointerLeave={() => setMapActive(false)} className="group/map relative h-[460px] sm:h-[540px] lg:absolute lg:inset-0 lg:z-0 lg:h-auto">
+      <div ref={mapRef} onPointerLeave={() => setMapActive(false)} className={`group/map relative h-[460px] sm:h-[540px] lg:absolute lg:inset-0 lg:z-0 lg:h-auto ${CROP_VARS}`}>
         <motion.div
-          className="absolute inset-0 bg-[hsl(150_30%_9%)]"
+          className="absolute inset-0 overflow-hidden bg-[hsl(150_30%_9%)]"
           initial={false}
           animate={
             shown
@@ -222,14 +183,18 @@ const LocationsSection = () => {
           }
           transition={{ duration: reduced ? 0 : 1.5, ease }}
         >
+          {/* No allowFullScreen: without it Google drops its fullscreen button too. */}
           <iframe
             src={MAP_EMBED}
             title="Map: Olive Foods, 292 Sea Street, Colombo 11"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-            className="absolute inset-0 h-full w-full border-0"
+            className="absolute border-0"
             style={{
+              left: "calc(-1 * var(--crop-x))",
+              top: "calc(-1 * var(--crop-y))",
+              width: "calc(100% + var(--crop-x))",
+              height: "calc(100% + var(--crop-y))",
               filter: "invert(0.9) hue-rotate(180deg) saturate(0.9) brightness(0.98) contrast(0.92)",
               pointerEvents: mapActive ? "auto" : "none",
             }}
@@ -250,16 +215,16 @@ const LocationsSection = () => {
           </span>
         )}
 
-        {/* Washes for legibility. They stop short of the bottom edge, where
-            Google's logo and attribution live. */}
+        {/* Washes for legibility. The side wash fades out before the bottom
+            edge, where Google's logo and attribution live. */}
         {/* Forest tint over the darkened map (light: the pin keeps its red). */}
         <div aria-hidden className="pointer-events-none absolute inset-0 bg-[hsl(150_45%_14%)] opacity-15 mix-blend-multiply" />
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[hsl(150_40%_5%)] to-transparent lg:h-36" />
-        <div aria-hidden className="pointer-events-none absolute bottom-12 left-0 top-0 hidden w-[58%] bg-gradient-to-r from-[hsl(150_40%_5%)] via-[hsl(150_40%_5%/0.85)] to-transparent lg:block" />
+        <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 hidden w-[58%] bg-gradient-to-r from-[hsl(150_40%_5%)] via-[hsl(150_40%_5%/0.85)] to-transparent [mask-image:linear-gradient(to_bottom,black_78%,transparent_97%)] lg:block" />
 
         {/* Ground ripple under Google's pin (the pin tip is the map centre). */}
         {!reduced && (
-          <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2">
+          <div aria-hidden className="pointer-events-none absolute" style={{ left: PIN_X, top: PIN_Y }}>
             {[0, 1, 2].map((i) => (
               <motion.span
                 key={i}
@@ -280,7 +245,8 @@ const LocationsSection = () => {
           initial={reduced ? false : { opacity: 0, y: 16, scale: 0.92 }}
           animate={shown ? { opacity: 1, y: 0, scale: 1 } : undefined}
           transition={{ type: "spring", stiffness: 260, damping: 22, delay: reduced ? 0 : 1.05 }}
-          className="group absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-[calc(100%+60px)] sm:-translate-x-[52px]"
+          style={{ left: PIN_X, top: PIN_Y }}
+          className="group absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+60px)] sm:-translate-x-[52px]"
           aria-label="Open Olive Foods HQ in Google Maps"
         >
           <span className="flex w-[248px] items-center gap-3 rounded-2xl p-3 pr-4 border border-primary-foreground/10 bg-[hsl(150_40%_7%/0.78)] backdrop-blur-xl shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] transition-transform duration-300 group-hover:-translate-y-0.5">
@@ -308,7 +274,7 @@ const LocationsSection = () => {
           />
         </motion.a>
 
-        {/* Top-right: open in Maps */}
+        {/* Top-right: open in Maps (clear of the fixed navbar) */}
         <motion.a
           href={MAPS_URL}
           target="_blank"
@@ -317,7 +283,7 @@ const LocationsSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.5, ease }}
-          className="absolute right-8 top-8 z-10 hidden h-10 items-center gap-1.5 rounded-full px-4 font-body text-xs font-semibold text-primary-foreground border border-primary-foreground/10 bg-[hsl(150_40%_7%/0.78)] backdrop-blur-xl shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] transition-colors hover:bg-[hsl(150_40%_10%/0.9)] lg:inline-flex"
+          className="absolute right-8 top-28 z-10 hidden h-10 items-center gap-1.5 rounded-full px-4 font-body text-xs font-semibold text-primary-foreground border border-primary-foreground/10 bg-[hsl(150_40%_7%/0.78)] backdrop-blur-xl shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] transition-colors hover:bg-[hsl(150_40%_10%/0.9)] lg:inline-flex"
         >
           <MapPin className="h-3.5 w-3.5 text-gold" /> Open in Google Maps <ArrowUpRight className="h-3.5 w-3.5" />
         </motion.a>

@@ -75,6 +75,29 @@ const AppRoutes = () => {
   }, [location.pathname]);
 
   useEffect(() => {
+    // Deep links to a section (/about#certificate, /contact#find-us). The route
+    // swap waits for the exit animation and some sections are lazy-loaded, so
+    // start after the swap and wait for the target to exist; offset by the
+    // fixed navbar.
+    if (location.pathname.startsWith("/admin") || !location.hash) return;
+    const id = decodeURIComponent(location.hash.slice(1));
+    let tries = 0;
+    let poll = 0;
+    const start = window.setTimeout(() => {
+      poll = window.setInterval(() => {
+        const el = document.getElementById(id);
+        if (!el && ++tries < 40) return;
+        window.clearInterval(poll);
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
+      }, 100);
+    }, 350);
+    return () => {
+      window.clearTimeout(start);
+      window.clearInterval(poll);
+    };
+  }, [location.pathname, location.hash]);
+
+  useEffect(() => {
     if (location.pathname.startsWith("/admin")) return;
     // The route swap waits for AnimatePresence's exit (~220ms) and helmet sets
     // the new <title> a frame after mount — wait so GA records the right title.

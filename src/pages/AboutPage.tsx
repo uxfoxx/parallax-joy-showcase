@@ -10,6 +10,7 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
 import ScrollFloatingElement from "@/components/landing/ScrollFloatingElement";
 import SectionTransition from "@/components/landing/SectionTransition";
+import LocationsSection from "@/components/landing/LocationsSection";
 import CompanyPhilosophy from "@/components/about/CompanyPhilosophy";
 import CertificationSection from "@/components/about/CertificationSection";
 import PageHero from "@/components/PageHero";
@@ -515,55 +516,9 @@ const AboutPage = () => {
 
       <SectionTransition />
 
-      {/* Location — Dark */}
+      {/* Location — Dark: the same map section as the homepage */}
       <div data-navbar-theme="dark">
-        <section className="relative overflow-hidden py-28 lg:py-36">
-          <div className="absolute inset-0" style={{
-            background: `
-              radial-gradient(ellipse at 40% 30%, hsl(140 50% 19% / 0.4) 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 70%, hsl(150 40% 14% / 0.3) 0%, transparent 50%),
-              linear-gradient(180deg, hsl(150 40% 6%), hsl(140 50% 14%), hsl(150 40% 10%))
-            `,
-          }} />
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-16">
-              <Eyebrow variant="pill" tone="primary" className="mb-6">
-                Find Us
-              </Eyebrow>
-              <h2 className="font-display text-4xl sm:text-5xl font-bold text-primary-foreground leading-tight tracking-tight">Our Location</h2>
-            </motion.div>
-
-            <div className="grid lg:grid-cols-[1fr_1.5fr] gap-12 items-start">
-              {/* Spec-sheet rows — hairlines, not boxes */}
-              <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-                <dl className="border-y border-primary-foreground/10 divide-y divide-primary-foreground/10">
-                  {[
-                    { label: "Address", value: "Olive Foods (Pvt) Ltd\n292 Sea Street, Colombo 11\nColombo, Sri Lanka 01100", href: undefined },
-                    { label: "Phone", value: "+94 11 207 1717", href: "tel:+94112071717" },
-                    { label: "Email", value: "info@olivefoods.lk", href: "mailto:info@olivefoods.lk" },
-                    { label: "Hours", value: "Mon – Fri: 8:30 AM – 5:30 PM", href: undefined },
-                  ].map((info) => (
-                    <div key={info.label} className="grid grid-cols-[92px_1fr] sm:grid-cols-[120px_1fr] gap-5 py-5">
-                      <dt className="font-body text-[11px] uppercase tracking-[0.18em] text-primary-foreground/45 pt-0.5">{info.label}</dt>
-                      <dd>
-                        {info.href ? (
-                          <a href={info.href} className="text-primary-foreground/90 font-body text-sm hover:text-accent transition-colors duration-300 whitespace-pre-line">
-                            {info.value}
-                          </a>
-                        ) : (
-                          <p className="text-primary-foreground/90 font-body text-sm whitespace-pre-line">{info.value}</p>
-                        )}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </motion.div>
-              <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="rounded-lg overflow-hidden border border-primary-foreground/15 shadow-xl">
-                <iframe src="https://www.google.com/maps?q=292%20Sea%20Street%2C%20Colombo%2011%2C%20Sri%20Lanka&output=embed" width="100%" height="400" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Olive Foods — 292 Sea Street, Colombo 11" className="w-full h-[400px] block" scrolling="no" />
-              </motion.div>
-            </div>
-          </div>
-        </section>
+        <LocationsSection />
       </div>
 
       <SectionTransition />
