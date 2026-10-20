@@ -38,6 +38,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Plus, Pencil, Trash2, ChevronUp, ChevronDown } from "lucide-react";
+import { AdminPageTitle } from "@/components/admin/AdminPageTitle";
 import { toast } from "sonner";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import XlsxSyncBar from "@/components/admin/XlsxSyncBar";
@@ -159,13 +160,8 @@ const AdminPartners = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-display text-2xl font-bold text-foreground">Partner Logos</h1>
-          <p className="font-body text-sm text-muted-foreground mt-1">
-            Curated logos shown in the landing page "Our Brand Partners" marquee. Order and active state here control what appears.
-          </p>
-        </div>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <AdminPageTitle description="Logos in the homepage “Our Brand Partners” marquee. Order and the active switch here control what appears." />
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button onClick={openCreate} className="gap-2 font-body">

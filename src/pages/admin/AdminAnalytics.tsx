@@ -1,10 +1,10 @@
 import { lazy, Suspense } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Activity } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useInsightsStatus, useRealtime, type Range } from "@/lib/insights";
 import { cn } from "@/lib/utils";
 import { Notice } from "@/components/admin/analytics/ui";
+import { AdminPageTitle } from "@/components/admin/AdminPageTitle";
 
 // recharts and each tab load only when someone opens this page.
 const OverviewTab = lazy(() => import("@/components/admin/analytics/OverviewTab"));
@@ -60,14 +60,7 @@ const AdminAnalytics = () => {
   return (
     <div className="mx-auto max-w-[1400px] space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="flex items-center gap-2 font-display text-2xl font-bold text-foreground">
-            <Activity className="h-5 w-5 text-forest-mid" /> Analytics
-          </h1>
-          <p className="mt-1 font-body text-sm text-muted-foreground">
-            Visitors, Google and Bing search, indexing, heatmap signals and speed for olivefoods.lk, in one place.
-          </p>
-        </div>
+        <AdminPageTitle description="Visitors, Google and Bing search, indexing, heatmap signals and speed for olivefoods.lk, in one place." />
         <div className="flex flex-wrap items-center gap-3">
           <LiveNow />
           <div className={cn("inline-flex rounded-lg border border-border bg-card p-0.5 transition-opacity", !ranged && "pointer-events-none opacity-40")} aria-label="Date range">

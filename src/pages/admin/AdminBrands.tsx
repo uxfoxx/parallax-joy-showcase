@@ -11,6 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Plus, Pencil, Trash2, Search } from "lucide-react";
 import { toast } from "sonner";
 import ImageUploadField from "@/components/admin/ImageUploadField";
+import { AdminPageTitle } from "@/components/admin/AdminPageTitle";
 
 const emptyBrand = { name: "", slug: "", description: "", origin: "", established: undefined as number | undefined, image_url: "" };
 
@@ -62,8 +63,8 @@ const AdminBrands = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl font-bold text-foreground">Brands</h1>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <AdminPageTitle />
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button onClick={openCreate} className="gap-2 font-body"><Plus className="w-4 h-4" /> Add Brand</Button>

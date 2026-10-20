@@ -41,6 +41,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Plus, Pencil, Trash2, Link2, ExternalLink, User, FileText, Upload, Loader2, Download, Palette, Phone, QrCode } from "lucide-react";
+import { AdminPageTitle } from "@/components/admin/AdminPageTitle";
 import QRCode from "qrcode";
 import { toast } from "sonner";
 import ImageUploadField from "@/components/admin/ImageUploadField";
@@ -377,13 +378,14 @@ const AdminBusinessProfilesInner = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-display text-2xl font-bold text-foreground">E Business Profiles</h1>
-          <p className="font-body text-sm text-muted-foreground mt-1">
-            Digital business cards for staff. Each profile gets a shareable link at <code>/profile/&lt;slug&gt;</code>.
-          </p>
-        </div>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <AdminPageTitle
+          description={
+            <>
+              Digital business cards for staff. Each profile gets a shareable link at <code>/profile/&lt;slug&gt;</code>.
+            </>
+          }
+        />
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button onClick={openCreate} className="gap-2 font-body">

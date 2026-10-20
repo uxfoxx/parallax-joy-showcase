@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, Search, ImagePlus, X, Loader2, Crop } from "lucide-react";
+import { AdminPageTitle } from "@/components/admin/AdminPageTitle";
 import { toast } from "sonner";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import ImageCropDialog from "@/components/admin/ImageCropDialog";
@@ -450,8 +451,8 @@ const AdminProducts = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl font-bold text-foreground">Products</h1>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <AdminPageTitle />
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
