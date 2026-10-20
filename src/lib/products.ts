@@ -78,3 +78,22 @@ export const productFaqs = (name: string, brandName: string): Faq[] => {
     { q: `How can I buy ${name} wholesale in Sri Lanka?`, a: ORDER_ANSWER },
   ];
 };
+
+/**
+ * Catalogue search shared by the navbar menu and /products?q=: a product
+ * matches when every word of the query appears in its name, brand, category,
+ * tags or SKU (so "mae ploy curry" finds Mae Ploy's curry pastes).
+ */
+export const searchProducts = <
+  T extends { name: string; sku?: string | null; category?: string | null; categories?: string[] | null; tags?: string[] | null; brands?: { name: string } | null },
+>(
+  products: T[],
+  query: string,
+): T[] => {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  if (!words.length) return products;
+  return products.filter((p) => {
+    const hay = [p.name, p.brands?.name, p.sku, p.category, ...(p.categories ?? []), ...(p.tags ?? [])].filter(Boolean).join(" ").toLowerCase();
+    return words.every((w) => hay.includes(w));
+  });
+};

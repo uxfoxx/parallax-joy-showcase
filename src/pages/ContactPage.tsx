@@ -19,6 +19,7 @@ import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
 import PageHero from "@/components/PageHero";
 import ScrollFloatingElement from "@/components/landing/ScrollFloatingElement";
 import SectionTransition from "@/components/landing/SectionTransition";
+import LocationsSection from "@/components/landing/LocationsSection";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -371,6 +372,13 @@ const ContactPage = () => {
             </div>
           </div>
         </section>
+      </div>
+
+      <SectionTransition />
+
+      {/* Map — Dark: the same map section as the homepage */}
+      <div data-navbar-theme="dark">
+        <LocationsSection />
       </div>
       </main>
 

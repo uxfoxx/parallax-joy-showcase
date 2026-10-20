@@ -19,6 +19,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Separator } from "@/components/ui/separator";
 import { useProducts, useBrands, useCategories } from "@/lib/api";
 import { categorySlug } from "@/lib/categories";
+import { searchProducts } from "@/lib/products";
 import ProductQuickView from "@/components/ProductQuickView";
 import FilterBar, { type FilterDef } from "@/components/products/FilterBar";
 import type { Product, Brand, Category } from "@/lib/api";
@@ -234,7 +235,8 @@ const ProductsPage = () => {
   const featuredParam = searchParams.get("featured") === "true";
   const ourParam = searchParams.get("our") === "true";
 
-  const [query, setQuery] = useState("");
+  const qParam = searchParams.get("q") ?? "";
+  const [query, setQuery] = useState(qParam);
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     categoryParam ? [categoryParam] : []
   );
@@ -261,6 +263,10 @@ const ProductsPage = () => {
   useEffect(() => {
     setOurOnly(ourParam);
   }, [ourParam]);
+  // ?q= comes from the navbar product search.
+  useEffect(() => {
+    setQuery(qParam);
+  }, [qParam]);
 
   const { data: allProducts = [], isLoading } = useProducts();
   const { data: brands = [] } = useBrands();
@@ -347,16 +353,7 @@ const ProductsPage = () => {
     if (featuredOnly) results = results.filter((p) => p.featured === true);
 
     // Text search
-    if (query.trim()) {
-      const q = query.trim().toLowerCase();
-      results = results.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          (p.brands?.name ?? "").toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q) ||
-          (p.tags ?? []).some((t) => t.toLowerCase().includes(q))
-      );
-    }
+    if (query.trim()) results = searchProducts(results, query);
 
     // Sort
     const sorted = [...results];

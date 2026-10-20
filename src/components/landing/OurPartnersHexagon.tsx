@@ -7,6 +7,7 @@ import SplitText from "@/components/motion/SplitText";
 import MarqueeRow from "@/components/motion/MarqueeRow";
 import { useBrands } from "@/lib/api";
 import { EASE_OUT_EXPO } from "@/lib/motion";
+import { cdnImg, fallbackToOriginal } from "@/lib/img";
 
 /**
  * "Brands we partner with." — three-row sliding logo marquee on white.
@@ -33,11 +34,15 @@ const LogoTile = ({ logo }: { logo: Logo }) => {
     "group relative flex items-center justify-center w-[200px] md:w-[240px] h-[110px] md:h-[130px] mx-3 rounded-2xl hover:shadow-[0_18px_36px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-300";
 
   return (
-    <Link to={`/products?brand=${logo.slug}`} aria-label={logo.name} className={cls}>
+    <Link to={`/brands/${logo.slug}`} aria-label={logo.name} className={cls}>
+      {/* Resized by Supabase's render endpoint: the originals are up to 1.3 MB
+          each, and a dozen of them made up most of the homepage's weight. */}
       <img
-        src={logo.image_url}
+        src={cdnImg(logo.image_url, 480)}
+        onError={fallbackToOriginal(logo.image_url)}
         alt={logo.name}
         loading="lazy"
+        decoding="async"
         className="max-h-[100%] max-w-[82%] object-contain opacity-70 saturate-[0.85] group-hover:opacity-100 group-hover:saturate-100 transition duration-300"
       />
       <ArrowUpRight

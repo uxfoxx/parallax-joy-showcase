@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
+import { cdnImg, fallbackToOriginal } from "@/lib/img";
 import Seo, { SITE_URL } from "@/components/Seo";
 import { categorySlug, faqSchema } from "@/lib/categories";
 import { isHouseBrand } from "@/lib/brands";
@@ -311,7 +312,7 @@ const ProductDetailPage = () => {
                             onClick={() => setActiveImage(i)}
                             className={`w-full aspect-square rounded-lg overflow-hidden border-2 transition-all duration-300 ${i === activeImage ? "border-accent ring-2 ring-accent/30 scale-105" : "border-border hover:border-accent/50 opacity-70 hover:opacity-100"}`}
                           >
-                            <img src={img} alt="" className="w-full h-full object-cover" />
+                            <img src={cdnImg(img, 200)} onError={fallbackToOriginal(img)} alt="" loading="lazy" className="w-full h-full object-cover" />
                           </button>
                         </CarouselItem>
                       ))}
@@ -688,7 +689,7 @@ const ProductDetailPage = () => {
                       i === activeImage ? "border-white ring-2 ring-white/30" : "border-white/20 hover:border-white/50 opacity-60 hover:opacity-100"
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <img src={cdnImg(img, 200)} onError={fallbackToOriginal(img)} alt="" loading="lazy" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
