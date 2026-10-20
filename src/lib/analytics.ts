@@ -27,8 +27,13 @@
  *     link, plus any element with data-track="<event>" (optional
  *     data-track-item). Each becomes a GA event and a Clarity event.
  *
- * Mark these as key events in GA4 to count them as conversions:
- *   generate_lead, request_quote, sourcing_request, whatsapp_click, phone_click
+ * Key events (conversions) in GA4 — property "olivefoods.lk", account "Olive
+ * Foods" (owner naveen.f.senanayake@gmail.com), set up 2026-10-20:
+ *   generate_lead, request_quote, sourcing_request, whatsapp_click, phone_click,
+ *   email_click
+ * The stream's enhanced measurement has "page changes based on browser history
+ * events" turned OFF — trackPageView sends one page_view per route, so leaving
+ * it on would double-count every SPA navigation.
  */
 declare global {
   interface Window {
