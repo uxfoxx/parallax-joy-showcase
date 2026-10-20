@@ -15,7 +15,7 @@ import ImageUploadField from "@/components/admin/ImageUploadField";
 const emptyBrand = { name: "", slug: "", description: "", origin: "", established: undefined as number | undefined, image_url: "" };
 
 const AdminBrands = () => {
-  const { data: brands, isLoading } = useBrands();
+  const { data: brands, isLoading } = useBrands({ raw: true });
   const createBrand = useCreateBrand();
   const updateBrand = useUpdateBrand();
   const deleteBrand = useDeleteBrand();

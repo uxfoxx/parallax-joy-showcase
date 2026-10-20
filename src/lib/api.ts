@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables, TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
+import { selectBrands, selectProducts, withBrandCopy, withProductCopy } from "@/lib/copy";
 
 export type Brand = Tables<"brands">;
 export type Product = Tables<"products"> & { brands?: Brand };
@@ -13,8 +14,15 @@ export type ProductImage = {
   created_at: string;
 };
 
+/**
+ * Public reads apply the reviewed copy from lib/copy.ts (`select`, so the
+ * cache keeps the raw rows); the admin passes { raw: true } to edit the
+ * database's own text.
+ */
+type ReadOpts = { raw?: boolean };
+
 // ─── Brands ───
-export const useBrands = () =>
+export const useBrands = (opts?: ReadOpts) =>
   useQuery({
     queryKey: ["brands"],
     queryFn: async () => {
@@ -22,6 +30,7 @@ export const useBrands = () =>
       if (error) throw error;
       return data as Brand[];
     },
+    select: opts?.raw ? undefined : selectBrands,
   });
 
 export const useBrand = (slug: string) =>
@@ -32,6 +41,7 @@ export const useBrand = (slug: string) =>
       if (error) throw error;
       return data as Brand;
     },
+    select: withBrandCopy,
     enabled: !!slug,
   });
 
@@ -71,7 +81,7 @@ export const useDeleteBrand = () => {
 };
 
 // ─── Products ───
-export const useProducts = (filters?: { category?: string; brandSlug?: string }) =>
+export const useProducts = (filters?: { category?: string; brandSlug?: string }, opts?: ReadOpts) =>
   useQuery({
     queryKey: ["products", filters],
     queryFn: async () => {
@@ -90,6 +100,7 @@ export const useProducts = (filters?: { category?: string; brandSlug?: string })
       if (error) throw error;
       return data as Product[];
     },
+    select: opts?.raw ? undefined : selectProducts,
   });
 
 export const useProduct = (slug: string) =>
@@ -100,6 +111,7 @@ export const useProduct = (slug: string) =>
       if (error) throw error;
       return data as Product;
     },
+    select: withProductCopy,
     enabled: !!slug,
   });
 
@@ -111,6 +123,7 @@ export const useFeaturedProducts = () =>
       if (error) throw error;
       return data as Product[];
     },
+    select: selectProducts,
   });
 
 export const useOurProducts = () =>
@@ -121,6 +134,7 @@ export const useOurProducts = () =>
       if (error) throw error;
       return data as Product[];
     },
+    select: selectProducts,
   });
 
 

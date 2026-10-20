@@ -22,7 +22,7 @@
         "heading": "Fish sauce: the salt of Thai cooking",
         "paragraphs": [
           "Fish sauce (nam pla) is made by fermenting fish, usually anchovies, with salt for many months, then drawing off the clear amber liquid. It seasons almost every savoury Thai dish, adding salt and a deep savoury flavour that disappears into the food rather than tasting fishy.",
-          "Use it in curries, stir-fries, soups, salad dressings and dipping sauces. A simple table sauce, prik nam pla, is fish sauce with sliced chillies and a squeeze of lime. Tiparos fish sauce has been made in Thailand by the Tang Sang Hah company since 1919. Keep the bottle closed and away from heat; it darkens slowly with age."
+          "Use it in curries, stir-fries, soups, salad dressings and dipping sauces. A simple table sauce, prik nam pla, is fish sauce with sliced chillies and a squeeze of lime. Tiparos fish sauce is made in Thailand by Tang Sang Hah Co., Ltd. Keep the bottle closed and away from heat; it darkens slowly with age."
         ]
       },
       {
@@ -60,10 +60,29 @@
       }
     ],
     "links": {
-      "brands": ["mae-ploy", "tiparos", "mahachai", "wai-wai"],
-      "categories": ["Thai Products", "Seasonings & Sauce"],
-      "products": ["mae-ploy-green-curry-paste", "mae-ploy-red-curry-paste", "mae-ploy-tom-yum-paste", "tiparos-fish-sauce", "mahachai-pad-thai-noodles-rice-stick", "wai-wai-rice-vermicelli", "generic-black-dark-soy-sauce-orange-label"],
-      "sectors": ["restaurants", "hotels"]
+      "brands": [
+        "mae-ploy",
+        "tiparos",
+        "mahachai",
+        "wai-wai"
+      ],
+      "categories": [
+        "Thai Products",
+        "Seasonings & Sauce"
+      ],
+      "products": [
+        "mae-ploy-green-curry-paste",
+        "mae-ploy-red-curry-paste",
+        "mae-ploy-tom-yum-paste",
+        "tiparos-fish-sauce",
+        "mahachai-pad-thai-noodles-rice-stick",
+        "wai-wai-rice-vermicelli",
+        "generic-black-dark-soy-sauce-orange-label"
+      ],
+      "sectors": [
+        "restaurants",
+        "hotels"
+      ]
     }
   },
   {
@@ -76,7 +95,7 @@
       {
         "heading": "Why −18 °C matters",
         "paragraphs": [
-          "−18 °C is the temperature used around the world for storing frozen food. At that temperature, bacteria cannot grow and food keeps its quality for months. The danger is not one moment of warmth but repeated swings: each time frozen food partly thaws and refreezes, ice crystals grow larger and break the food's structure. Meat loses juice when it cooks, vegetables turn soft, fries go limp and packs develop freezer burn."
+          "−18 °C is the temperature used around the world for storing frozen food. At −18 °C or below, microbes cannot grow, but freezing does not kill them, and quality still declines slowly over time. Temperature swings do the most visible damage: each time frozen food partly thaws and refreezes, ice crystals grow larger and break down its structure. Meat loses juice when it cooks, vegetables turn soft, fries go limp and packs develop freezer burn. Follow the storage directions on each label, and refuse any delivery that looks as if it has thawed."
         ]
       },
       {
@@ -131,18 +150,33 @@
       }
     ],
     "links": {
-      "brands": ["hungritos", "damaco", "dira"],
-      "categories": ["Frozen Meat", "Poultry", "Frozen French Fries", "Frozen Potato Products", "Frozen Vegetables & Fruits", "Frozen Fruit Puree"],
+      "brands": [
+        "hungritos",
+        "damaco",
+        "dira"
+      ],
+      "categories": [
+        "Frozen Meat",
+        "Poultry",
+        "Frozen French Fries",
+        "Frozen Potato Products",
+        "Frozen Vegetables & Fruits",
+        "Frozen Fruit Puree"
+      ],
       "products": [],
-      "sectors": ["hotels", "frozen-food", "catering"]
+      "sectors": [
+        "hotels",
+        "frozen-food",
+        "catering"
+      ]
     }
   },
   {
     "slug": "frozen-fruit-purees",
     "title": "Frozen fruit purees for cocktails, smoothies and pastry",
     "seoTitle": "Frozen Fruit Purees in Sri Lanka: For Bars, Cafés and Pastry",
-    "description": "How bars, cafés and pastry kitchens in Sri Lanka use frozen fruit purees: why they beat fresh fruit for consistency, which flavour suits what, and how to thaw and store them.",
-    "summary": "Frozen fruit puree is fruit that has been washed, pulped, strained and frozen, so it tastes and looks the same in every batch and in every season. Bars use it for cocktails and mocktails, cafés for smoothies and shakes, and pastry kitchens for mousses, sorbets, glazes and fillings. Olive Foods imports DIRA purees from Belgium (mango, passion fruit, strawberry, raspberry, lemon and coconut) and delivers them frozen at −18 °C.",
+    "description": "How bars, cafés and pastry kitchens in Sri Lanka use frozen fruit purees: how they help keep recipes consistent, which flavour suits what, and how to thaw and store them.",
+    "summary": "Frozen fruit puree is fruit that has been washed, pulped, strained and frozen, so a kitchen can make the same recipe all year, whatever the fruit season. Bars use it for cocktails and mocktails, cafés for smoothies and shakes, and pastry kitchens for mousses, sorbets, glazes and fillings. Olive Foods imports and distributes DIRA purees from Dirafrost (mango, passion fruit, strawberry, raspberry, lemon and coconut) and delivers them frozen at −18 °C.",
     "sections": [
       {
         "heading": "Why kitchens and bars use purees",
@@ -174,14 +208,35 @@
       {
         "heading": "Which flavour for what",
         "table": {
-          "head": ["Puree", "Good for"],
+          "head": [
+            "Puree",
+            "Good for"
+          ],
           "rows": [
-            ["Mango", "Smoothies, lassi, mousses, cheesecakes, sorbet"],
-            ["Passion fruit", "Cocktails, glazes, curds, tarts, macarons"],
-            ["Strawberry", "Daiquiris, milkshakes, mousses, coulis"],
-            ["Raspberry", "Coulis, sorbet, macaron and chocolate fillings, vinaigrettes"],
-            ["Lemon", "Tarts, curds, sorbets, marinades"],
-            ["Coconut", "Piña coladas, dairy-free desserts, curries"]
+            [
+              "Mango",
+              "Smoothies, lassi, mousses, cheesecakes, sorbet"
+            ],
+            [
+              "Passion fruit",
+              "Cocktails, glazes, curds, tarts, macarons"
+            ],
+            [
+              "Strawberry",
+              "Daiquiris, milkshakes, mousses, coulis"
+            ],
+            [
+              "Raspberry",
+              "Coulis, sorbet, macaron and chocolate fillings, vinaigrettes"
+            ],
+            [
+              "Lemon",
+              "Tarts, curds, sorbets, marinades"
+            ],
+            [
+              "Coconut",
+              "Piña coladas, dairy-free desserts, curries"
+            ]
           ]
         }
       },
@@ -198,7 +253,7 @@
     "faqs": [
       {
         "q": "Where can I buy frozen fruit puree in Sri Lanka?",
-        "a": "Olive Foods imports DIRA frozen fruit purees from Belgium in mango, passion fruit, strawberry, raspberry, lemon and coconut, and delivers them frozen to bars, cafés, hotels and pastry kitchens across Sri Lanka."
+        "a": "Olive Foods imports and distributes DIRA frozen fruit purees in mango, passion fruit, strawberry, raspberry, lemon and coconut, and delivers them frozen to bars, cafés, hotels and pastry kitchens across Sri Lanka."
       },
       {
         "q": "Is fruit puree the same as a flavoured syrup?",
@@ -210,10 +265,26 @@
       }
     ],
     "links": {
-      "brands": ["dira"],
-      "categories": ["Frozen Fruit Puree", "Frozen Vegetables & Fruits"],
-      "products": ["dira-frozen-mango-puree", "dira-frozen-passion-fruit-puree", "dira-frozen-strawberry-puree", "dira-frozen-raspberry-puree", "dira-frozen-lemon-puree", "dira-frozen-coconut-puree"],
-      "sectors": ["bakeries-and-cafes", "hotels", "frozen-food"]
+      "brands": [
+        "dira"
+      ],
+      "categories": [
+        "Frozen Fruit Puree",
+        "Frozen Vegetables & Fruits"
+      ],
+      "products": [
+        "dira-frozen-mango-puree",
+        "dira-frozen-passion-fruit-puree",
+        "dira-frozen-strawberry-puree",
+        "dira-frozen-raspberry-puree",
+        "dira-frozen-lemon-puree",
+        "dira-frozen-coconut-puree"
+      ],
+      "sectors": [
+        "bakeries-and-cafes",
+        "hotels",
+        "frozen-food"
+      ]
     }
   },
   {
@@ -279,10 +350,30 @@
       }
     ],
     "links": {
-      "brands": ["daily-dairy"],
-      "categories": ["Imported Cheese"],
-      "products": ["daily-dairy-gouda-cheese-48", "daily-dairy-edam-cheese-40", "daily-dairy-cheddar-cheese-white-50", "daily-dairy-emmental-cheese-45", "daily-dairy-grana-padano-cheese-wheel", "daily-dairy-pecorino-romano-cheese", "daily-dairy-kolios-feta-cheese", "daily-dairy-snow-white-danish-blue-cheese", "daily-dairy-comte-cheese", "daily-dairy-v-s-o-c-black-label-aged-gouda-48", "generic-cheese-slice-128s"],
-      "sectors": ["hotels", "restaurants", "supermarkets-and-retail"]
+      "brands": [
+        "daily-dairy"
+      ],
+      "categories": [
+        "Imported Cheese"
+      ],
+      "products": [
+        "daily-dairy-gouda-cheese-48",
+        "daily-dairy-edam-cheese-40",
+        "daily-dairy-cheddar-cheese-white-50",
+        "daily-dairy-emmental-cheese-45",
+        "daily-dairy-grana-padano-cheese-wheel",
+        "daily-dairy-pecorino-romano-cheese",
+        "daily-dairy-kolios-feta-cheese",
+        "daily-dairy-snow-white-danish-blue-cheese",
+        "daily-dairy-comte-cheese",
+        "daily-dairy-v-s-o-c-black-label-aged-gouda-48",
+        "generic-cheese-slice-128s"
+      ],
+      "sectors": [
+        "hotels",
+        "restaurants",
+        "supermarkets-and-retail"
+      ]
     }
   },
   {
@@ -295,13 +386,37 @@
       {
         "heading": "Match the shape to the sauce",
         "table": {
-          "head": ["Shape", "Best with", "In the range"],
+          "head": [
+            "Shape",
+            "Best with",
+            "In the range"
+          ],
           "rows": [
-            ["Long and thin", "Olive oil and garlic, light tomato, seafood, carbonara", "Spaghetti, linguine, spaghetti vermicelli"],
-            ["Ribbons", "Butter and cream sauces, mushroom, rich meat ragù", "Tagliatelle (spinach), pappardelle"],
-            ["Tubes and twists", "Chunky vegetable and meat sauces, bakes, salads", "Penne, fusilli, spirali fantasia, elbow macaroni"],
-            ["Bows", "Pasta salads, light creamy sauces", "Farfalloni"],
-            ["For baking", "Layered and filled baked dishes", "Lasagna sheets, cannelloni"]
+            [
+              "Long and thin",
+              "Olive oil and garlic, light tomato, seafood, carbonara",
+              "Spaghetti, linguine, spaghetti vermicelli"
+            ],
+            [
+              "Ribbons",
+              "Butter and cream sauces, mushroom, rich meat ragù",
+              "Tagliatelle (spinach), pappardelle"
+            ],
+            [
+              "Tubes and twists",
+              "Chunky vegetable and meat sauces, bakes, salads",
+              "Penne, fusilli, spirali fantasia, elbow macaroni"
+            ],
+            [
+              "Bows",
+              "Pasta salads, light creamy sauces",
+              "Farfalloni"
+            ],
+            [
+              "For baking",
+              "Layered and filled baked dishes",
+              "Lasagna sheets, cannelloni"
+            ]
           ]
         }
       },
@@ -321,7 +436,7 @@
       {
         "heading": "Why durum wheat",
         "paragraphs": [
-          "Italian dried pasta is made from durum wheat semolina, a hard, high-protein wheat whose gluten keeps pasta firm when cooked; Italian law requires it for dried pasta made in Italy. Dedicato is Granoro's 100% Puglia line, made from durum wheat grown and milled in Puglia through a traced supply chain."
+          "Italian dried pasta is made from durum wheat semolina, a hard, high-protein wheat whose gluten keeps pasta firm when cooked; Italian law requires it for dried pasta made in Italy. Dedicato is Granoro's 100% Puglia line, built on durum wheat grown in Puglia through a supply chain linking local farms, mills and Granoro's pasta factory in Corato."
         ]
       },
       {
@@ -346,10 +461,30 @@
       }
     ],
     "links": {
-      "brands": ["dedicato", "donna-chiara"],
-      "categories": ["Italian Pasta", "Imported Cheese"],
-      "products": ["donna-chiara-spaghetti", "donna-chiara-linguine", "donna-chiara-penne", "donna-chiara-fusilli", "donna-chiara-farfalloni", "pasta", "dedicato-pappardelle-sem", "dedicato-tagliatelle-spinaci-80-500-gr", "dedicato-cannelloni", "generic-lasagna-semola"],
-      "sectors": ["restaurants", "hotels"]
+      "brands": [
+        "dedicato",
+        "donna-chiara"
+      ],
+      "categories": [
+        "Italian Pasta",
+        "Imported Cheese"
+      ],
+      "products": [
+        "donna-chiara-spaghetti",
+        "donna-chiara-linguine",
+        "donna-chiara-penne",
+        "donna-chiara-fusilli",
+        "donna-chiara-farfalloni",
+        "pasta",
+        "dedicato-pappardelle-sem",
+        "dedicato-tagliatelle-spinaci-80-500-gr",
+        "dedicato-cannelloni",
+        "generic-lasagna-semola"
+      ],
+      "sectors": [
+        "restaurants",
+        "hotels"
+      ]
     }
   },
   {
@@ -357,17 +492,37 @@
     "title": "Frozen fries and potato products for hotels and quick-service kitchens",
     "seoTitle": "Frozen French Fries in Sri Lanka: A Guide for Kitchens",
     "description": "How restaurant, hotel and quick-service kitchens in Sri Lanka choose and cook frozen fries, wedges and hash browns: cut sizes, coated fries, frying temperature and oil care.",
-    "summary": "Frozen fries are potatoes that have been cut, blanched, usually par-fried and frozen, so a kitchen only has to finish them: fry from frozen at around 175 °C until golden. The cut decides the result. Thin cuts are crisper and faster, thicker cuts fluffier inside, and coated fries hold their crunch longer for delivery and buffets. Olive Foods imports Hungritos 9 mm fries, coated 7 mm shoestring fries, potato wedges and hash browns, and delivers them at −18 °C.",
+    "summary": "Frozen fries are potatoes that have been cut, blanched, usually par-fried and frozen, so a kitchen only has to finish them: most are fried straight from frozen at around 175 °C, or as the pack directs, until golden. The cut decides the result. Thin cuts are crisper and faster, thicker cuts fluffier inside, and coated fries hold their crunch longer for delivery and buffets. Olive Foods imports Hungritos 9 mm fries, coated 7 mm shoestring fries, potato wedges and hash browns, and delivers them at −18 °C.",
     "sections": [
       {
         "heading": "Choosing a cut",
         "table": {
-          "head": ["Product", "Character", "Use it for"],
+          "head": [
+            "Product",
+            "Character",
+            "Use it for"
+          ],
           "rows": [
-            ["9 mm fries", "Balanced crisp outside, soft inside", "Everyday sides, kids' menus, room service"],
-            ["7 mm shoestring, coated", "Thin, extra crunchy, made to stay crisp longer", "Burgers, fried-seafood baskets, delivery"],
-            ["Potato wedges", "Thick, fluffy inside", "Starters, sharing plates, pub-style menus"],
-            ["Hash browns", "Shredded potato patties", "Breakfast buffets and plates"]
+            [
+              "9 mm fries",
+              "Balanced crisp outside, soft inside",
+              "Everyday sides, kids' menus, room service"
+            ],
+            [
+              "7 mm shoestring, coated",
+              "Thin, extra crunchy, made to stay crisp longer",
+              "Burgers, fried-seafood baskets, delivery"
+            ],
+            [
+              "Potato wedges",
+              "Thick, fluffy inside",
+              "Starters, sharing plates, pub-style menus"
+            ],
+            [
+              "Hash browns",
+              "Shredded potato patties",
+              "Breakfast buffets and plates"
+            ]
           ]
         }
       },
@@ -407,7 +562,7 @@
       },
       {
         "q": "Should frozen fries be thawed before frying?",
-        "a": "No. Fry them straight from frozen. Thawed fries absorb more oil and come out limp."
+        "a": "Usually not. Most frozen fries are made to be cooked straight from frozen, so follow the pack. Thawed fries absorb more oil and come out limp."
       },
       {
         "q": "Where can a restaurant buy frozen fries in Sri Lanka?",
@@ -415,10 +570,24 @@
       }
     ],
     "links": {
-      "brands": ["hungritos"],
-      "categories": ["Frozen French Fries", "Frozen Potato Products"],
-      "products": ["hungritos-frozen-french-fries-9mm", "hungritos-frozen-french-fries-shoes-strings-coated-7mm", "hungritos-frozen-potato-wedges", "hungritos-frozen-hash-brown-potato"],
-      "sectors": ["restaurants", "hotels", "frozen-food"]
+      "brands": [
+        "hungritos"
+      ],
+      "categories": [
+        "Frozen French Fries",
+        "Frozen Potato Products"
+      ],
+      "products": [
+        "hungritos-frozen-french-fries-9mm",
+        "hungritos-frozen-french-fries-shoes-strings-coated-7mm",
+        "hungritos-frozen-potato-wedges",
+        "hungritos-frozen-hash-brown-potato"
+      ],
+      "sectors": [
+        "restaurants",
+        "hotels",
+        "frozen-food"
+      ]
     }
   },
   {
@@ -470,10 +639,27 @@
       }
     ],
     "links": {
-      "brands": ["albertos", "tabasco"],
-      "categories": ["Mexican", "Seasonings & Sauce", "Imported Cheese"],
-      "products": ["albertos-albertos-flour-tortilla-wraps-10-6s", "albertos-albertos-tortilla-wraps-6-8s", "tabasco-hot-pepper-sauce-60ml", "acroyali-red-kidney-beans", "acroyali-sweet-corn-kernel", "daily-dairy-cheddar-cheese-coloured-50"],
-      "sectors": ["restaurants", "hotels"]
+      "brands": [
+        "albertos",
+        "tabasco"
+      ],
+      "categories": [
+        "Mexican",
+        "Seasonings & Sauce",
+        "Imported Cheese"
+      ],
+      "products": [
+        "albertos-albertos-flour-tortilla-wraps-10-6s",
+        "albertos-albertos-tortilla-wraps-6-8s",
+        "tabasco-hot-pepper-sauce-60ml",
+        "acroyali-red-kidney-beans",
+        "acroyali-sweet-corn-kernel",
+        "daily-dairy-cheddar-cheese-coloured-50"
+      ],
+      "sectors": [
+        "restaurants",
+        "hotels"
+      ]
     }
   },
   {
@@ -543,9 +729,21 @@
     ],
     "links": {
       "brands": [],
-      "categories": ["Frozen Meat", "Imported Cheese", "Italian Pasta", "Thai Products"],
+      "categories": [
+        "Frozen Meat",
+        "Imported Cheese",
+        "Italian Pasta",
+        "Thai Products"
+      ],
       "products": [],
-      "sectors": ["hotels", "restaurants", "bakeries-and-cafes", "supermarkets-and-retail", "catering", "frozen-food"]
+      "sectors": [
+        "hotels",
+        "restaurants",
+        "bakeries-and-cafes",
+        "supermarkets-and-retail",
+        "catering",
+        "frozen-food"
+      ]
     }
   }
 ]
