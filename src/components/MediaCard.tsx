@@ -16,6 +16,8 @@ type MediaCardProps = {
   onClick?: () => void;
   image: string | null;
   title: string;
+  /** Small line above the title (e.g. the brand). */
+  eyebrow?: string;
   meta?: string;
   origin?: string | null;
   badge?: ReactNode;
@@ -35,15 +37,19 @@ type MediaCardProps = {
 
 /**
  * Shared portrait card used by ProductCard and BrandCard so the two card
- * families read as visual siblings. Image fills a 4/5 tile (tilt + curtain
- * reveal + shine sweep on hover); name/meta sit in a plain caption below the
- * image, with an accent hairline that draws in on hover.
+ * families read as visual siblings. The 4/5 tile is a warm "studio" surface:
+ * product and logo images mostly come on white, so they're multiplied into
+ * it (the white disappears instead of reading as a pasted box), sized with an
+ * even margin, and grounded by a soft floor shadow. While an image loads the
+ * tile shows a shimmer, never an empty box. Caption: optional eyebrow (the
+ * brand), name, meta, and an accent hairline that draws in on hover.
  */
 const MediaCard = ({
   to,
   onClick,
   image,
   title,
+  eyebrow,
   meta,
   origin,
   badge,
@@ -74,23 +80,33 @@ const MediaCard = ({
       transitionSpeed={900}
     >
       <div
-        className={`bg-white relative aspect-[4/5] overflow-hidden rounded-2xl shadow-sm group-hover:shadow-2xl group-hover:shadow-black/25 transition-shadow duration-500 border ${
-          isDark ? "border-white/10 bg-forest-deep/40" : "border-border/70"
+        className={`relative aspect-[4/5] overflow-hidden rounded-2xl border transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-black/20 ${
+          isDark
+            ? "border-white/10 bg-[radial-gradient(ellipse_at_50%_35%,hsl(150_30%_16%),hsl(150_35%_9%))]"
+            : "border-border/60 bg-[radial-gradient(ellipse_at_50%_35%,#ffffff_0%,hsl(42_33%_95%)_70%,hsl(42_28%_91%)_100%)] shadow-sm"
         }`}
       >
         {hasImage ? (
           <>
-            {!imgLoaded && <div className="absolute inset-0 bg-muted animate-pulse" />}
+            {/* Loading: a shimmer, so the tile never sits empty. */}
+            {!imgLoaded && <div aria-hidden className="absolute inset-0 skeleton-shimmer" />}
+            {/* Floor shadow under the product. */}
+            {!isDark && (
+              <span
+                aria-hidden
+                className={`absolute bottom-[9%] left-1/2 h-[4%] w-[48%] -translate-x-1/2 rounded-[50%] bg-forest-deep/[0.07] blur-md transition-opacity duration-500 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+              />
+            )}
             <CurtainImage
-              wrapperClassName={
-                imageInset ? "absolute inset-3 sm:inset-6 md:inset-8" : "absolute inset-0"
-              }
+              // Multiply on the wrapper, not the <img>: the curtain's clip-path
+              // isolates the image, so a blend on it has nothing to blend with.
+              wrapperClassName={`${imageInset ? "absolute inset-[14%]" : "absolute inset-[9%]"} ${isDark ? "" : "mix-blend-multiply"}`}
               wrapperStyle={{ width: "auto", height: "auto" }}
               src={srcTier === 0 ? cdnImg(image!, 600) : image!}
               alt={title}
               onLoad={() => setImgLoaded(true)}
               onError={() => setSrcTier((t) => t + 1)}
-              className={`absolute inset-0 w-full h-full object-scale-down transition-transform duration-[900ms] ease-out group-hover:scale-[1.06] ${
+              className={`absolute inset-0 w-full h-full object-contain transition-[transform,opacity] duration-[900ms] ease-out group-hover:scale-[1.05] ${
                 imgLoaded ? "opacity-100" : "opacity-0"
               }`}
             />
@@ -121,7 +137,10 @@ const MediaCard = ({
   );
 
   const caption = (
-    <div className="pt-2.5 px-0.5">
+    <div className="pt-3 px-0.5">
+      {eyebrow && (
+        <p className="mb-1 truncate font-body text-[10.5px] font-semibold uppercase tracking-[0.18em] text-accent">{eyebrow}</p>
+      )}
       <h3 className="font-body text-sm font-semibold leading-snug text-foreground group-hover:text-accent transition-colors line-clamp-2">
         {title}
       </h3>

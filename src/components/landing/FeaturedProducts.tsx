@@ -10,7 +10,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useFeaturedProducts } from "@/lib/api";
-import ProductCard from "@/components/ProductCard";
+import ProductCard, { ProductCardSkeleton } from "@/components/ProductCard";
 import ProductQuickView from "@/components/ProductQuickView";
 import type { Product } from "@/lib/api";
 import {
@@ -25,7 +25,7 @@ import Eyebrow from "@/components/ui/eyebrow";
 type CarouselApi = UseEmblaCarouselType[1];
 
 const FeaturedProducts = () => {
-  const { data: products = [] } = useFeaturedProducts();
+  const { data: products = [], isLoading } = useFeaturedProducts();
   const sectionRef = useRef<HTMLElement>(null);
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
@@ -81,7 +81,9 @@ const FeaturedProducts = () => {
     rawMouseY.set((e.clientY - rect.top) / rect.height - 0.5);
   }, [rawMouseX, rawMouseY]);
 
-  if (products.length === 0) return null;
+  // Hidden only when there are genuinely no featured products; while they
+  // load, the carousel shows placeholder cards instead of popping in late.
+  if (!isLoading && products.length === 0) return null;
 
   return (
     <section
@@ -207,11 +209,18 @@ const FeaturedProducts = () => {
             className="w-full cursor-grab active:cursor-grabbing"
           >
             <CarouselContent className="-ml-5">
-              {products.map((product) => (
-                <CarouselItem key={product.id} className="pl-5 basis-full md:basis-1/2 lg:basis-1/3">
-                  <ProductCard product={product} large onQuickView={() => setQuickViewProduct(product)} />
-                </CarouselItem>
-              ))}
+              {isLoading
+                ? [0, 1, 2].map((i) => (
+                    <CarouselItem key={`skeleton-${i}`} className="pl-5 basis-full md:basis-1/2 lg:basis-1/3">
+                      <ProductCardSkeleton />
+                    </CarouselItem>
+                  ))
+                : products.map((product) => (
+                    <CarouselItem key={product.id} className="pl-5 basis-full md:basis-1/2 lg:basis-1/3">
+                      {/* Every card here is featured, so no per-card badge. */}
+                      <ProductCard product={product} large showBadge={false} onQuickView={() => setQuickViewProduct(product)} />
+                    </CarouselItem>
+                  ))}
             </CarouselContent>
           </Carousel>
         </motion.div>

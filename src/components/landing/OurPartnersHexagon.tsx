@@ -5,19 +5,16 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Eyebrow from "@/components/ui/eyebrow";
 import SplitText from "@/components/motion/SplitText";
-import MarqueeRow from "@/components/motion/MarqueeRow";
 import { useBrands, useProducts } from "@/lib/api";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 import { cdnImg, fallbackToOriginal } from "@/lib/img";
 
 /**
- * "Brands we partner with." — three-row sliding logo marquee on white.
- *
- * Borderless tiles float through three rows at alternating directions
- * and slightly different baseline speeds. Each row picks up scroll
- * velocity via `MarqueeRow` for a subtle "alive" feel. Hover any tile
- * to bring the logo to full opacity + saturation, lift it slightly,
- * and reveal an outbound link badge.
+ * "Brands we partner with." — every brand's logo, full colour, in an even
+ * grid of identical tiles (the old marquee faded and desaturated them and cut
+ * them off at the edges, which read as unfinished). Brands with products link
+ * to their brand page; the rest are a plain tile. Logos come on white, so the
+ * tiles are white too, and each logo is fitted to the same optical box.
  *
  * File name kept (`OurPartnersHexagon.tsx`) so Index.tsx imports stay
  * stable — purely a cosmetic mismatch with the file name now.
@@ -30,32 +27,38 @@ type Logo = {
   image_url: string;
 };
 
-const LogoTile = ({ logo, linked }: { logo: Logo; linked: boolean }) => {
-  const cls =
-    "group relative flex items-center justify-center w-[200px] md:w-[240px] h-[110px] md:h-[130px] mx-3 rounded-2xl hover:shadow-[0_18px_36px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-300";
-
-  return (
-    // Only brands with products have a brand page; the rest are a plain tile.
-    <Wrapper logo={logo} linked={linked} className={cls}>
-      {/* Resized by Supabase's render endpoint: the originals are up to 1.3 MB
-          each, and a dozen of them made up most of the homepage's weight. */}
+const LogoTile = ({ logo, linked, index }: { logo: Logo; linked: boolean; index: number }) => (
+  <motion.li
+    className="w-[calc(50%-6px)] sm:w-[calc(33.333%-11px)] lg:w-[calc(16.666%-14px)]"
+    initial={{ opacity: 0, y: 16 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-40px" }}
+    transition={{ duration: 0.5, delay: (index % 6) * 0.05 + Math.floor(index / 6) * 0.08, ease: EASE_OUT_EXPO }}
+  >
+    <Wrapper
+      logo={logo}
+      linked={linked}
+      className={`group relative flex aspect-[3/2] items-center justify-center rounded-2xl border border-border/70 bg-white p-3 transition-[transform,box-shadow,border-color] duration-300 sm:p-4 ${
+        linked ? "hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_18px_36px_-18px_rgba(0,0,0,0.25)]" : ""
+      }`}
+    >
       <img
-        src={cdnImg(logo.image_url, 480)}
+        src={cdnImg(logo.image_url, 360)}
         onError={fallbackToOriginal(logo.image_url)}
         alt={logo.name}
         loading="lazy"
         decoding="async"
-        className="max-h-[100%] max-w-[82%] object-contain opacity-70 saturate-[0.85] group-hover:opacity-100 group-hover:saturate-100 transition duration-300"
+        className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.04]"
       />
       {linked && (
         <ArrowUpRight
           aria-hidden
-          className="absolute top-3 right-3 w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          className="absolute right-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         />
       )}
     </Wrapper>
-  );
-};
+  </motion.li>
+);
 
 const Wrapper = ({ logo, linked, className, children }: { logo: Logo; linked: boolean; className: string; children: ReactNode }) =>
   linked ? (
@@ -73,21 +76,6 @@ const OurPartnersHexagon = () => {
   const logos = brands.filter((b): b is typeof b & { image_url: string } => !!b.image_url);
 
   if (logos.length === 0) return null;
-
-  // Split the brand portfolio across two rows so each logo appears in one row
-  // instead of three. useBrands() is already ordered by name → stable split.
-  // If we only have a single brand, both rows fall back to the same list so
-  // we still render two rows without an empty placeholder.
-  const half = Math.ceil(logos.length / 2);
-  const rowA = logos.slice(0, half);
-  const rowB = logos.length > 1 ? logos.slice(half) : logos.slice(0, half);
-
-  // Pick a per-row `repeat` so the total stride always overflows the widest
-  // typical viewports, even when a row only has 1–2 logos. One tile is ~264px
-  // wide (240 + 2×12 margin), so 16 / rowLength copies gives us roughly 4k px
-  // of stride at the minimum.
-  const repeatFor = (rowLen: number) =>
-    Math.max(6, Math.ceil(16 / Math.max(rowLen, 1)));
 
   return (
     <section className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background">
@@ -159,43 +147,13 @@ const OurPartnersHexagon = () => {
           </motion.p>
         </motion.div>
 
-        {/* Marquee stack — three rows, alternating directions */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.9, delay: 0.2 }}
-          className="relative space-y-3"
-        >
-          {/* Edge fades — white → transparent */}
-          <div
-            aria-hidden
-            className="absolute inset-y-0 left-0 w-24 md:w-32 z-10 pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(90deg, hsl(var(--background)) 10%, hsl(var(--background) / 0.7) 50%, transparent 100%)",
-            }}
-          />
-          <div
-            aria-hidden
-            className="absolute inset-y-0 right-0 w-24 md:w-32 z-10 pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(270deg, hsl(var(--background)) 10%, hsl(var(--background) / 0.7) 50%, transparent 100%)",
-            }}
-          />
-
-          <MarqueeRow baseVelocity={20} direction={-1} repeat={repeatFor(rowA.length)}>
-            {rowA.map((logo) => (
-              <LogoTile key={`r1-${logo.id}`} logo={logo} linked={stocked.has(logo.id)} />
-            ))}
-          </MarqueeRow>
-          <MarqueeRow baseVelocity={17} direction={1} repeat={repeatFor(rowB.length)}>
-            {rowB.map((logo) => (
-              <LogoTile key={`r2-${logo.id}`} logo={logo} linked={stocked.has(logo.id)} />
-            ))}
-          </MarqueeRow>
-        </motion.div>
+        {/* Every brand, one even grid */}
+        {/* flex-wrap (not grid) so a short last row sits centred */}
+        <ul className="flex flex-wrap justify-center gap-3 sm:gap-4">
+          {logos.map((logo, i) => (
+            <LogoTile key={logo.id} logo={logo} linked={stocked.has(logo.id)} index={i} />
+          ))}
+        </ul>
 
         {/* CTA */}
         <motion.div
