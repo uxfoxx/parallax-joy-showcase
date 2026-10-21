@@ -4,10 +4,10 @@ import { cdnImg, fallbackToOriginal } from "@/lib/img";
 import Seo, { SITE_URL } from "@/components/Seo";
 import { categorySlug, faqSchema } from "@/lib/categories";
 import { isHouseBrand } from "@/lib/brands";
-import { packSize, productFaqs, storageFor, variantGroupName, variantLabel, variantsOf } from "@/lib/products";
+import { packSize, productFaqs, productMetaDescription, storageFor, variantGroupName, variantLabel, variantsOf } from "@/lib/products";
 import { productCategories } from "@/hooks/useSuppliedCategories";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ArrowLeft, Package, Share2, Tag, Building2, ChevronLeft, ChevronRight, ChevronDown, Sparkles, Box, Hash, FileText, Phone, Check, Ruler, Snowflake, Layers } from "lucide-react";
+import { ArrowLeft, Package, Share2, Tag, Building2, ChevronLeft, ChevronRight, ChevronDown, Sparkles, Box, Hash, FileText, Phone, Check, Ruler, Snowflake, Layers, Receipt } from "lucide-react";
 import { toast } from "sonner";
 import PageLayout from "@/components/PageLayout";
 import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
@@ -129,6 +129,14 @@ const ProductDetailPage = () => {
     ...(size ? [{ icon: Ruler, label: "Pack size", value: size }] : []),
     ...(storage ? [{ icon: Snowflake, label: "Storage", value: storage }] : []),
     ...(product.sku ? [{ icon: Hash, label: "SKU", value: product.sku }] : []),
+    // Prices aren't published (trade prices vary by volume); this is the honest
+    // answer to the "<product> price in sri lanka" searches, and a way to ask.
+    {
+      icon: Receipt,
+      label: "Price",
+      value: "Wholesale, on request",
+      link: quoteHref({ kind: "product", name: product.name, sku: product.sku, path: `/products/${product.slug}` }),
+    },
   ];
 
   const enquiry: EnquiryTarget = { kind: "product", name: product.name, sku: product.sku, path: `/products/${product.slug}` };
@@ -148,7 +156,7 @@ const ProductDetailPage = () => {
         // Own-range items read "Almond Milk Supplier in Sri Lanka", not
         // "Almond Milk by Olive Foods" (which implies Olive Foods makes it).
         title={ownRange ? `${product.name} Supplier in Sri Lanka` : `${product.name} by ${brandName}, Sri Lanka`}
-        description={plainDesc}
+        description={productMetaDescription(product.name, brandName, ownRange, plainDesc)}
         path={`/products/${product.slug}`}
         image={product.image_url || undefined}
         type="product"

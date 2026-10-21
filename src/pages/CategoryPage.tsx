@@ -9,6 +9,7 @@ import ProductCard from "@/components/ProductCard";
 import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
 import { useCategories, useProducts } from "@/lib/api";
 import { categoryFromSlug, categorySeo, categoryFaqs, faqSchema, lowerCategory } from "@/lib/categories";
+import { isHouseBrand, listOf } from "@/lib/brands";
 import { quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
 import RelatedGuides from "@/components/RelatedGuides";
 import categoryIntros from "@/data/category-intros.json";
@@ -45,6 +46,15 @@ const CategoryPage = () => {
   const path = `/categories/${slug}`;
   const brandNames = [...new Set(products.map((p) => p.brands?.name).filter((b): b is string => !!b))].sort();
   const faqs = categoryFaqs(name, brandNames);
+  // Search-result description: the queries are "<category> wholesale / supplier /
+  // distributor / importers in sri lanka", so lead with wholesale + Sri Lanka and
+  // the real count and brands; fall back to the template while products load.
+  const notHouse = brandNames.filter((b) => !isHouseBrand(b) && b.toLowerCase() !== "generic");
+  const metaDescription = products.length
+    ? `Wholesale ${lowerCategory(name)} in Sri Lanka: ${products.length} product${products.length === 1 ? "" : "s"}${
+        notHouse.length ? ` from ${listOf(notHouse.slice(0, 3))}${notHouse.length > 3 ? " and more" : ""}` : ""
+      }. Olive Foods imports and distributes them island-wide from Colombo to hotels, restaurants and retailers.`
+    : seo.description;
   const enquiry: EnquiryTarget = { kind: "category", name, path };
 
   const schema = [
@@ -81,7 +91,7 @@ const CategoryPage = () => {
 
   return (
     <PageLayout enquiry={enquiry}>
-      <Seo title={`${seo.title} | Olive Foods`} description={seo.description} path={path} schema={schema} noindex={empty} />
+      <Seo title={`${seo.title} | Olive Foods`} description={metaDescription} path={path} schema={schema} noindex={empty} />
       <PageHero
         eyebrow={`Olive Foods / Categories / ${name}`}
         title={

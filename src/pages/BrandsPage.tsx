@@ -30,8 +30,8 @@ const BrandsPage = () => {
   return (
     <PageLayout>
       <Seo
-        title="Our Brands: World-Class Food Producers | Olive Foods"
-        description="The international food brands Olive Foods imports and represents in Sri Lanka, sourced from world-class growers and producers across Europe, Asia and the Middle East."
+        title="Imported Food Brands in Sri Lanka | Olive Foods"
+        description="The international food brands Olive Foods imports and distributes in Sri Lanka, from producers across Europe, Asia and the Middle East, supplied wholesale to hotels, restaurants and retailers island-wide."
         path="/brands"
       />
       <PageHero

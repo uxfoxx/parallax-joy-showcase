@@ -56,6 +56,20 @@ export type SearchReport = {
   countries: SearchRow[];
   devices: SearchRow[];
 };
+/** A non-brand search where a page shows up at ~4–20 (see deploy/insights/sources/gsc.mjs). */
+export type Opportunity = {
+  query: string;
+  page: string;
+  clicks: number;
+  impressions: number;
+  ctr: number;
+  position: number;
+  stage: "page1" | "page2";
+  /** Extra clicks a move to position 3 would bring. */
+  potential: number;
+};
+export type Opportunities = { days: number; rows: Opportunity[]; nonBrandSearches: number };
+
 export type Sitemap = {
   path: string;
   isIndex: boolean;
@@ -182,6 +196,7 @@ export const useInsightsStatus = () => useInsight<Status>("status");
 export const useGa = (days: Range) => useInsight<Envelope<GaReport>>(`ga?days=${days}`);
 export const useRealtime = () => useInsight<Envelope<Realtime>>("realtime", { refetchInterval: 60_000 });
 export const useSearch = (days: Range) => useInsight<Envelope<SearchReport>>(`search?days=${days}`);
+export const useOpportunities = (days: Range) => useInsight<Envelope<Opportunities>>(`opportunities?days=${days}`);
 export const useSitemaps = () => useInsight<Envelope<Sitemap[]>>("sitemaps", { refetchInterval: whileRunning });
 export const useIndexing = () => useInsight<Envelope<IndexingData>>("indexing", { refetchInterval: whileRunning });
 export const useClarity = () => useInsight<ClarityEnvelope>("clarity", { refetchInterval: whileRunning });

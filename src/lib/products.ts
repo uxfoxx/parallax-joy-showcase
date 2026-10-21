@@ -97,3 +97,20 @@ export const searchProducts = <
     return words.every((w) => hay.includes(w));
   });
 };
+
+/**
+ * The search-result description for a product page. Search Console shows
+ * people typing "<product> sri lanka" and "<product> price in sri lanka", so it
+ * leads with the product, Sri Lanka and wholesale, then the product's own first
+ * sentence (trimmed to fit), and ends with what a buyer can do — prices aren't
+ * published, so "ask for a price" is the honest answer to the price searches.
+ */
+export const productMetaDescription = (name: string, brand: string, ownRange: boolean, plain: string): string => {
+  const lead = `${name}${ownRange || !brand ? "" : ` by ${brand}`} wholesale in Sri Lanka from Olive Foods.`;
+  const tail = " Ask for a price; island-wide delivery.";
+  const room = 158 - lead.length - tail.length;
+  const first = ((plain.match(/^.*?[.!?](?=\s|$)/) ?? [plain])[0] ?? "").trim();
+  let mid = "";
+  if (first && room > 30) mid = " " + (first.length <= room - 1 ? first : `${first.slice(0, room - 2).replace(/\s+\S*$/, "")}…`);
+  return `${lead}${mid}${tail}`;
+};
