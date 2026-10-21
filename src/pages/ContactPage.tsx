@@ -128,7 +128,7 @@ const ContactPage = () => {
   const lightInputClasses = "flex h-11 w-full rounded-lg border border-border bg-background px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:border-accent/30 transition-colors font-body";
 
   return (
-    <div className="smooth-scroll overflow-x-hidden">
+    <div className="smooth-scroll overflow-x-clip">
       <Seo
         title="Contact Olive Foods: Food Supply for Hotels, Restaurants & Retail"
         description="Hotel, restaurant, supermarket, or sourcing a hard-to-find product in Sri Lanka? Talk to Olive Foods: email info@olivefoods.lk or message us on WhatsApp. We respond within one business day."

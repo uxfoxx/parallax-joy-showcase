@@ -254,7 +254,7 @@ const AboutPage = () => {
   ];
 
   return (
-    <div className="smooth-scroll overflow-x-hidden">
+    <div className="smooth-scroll overflow-x-clip">
       <Seo
         title="About Olive Foods: Sri Lanka's Premium Food Import Partner"
         description="Thirty-plus years of food-industry experience. Olive Foods sources globally and distributes island-wide to Sri Lanka's hotels, restaurants and retailers, built on relationships, not transactions."
