@@ -42,9 +42,6 @@ const Index = () => {
       <FloatingWhatsApp />
 
       <main>
-      {/* Sections are grouped by theme so the page doesn't flicker between
-          dark and light: products (light) → who we are (dark) → where it comes
-          from (light) → visit (dark) → FAQ (light). */}
       {/* Light hero, dark navbar over it (data-navbar-bar, see Navbar). */}
       <div data-navbar-theme="light" data-navbar-bar="dark">
         <HeroSection />
@@ -59,20 +56,20 @@ const Index = () => {
         <div data-navbar-theme="light">
           <OurProductsSection />
         </div>
+        <div data-navbar-theme="dark">
+          <WhyChooseUs />
+        </div>
         <div data-navbar-theme="light">
           <CategoriesSection />
         </div>
         <div data-navbar-theme="dark">
-          <WhyChooseUs />
-        </div>
-        <div data-navbar-theme="dark">
           <BrandManifesto />
-        </div>
-        <div data-navbar-theme="dark">
-          <TeamSection />
         </div>
         <div data-navbar-theme="light">
           <StatsSection />
+        </div>
+        <div data-navbar-theme="dark">
+          <TeamSection />
         </div>
         <div data-navbar-theme="light">
           <OurPartnersHexagon />

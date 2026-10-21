@@ -10,9 +10,11 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { ArrowUpRight, Globe2, Snowflake, Truck, Warehouse } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Globe2, Snowflake, Truck, Warehouse } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import Eyebrow from "@/components/ui/eyebrow";
 import SplitText from "@/components/motion/SplitText";
+import MagneticButton from "@/components/motion/MagneticButton";
 import CursorSpotlight from "@/components/motion/CursorSpotlight";
 import { cn } from "@/lib/utils";
 import { SRI_LANKA_CITIES, SRI_LANKA_PATH } from "@/data/sriLankaMap";
@@ -867,6 +869,37 @@ const WhyChooseUs = () => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* ── Close ── */}
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-8">
+        <motion.div
+          initial={reduced ? false : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.7, ease }}
+          className="mt-10 flex flex-col items-start justify-between gap-6 rounded-[22px] border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm sm:flex-row sm:items-center sm:p-7 lg:mt-6"
+        >
+          <div>
+            <p className="font-display text-xl font-bold text-white sm:text-2xl">Ready to partner with Olive Foods?</p>
+            <p className="mt-1 font-body text-sm text-white/55">Tell us what your kitchen or shelves need. We reply within one business day.</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <MagneticButton>
+              <Button asChild variant="brand" size="pill" className="group font-body">
+                <Link to="/contact">
+                  Get in touch
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            </MagneticButton>
+            <MagneticButton>
+              <Button asChild variant="heroOutline" size="pill" className="font-body">
+                <Link to="/products">Browse products</Link>
+              </Button>
+            </MagneticButton>
+          </div>
+        </motion.div>
       </div>
 
       <CursorSpotlight color="hsl(75 40% 60% / 0.1)" size={560} blendMode="screen" />
