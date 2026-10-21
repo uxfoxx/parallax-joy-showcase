@@ -15,7 +15,7 @@ interface PageLayoutProps {
 
 const PageLayout = ({ children, enquiry }: PageLayoutProps) => {
   return (
-    <div className="min-h-screen smooth-scroll overflow-x-hidden">
+    <div className="min-h-screen smooth-scroll overflow-x-clip">
       <ImmersiveBackground />
       <ScrollFloatingElement />
       <Navbar />

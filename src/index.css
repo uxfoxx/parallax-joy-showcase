@@ -126,11 +126,16 @@
     scrollbar-color: hsl(140 50% 19% / 0.4) transparent;
   }
 
+  /* clip, not hidden: overflow-x: hidden turns body into a scroll container
+   * (overflow-y computes to auto), and then nothing inside can be
+   * position: sticky against the viewport. html's overflow-x: hidden above
+   * still stops sideways scrolling where clip isn't supported. The page
+   * wrappers (Index, PageLayout, About, Contact) use overflow-x-clip for the
+   * same reason. */
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter Variable', 'Inter', sans-serif;
-    overflow-x: hidden;
-    overflow-y: visible;
+    overflow-x: clip;
   }
 
   /* Custom scrollbar — Webkit */

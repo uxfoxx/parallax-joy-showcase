@@ -1,7 +1,16 @@
 import { useEffect, useId, useRef, useState, type ComponentType } from "react";
 import { Link } from "react-router-dom";
-import { motion, useInView, useReducedMotion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, ChevronDown, Globe2, Snowflake, Truck, Warehouse } from "lucide-react";
+import {
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
+import { ArrowRight, ArrowUpRight, Globe2, Snowflake, Truck, Warehouse } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Eyebrow from "@/components/ui/eyebrow";
 import SplitText from "@/components/motion/SplitText";
@@ -13,15 +22,21 @@ import { SRI_LANKA_CITIES, SRI_LANKA_PATH } from "@/data/sriLankaMap";
 /**
  * WhyChooseUs — "Your complete import and distribution partner".
  *
- * A capability deck: four panels, one open at a time. On desktop the open
- * panel widens to show a live scene of that capability (routes converging on
- * Colombo, the bonded racks, the −18 °C trace, deliveries across the island)
- * while the others fold down to a vertical label; the deck steps through them
- * on its own while it's on screen, pausing on hover or focus and stopping for
- * good once the visitor picks one. On phones it's an accordion.
+ * A capability deck, driven by scroll. On desktop the deck pins in view while
+ * the visitor scrolls through a tall track, and the scroll position opens the
+ * panels in turn: the open one widens to show a live scene of that capability
+ * (routes converging on Colombo, the bonded racks, the −18 °C trace,
+ * deliveries across the island) while the rest fold to a vertical label. Each
+ * panel holds open for a stretch, then hands over; widths, content and scenes
+ * all follow the (spring-smoothed) scroll, so scrolling back closes them again.
+ * A rail under the deck fills with progress; its steps and the folded panels
+ * jump to that capability. On phones the cards stack: each slides up over the
+ * last, which shrinks and dims as it's covered.
  *
- * The Olive Standard (BrandManifesto) tells the same journey as a scroll-drawn
- * chain; this is the hands-on version, so it's built to be clicked.
+ * Needs every ancestor to be overflow visible/clip (not hidden) or the pin
+ * can't stick — see the body rule in index.css.
+ *
+ * prefers-reduced-motion: no pinning or stacking; panels open on click.
  *
  * Facts only from src/data/company.json — 30+ years, 30+ source countries,
  * bonded warehousing, −18 °C cold chain, all 25 districts — and the office,
@@ -44,7 +59,6 @@ type Capability = {
 };
 
 const ease = [0.22, 1, 0.36, 1] as const;
-const STEP_MS = 7000;
 const GOLD = "hsl(var(--gold-light))";
 const ACCENT = "hsl(var(--accent))";
 
@@ -403,74 +417,131 @@ const CAPABILITIES: Capability[] = [
   },
 ];
 
+/* ─── Openness: scroll position → how open each panel is ──────────────── */
+
+const N = CAPABILITIES.length;
+/** Share of each step on either side of a panel where it stays fully open. */
+const DWELL = 0.22;
+const smoothstep = (t: number) => t * t * (3 - 2 * t);
+
+/**
+ * `x` runs 0 → N−1 through the pinned scroll. Panel i is fully open while x is
+ * within DWELL of i and hands over to its neighbour in between, eased. The
+ * openness of all panels always sums to 1, so the deck's total width never
+ * changes while the panels trade space.
+ */
+function openness(x: number, i: number) {
+  const d = Math.abs(x - i);
+  if (d >= 1) return 0;
+  const t = Math.min(1, Math.max(0, (d - DWELL) / (1 - 2 * DWELL)));
+  return 1 - smoothstep(t);
+}
+
+/** Sticky top of card i in the phone stack (below the 64px navbar). */
+const stackTop = (i: number) => 84 + i * 14;
+
+const reveal = {
+  hide: { opacity: 0, y: 14 },
+  show: (i: number) => ({ opacity: 1, y: 0, transition: { duration: 0.55, delay: 0.08 + i * 0.07, ease } }),
+};
+
 /* ─── One panel of the deck ───────────────────────────────────────────── */
 
 function Panel({
   cap,
   index,
+  x,
+  arrivals,
+  wide,
   on,
   reduced,
-  timer,
   onSelect,
-  onTimerEnd,
 }: {
   cap: Capability;
   index: number;
+  /** Deck position, 0 → N−1 (desktop). */
+  x: MotionValue<number>;
+  /** How far each phone card has slid up to its sticky spot, 0 → 1. */
+  arrivals: MotionValue<number>[];
+  wide: boolean;
   on: boolean;
   reduced: boolean;
-  /** "run" / "pause" the auto-advance bar, or null when it's off. */
-  timer: "run" | "pause" | null;
   onSelect: () => void;
-  onTimerEnd: () => void;
 }) {
   const uid = useId();
   const btnId = `${uid}-btn`;
   const regionId = `${uid}-region`;
   const { icon: Icon, Scene } = cap;
   const num = String(index + 1).padStart(2, "0");
+  const ref = useRef<HTMLLIElement>(null);
+
+  // Desktop: everything follows this panel's openness.
+  const o = useTransform(x, (v) => openness(v, index));
+  const grow = useTransform(o, (v) => 1 + 2.3 * v);
+  // The label and the content overlap their fades, so a half-open panel is
+  // never blank.
+  const contentOpacity = useTransform(o, [0.38, 0.82], [0, 1]);
+  const contentX = useTransform(o, [0.38, 1], [32, 0]);
+  const sceneScale = useTransform(o, [0.35, 1], [0.86, 1]);
+  const ghostY = useTransform(o, [0.4, 1], [40, 0]);
+  const labelOpacity = useTransform(o, [0.22, 0.56], [1, 0]);
+  const labelY = useTransform(o, [0.1, 0.56], [0, 28]);
+  const glow = useTransform(o, [0.55, 1], [0, 1]);
+
+  // Phones: this card slides up into the stack, then recedes as the next
+  // one covers it.
+  const { scrollYProgress: arrive } = useScroll({ target: ref, offset: ["start end", `start ${stackTop(index)}px`] });
+  useMotionValueEvent(arrive, "change", (v) => arrivals[index].set(v));
+  const covered = arrivals[index + 1] ?? arrivals[index];
+  const isLast = index === N - 1;
+  const stackScale = useTransform(covered, [0, 1], [1, isLast ? 1 : 0.92]);
+  const stackDim = useTransform(covered, [0, 1], [0, isLast ? 0 : 0.6]);
 
   return (
-    <li
+    <motion.li
+      ref={ref}
+      id={`capability-${cap.key}`}
+      style={
+        wide
+          ? { flexGrow: grow }
+          : reduced
+            ? undefined
+            : { top: stackTop(index), scale: stackScale, transformOrigin: "50% 0%" }
+      }
       className={cn(
-        "relative overflow-hidden rounded-[22px] border transition-[flex-grow,border-color,background-color] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] lg:min-w-0 lg:basis-0",
-        on
-          ? "border-gold-light/25 bg-[linear-gradient(160deg,hsl(150_38%_9%),hsl(150_40%_6%))] lg:grow-[3.3]"
-          : "border-white/[0.08] bg-white/[0.025] hover:border-white/20 hover:bg-white/[0.05] lg:grow",
+        "relative overflow-hidden rounded-[22px] border border-white/[0.09] bg-[linear-gradient(160deg,hsl(150_38%_9%),hsl(150_40%_6%))]",
+        !reduced && "sticky lg:relative lg:top-auto",
+        "lg:min-w-0 lg:basis-0 lg:bg-none lg:bg-white/[0.025]",
       )}
     >
-      {/* Auto-advance progress (desktop) */}
-      {on && (
-        <span aria-hidden className="absolute inset-x-0 top-0 z-20 hidden h-[2px] bg-white/[0.06] lg:block">
-          <span
-            key={timer ? "timed" : "static"}
-            className="block h-full origin-left bg-gradient-to-r from-accent to-gold-light"
-            style={timer ? { animation: `progress-bar ${STEP_MS}ms linear forwards`, animationPlayState: timer === "pause" ? "paused" : "running" } : undefined}
-            onAnimationEnd={onTimerEnd}
-          />
-        </span>
+      {/* Desktop: the open panel's ground and gold edge fade in with it. */}
+      {wide && (
+        <motion.span
+          aria-hidden
+          style={{ opacity: glow }}
+          className="pointer-events-none absolute inset-0 rounded-[22px] border border-gold-light/30 bg-[linear-gradient(160deg,hsl(150_38%_10%),hsl(150_40%_6%))]"
+        />
       )}
+      {/* Phones: covered cards dim as they recede. */}
+      {!wide && !reduced && <motion.span aria-hidden style={{ opacity: stackDim }} className="pointer-events-none absolute inset-0 z-20 bg-[hsl(150_40%_4%)]" />}
 
-      {/* Trigger: an accordion row on phones; the folded label on desktop */}
+      {/* Trigger: the card's header row on phones; the folded label on desktop. */}
       <h3 className="lg:contents">
-        <button
+        <motion.button
           id={btnId}
           type="button"
-          aria-expanded={on}
+          aria-expanded={wide ? on : true}
           aria-controls={regionId}
           onClick={onSelect}
+          style={wide ? { opacity: labelOpacity, y: labelY } : undefined}
           className={cn(
             "group/trigger relative z-10 flex w-full items-center gap-4 p-4 text-left sm:p-5",
-            "lg:absolute lg:inset-0 lg:flex-col lg:items-start lg:justify-between lg:gap-0 lg:p-6 lg:transition-opacity lg:duration-300",
-            on ? "lg:pointer-events-none lg:opacity-0" : "lg:opacity-100 lg:delay-200",
+            "lg:absolute lg:inset-0 lg:flex-col lg:items-start lg:justify-between lg:gap-0 lg:p-6",
+            on && "lg:pointer-events-none",
           )}
         >
           <span className="flex shrink-0 items-center gap-3 lg:w-full lg:justify-between">
-            <span
-              className={cn(
-                "flex h-11 w-11 items-center justify-center rounded-xl border transition-colors duration-500",
-                on ? "border-transparent bg-gold-light text-forest-deep" : "border-white/10 bg-white/[0.05] text-gold-light group-hover/trigger:border-gold-light/40",
-              )}
-            >
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gold-light text-forest-deep transition-colors duration-300 lg:border lg:border-white/10 lg:bg-white/[0.05] lg:text-gold-light lg:group-hover/trigger:border-gold-light/40">
               <Icon className="h-5 w-5" />
             </span>
             <span className="hidden font-display text-xs font-semibold tracking-[0.2em] text-white/40 lg:block">{num}</span>
@@ -483,57 +554,83 @@ function Panel({
               {cap.stat.value} · {cap.stat.unit}
             </span>
           </span>
-          <ChevronDown className={cn("h-5 w-5 shrink-0 text-white/50 transition-transform duration-300 lg:hidden", on && "rotate-180 text-gold-light")} />
-        </button>
+          <span className="font-display text-xs font-semibold tracking-[0.2em] text-white/35 lg:hidden">
+            {num}/{String(N).padStart(2, "0")}
+          </span>
+        </motion.button>
       </h3>
 
-      {/* The open panel: collapses by row height on phones, fades on desktop */}
-      <div
+      {/* The open panel. Phones: always open. Desktop: fades and slides in as
+          the panel widens; fixed width, so the text never reflows mid-move. */}
+      <motion.div
         id={regionId}
         role="region"
         aria-labelledby={btnId}
-        aria-hidden={!on}
+        aria-hidden={wide ? !on : undefined}
+        style={wide ? { opacity: contentOpacity, x: contentX } : undefined}
         className={cn(
-          "grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:absolute lg:inset-y-0 lg:left-0 lg:block lg:w-[calc((min(100vw,80rem)_-_100px)_*_0.52)]",
-          on ? "grid-rows-[1fr] opacity-100 lg:delay-200" : "grid-rows-[0fr] opacity-0 lg:duration-200",
+          "lg:pointer-events-none lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:w-[calc((min(100vw,80rem)_-_100px)_*_0.52)] lg:flex-col",
+          on && "lg:pointer-events-auto",
         )}
       >
-        <div className="min-h-0 overflow-hidden lg:flex lg:h-full lg:flex-col">
-          {/* scene */}
-          <div className="relative mx-4 h-52 overflow-hidden rounded-2xl border border-white/[0.06] bg-[radial-gradient(ellipse_at_50%_40%,hsl(146_40%_11%),hsl(150_40%_6%)_75%)] sm:mx-5 sm:h-64 lg:mx-0 lg:h-auto lg:flex-1 lg:rounded-none lg:border-0 lg:bg-[radial-gradient(ellipse_at_50%_45%,hsl(146_40%_12%/0.9),transparent_70%)]">
-            <div className="absolute inset-0 p-3 lg:p-6 lg:pb-0">
-              <Scene on={on} reduced={reduced} />
-            </div>
-            <span aria-hidden className="pointer-events-none absolute left-6 top-6 hidden font-display text-xs font-semibold tracking-[0.2em] text-white/40 lg:block">
-              {num} / 04
-            </span>
+        {/* scene */}
+        <motion.div
+          style={wide ? { scale: sceneScale } : undefined}
+          className="relative mx-4 h-52 overflow-hidden rounded-2xl border border-white/[0.06] bg-[radial-gradient(ellipse_at_50%_40%,hsl(146_40%_11%),hsl(150_40%_6%)_75%)] sm:mx-5 sm:h-64 lg:mx-0 lg:h-auto lg:flex-1 lg:origin-bottom lg:rounded-none lg:border-0 lg:bg-[radial-gradient(ellipse_at_50%_45%,hsl(146_40%_12%/0.9),transparent_70%)]"
+        >
+          {/* ghost numeral */}
+          <motion.span
+            aria-hidden
+            style={wide ? { y: ghostY } : undefined}
+            className="pointer-events-none absolute -right-2 -top-6 hidden select-none font-display text-[150px] font-bold leading-none tracking-tighter text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.07)] lg:block"
+          >
+            {num}
+          </motion.span>
+          <div className="absolute inset-0 p-3 lg:p-6 lg:pb-0">
+            <Scene on={on} reduced={reduced} />
           </div>
+          <span aria-hidden className="pointer-events-none absolute left-6 top-6 hidden font-display text-xs font-semibold tracking-[0.2em] text-white/40 lg:block">
+            {num} / {String(N).padStart(2, "0")}
+          </span>
+        </motion.div>
 
-          {/* copy */}
-          <div className="px-4 pb-5 pt-4 sm:px-5 lg:px-8 lg:pb-8 lg:pt-2">
-            <p className="font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-light">{cap.tag}</p>
-            <p aria-hidden className="mt-2 hidden font-display text-[28px] font-bold leading-[1.1] tracking-tight text-white lg:block xl:text-[32px]">
-              {cap.headline}
+        {/* copy, staggered in each time the panel opens */}
+        <motion.div initial={false} animate={on || reduced ? "show" : "hide"} className="px-4 pb-5 pt-4 sm:px-5 lg:px-8 lg:pb-8 lg:pt-2">
+          <motion.p variants={reveal} custom={0} className="font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-light">
+            {cap.tag}
+          </motion.p>
+          <motion.p
+            variants={reveal}
+            custom={1}
+            aria-hidden
+            className="mt-2 hidden font-display text-[28px] font-bold leading-[1.1] tracking-tight text-white lg:block xl:text-[32px]"
+          >
+            {cap.headline}
+          </motion.p>
+          <motion.p variants={reveal} custom={2} className="mt-2 max-w-[34rem] font-body text-[15px] leading-relaxed text-white/60">
+            {cap.text}
+          </motion.p>
+          <motion.div
+            variants={reveal}
+            custom={3}
+            className="mt-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3 lg:mt-5 lg:border-t lg:border-white/[0.08] lg:pt-4"
+          >
+            <p className="hidden items-baseline gap-2 lg:flex">
+              <span className="font-display text-3xl font-bold tracking-tight text-gradient-gold-dark">{cap.stat.value}</span>
+              <span className="font-body text-[13px] text-white/50">{cap.stat.unit}</span>
             </p>
-            <p className="mt-2 max-w-[34rem] font-body text-[15px] leading-relaxed text-white/60">{cap.text}</p>
-            <div className="mt-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3 lg:mt-5 lg:border-t lg:border-white/[0.08] lg:pt-4">
-              <p className="hidden items-baseline gap-2 lg:flex">
-                <span className="font-display text-3xl font-bold tracking-tight text-gradient-gold-dark">{cap.stat.value}</span>
-                <span className="font-body text-[13px] text-white/50">{cap.stat.unit}</span>
-              </p>
-              <Link
-                to={cap.link.to}
-                tabIndex={on ? undefined : -1}
-                className="group/link inline-flex items-center gap-1.5 py-1 font-body text-sm font-semibold text-gold-light transition-colors hover:text-white"
-              >
-                {cap.link.label}
-                <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </li>
+            <Link
+              to={cap.link.to}
+              tabIndex={wide && !on ? -1 : undefined}
+              className="group/link inline-flex items-center gap-1.5 py-1 font-body text-sm font-semibold text-gold-light transition-colors hover:text-white"
+            >
+              {cap.link.label}
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
+            </Link>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </motion.li>
   );
 }
 
@@ -541,12 +638,6 @@ function Panel({
 
 const WhyChooseUs = () => {
   const reduced = !!useReducedMotion();
-  const deckRef = useRef<HTMLUListElement>(null);
-  const deckInView = useInView(deckRef, { amount: 0.45 });
-  const [active, setActive] = useState(0);
-  // Auto-advance runs on desktop only, until the visitor picks a panel.
-  const [auto, setAuto] = useState(true);
-  const [held, setHeld] = useState(false);
   const [wide, setWide] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");
@@ -555,25 +646,98 @@ const WhyChooseUs = () => {
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
+  const pinned = wide && !reduced;
 
-  // Desktop always shows one panel open.
+  // Desktop: the deck pins for the length of the track and scroll drives it.
+  const trackRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: trackRef, offset: ["start start", "end end"] });
+  const eased = useSpring(scrollYProgress, { stiffness: 170, damping: 32, mass: 0.35 });
+  const scrolledX = useTransform(eased, (v) => v * (N - 1));
+  // Reduced motion: no pinning; panels open on click.
+  const clickedX = useMotionValue(0);
+  const x = pinned ? scrolledX : clickedX;
+  const rail = useTransform(eased, [0, 1], [0, 1]);
+
+  const [active, setActive] = useState(0);
+  useMotionValueEvent(scrolledX, "change", (v) => {
+    if (!pinned) return;
+    const next = Math.round(v);
+    setActive((cur) => (cur === next ? cur : next));
+  });
+
+  // Settle: if the visitor stops scrolling between two panels, glide to the
+  // nearer one so the deck never rests half-open.
   useEffect(() => {
-    if (wide && active < 0) setActive(0);
-  }, [wide, active]);
+    if (!pinned) return;
+    let timer = 0;
+    const settle = () => {
+      const track = trackRef.current;
+      if (!track) return;
+      const top = track.getBoundingClientRect().top;
+      const distance = track.offsetHeight - window.innerHeight;
+      if (top > 0 || top < -distance) return; // not pinned right now
+      const pos = (-top / distance) * (N - 1);
+      const nearest = Math.round(pos);
+      if (Math.abs(pos - nearest) <= DWELL * 0.9) return; // already inside a panel's hold
+      window.scrollTo({ top: window.scrollY + top + (distance * nearest) / (N - 1), behavior: "smooth" });
+    };
+    const onScroll = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(settle, 200);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.clearTimeout(timer);
+    };
+  }, [pinned]);
 
-  const timer: "run" | "pause" | null = !auto || reduced || !wide ? null : held || !deckInView ? "pause" : "run";
+  // Phones: one arrival value per card (see Panel). N is constant.
+  const a0 = useMotionValue(0);
+  const a1 = useMotionValue(0);
+  const a2 = useMotionValue(0);
+  const a3 = useMotionValue(0);
+  const arrivals = [a0, a1, a2, a3];
 
-  const select = (i: number) => {
-    setAuto(false);
-    // Phones: tapping the open row closes it; desktop always keeps one open.
-    setActive((cur) => (cur === i && !wide ? -1 : i));
+  // Phones: a card's scene plays while the card is the one in view.
+  const [inViewCard, setInViewCard] = useState(0);
+  useEffect(() => {
+    if (wide) return;
+    const els = CAPABILITIES.map((c) => document.getElementById(`capability-${c.key}`));
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) setInViewCard(els.indexOf(e.target as HTMLElement));
+      },
+      { rootMargin: "-45% 0px -45% 0px" },
+    );
+    els.forEach((el) => el && io.observe(el));
+    return () => io.disconnect();
+  }, [wide]);
+
+  /** Jump to a capability: scroll the track to its step (desktop) or the card (phones). */
+  const goTo = (i: number) => {
+    if (!wide) {
+      document.getElementById(`capability-${CAPABILITIES[i].key}`)?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+      return;
+    }
+    if (reduced) {
+      clickedX.set(i);
+      setActive(i);
+      return;
+    }
+    const track = trackRef.current;
+    if (!track) return;
+    const top = track.getBoundingClientRect().top + window.scrollY;
+    const distance = track.offsetHeight - window.innerHeight;
+    window.scrollTo({ top: top + (distance * i) / (N - 1), behavior: "smooth" });
   };
 
   return (
     <section
       id="about"
       aria-labelledby="why-choose-us-title"
-      className="relative overflow-hidden py-section-base lg:py-section-base-lg"
+      // overflow-clip (not hidden) so the deck can stick while it plays.
+      className="relative overflow-clip py-section-base lg:py-section-base-lg"
       style={{ background: "radial-gradient(ellipse 90% 60% at 50% 0%, hsl(150 42% 9%), hsl(150 40% 5%) 65%)" }}
     >
       {/* Blueprint grid, faded at the edges, and two slow glows. */}
@@ -596,9 +760,9 @@ const WhyChooseUs = () => {
         style={{ background: "radial-gradient(circle, hsl(75 40% 45%), transparent 70%)", animationDelay: "8s" }}
       />
 
+      {/* ── Header ── */}
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-8">
-        {/* ── Header ── */}
-        <div className="relative mb-12 lg:mb-14">
+        <div className="relative mb-10 lg:mb-4">
           <div>
             <motion.div
               initial={reduced ? false : { opacity: 0, y: 16 }}
@@ -634,46 +798,87 @@ const WhyChooseUs = () => {
               Thirty-plus years in the food trade. Sourcing, import, bonded storage, cold chain and island-wide delivery, handled by one team from
               one Colombo address.
             </p>
-            <p className="mt-4 hidden font-body text-xs font-medium uppercase tracking-[0.2em] text-white/35 lg:block">Pick a capability, or watch them in turn</p>
           </motion.div>
         </div>
+      </div>
 
-        {/* ── The deck ── */}
-        <motion.ul
-          ref={deckRef}
-          initial={reduced ? false : { opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.8, ease }}
-          onMouseEnter={() => setHeld(true)}
-          onMouseLeave={() => setHeld(false)}
-          onFocus={() => setHeld(true)}
-          onBlur={(e) => {
-            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setHeld(false);
-          }}
-          className="flex flex-col gap-3 lg:h-[560px] lg:flex-row"
-        >
-          {CAPABILITIES.map((cap, i) => (
-            <Panel
-              key={cap.key}
-              cap={cap}
-              index={i}
-              on={active === i}
-              reduced={reduced}
-              timer={active === i ? timer : null}
-              onSelect={() => select(i)}
-              onTimerEnd={() => setActive((cur) => (cur + 1) % CAPABILITIES.length)}
-            />
-          ))}
-        </motion.ul>
+      {/* ── The deck: pinned and scroll-driven on desktop, a card stack on phones ── */}
+      <div ref={trackRef} className={cn("relative", pinned && "h-[340vh]")}>
+        <div className={cn("relative z-10", pinned && "sticky top-0 flex h-screen flex-col justify-center pt-16")}>
+          <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">
+            <ul className={cn("flex flex-col gap-4 lg:flex-row lg:gap-3", wide ? "h-[min(560px,calc(100vh-190px))]" : "")}>
+              {CAPABILITIES.map((cap, i) => (
+                <Panel
+                  key={cap.key}
+                  cap={cap}
+                  index={i}
+                  x={x}
+                  arrivals={arrivals}
+                  wide={wide}
+                  on={wide ? active === i : reduced || inViewCard === i}
+                  reduced={reduced}
+                  onSelect={() => goTo(i)}
+                />
+              ))}
+            </ul>
 
-        {/* ── Close ── */}
+            {/* Desktop progress: a rail that fills with the scroll, and the steps. */}
+            {wide && (
+              <div className="mt-6 flex items-center gap-6">
+                <span className="hidden shrink-0 items-center gap-2 font-body text-[11px] font-medium uppercase tracking-[0.2em] text-white/40 xl:flex">
+                  <span className="relative flex h-6 w-4 justify-center rounded-full border border-white/25">
+                    {!reduced && (
+                      <motion.span
+                        className="mt-1 h-1.5 w-1 rounded-full bg-gold-light"
+                        animate={{ y: [0, 8, 0], opacity: [1, 0.2, 1] }}
+                        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                      />
+                    )}
+                  </span>
+                  {reduced ? "Pick one" : "Scroll"}
+                </span>
+                <div className="relative flex flex-1 items-center">
+                  <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-white/10" />
+                  {!reduced && (
+                    <motion.span
+                      style={{ scaleX: rail }}
+                      className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 origin-left bg-gradient-to-r from-accent to-gold-light"
+                    />
+                  )}
+                  <ol className="relative flex w-full justify-between">
+                    {CAPABILITIES.map((c, i) => (
+                      <li key={c.key}>
+                        <button
+                          type="button"
+                          onClick={() => goTo(i)}
+                          className={cn(
+                            "flex items-center gap-2 rounded-full border px-3 py-1.5 font-body text-xs font-semibold transition-colors duration-300",
+                            active === i
+                              ? "border-gold-light/50 bg-[hsl(150_40%_6%)] text-white"
+                              : "border-white/10 bg-[hsl(150_40%_5%)] text-white/45 hover:text-white/80",
+                          )}
+                        >
+                          <span className={cn("h-1.5 w-1.5 rounded-full transition-colors", active === i ? "bg-gold-light" : "bg-white/25")} />
+                          {c.label}
+                        </button>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Close ── */}
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-8">
         <motion.div
           initial={reduced ? false : { opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.7, ease }}
-          className="mt-10 flex flex-col items-start justify-between gap-6 rounded-[22px] border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm sm:flex-row sm:items-center sm:p-7 lg:mt-12"
+          className="mt-10 flex flex-col items-start justify-between gap-6 rounded-[22px] border border-white/[0.08] bg-white/[0.03] p-6 backdrop-blur-sm sm:flex-row sm:items-center sm:p-7 lg:mt-6"
         >
           <div>
             <p className="font-display text-xl font-bold text-white sm:text-2xl">Ready to partner with Olive Foods?</p>

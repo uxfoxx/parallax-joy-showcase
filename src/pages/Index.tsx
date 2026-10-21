@@ -29,7 +29,7 @@ const FAQSection = lazy(() => import("@/components/landing/FAQSection"));
 const Index = () => {
   const suppliedCategories = useSuppliedCategories();
   return (
-    <div className="smooth-scroll overflow-x-hidden">
+    <div className="smooth-scroll overflow-x-clip">
       {/* Organization + WebSite structured data is defined statically in
           index.html (site-wide, JS-free). This just sets the homepage's
           title / description / canonical. */}
