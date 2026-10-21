@@ -18,7 +18,7 @@ type Props = {
 /** Small product thumbnail on a cream tile (product photos are cut-outs). */
 function Thumb({ p, size = 48 }: { p: Product; size?: number }) {
   return (
-    <span className="flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[hsl(42_33%_96%)]" style={{ width: size, height: size }}>
+    <span className="flex shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white" style={{ width: size, height: size }}>
       {p.image_url ? (
         <img
           src={cdnImg(p.image_url, size * 2)}
@@ -287,7 +287,7 @@ const ProductsMegaMenu = ({ isDark, mutedText, isActive }: Props) => {
                         <div className="mt-3 grid grid-cols-2 gap-2">
                           {(preview ? preview.items : featured).map((p) => (
                             <Link key={p.id} to={`/products/${p.slug}`} onClick={close} className="group/pv block" title={p.name}>
-                              <span className="block aspect-square overflow-hidden rounded-xl bg-[hsl(42_33%_96%)]">
+                              <span className="block aspect-square overflow-hidden rounded-xl bg-white">
                                 {p.image_url && (
                                   <img
                                     src={cdnImg(p.image_url, 220)}

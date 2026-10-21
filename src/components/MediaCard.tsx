@@ -37,10 +37,10 @@ type MediaCardProps = {
 
 /**
  * Shared portrait card used by ProductCard and BrandCard so the two card
- * families read as visual siblings. The 4/5 tile is a warm "studio" surface:
- * product and logo images mostly come on white, so they're multiplied into
- * it (the white disappears instead of reading as a pasted box), sized with an
- * even margin, and grounded by a soft floor shadow. While an image loads the
+ * families read as visual siblings. The 4/5 tile is white (the client wants
+ * product backgrounds white, not tinted); images are multiplied into it so an
+ * off-white photo background can't show as a pasted box, sized with an even
+ * margin, and grounded by a soft floor shadow. While an image loads the
  * tile shows a shimmer, never an empty box. Caption: optional eyebrow (the
  * brand), name, meta, and an accent hairline that draws in on hover.
  */
@@ -83,7 +83,7 @@ const MediaCard = ({
         className={`relative aspect-[4/5] overflow-hidden rounded-2xl border transition-shadow duration-500 group-hover:shadow-2xl group-hover:shadow-black/20 ${
           isDark
             ? "border-white/10 bg-[radial-gradient(ellipse_at_50%_35%,hsl(150_30%_16%),hsl(150_35%_9%))]"
-            : "border-border/60 bg-[radial-gradient(ellipse_at_50%_35%,#ffffff_0%,hsl(42_33%_95%)_70%,hsl(42_28%_91%)_100%)] shadow-sm"
+            : "border-border/60 bg-white shadow-sm"
         }`}
       >
         {hasImage ? (
