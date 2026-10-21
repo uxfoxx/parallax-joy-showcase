@@ -1,39 +1,73 @@
 import { motion, useMotionValue, useTransform, useSpring, useScroll } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useCategories, useProducts } from "@/lib/api";
+import { useCategories, useProducts, type Product } from "@/lib/api";
 import { categorySlug } from "@/lib/categories";
-import { productCategories } from "@/hooks/useSuppliedCategories";
+import { productCategories, useSuppliedCategories } from "@/hooks/useSuppliedCategories";
+import { cdnImg, fallbackToOriginal } from "@/lib/img";
 import { isHouseBrand, listOf } from "@/lib/brands";
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
 import SplitText from "@/components/motion/SplitText";
 import MagneticButton from "@/components/motion/MagneticButton";
-import CategoryArt from "@/components/art/CategoryArt";
 import Eyebrow from "@/components/ui/eyebrow";
+
+/** A few of the category's products as small tiles, fanned out on hover. */
+const Thumbs = ({ items, extra, hovered }: { items: Product[]; extra: number; hovered: boolean }) => (
+  <div aria-hidden className="flex items-center">
+    {items.map((p, i) => (
+      <motion.span
+        key={p.id}
+        animate={{ x: hovered ? i * 6 : 0, y: hovered ? (i % 2 ? -3 : 3) : 0, rotate: hovered ? (i - (items.length - 1) / 2) * 3 : 0 }}
+        transition={{ type: "spring", stiffness: 260, damping: 20 }}
+        className="-ml-3 first:ml-0 flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border/70 bg-[radial-gradient(ellipse_at_50%_35%,#fff,hsl(42_33%_94%))] shadow-sm md:h-16 md:w-16"
+        style={{ zIndex: items.length - i }}
+      >
+        <img
+          src={cdnImg(p.image_url!, 128)}
+          onError={fallbackToOriginal(p.image_url!)}
+          alt=""
+          loading="lazy"
+          width={64}
+          height={64}
+          className="h-full w-full object-contain p-1.5 mix-blend-multiply"
+        />
+      </motion.span>
+    ))}
+    {extra > 0 && (
+      <span className="-ml-3 flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-border/70 bg-card font-body text-xs font-semibold text-muted-foreground shadow-sm md:h-16 md:w-16" style={{ zIndex: 0 }}>
+        +{extra}
+      </span>
+    )}
+  </div>
+);
 
 const CategoryRow = ({
   name,
   desc,
+  items,
+  extra,
   index,
 }: {
   name: string;
   desc: string;
+  items: Product[];
+  extra: number;
   index: number;
 }) => {
   const [hovered, setHovered] = useState(false);
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -48 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.65, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.6, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className="relative group"
     >
-      <Link to={`/categories/${categorySlug(name)}`}>
+      <Link to={`/categories/${categorySlug(name)}`} className="block">
         {/* Hover background */}
         <motion.div
           animate={{ opacity: hovered ? 1 : 0 }}
@@ -41,66 +75,30 @@ const CategoryRow = ({
           className="absolute inset-0 rounded-xl bg-gradient-to-r from-accent/[0.06] via-accent/[0.02] to-transparent pointer-events-none"
         />
 
-        {/* Left accent bar */}
-        <motion.div
-          animate={{ scaleY: hovered ? 1 : 0, opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute left-0 top-3 bottom-3 w-[3px] bg-accent rounded-r-full origin-top"
-        />
-
-        <div className="relative flex items-center gap-5 md:gap-8 px-5 md:px-8 py-5 md:py-7">
-          {/* Number */}
-          <motion.span
-            aria-hidden
-            animate={{ color: hovered ? "hsl(var(--foreground) / 0.14)" : "hsl(var(--foreground) / 0.07)" }}
-            transition={{ duration: 0.25 }}
-            className="font-display text-5xl md:text-6xl lg:text-7xl font-black select-none leading-none w-16 md:w-20 shrink-0 tabular-nums"
-          >
-            {String(index + 1).padStart(2, "0")}
-          </motion.span>
-
-          {/* Text content */}
-          <div className="flex-1 min-w-0">
-            <motion.h3
-              animate={{ color: hovered ? "hsl(var(--forest-deep))" : "hsl(var(--foreground))" }}
-              transition={{ duration: 0.25 }}
-              className="font-display text-xl md:text-2xl lg:text-3xl font-bold leading-snug tracking-tight"
-            >
+        <div className="relative flex flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:gap-8 md:px-6 md:py-6">
+          {/* Text */}
+          <div className="min-w-0 flex-1">
+            <h3 className="font-display text-xl font-bold leading-snug tracking-tight text-foreground transition-colors duration-300 group-hover:text-forest-deep md:text-2xl lg:text-[28px]">
               {name}
-            </motion.h3>
-            <motion.p
-              animate={{ y: hovered ? 0 : 2 }}
-              transition={{ duration: 0.3 }}
-              className="font-body text-sm text-muted-foreground mt-1.5 leading-relaxed max-w-lg"
-            >
-              {desc}
-            </motion.p>
+            </h3>
+            {desc && <p className="mt-1 max-w-lg font-body text-sm leading-relaxed text-muted-foreground">{desc}</p>}
           </div>
 
-          {/* Art + arrow */}
-          <div className="flex items-center gap-3 md:gap-4 shrink-0">
-            <motion.div
-              animate={{
-                scale: hovered ? 1.08 : 1,
-                rotate: hovered ? 4 : 0,
-                color: hovered ? "hsl(var(--accent))" : "hsl(var(--forest-mid))",
-              }}
-              transition={{ type: "spring", stiffness: 240, damping: 18 }}
-              className="shrink-0"
-            >
-              
-            </motion.div>
-            <motion.div
-              animate={{ x: hovered ? 6 : 0, opacity: hovered ? 1 : 0.3 }}
+          {/* Products + arrow */}
+          <div className="flex shrink-0 items-center justify-between gap-5 sm:justify-end">
+            {items.length > 0 && <Thumbs items={items} extra={extra} hovered={hovered} />}
+            <motion.span
+              animate={{ x: hovered ? 4 : 0 }}
               transition={{ duration: 0.2 }}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground/60 transition-colors duration-300 group-hover:border-transparent group-hover:bg-forest-deep group-hover:text-primary-foreground"
             >
-              <ArrowRight className="w-5 h-5 text-accent" />
-            </motion.div>
+              <ArrowRight className="h-4 w-4" />
+            </motion.span>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-border mx-5 md:mx-8" />
+        <div className="h-px bg-border mx-4 md:mx-6" />
       </Link>
     </motion.div>
   );
@@ -108,14 +106,19 @@ const CategoryRow = ({
 
 const CategoriesSection = () => {
   const { data: allCategories = [] } = useCategories();
-  const featured = allCategories
-    .filter((c) => (c as any).homepage_featured)
-    .sort((a, b) => ((a as any).homepage_order ?? 0) - ((b as any).homepage_order ?? 0));
-  // Falls back to the first 5 categories (alphabetical) until curated in Admin → Categories.
-  const categories = (featured.length > 0 ? featured : allCategories).slice(0, 5);
+  const supplied = useSuppliedCategories();
+  type HomeCategory = { name: string; homepage_featured?: boolean; homepage_order?: number | null };
+  const featured = (allCategories as HomeCategory[])
+    .filter((c) => c.homepage_featured)
+    .sort((a, b) => (a.homepage_order ?? 0) - (b.homepage_order ?? 0))
+    .map((c) => c.name);
+  // Curated in Admin → Categories; until then, the categories with the most
+  // products (an alphabetical fallback used to put "Flour: 2 products" here).
+  const categories = (featured.length > 0 ? featured : supplied.map((c) => c.name)).slice(0, 6);
 
   // Real facts per row (product count + brands) instead of one stock line.
   const { data: products = [] } = useProducts();
+  const inCategory = (name: string) => products.filter((p) => productCategories(p).includes(name));
   const summary = (name: string) => {
     const inCat = products.filter((p) => productCategories(p).includes(name));
     const brands = [...new Set(inCat.map((p) => p.brands?.name).filter((b): b is string => !!b && !isHouseBrand(b)))];
@@ -206,14 +209,12 @@ const CategoriesSection = () => {
 
         {/* Category rows */}
         <div className="border-t border-border">
-          {categories.map((cat, i) => (
-            <CategoryRow
-              key={cat.id}
-              name={cat.name}
-              desc={summary(cat.name)}
-              index={i}
-            />
-          ))}
+          {categories.map((name, i) => {
+            const all = inCategory(name);
+            const withImage = all.filter((p) => p.image_url);
+            const items = withImage.slice(0, 3);
+            return <CategoryRow key={name} name={name} desc={summary(name)} items={items} extra={all.length - items.length} index={i} />;
+          })}
         </div>
 
         {/* CTA */}

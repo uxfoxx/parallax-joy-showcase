@@ -3,6 +3,7 @@ import { Package } from "lucide-react";
 import type { Product } from "@/lib/api";
 import MediaCard from "@/components/MediaCard";
 import { useProductModal } from "@/lib/productModal";
+import { productCategories } from "@/hooks/useSuppliedCategories";
 
 interface ProductCardProps {
   product: Product;
@@ -11,12 +12,14 @@ interface ProductCardProps {
   index?: number;
   columns?: number;
   onQuickView?: () => void;
+  /** Hide the "Featured" badge where every card is featured anyway. */
+  showBadge?: boolean;
 }
 
-const ProductCard = ({ product, variant = "light", index = 0, columns = 3 }: ProductCardProps) => {
+const ProductCard = ({ product, variant = "light", index = 0, columns = 3, showBadge = true }: ProductCardProps) => {
   const { openProductModal } = useProductModal();
   const brandName = product.brands?.name ?? "";
-  const meta = brandName || product.category;
+  const category = productCategories(product)[0] ?? product.category;
 
   return (
     <MediaCard
@@ -26,19 +29,16 @@ const ProductCard = ({ product, variant = "light", index = 0, columns = 3 }: Pro
       onClick={() => openProductModal(product.slug)}
       image={product.image_url ?? null}
       title={product.name}
-      meta={meta}
+      eyebrow={brandName || undefined}
+      meta={category}
       /* origin deliberately not passed — product↔country associations are
        * admin-only and never shown to visitors (BrandCard still uses the
        * MediaCard origin slot; a brand's home country is fine to show). */
       variant={variant}
       index={index}
       columns={columns}
-      // TEMPORARY: featured products currently host oversized source
-      // images; rendering them inside an inset keeps their visual weight
-      // matched to standard cards until images are re-uploaded.
-      imageInset={!!product.featured}
       badge={
-        product.featured ? (
+        showBadge && product.featured ? (
           <Badge className="bg-accent text-accent-foreground font-body text-[11px] tracking-[0.14em] uppercase shadow-md border-0">
             Featured
           </Badge>
@@ -48,5 +48,15 @@ const ProductCard = ({ product, variant = "light", index = 0, columns = 3 }: Pro
     />
   );
 };
+
+/** Placeholder card while products load (same footprint as ProductCard). */
+export const ProductCardSkeleton = () => (
+  <div aria-hidden>
+    <div className="aspect-[4/5] rounded-2xl border border-border/60 skeleton-shimmer" />
+    <div className="mt-3 h-2.5 w-16 rounded-full skeleton-shimmer" />
+    <div className="mt-2 h-3.5 w-3/4 rounded-full skeleton-shimmer" />
+    <div className="mt-2 h-3 w-1/3 rounded-full skeleton-shimmer" />
+  </div>
+);
 
 export default ProductCard;

@@ -95,8 +95,8 @@ const TeamSection = () => {
   return (
     <section
       aria-labelledby="built-to-last-title"
-      className="relative overflow-hidden py-section-base lg:py-section-base-lg"
-      style={{ background: "linear-gradient(160deg, hsl(150 42% 5%) 0%, hsl(146 45% 9%) 55%, hsl(140 50% 13%) 100%)" }}
+      className="relative overflow-hidden border-t border-white/[0.06] py-section-base lg:py-section-base-lg"
+      style={{ background: "linear-gradient(175deg, hsl(150 40% 5%) 0%, hsl(146 45% 9%) 60%, hsl(140 50% 13%) 100%)" }}
     >
       {/* Interlocking rings — the "link" motif — turning very slowly. */}
       <div aria-hidden className="pointer-events-none absolute -right-[12%] top-1/2 hidden h-[620px] w-[900px] -translate-y-1/2 opacity-[0.12] md:block">

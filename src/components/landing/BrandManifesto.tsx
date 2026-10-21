@@ -2,9 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, Globe2, Snowflake, Truck, Warehouse, type LucideIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Eyebrow from "@/components/ui/eyebrow";
-import MagneticButton from "@/components/motion/MagneticButton";
 import CursorSpotlight from "@/components/motion/CursorSpotlight";
 import ScrollRevealWords from "@/components/motion/ScrollRevealWords";
 import FoilSeal from "@/components/FoilSeal";
@@ -54,8 +52,11 @@ const BrandManifesto = () => {
   return (
     <section
       aria-labelledby="olive-standard-title"
-      className="relative overflow-hidden py-section-base lg:py-section-base-lg"
-      style={{ background: "radial-gradient(ellipse 90% 70% at 70% 40%, hsl(150 45% 7%), hsl(150 50% 3%) 70%)" }}
+      // Sits between Why Choose Us and Built to Last: same edge colour as its
+      // neighbours (hsl 150 40% 5%) plus a hairline, so the run of dark
+      // sections reads as one chapter without hard seams.
+      className="relative overflow-hidden border-t border-white/[0.06] py-section-base lg:py-section-base-lg"
+      style={{ background: "radial-gradient(ellipse 90% 70% at 70% 40%, hsl(150 45% 7.5%), hsl(150 40% 5%) 70%)" }}
     >
       {/* Ambient: two slow forest/olive glows and a faint contour texture. */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
@@ -107,27 +108,6 @@ const BrandManifesto = () => {
             with intent, delivered with trust.
           </motion.p>
 
-          <motion.div
-            initial={reduced ? false : { opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-15%" }}
-            transition={{ duration: 0.6, delay: 0.35, ease }}
-            className="mt-10 flex flex-wrap items-center gap-3"
-          >
-            <MagneticButton>
-              <Button asChild variant="brand" size="pill" className="group font-body">
-                <Link to="/contact">
-                  Start a conversation
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
-              </Button>
-            </MagneticButton>
-            <MagneticButton>
-              <Button asChild variant="heroOutline" size="pill" className="font-body">
-                <Link to="/products">Explore the range</Link>
-              </Button>
-            </MagneticButton>
-          </motion.div>
         </div>
 
         {/* ── The chain ── */}

@@ -6,16 +6,14 @@ import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import LogoStrip from "@/components/landing/LogoStrip";
 import FeaturedProducts from "@/components/landing/FeaturedProducts";
-import SectionTransition from "@/components/landing/SectionTransition";
 import Footer from "@/components/landing/Footer";
 import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 /* Below-the-fold sections — code-split so the initial bundle drops to
  * the hero + LogoStrip + Featured trio. Each chunk loads on demand as
- * the visitor scrolls; Suspense fallback is null because the surrounding
- * SectionTransition divider already occupies the layout gap and
- * sections animate in via whileInView regardless. */
+ * the visitor scrolls; Suspense fallback is null because the sections
+ * animate in via whileInView regardless. */
 const OurProductsSection = lazy(() => import("@/components/landing/OurProductsSection"));
 const WhyChooseUs = lazy(() => import("@/components/landing/WhyChooseUs"));
 const CategoriesSection = lazy(() => import("@/components/landing/CategoriesSection"));
@@ -44,52 +42,44 @@ const Index = () => {
       <FloatingWhatsApp />
 
       <main>
+      {/* Sections are grouped by theme so the page doesn't flicker between
+          dark and light: products (light) → who we are (dark) → where it comes
+          from (light) → visit (dark) → FAQ (light). */}
       {/* Light hero, dark navbar over it (data-navbar-bar, see Navbar). */}
       <div data-navbar-theme="light" data-navbar-bar="dark">
         <HeroSection />
       </div>
-      <SectionTransition />
       <div data-navbar-theme="dark">
         <LogoStrip />
       </div>
-      <SectionTransition />
       <div data-navbar-theme="light">
         <FeaturedProducts />
       </div>
       <Suspense fallback={null}>
-        <SectionTransition />
         <div data-navbar-theme="light">
           <OurProductsSection />
         </div>
-        <SectionTransition />
-        <div data-navbar-theme="dark">
-          <WhyChooseUs />
-        </div>
-        <SectionTransition />
         <div data-navbar-theme="light">
           <CategoriesSection />
         </div>
-        <SectionTransition />
+        <div data-navbar-theme="dark">
+          <WhyChooseUs />
+        </div>
         <div data-navbar-theme="dark">
           <BrandManifesto />
         </div>
-        <SectionTransition />
-        <div data-navbar-theme="light">
-          <StatsSection />
-        </div>
-        <SectionTransition />
         <div data-navbar-theme="dark">
           <TeamSection />
         </div>
-        <SectionTransition />
+        <div data-navbar-theme="light">
+          <StatsSection />
+        </div>
         <div data-navbar-theme="light">
           <OurPartnersHexagon />
         </div>
-        <SectionTransition />
         <div data-navbar-theme="dark">
           <LocationsSection />
         </div>
-        <SectionTransition />
         <div data-navbar-theme="light">
           <FAQSection />
         </div>

@@ -1,13 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import MarqueeRow from "@/components/motion/MarqueeRow";
 import MagneticButton from "@/components/motion/MagneticButton";
 import Eyebrow from "@/components/ui/eyebrow";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useOurProducts } from "@/lib/api";
-import ProductCard from "@/components/ProductCard";
+import ProductCard, { ProductCardSkeleton } from "@/components/ProductCard";
 import ProductQuickView from "@/components/ProductQuickView";
 import type { Product } from "@/lib/api";
 import {
@@ -19,14 +18,8 @@ import type { UseEmblaCarouselType } from "embla-carousel-react";
 
 type CarouselApi = UseEmblaCarouselType[1];
 
-const MARQUEE_ITEMS = [
-  "Frozen Foods", "Premium Dairy", "Grocery & Staples",
-  "Edible Oils", "Specialty Imports", "Cold-Chain Certified",
-  "International Brands", "B2B Distribution", "Quality Assured",
-];
-
 const OurProductsSection = () => {
-  const { data: products = [] } = useOurProducts();
+  const { data: products = [], isLoading } = useOurProducts();
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
@@ -62,7 +55,7 @@ const OurProductsSection = () => {
     return () => { api.off("pointerDown", onPointerDown); };
   }, [api]);
 
-  if (products.length === 0) return null;
+  if (!isLoading && products.length === 0) return null;
 
   return (
     <section className="relative overflow-hidden py-section-base lg:py-section-base-lg bg-background">
@@ -123,33 +116,6 @@ const OurProductsSection = () => {
           </div>
         </motion.div>
 
-        {/* Scroll-velocity marquee — motion.dev pattern, speeds up with scroll */}
-        <div className="relative mb-10 bg-accent/5 border-y border-accent/10">
-          <MarqueeRow baseVelocity={26} direction={-1} className="py-2.5">
-            {MARQUEE_ITEMS.map((item, i) => (
-              <span
-                key={`r1-${i}`}
-                className="font-body text-xs font-semibold tracking-[0.18em] uppercase text-accent whitespace-nowrap flex items-center gap-3 mx-4"
-              >
-                {item}
-                <span className="w-1 h-1 rounded-full bg-accent/30 inline-block" />
-              </span>
-            ))}
-          </MarqueeRow>
-          <div className="h-px bg-accent/10" />
-          <MarqueeRow baseVelocity={22} direction={1} className="py-2.5">
-            {MARQUEE_ITEMS.map((item, i) => (
-              <span
-                key={`r2-${i}`}
-                className="font-body text-[11px] font-medium tracking-[0.22em] uppercase text-forest-mid/70 whitespace-nowrap flex items-center gap-3 mx-4"
-              >
-                <span className="w-1 h-1 rounded-full bg-forest-mid/30 inline-block" />
-                {item}
-              </span>
-            ))}
-          </MarqueeRow>
-        </div>
-
         {/* Carousel — px-10 md:px-14 wrapper provides clearance for absolute arrow buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -180,11 +146,17 @@ const OurProductsSection = () => {
             className="w-full cursor-grab active:cursor-grabbing"
           >
             <CarouselContent className="-ml-5">
-              {products.map((product) => (
-                <CarouselItem key={product.id} className="pl-5 basis-full md:basis-1/2 lg:basis-1/3">
-                  <ProductCard product={product} large onQuickView={() => setQuickViewProduct(product)} />
-                </CarouselItem>
-              ))}
+              {isLoading
+                ? [0, 1, 2].map((i) => (
+                    <CarouselItem key={`skeleton-${i}`} className="pl-5 basis-full md:basis-1/2 lg:basis-1/3">
+                      <ProductCardSkeleton />
+                    </CarouselItem>
+                  ))
+                : products.map((product) => (
+                    <CarouselItem key={product.id} className="pl-5 basis-full md:basis-1/2 lg:basis-1/3">
+                      <ProductCard product={product} large onQuickView={() => setQuickViewProduct(product)} />
+                    </CarouselItem>
+                  ))}
             </CarouselContent>
           </Carousel>
         </motion.div>
