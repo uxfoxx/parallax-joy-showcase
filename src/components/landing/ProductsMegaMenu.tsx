@@ -92,7 +92,8 @@ const ProductsMegaMenu = ({ isDark, mutedText, isActive }: Props) => {
   const topBrands = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const p of products) if (p.brand_id) counts[p.brand_id] = (counts[p.brand_id] ?? 0) + 1;
-    return [...brands].sort((a, b) => (counts[b.id] ?? 0) - (counts[a.id] ?? 0)).slice(0, 10);
+    // Only brands with products have a brand page.
+    return brands.filter((b) => counts[b.id]).sort((a, b) => counts[b.id] - counts[a.id]).slice(0, 10);
   }, [brands, products]);
 
   const onSearch = (e: FormEvent) => {

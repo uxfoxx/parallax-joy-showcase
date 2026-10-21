@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -5,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import Eyebrow from "@/components/ui/eyebrow";
 import SplitText from "@/components/motion/SplitText";
 import MarqueeRow from "@/components/motion/MarqueeRow";
-import { useBrands } from "@/lib/api";
+import { useBrands, useProducts } from "@/lib/api";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 import { cdnImg, fallbackToOriginal } from "@/lib/img";
 
@@ -29,12 +30,13 @@ type Logo = {
   image_url: string;
 };
 
-const LogoTile = ({ logo }: { logo: Logo }) => {
+const LogoTile = ({ logo, linked }: { logo: Logo; linked: boolean }) => {
   const cls =
     "group relative flex items-center justify-center w-[200px] md:w-[240px] h-[110px] md:h-[130px] mx-3 rounded-2xl hover:shadow-[0_18px_36px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-[transform,box-shadow] duration-300";
 
   return (
-    <Link to={`/brands/${logo.slug}`} aria-label={logo.name} className={cls}>
+    // Only brands with products have a brand page; the rest are a plain tile.
+    <Wrapper logo={logo} linked={linked} className={cls}>
       {/* Resized by Supabase's render endpoint: the originals are up to 1.3 MB
           each, and a dozen of them made up most of the homepage's weight. */}
       <img
@@ -45,16 +47,29 @@ const LogoTile = ({ logo }: { logo: Logo }) => {
         decoding="async"
         className="max-h-[100%] max-w-[82%] object-contain opacity-70 saturate-[0.85] group-hover:opacity-100 group-hover:saturate-100 transition duration-300"
       />
-      <ArrowUpRight
-        aria-hidden
-        className="absolute top-3 right-3 w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-      />
-    </Link>
+      {linked && (
+        <ArrowUpRight
+          aria-hidden
+          className="absolute top-3 right-3 w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        />
+      )}
+    </Wrapper>
   );
 };
 
+const Wrapper = ({ logo, linked, className, children }: { logo: Logo; linked: boolean; className: string; children: ReactNode }) =>
+  linked ? (
+    <Link to={`/brands/${logo.slug}`} aria-label={logo.name} className={className}>
+      {children}
+    </Link>
+  ) : (
+    <div className={className}>{children}</div>
+  );
+
 const OurPartnersHexagon = () => {
   const { data: brands = [] } = useBrands();
+  const { data: products = [] } = useProducts();
+  const stocked = new Set(products.map((p) => p.brand_id));
   const logos = brands.filter((b): b is typeof b & { image_url: string } => !!b.image_url);
 
   if (logos.length === 0) return null;
@@ -172,12 +187,12 @@ const OurPartnersHexagon = () => {
 
           <MarqueeRow baseVelocity={20} direction={-1} repeat={repeatFor(rowA.length)}>
             {rowA.map((logo) => (
-              <LogoTile key={`r1-${logo.id}`} logo={logo} />
+              <LogoTile key={`r1-${logo.id}`} logo={logo} linked={stocked.has(logo.id)} />
             ))}
           </MarqueeRow>
           <MarqueeRow baseVelocity={17} direction={1} repeat={repeatFor(rowB.length)}>
             {rowB.map((logo) => (
-              <LogoTile key={`r2-${logo.id}`} logo={logo} />
+              <LogoTile key={`r2-${logo.id}`} logo={logo} linked={stocked.has(logo.id)} />
             ))}
           </MarqueeRow>
         </motion.div>
