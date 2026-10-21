@@ -378,8 +378,8 @@ const ProductsPage = () => {
   return (
     <PageLayout>
       <Seo
-        title={ourParam ? "Our Products: Food We Source & Distribute in Sri Lanka" : "Products: Premium Imported Food for Sri Lanka's Trade"}
-        description="Browse Olive Foods' range of globally sourced food products: frozen foods, dairy, grocery staples, edible oils and specialty imports, supplied to hotels, restaurants and supermarkets across Sri Lanka."
+        title={ourParam ? "Our Products: Food We Source & Distribute in Sri Lanka" : "Imported Food Products, Wholesale in Sri Lanka"}
+        description="Wholesale imported food in Sri Lanka from Olive Foods, a food importer and supplier in Colombo: frozen foods, cheese, pasta, oils, sauces and specialty imports for hotels, restaurants and supermarkets, delivered island-wide."
         path={canonicalPath}
       />
       <PageHero

@@ -102,3 +102,40 @@ export async function inspect(site, url) {
     checkedAt: new Date().toISOString(),
   };
 }
+
+/**
+ * Opportunities: non-brand searches where a page already shows up just off
+ * the top (positions ~4–20) — the cheapest traffic to win. Brand searches
+ * ("olive foods", "oliva foods", "oli foods"…) are left out; they're won.
+ * `potential` is the extra clicks a move to position 3 would bring at a
+ * typical position-3 click rate, so the list sorts by payoff. Page 1 rows
+ * usually need a sharper title/description (the click); page 2 rows need a
+ * stronger page (content for that search, internal links).
+ */
+const BRAND = /\bol(?:i|iv|ive|iva|ives)?\s?foods?\b|olivefood|^olive'?s?(?:\s+(?:sri lanka|colombo|lk))?$/i;
+const CTR_AT_3 = 0.1;
+
+export async function opportunities(site, days) {
+  const rows = await query(site, {
+    startDate: day(days - 1),
+    endDate: day(0),
+    dimensions: ["query", "page"],
+    rowLimit: 1000,
+  });
+  const nonBrand = rows.filter((r) => !BRAND.test(r.keys[0].trim()));
+  const list = nonBrand
+    .filter((r) => r.position >= 3.5 && r.position <= 20 && r.impressions >= 3)
+    .map((r) => ({
+      query: r.keys[0],
+      page: r.keys[1],
+      clicks: r.clicks,
+      impressions: r.impressions,
+      ctr: r.ctr,
+      position: r.position,
+      stage: r.position <= 10 ? "page1" : "page2",
+      potential: Math.max(0, Math.round(r.impressions * (CTR_AT_3 - r.ctr) * 10) / 10),
+    }))
+    .sort((a, b) => b.potential - a.potential || b.impressions - a.impressions)
+    .slice(0, 60);
+  return { days, rows: list, nonBrandSearches: nonBrand.length };
+}

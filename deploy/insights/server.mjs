@@ -25,7 +25,7 @@ import { googleConfigured } from "./lib/google.mjs";
 import { isAdmin } from "./lib/auth.mjs";
 import { openStore, read, save, write } from "./lib/store.mjs";
 import { gaRealtime, gaReport } from "./sources/ga.mjs";
-import { inspect, searchReport, sitemapUrls, sitemaps } from "./sources/gsc.mjs";
+import { inspect, opportunities, searchReport, sitemapUrls, sitemaps } from "./sources/gsc.mjs";
 import { byUrl, clarityInsights, summarise } from "./sources/clarity.mjs";
 import { bingReport } from "./sources/bing.mjs";
 import { speedReport } from "./sources/speed.mjs";
@@ -197,6 +197,7 @@ const routes = {
   "GET ga": (u) => (hasGoogle ? cached(`ga:${days(u)}`, 15 * 60_000, () => gaReport(cfg.ga4, days(u))) : { configured: false }),
   "GET realtime": () => (hasGoogle ? cached("rt", 60_000, () => gaRealtime(cfg.ga4)) : { configured: false }),
   "GET search": (u) => (hasGoogle ? cached(`gsc:${days(u)}`, 6 * HOUR, () => searchReport(cfg.gsc, days(u))) : { configured: false }),
+  "GET opportunities": (u) => (hasGoogle ? cached(`opp:${days(u)}`, 6 * HOUR, () => opportunities(cfg.gsc, days(u))) : { configured: false }),
   "GET sitemaps": () => stored("sitemaps", hasGoogle),
   "GET indexing": () => stored("indexing", hasGoogle, { running: running.has("indexing") }),
   "GET clarity": () =>

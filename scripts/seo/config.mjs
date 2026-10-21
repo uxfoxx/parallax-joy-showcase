@@ -31,7 +31,7 @@ export const STATE_PATH = "/sitemap-state.json";
 
 // ─── Route registry ───
 /** Fixed public pages, in sitemap order. */
-export const STATIC_PAGES = ["/", "/about", "/products", "/brands", "/categories", "/contact", "/site-map"];
+export const STATIC_PAGES = ["/", "/about", "/food-importer-distributor-sri-lanka", "/products", "/brands", "/categories", "/contact", "/site-map"];
 /** Data-driven page kinds → the app route that renders them. */
 export const ROUTE_PATTERNS = {
   sector: "/supply/:slug",

@@ -9,7 +9,7 @@ import { EASE_OUT_EXPO } from "@/lib/motion";
 import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
 import { categorySlug } from "@/lib/categories";
 import { SECTORS } from "@/lib/sectors";
-import { SOCIAL_PROFILES } from "@/lib/site";
+import { IMPORTER_PATH, SOCIAL_PROFILES } from "@/lib/site";
 import { GUIDES } from "@/lib/guides";
 import { PHONE_DISPLAY, PHONE_TEL, WHATSAPP_DISPLAY, whatsappHref, whatsappMessage } from "@/lib/contact";
 import { openStatus, useColomboNow } from "@/lib/hours";
@@ -32,6 +32,8 @@ const FACTS = ["30+ years in the food trade", "30+ source countries", "All 25 di
 
 const quickLinks = [
   { label: "About", href: "/about" },
+  // Sitewide link with descriptive anchor text to the pillar page.
+  { label: "Food importer & distributor", href: IMPORTER_PATH },
   { label: "Products", href: "/products" },
   { label: "Brands", href: "/brands" },
   { label: "Our Products", href: "/products?our=true" },

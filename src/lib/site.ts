@@ -72,3 +72,6 @@ export const organizationSchema = (categories: string[]) => ({
   ],
   ...(SOCIAL_PROFILES.length ? { sameAs: SOCIAL_PROFILES.map((s) => s.url) } : {}),
 });
+
+/** The pillar page for "food importer / distributor in Sri Lanka" (src/pages/ImporterPage.tsx). */
+export const IMPORTER_PATH = "/food-importer-distributor-sri-lanka";

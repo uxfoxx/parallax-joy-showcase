@@ -131,6 +131,7 @@ ${liveCategories.map((c) => `### ${c.name}\n${byCategory.get(c.name).map((p) => 
   const keyPages = `## Key pages
 - [Home](${SITE}/): Company overview.
 - [About](${SITE}/about): Background, facts and how Olive Foods works.
+- [Food importer & distributor in Sri Lanka](${SITE}/food-importer-distributor-sri-lanka): What Olive Foods imports, the brands, who it supplies, how supply and ordering work.
 - [Products](${SITE}/products): The full catalogue, filterable by category and brand.
 - [Brands](${SITE}/brands): Every brand Olive Foods imports and distributes.
 - [Categories](${SITE}/categories): Every product category.

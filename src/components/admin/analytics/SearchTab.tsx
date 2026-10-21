@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { fmtAgo, fmtDec, fmtInt, fmtPct, LINKS, pathOf, useRefreshInsight, useSearch, useSitemaps, type Range, type SearchRow } from "@/lib/insights";
+import { fmtAgo, fmtDec, fmtInt, fmtPct, LINKS, pathOf, useOpportunities, useRefreshInsight, useSearch, useSitemaps, type Range, type SearchRow } from "@/lib/insights";
 import { cn } from "@/lib/utils";
 import { BarList, DataTable, Delta, Freshness, Kpi, Panel, Pill, Skeletons } from "./ui";
 import { Legend, TrendChart, type Series } from "./TrendChart";
@@ -28,6 +28,7 @@ function Position({ value }: { value: number }) {
 export default function SearchTab({ days }: { days: Range }) {
   const gsc = useSearch(days);
   const maps = useSitemaps();
+  const opps = useOpportunities(days);
   const refresh = useRefreshInsight();
   const [view, setView] = useState<"queries" | "pages">("queries");
   const s = gsc.data?.data;
@@ -80,6 +81,49 @@ export default function SearchTab({ days }: { days: Range }) {
               </a>
             ))}
             limit={50}
+          />
+        )}
+      </Panel>
+
+      {/* The monthly SEO loop: work down this list, then re-check next month. */}
+      <Panel
+        title="Opportunities"
+        description={
+          <>
+            Searches (not your brand name) where a page already appears at positions 4–20, sorted by the extra clicks a move into the top 3 would bring.
+            Work down this list each month: on page 1, sharpen that page's title and description to win the click; on page 2, strengthen the page itself
+            (content that answers that search, links to it from related pages).
+          </>
+        }
+      >
+        {!opps.data?.data ? (
+          opps.data?.error ? <p className="font-body text-sm text-muted-foreground">{opps.data.error}</p> : <Skeletons count={1} className="h-40" />
+        ) : (
+          <DataTable
+            rows={opps.data.data.rows}
+            empty="No searches in the 4–20 range yet. Check back as Google gathers data."
+            columns={[
+              { key: "q", label: "Search", render: (r) => <span className="font-medium">{r.query}</span> },
+              {
+                key: "p",
+                label: "Page",
+                render: (r) => (
+                  <a href={r.page} target="_blank" rel="noopener noreferrer" className="break-all text-muted-foreground hover:text-foreground hover:underline">
+                    {pathOf(r.page)}
+                  </a>
+                ),
+              },
+              { key: "pos", label: "Position", align: "right", render: (r) => <Position value={r.position} /> },
+              { key: "i", label: "Impressions", align: "right", render: (r) => fmtInt(r.impressions) },
+              { key: "c", label: "Clicks", align: "right", render: (r) => fmtInt(r.clicks) },
+              { key: "g", label: "Potential", align: "right", render: (r) => <span className="tabular-nums">+{fmtDec(r.potential)}</span> },
+              {
+                key: "s",
+                label: "Next step",
+                render: (r) => (r.stage === "page1" ? <Pill tone="warn">Page 1 · sharpen title</Pill> : <Pill tone="neutral">Page 2 · strengthen page</Pill>),
+              },
+            ]}
+            limit={40}
           />
         )}
       </Panel>
