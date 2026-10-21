@@ -272,7 +272,7 @@ const Navbar = () => {
                                 {menuResults.map((p) => (
                                   <li key={p.id} className="border-b border-white/[0.06] last:border-0">
                                     <Link to={`/products/${p.slug}`} className="flex items-center gap-3 px-3 py-2.5">
-                                      <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[hsl(42_33%_96%)]">
+                                      <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white">
                                         {p.image_url && <img src={cdnImg(p.image_url, 80)} onError={fallbackToOriginal(p.image_url)} alt="" className="h-full w-full object-contain p-1" />}
                                       </span>
                                       <span className="min-w-0">

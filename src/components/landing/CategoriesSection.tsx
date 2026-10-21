@@ -20,7 +20,7 @@ const Thumbs = ({ items, extra, hovered }: { items: Product[]; extra: number; ho
         key={p.id}
         animate={{ x: hovered ? i * 6 : 0, y: hovered ? (i % 2 ? -3 : 3) : 0, rotate: hovered ? (i - (items.length - 1) / 2) * 3 : 0 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
-        className="-ml-3 first:ml-0 flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border/70 bg-[radial-gradient(ellipse_at_50%_35%,#fff,hsl(42_33%_94%))] shadow-sm md:h-16 md:w-16"
+        className="-ml-3 first:ml-0 flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border/70 bg-white shadow-sm md:h-16 md:w-16"
         style={{ zIndex: items.length - i }}
       >
         <img

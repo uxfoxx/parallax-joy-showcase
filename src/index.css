@@ -304,7 +304,7 @@
     to { background-position: -50% 0; }
   }
   .skeleton-shimmer {
-    background: linear-gradient(105deg, transparent 35%, hsl(0 0% 100% / 0.75) 50%, transparent 65%) hsl(42 25% 92%);
+    background: linear-gradient(105deg, transparent 35%, hsl(0 0% 100% / 0.75) 50%, transparent 65%) hsl(0 0% 94%);
     background-size: 200% 100%;
     animation: skeleton-shimmer 1.4s ease-in-out infinite;
   }
