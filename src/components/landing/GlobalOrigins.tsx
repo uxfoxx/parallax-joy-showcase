@@ -49,7 +49,7 @@ const ORIGINS: Origin[] = [
   { key: "uae", country: "UAE", code: "AE", flag: "🇦🇪", region: "Middle East", label: { dx: -10, dy: 4, anchor: "end" },
     brands: [{ name: "Royal Arm", slug: "royal-arm" }, { name: "Falcon" }, { name: "Super Chef" }] },
   { key: "india", country: "India", code: "IN", flag: "🇮🇳", region: "South Asia", label: { dx: -10, dy: -4, anchor: "end" },
-    brands: [{ name: "Azizaa", slug: "azizaa" }, { name: "Hungritos", slug: "hungritos" }, { name: "Mavee's", slug: "mavees" }, { name: "Bon Vegato" }] },
+    brands: [{ name: "Azizaa", slug: "azizaa" }, { name: "Hungritos", slug: "hungritos" }, { name: "Mavee's", slug: "mavees" }] },
   { key: "china", country: "China", code: "CN", flag: "🇨🇳", region: "East Asia", label: { dx: 10, dy: 4, anchor: "start" },
     brands: [{ name: "Acroyali", slug: "acroyali" }, { name: "Fletcher" }] },
   { key: "thailand", country: "Thailand", code: "TH", flag: "🇹🇭", region: "South-East Asia", label: { dx: 10, dy: 4, anchor: "start" },
