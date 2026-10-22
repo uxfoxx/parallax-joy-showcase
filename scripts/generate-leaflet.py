@@ -35,7 +35,7 @@ MX = 13 * mm
 CW = PW - 2 * MX
 SITE = "https://www.olivefoods.lk"
 
-BRANDS = ["Acroyali", "Albertos", "Azizaa", "Bon Vegato", "Daily Dairy", "Damaco",
+BRANDS = ["Acroyali", "Albertos", "Azizaa", "Daily Dairy", "Damaco",
           "Dedicato", "Dira", "Donna Chiara", "Hungritos", "Mae Ploy", "Mahachai",
           "Royal Arm", "Tabasco", "Tiparos", "Wai Wai"]
 
