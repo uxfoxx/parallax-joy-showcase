@@ -11,7 +11,7 @@ import { isHouseBrand, listOf } from "@/lib/brands";
 import { SECTORS } from "@/lib/sectors";
 import { GUIDES } from "@/lib/guides";
 import { AT_A_GLANCE, IMPORTER_PATH, ORGANIZATION_ID } from "@/lib/site";
-import { PHONE_DISPLAY, WHATSAPP_DISPLAY, quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
+import { PHONE_DISPLAY, SALES_DISPLAY, quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
 
 /**
  * Pillar page for the head searches Search Console shows the site close on —
@@ -81,7 +81,7 @@ const ImporterPage = () => {
     },
     {
       q: "How do I open an account or place an order?",
-      a: `Send the products and quantities you need through the quote form, message WhatsApp ${WHATSAPP_DISPLAY} or call ${PHONE_DISPLAY}. The team replies within one business day.`,
+      a: `Businesses and bulk buyers: WhatsApp or call the sales line on ${SALES_DISPLAY}, or send the products and quantities you need through the quote form. For anything else, call the office on ${PHONE_DISPLAY}. The team replies within one business day.`,
     },
   ];
 

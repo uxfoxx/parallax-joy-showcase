@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import Seo, { SITE_URL } from "@/components/Seo";
 import { track } from "@/lib/analytics";
 import { openingHoursSchema } from "@/lib/site";
-import { WHATSAPP_DISPLAY, whatsappHref, whatsappMessage } from "@/lib/contact";
+import { LANES, whatsappHref, whatsappMessage, type Lane } from "@/lib/contact";
+import ContactLanes from "@/components/ContactLanes";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { Mail, Phone, MapPin, MessageCircle, Send, Clock, CheckCircle2, Loader2 } from "lucide-react";
+import { MapPin, Send, Clock, CheckCircle2, Loader2, Building2, User } from "lucide-react";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -29,7 +30,13 @@ const contactSchema = z.object({
   message: z.string().trim().min(1, "Message is required").max(2000),
 });
 
-const subjects = ["Request a Quote", "Sourcing Request", "Product Inquiry", "Brand Inquiry", "General Inquiry", "Partnership", "Distribution"];
+/** Subjects per lane (see LANES in lib/contact). Stored as "<Lane> · <subject>"
+ *  so the admin enquiries list shows at a glance which team it's for. */
+const SUBJECTS: Record<Lane, string[]> = {
+  business: ["Request a Quote", "Sourcing Request", "Product Inquiry", "Brand Inquiry", "Distribution", "Partnership"],
+  general: ["General Inquiry", "Personal Purchase", "Supplier Enquiry", "Careers", "Other"],
+};
+const subjects = [...SUBJECTS.business, ...SUBJECTS.general];
 
 const contactPageSchema = {
   "@context": "https://schema.org",
@@ -39,21 +46,30 @@ const contactPageSchema = {
   isPartOf: { "@id": `${SITE_URL}/#website` },
   mainEntity: {
     "@id": `${SITE_URL}/#organization`,
-    contactPoint: {
-      "@type": "ContactPoint",
-      contactType: "sales",
-      telephone: "+94-11-207-1717",
-      email: "info@olivefoods.lk",
-      areaServed: "LK",
-      hoursAvailable: openingHoursSchema,
-    },
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        name: "Business and bulk orders",
+        telephone: "+94-77-330-0700",
+        areaServed: "LK",
+        availableLanguage: ["en", "si", "ta"],
+      },
+      {
+        "@type": "ContactPoint",
+        contactType: "customer service",
+        name: "General enquiries",
+        telephone: "+94-11-207-1717",
+        email: "info@olivefoods.lk",
+        areaServed: "LK",
+        hoursAvailable: openingHoursSchema,
+      },
+    ],
   },
 };
 
+// Phone, WhatsApp and email live in <ContactLanes>; this is what's left.
 const contactInfo = [
-  { icon: Mail, label: "Email", value: "info@olivefoods.lk", href: "mailto:info@olivefoods.lk" },
-  { icon: Phone, label: "Phone", value: "+94 11 207 1717", href: "tel:+94112071717" },
-  { icon: MessageCircle, label: "WhatsApp", value: WHATSAPP_DISPLAY, href: whatsappHref(whatsappMessage()) },
   { icon: MapPin, label: "Office", value: "292 Sea Street, Colombo 11, Colombo, Sri Lanka 01100", href: "https://www.google.com/maps/dir/?api=1&destination=292+Sea+Street%2C+Colombo+11%2C+Sri+Lanka" },
 ];
 
@@ -63,6 +79,9 @@ const ContactPage = () => {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
+  // Which team this is for; business is the default (most enquiries are).
+  const [lane, setLane] = useState<Lane>("business");
+  const [business, setBusiness] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const { scrollYProgress } = useScroll();
   const bgY = useTransform(scrollYProgress, [0, 1], ["-50px", "50px"]);
@@ -80,7 +99,10 @@ const ContactPage = () => {
     const subject = searchParams.get("subject") || "";
     setForm((f) => {
       const next = { ...f };
-      if (subjects.includes(subject)) next.subject = subject;
+      if (subjects.includes(subject)) {
+        next.subject = subject;
+        setLane(SUBJECTS.general.includes(subject) ? "general" : "business");
+      }
       if (qProduct)
         next.message =
           subject === "Request a Quote"
@@ -106,20 +128,22 @@ const ContactPage = () => {
       return;
     }
     setLoading(true);
+    const laneTag = lane === "business" ? "Business" : "General";
     const { error } = await supabase.from("contact_submissions").insert({
       name: result.data.name,
       email: result.data.email,
       phone: result.data.phone || null,
-      subject: result.data.subject,
-      message: result.data.message,
+      subject: `${laneTag} · ${result.data.subject}`,
+      message: lane === "business" && business.trim() ? `Business: ${business.trim()}\n\n${result.data.message}` : result.data.message,
     });
     setLoading(false);
     if (error) {
       toast({ title: "Error", description: "Failed to send message. Please try again.", variant: "destructive" });
     } else {
-      track("generate_lead", { form_subject: result.data.subject, item: regarding || undefined });
+      track("generate_lead", { form_subject: `${laneTag} · ${result.data.subject}`, lane, item: regarding || undefined });
       toast({ title: "Message Sent", description: "We'll get back to you shortly!" });
       setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+      setBusiness("");
       setSubmitted(true);
       setTimeout(() => setSubmitted(false), 3500);
     }
@@ -207,6 +231,80 @@ const ContactPage = () => {
                   )}
                 </div>
 
+                {/* What's this about? Picks the team (and the subjects shown). */}
+                <fieldset>
+                  <legend className="mb-2 font-body text-sm font-semibold text-foreground">What's this about?</legend>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {(
+                      [
+                        { key: "business", icon: Building2, title: "A business or bulk order", note: "Hotels, restaurants, cafés, caterers, shops" },
+                        { key: "general", icon: User, title: "Something else", note: "Personal, supplier, careers, other" },
+                      ] as const
+                    ).map(({ key, icon: Icon, title, note }) => {
+                      const on = lane === key;
+                      return (
+                        <label
+                          key={key}
+                          className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors ${on ? "border-accent bg-accent/[0.06] ring-1 ring-accent" : "border-border hover:border-foreground/30"}`}
+                        >
+                          <input
+                            type="radio"
+                            name="lane"
+                            value={key}
+                            checked={on}
+                            onChange={() => {
+                              setLane(key);
+                              if (form.subject && !SUBJECTS[key].includes(form.subject)) setForm((f) => ({ ...f, subject: "" }));
+                            }}
+                            className="sr-only"
+                          />
+                          <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${on ? "text-accent" : "text-muted-foreground"}`} />
+                          <span>
+                            <span className="block font-body text-sm font-semibold text-foreground">{title}</span>
+                            <span className="block font-body text-xs text-muted-foreground">{note}</span>
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                  <p className="mt-2 font-body text-xs text-muted-foreground">
+                    {lane === "business" ? (
+                      <>
+                        Fastest reply:{" "}
+                        <a href={whatsappHref(whatsappMessage())} target="_blank" rel="noopener noreferrer" data-track="contact_business_whatsapp" data-track-item="contact_form" className="font-semibold text-accent hover:underline">
+                          WhatsApp our sales team on {LANES.business.display}
+                        </a>
+                      </>
+                    ) : (
+                      <>
+                        Prefer to talk?{" "}
+                        <a href={LANES.general.tel} data-track="contact_general_call" data-track-item="contact_form" className="font-semibold text-accent hover:underline">
+                          Call the office on {LANES.general.display}
+                        </a>
+                      </>
+                    )}
+                  </p>
+                </fieldset>
+
+                {lane === "business" && (
+                  <div className="relative">
+                    <input
+                      className={`${lightInputClasses} peer pt-5 pb-1`}
+                      value={business}
+                      onChange={(e) => setBusiness(e.target.value)}
+                      placeholder=" "
+                      id="contact-business"
+                      autoComplete="organization"
+                    />
+                    <label
+                      htmlFor="contact-business"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 font-body text-sm text-muted-foreground transition-all duration-200 pointer-events-none peer-focus:top-2.5 peer-focus:translate-y-0 peer-focus:text-[11px] peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[11px]"
+                    >
+                      Business name (optional)
+                    </label>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Name */}
                   <div className="relative">
@@ -275,7 +373,7 @@ const ContactPage = () => {
                         <SelectValue placeholder="Select subject" />
                       </SelectTrigger>
                       <SelectContent>
-                        {subjects.map((s) => (
+                        {SUBJECTS[lane].map((s) => (
                           <SelectItem key={s} value={s}>{s}</SelectItem>
                         ))}
                       </SelectContent>
@@ -332,8 +430,10 @@ const ContactPage = () => {
                     Reach Out
                   </span>
                   <h2 className="font-display text-2xl font-bold text-foreground tracking-tight mb-2">Contact Details</h2>
-                  <p className="font-body text-muted-foreground text-sm">Reach us through any of the channels below.</p>
+                  <p className="font-body text-muted-foreground text-sm">Two lines, so you reach the right team first time.</p>
                 </div>
+
+                <ContactLanes layout="rows" tone="light" source="contact_page" />
 
                 <div className="space-y-4">
                   {contactInfo.map((ci) => (

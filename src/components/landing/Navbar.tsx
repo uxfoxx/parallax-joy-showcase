@@ -1,17 +1,15 @@
 import { useState, useEffect, useMemo, type FormEvent } from "react";
-import { Menu, X, Phone, Search, ArrowRight, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, X, Search, ArrowRight, ChevronDown } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import logoSvg from "@/assets/olive-mark.svg";
 import ProductsMegaMenu from "@/components/landing/ProductsMegaMenu";
-import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
 import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
 import { categorySlug } from "@/lib/categories";
 import { useProducts } from "@/lib/api";
 import { searchProducts } from "@/lib/products";
 import { cdnImg, fallbackToOriginal } from "@/lib/img";
-import { PHONE_DISPLAY, PHONE_TEL, whatsappHref, whatsappMessage } from "@/lib/contact";
+import ContactLanes from "@/components/ContactLanes";
 
 const links = [
   { label: "Home", href: "/" },
@@ -339,26 +337,10 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 16 }}
                 transition={{ delay: 0.32, duration: 0.4 }}
-                className="mt-4 grid grid-cols-2 gap-3"
+                className="mt-4 grid gap-3"
               >
-                <Button asChild className="col-span-2 h-12 bg-accent text-accent-foreground hover:bg-accent/90 font-body font-semibold text-base rounded-md">
-                  <Link to="/contact">Contact us</Link>
-                </Button>
-                <a
-                  href={PHONE_TEL}
-                  className="inline-flex items-center justify-center gap-2 h-12 rounded-md border border-white/25 font-body text-sm font-medium text-primary-foreground hover:bg-white/10 transition-colors"
-                >
-                  <Phone className="w-4 h-4" /> Call
-                </a>
-                <a
-                  href={whatsappHref(whatsappMessage())}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 h-12 rounded-md border border-[#25D366]/50 font-body text-sm font-medium text-primary-foreground hover:bg-white/10 transition-colors"
-                >
-                  <WhatsAppIcon className="w-4 h-4 text-[#25D366]" /> WhatsApp
-                </a>
-                <p className="col-span-2 text-center font-body text-xs text-primary-foreground/60">{PHONE_DISPLAY}</p>
+                {/* The two lines, labelled by who they're for (see ContactLanes). */}
+                <ContactLanes layout="rows" tone="dark" source="mobile_menu" showQuote />
               </motion.div>
             </nav>
           </motion.div>

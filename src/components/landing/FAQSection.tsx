@@ -51,7 +51,7 @@ const FAQS: Faq[] = [
   {
     id: "how-to-order",
     q: "How do I place an order or get a quote?",
-    a: "Send us the products and quantities you need through the contact form, message us on WhatsApp at +94 77 330 0700 or call the office on +94 11 207 1717. We reply within one business day.",
+    a: "Businesses and bulk buyers: WhatsApp or call the sales line on +94 77 330 0700, or send the products and quantities you need through the contact form. For anything else, call the office on +94 11 207 1717. We reply within one business day.",
     link: { label: "Request a quote", to: "/contact" },
   },
   {
