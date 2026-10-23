@@ -1,24 +1,23 @@
-import { useRef, type ComponentType, type MouseEvent } from "react";
+import { useRef, type MouseEvent } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, ArrowUp, ArrowUpRight, Mail, MapPin, MessageSquareText, Phone } from "lucide-react";
+import { ArrowRight, ArrowUp, Mail, MapPin } from "lucide-react";
 import { BRAND_TAGLINE, BrandLogo } from "@/components/admin/BrandLogo";
 import StatusPill from "@/components/StatusPill";
-import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
+import ContactLanes from "@/components/ContactLanes";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
 import { categorySlug } from "@/lib/categories";
 import { SECTORS } from "@/lib/sectors";
 import { IMPORTER_PATH, SOCIAL_PROFILES } from "@/lib/site";
 import { GUIDES } from "@/lib/guides";
-import { PHONE_DISPLAY, PHONE_TEL, WHATSAPP_DISPLAY, whatsappHref, whatsappMessage } from "@/lib/contact";
 import { openStatus, useColomboNow } from "@/lib/hours";
 
 /**
  * Site footer — on every page.
  *
  * Three layers, top to bottom: a closing statement (the brand tagline) with
- * the three ways to reach us as large action rows; the directory (brand +
+ * the two contact lines — business and bulk orders, general enquiries; the directory (brand +
  * address with live opening status, then Explore / Who we supply / Top
  * categories — the sitewide crawl paths to the sector and category pages);
  * and an oversized "Olive Foods" set in Sora that rises as the page ends,
@@ -54,51 +53,6 @@ const fade = (i: number) => ({
   viewport: { once: true, margin: "-8%" },
   transition: { duration: 0.6, delay: i * 0.08, ease: EASE_OUT_EXPO },
 });
-
-function ActionRow({
-  icon: Icon,
-  label,
-  value,
-  href,
-  external,
-  primary,
-}: {
-  icon: ComponentType<{ className?: string }>;
-  label: string;
-  value: string;
-  href: string;
-  external?: boolean;
-  primary?: boolean;
-}) {
-  const inner = (
-    <>
-      <span
-        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors duration-300 ${
-          primary ? "bg-gold-light text-forest-deep" : "border border-white/10 bg-white/[0.05] text-gold-light group-hover:border-transparent group-hover:bg-gold-light group-hover:text-forest-deep"
-        }`}
-      >
-        <Icon className="h-5 w-5" />
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block font-body text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45">{label}</span>
-        <span className="block truncate font-display text-lg font-semibold text-white">{value}</span>
-      </span>
-      <ArrowUpRight className="h-5 w-5 shrink-0 text-white/40 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-gold-light" />
-    </>
-  );
-  const cls = `group relative flex items-center gap-4 overflow-hidden rounded-2xl border px-4 py-3.5 transition-colors duration-300 sm:px-5 ${
-    primary ? "border-gold-light/30 bg-[hsl(75_40%_45%/0.12)] hover:bg-[hsl(75_40%_45%/0.2)]" : "border-white/10 bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.06]"
-  }`;
-  return external || href.startsWith("tel:") ? (
-    <a href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} className={cls}>
-      {inner}
-    </a>
-  ) : (
-    <Link to={href} className={cls}>
-      {inner}
-    </Link>
-  );
-}
 
 const Footer = () => {
   const reduced = !!useReducedMotion();
@@ -164,10 +118,9 @@ const Footer = () => {
             </ul>
           </motion.div>
 
-          <motion.div {...(reduced ? {} : fade(1))} className="grid gap-3 lg:grid-cols-3 xl:grid-cols-1">
-            <ActionRow icon={MessageSquareText} label="Request a quote" value="Tell us what you need" href="/contact" primary />
-            <ActionRow icon={WhatsAppIcon} label="WhatsApp" value={WHATSAPP_DISPLAY} href={whatsappHref(whatsappMessage())} external />
-            <ActionRow icon={Phone} label="Call the office" value={PHONE_DISPLAY} href={PHONE_TEL} />
+          {/* The two lines, labelled by who they're for (see ContactLanes). */}
+          <motion.div {...(reduced ? {} : fade(1))}>
+            <ContactLanes layout="rows" tone="dark" source="footer" showQuote className="lg:grid-cols-2 xl:grid-cols-1" />
           </motion.div>
         </div>
 

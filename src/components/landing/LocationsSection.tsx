@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import Eyebrow from "@/components/ui/eyebrow";
 import SplitText from "@/components/motion/SplitText";
 import mark from "@/assets/olive-mark.svg";
-import { PHONE_DISPLAY, PHONE_TEL } from "@/lib/contact";
+import { LANES, whatsappHref, whatsappMessage } from "@/lib/contact";
+import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
 import { HOURS, fmtHour, openStatus, useColomboNow } from "@/lib/hours";
 import StatusPill from "@/components/StatusPill";
 
@@ -57,7 +58,7 @@ const PIN_Y = "calc(50% - var(--crop-y) / 2)";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-function ContactRow({ icon: Icon, label, value, href, copy }: { icon: ComponentType<{ className?: string }>; label: string; value: string; href: string; copy: string }) {
+function ContactRow({ icon: Icon, label, value, href, copy, track }: { icon: ComponentType<{ className?: string }>; label: string; value: string; href: string; copy: string; track?: string }) {
   const [copied, setCopied] = useState(false);
   const external = href.startsWith("http");
   const onCopy = async () => {
@@ -78,6 +79,8 @@ function ContactRow({ icon: Icon, label, value, href, copy }: { icon: ComponentT
         href={href}
         target={external ? "_blank" : undefined}
         rel={external ? "noopener noreferrer" : undefined}
+        data-track={track}
+        data-track-item={track ? "find_us" : undefined}
         className="min-w-0 flex-1 after:absolute after:inset-0 after:content-['']"
       >
         <span className="block font-body text-[11px] font-medium uppercase tracking-[0.16em] text-primary-foreground/50">{label}</span>
@@ -311,7 +314,9 @@ const LocationsSection = () => {
 
           <div className="mt-3 divide-y divide-primary-foreground/[0.07]">
             <ContactRow icon={MapPin} label="Address" value="292 Sea Street, Colombo 11" href={DIRECTIONS_URL} copy={`Olive Foods (Pvt) Ltd, ${ADDRESS}`} />
-            <ContactRow icon={Phone} label="Phone" value={PHONE_DISPLAY} href={PHONE_TEL} copy={PHONE_DISPLAY} />
+            {/* The two lines, each labelled by who it's for (lib/contact LANES). */}
+            <ContactRow icon={WhatsAppIcon} label={LANES.business.label} value={LANES.business.display} href={whatsappHref(whatsappMessage())} copy={LANES.business.display} track="contact_business_whatsapp" />
+            <ContactRow icon={Phone} label={LANES.general.label} value={LANES.general.display} href={LANES.general.tel} copy={LANES.general.display} track="contact_general_call" />
             <ContactRow icon={Mail} label="Email" value={EMAIL} href={`mailto:${EMAIL}`} copy={EMAIL} />
           </div>
 
@@ -338,9 +343,9 @@ const LocationsSection = () => {
                 <ArrowUpRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </a>
             </Button>
-            <Button asChild variant="heroOutline" size="pill" className="px-5 font-body sm:px-7">
-              <a href={PHONE_TEL}>
-                <Phone className="mr-1 h-4 w-4" /> Call
+            <Button asChild variant="heroOutline" size="pill" className="px-5 font-body sm:px-6">
+              <a href={whatsappHref(whatsappMessage())} target="_blank" rel="noopener noreferrer" data-track="contact_business_whatsapp" data-track-item="find_us_button">
+                <WhatsAppIcon className="mr-1 h-4 w-4 text-[#25D366]" /> Bulk enquiries
               </a>
             </Button>
           </div>

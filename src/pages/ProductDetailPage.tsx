@@ -11,7 +11,7 @@ import { ArrowLeft, Package, Share2, Tag, Building2, ChevronLeft, ChevronRight, 
 import { toast } from "sonner";
 import PageLayout from "@/components/PageLayout";
 import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
-import { PHONE_DISPLAY, PHONE_TEL, quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
+import { SALES_DISPLAY, SALES_TEL, quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -533,19 +533,24 @@ const ProductDetailPage = () => {
                   >
                     <FileText className="w-4 h-4" /> Request a Quote
                   </Link>
+                  {/* Product enquiries are bulk enquiries: the sales line. */}
                   <a
                     href={whatsappHref(whatsappMessage(enquiry))}
                     target="_blank"
                     rel="noopener noreferrer"
+                    data-track="contact_business_whatsapp"
+                    data-track-item={product.name}
                     className="inline-flex items-center gap-2 rounded-lg border border-[#25D366]/40 bg-background/50 px-4 h-11 text-sm font-body font-medium text-foreground hover:border-[#25D366] transition-all"
                   >
                     <WhatsAppIcon className="w-4 h-4 text-[#25D366]" /> WhatsApp
                   </a>
                   <a
-                    href={PHONE_TEL}
+                    href={SALES_TEL}
+                    data-track="contact_business_call"
+                    data-track-item={product.name}
                     className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/50 px-4 h-11 text-sm font-body text-muted-foreground hover:text-foreground hover:border-accent/50 transition-all"
                   >
-                    <Phone className="w-4 h-4" /> {PHONE_DISPLAY}
+                    <Phone className="w-4 h-4" /> Bulk enquiries · {SALES_DISPLAY}
                   </a>
                   <button
                     type="button"
