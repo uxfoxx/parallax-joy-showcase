@@ -5,12 +5,12 @@ import { cn } from "@/lib/utils";
 import { EMAIL, LANES, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
 
 /**
- * The two ways to reach Olive Foods, always together and always labelled by
- * who they're for (see LANES in lib/contact):
- *  - Business and bulk orders → the sales mobile, WhatsApp or call (primary)
- *  - General enquiries → the office landline or email (secondary)
- * People pick by who they are ("I run a café") rather than by which number,
- * so the business line gets business enquiries and the office the rest.
+ * The two ways to reach Olive Foods, always together and always worded the
+ * way the client asked (see LANES in lib/contact):
+ *  - "For bulk enquiries" → +94 77 330 0700, WhatsApp or call (primary)
+ *  - "For personal enquiries" → +94 11 207 1717, call or email (secondary)
+ * Each block leads with that sentence and the number, so nobody has to work
+ * out which line is which.
  *
  * `layout="cards"`: two side-by-side cards (contact page, landing pages).
  * `layout="rows"`: two compact rows (footer, phone menu).
@@ -50,14 +50,14 @@ export default function ContactLanes({ layout = "cards", tone = "light", enquiry
         <WhatsAppIcon className="h-4 w-4" /> WhatsApp
       </a>
       <a href={b.tel} data-track="contact_business_call" data-track-item={source} className={cn(btn, outline)}>
-        <Phone className="h-4 w-4" /> Call sales
+        <Phone className="h-4 w-4" /> Call
       </a>
     </div>
   );
   const generalActions = (
     <div className="flex flex-wrap gap-2">
       <a href={g.tel} data-track="contact_general_call" data-track-item={source} className={cn(btn, outline)}>
-        <Phone className="h-4 w-4" /> Call the office
+        <Phone className="h-4 w-4" /> Call
       </a>
       <a href={`mailto:${EMAIL}`} data-track="contact_general_email" data-track-item={source} className={cn(btn, outline)}>
         <Mail className="h-4 w-4" /> Email
@@ -80,16 +80,16 @@ export default function ContactLanes({ layout = "cards", tone = "light", enquiry
     return (
       <div className={cn("grid gap-3", className)}>
         <div className={cn("rounded-2xl border p-4 sm:p-5", dark ? "border-gold-light/30 bg-[hsl(75_40%_45%/0.1)]" : "border-accent/40 bg-accent/[0.05]")}>
-          <p className={cn("font-body text-[11px] font-semibold uppercase tracking-[0.2em]", dark ? "text-gold-light" : "text-accent")}>{b.label}</p>
-          <p className={cn("mt-1 font-body text-[13px]", muted)}>{b.who}</p>
-          <p className={cn("mt-2 font-display text-xl font-semibold tabular-nums", strong)}>{b.display}</p>
+          <p className={cn("font-display text-base font-semibold", dark ? "text-gold-light" : "text-accent")}>{b.heading}</p>
+          <p className={cn("mt-0.5 font-display text-2xl font-bold tabular-nums", strong)}>{b.display}</p>
+          <p className={cn("mt-1 font-body text-[13px]", muted)}>{b.who} · WhatsApp or call</p>
           <div className="mt-3">{businessActions}</div>
           {quote}
         </div>
         <div className={cn("rounded-2xl border p-4 sm:p-5", dark ? "border-white/10 bg-white/[0.03]" : "border-border bg-card")}>
-          <p className={cn("font-body text-[11px] font-semibold uppercase tracking-[0.2em]", muted)}>{g.label}</p>
+          <p className={cn("font-display text-base font-semibold", strong)}>{g.heading}</p>
+          <p className={cn("mt-0.5 font-display text-2xl font-bold tabular-nums", strong)}>{g.display}</p>
           <p className={cn("mt-1 font-body text-[13px]", muted)}>{g.who}</p>
-          <p className={cn("mt-2 font-display text-lg font-semibold tabular-nums", strong)}>{g.display}</p>
           <div className="mt-3">{generalActions}</div>
         </div>
       </div>
@@ -99,24 +99,16 @@ export default function ContactLanes({ layout = "cards", tone = "light", enquiry
   return (
     <div className={cn("grid gap-3 sm:grid-cols-2", className)}>
       <div className={cn("rounded-2xl border-2 p-5", dark ? "border-gold-light/40 bg-white/[0.04]" : "border-accent/50 bg-card")}>
-        <span className={cn("inline-block rounded-full px-2.5 py-0.5 font-body text-[11px] font-semibold", dark ? "bg-gold-light/15 text-gold-light" : "bg-accent/10 text-accent")}>
-          For businesses
-        </span>
-        <p className={cn("mt-3 font-display text-lg font-bold", strong)}>{b.label}</p>
-        <p className={cn("mt-1 font-body text-[13px] leading-snug", muted)}>{b.who}</p>
-        <p className={cn("mt-3 font-display text-xl font-semibold tabular-nums", strong)}>{b.display}</p>
-        <p className={cn("font-body text-xs", muted)}>WhatsApp or call</p>
+        <p className={cn("font-display text-lg font-bold", dark ? "text-gold-light" : "text-accent")}>{b.heading}</p>
+        <p className={cn("mt-1 font-display text-2xl font-bold tabular-nums", strong)}>{b.display}</p>
+        <p className={cn("mt-1 font-body text-[13px] leading-snug", muted)}>{b.who} · WhatsApp or call</p>
         <div className="mt-4">{businessActions}</div>
         {quote}
       </div>
       <div className={cn("rounded-2xl border p-5", dark ? "border-white/10 bg-white/[0.03]" : "border-border bg-card")}>
-        <span className={cn("inline-block rounded-full px-2.5 py-0.5 font-body text-[11px] font-semibold", dark ? "bg-white/10 text-primary-foreground/70" : "bg-muted text-muted-foreground")}>
-          Everything else
-        </span>
-        <p className={cn("mt-3 font-display text-lg font-bold", strong)}>{g.label}</p>
-        <p className={cn("mt-1 font-body text-[13px] leading-snug", muted)}>{g.who}</p>
-        <p className={cn("mt-3 font-display text-xl font-semibold tabular-nums", strong)}>{g.display}</p>
-        <p className={cn("font-body text-xs", muted)}>Office line · {EMAIL}</p>
+        <p className={cn("font-display text-lg font-bold", strong)}>{g.heading}</p>
+        <p className={cn("mt-1 font-display text-2xl font-bold tabular-nums", strong)}>{g.display}</p>
+        <p className={cn("mt-1 font-body text-[13px] leading-snug", muted)}>{g.who} · {EMAIL}</p>
         <div className="mt-4">{generalActions}</div>
       </div>
     </div>

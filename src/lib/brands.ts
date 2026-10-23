@@ -36,7 +36,7 @@ export const listOf = (items: string[]) =>
   items.length > 1 ? `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}` : items[0] ?? "";
 
 export const ORDER_ANSWER =
-  "Request a quote on this page or contact the sales line for business and bulk orders, +94 77 330 0700 (WhatsApp or call), with the products and quantities you need; the team replies within one business day.";
+  "Request a quote on this page or, for bulk enquiries, WhatsApp or call +94 77 330 0700 with the products and quantities you need; the team replies within one business day.";
 
 export const brandFaqs = (name: string, productNames: string[]): Faq[] => {
   const n = productNames.length;

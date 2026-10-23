@@ -345,7 +345,7 @@ const LocationsSection = () => {
             </Button>
             <Button asChild variant="heroOutline" size="pill" className="px-5 font-body sm:px-6">
               <a href={whatsappHref(whatsappMessage())} target="_blank" rel="noopener noreferrer" data-track="contact_business_whatsapp" data-track-item="find_us_button">
-                <WhatsAppIcon className="mr-1 h-4 w-4 text-[#25D366]" /> Sales
+                <WhatsAppIcon className="mr-1 h-4 w-4 text-[#25D366]" /> Bulk enquiries
               </a>
             </Button>
           </div>

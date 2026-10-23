@@ -30,8 +30,9 @@ const contactSchema = z.object({
   message: z.string().trim().min(1, "Message is required").max(2000),
 });
 
-/** Subjects per lane (see LANES in lib/contact). Stored as "<Lane> · <subject>"
- *  so the admin enquiries list shows at a glance which team it's for. */
+/** Subjects per lane (see LANES in lib/contact). Stored as "Bulk · <subject>"
+ *  or "Personal · <subject>", so the admin enquiries list shows at a glance
+ *  which line it's for. */
 const SUBJECTS: Record<Lane, string[]> = {
   business: ["Request a Quote", "Sourcing Request", "Product Inquiry", "Brand Inquiry", "Distribution", "Partnership"],
   general: ["General Inquiry", "Personal Purchase", "Supplier Enquiry", "Careers", "Other"],
@@ -50,7 +51,7 @@ const contactPageSchema = {
       {
         "@type": "ContactPoint",
         contactType: "sales",
-        name: "Business and bulk orders",
+        name: "Bulk enquiries",
         telephone: "+94-77-330-0700",
         areaServed: "LK",
         availableLanguage: ["en", "si", "ta"],
@@ -58,7 +59,7 @@ const contactPageSchema = {
       {
         "@type": "ContactPoint",
         contactType: "customer service",
-        name: "General enquiries",
+        name: "Personal enquiries",
         telephone: "+94-11-207-1717",
         email: "info@olivefoods.lk",
         areaServed: "LK",
@@ -128,7 +129,7 @@ const ContactPage = () => {
       return;
     }
     setLoading(true);
-    const laneTag = lane === "business" ? "Business" : "General";
+    const laneTag = lane === "business" ? "Bulk" : "Personal";
     const { error } = await supabase.from("contact_submissions").insert({
       name: result.data.name,
       email: result.data.email,
@@ -237,8 +238,8 @@ const ContactPage = () => {
                   <div className="grid gap-2 sm:grid-cols-2">
                     {(
                       [
-                        { key: "business", icon: Building2, title: "A business or bulk order", note: "Hotels, restaurants, cafés, caterers, shops" },
-                        { key: "general", icon: User, title: "Something else", note: "Personal, supplier, careers, other" },
+                        { key: "business", icon: Building2, title: "Bulk enquiry", note: "Hotels, restaurants, cafés, caterers, shops, bulk buyers" },
+                        { key: "general", icon: User, title: "Personal enquiry", note: "Personal purchases and all other questions" },
                       ] as const
                     ).map(({ key, icon: Icon, title, note }) => {
                       const on = lane === key;
@@ -270,16 +271,16 @@ const ContactPage = () => {
                   <p className="mt-2 font-body text-xs text-muted-foreground">
                     {lane === "business" ? (
                       <>
-                        Fastest reply:{" "}
+                        {LANES.business.heading}, WhatsApp or call{" "}
                         <a href={whatsappHref(whatsappMessage())} target="_blank" rel="noopener noreferrer" data-track="contact_business_whatsapp" data-track-item="contact_form" className="font-semibold text-accent hover:underline">
-                          WhatsApp our sales team on {LANES.business.display}
+                          {LANES.business.display}
                         </a>
                       </>
                     ) : (
                       <>
-                        Prefer to talk?{" "}
+                        {LANES.general.heading}, call{" "}
                         <a href={LANES.general.tel} data-track="contact_general_call" data-track-item="contact_form" className="font-semibold text-accent hover:underline">
-                          Call the office on {LANES.general.display}
+                          {LANES.general.display}
                         </a>
                       </>
                     )}
@@ -430,7 +431,7 @@ const ContactPage = () => {
                     Reach Out
                   </span>
                   <h2 className="font-display text-2xl font-bold text-foreground tracking-tight mb-2">Contact Details</h2>
-                  <p className="font-body text-muted-foreground text-sm">Two lines, so you reach the right team first time.</p>
+                  <p className="font-body text-muted-foreground text-sm">Bulk enquiries and personal enquiries each have their own number.</p>
                 </div>
 
                 <ContactLanes layout="rows" tone="light" source="contact_page" />

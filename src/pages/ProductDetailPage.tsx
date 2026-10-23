@@ -533,7 +533,7 @@ const ProductDetailPage = () => {
                   >
                     <FileText className="w-4 h-4" /> Request a Quote
                   </Link>
-                  {/* Product enquiries are business enquiries: the sales line. */}
+                  {/* Product enquiries are bulk enquiries: the sales line. */}
                   <a
                     href={whatsappHref(whatsappMessage(enquiry))}
                     target="_blank"
@@ -550,7 +550,7 @@ const ProductDetailPage = () => {
                     data-track-item={product.name}
                     className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/50 px-4 h-11 text-sm font-body text-muted-foreground hover:text-foreground hover:border-accent/50 transition-all"
                   >
-                    <Phone className="w-4 h-4" /> Call sales · {SALES_DISPLAY}
+                    <Phone className="w-4 h-4" /> Bulk enquiries · {SALES_DISPLAY}
                   </a>
                   <button
                     type="button"

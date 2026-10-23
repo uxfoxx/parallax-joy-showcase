@@ -81,7 +81,7 @@ const ImporterPage = () => {
     },
     {
       q: "How do I open an account or place an order?",
-      a: `Businesses and bulk buyers: WhatsApp or call the sales line on ${SALES_DISPLAY}, or send the products and quantities you need through the quote form. For anything else, call the office on ${PHONE_DISPLAY}. The team replies within one business day.`,
+      a: `For bulk enquiries, WhatsApp or call ${SALES_DISPLAY}, or send the products and quantities you need through the quote form. For personal enquiries, call ${PHONE_DISPLAY}. The team replies within one business day.`,
     },
   ];
 

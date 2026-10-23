@@ -13,11 +13,11 @@ export const WhatsAppIcon =({ className = "" }: { className?: string }) => (
 );
 
 /**
- * Floating "Bulk orders" button, on every public page. It names who it's for
- * and opens a small panel rather than jumping straight to WhatsApp: business
- * buyers get the sales line (WhatsApp or call), and anyone else is pointed at
- * the office line in one sentence, so personal enquiries stop landing on the
- * sales WhatsApp. On a product page the WhatsApp message names the product.
+ * Floating "Bulk enquiries" button, on every public page. It names who it's
+ * for and opens a small panel rather than jumping straight to WhatsApp: "For
+ * bulk enquiries" with the sales number (WhatsApp or call), and one line
+ * underneath, "For personal enquiries, call +94 11 207 1717", so personal
+ * enquiries stop landing on the sales WhatsApp. On a product page the WhatsApp message names the product.
  *
  * `hideOnMobile`: pages that show the sticky EnquiryBar (which has its own
  * WhatsApp button) hide this one on mobile so the two don't overlap.
@@ -73,7 +73,7 @@ const FloatingWhatsApp = ({ hideOnMobile = false }: { hideOnMobile?: boolean }) 
             className="w-[min(19rem,calc(100vw-2rem))] origin-bottom-right rounded-2xl border border-border bg-background p-4 text-foreground shadow-[0_24px_60px_-20px_rgba(0,0,0,0.35)]"
           >
             <div className="flex items-start justify-between gap-3">
-              <p className="font-display text-base font-semibold leading-tight">Buying for a business?</p>
+              <p className="font-display text-base font-semibold leading-tight">{b.heading}</p>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
@@ -83,8 +83,9 @@ const FloatingWhatsApp = ({ hideOnMobile = false }: { hideOnMobile?: boolean }) 
                 <X className="h-4 w-4" />
               </button>
             </div>
+            <p className="mt-0.5 font-display text-xl font-bold tabular-nums">{b.display}</p>
             <p className="mt-1 font-body text-sm leading-snug text-muted-foreground">
-              {matchedProduct ? `WhatsApp our sales team for a quote on ${matchedProduct.name}.` : "WhatsApp our sales team for quotes and bulk orders."}
+              {matchedProduct ? `WhatsApp or call for a quote on ${matchedProduct.name}.` : "WhatsApp or call for quotes and bulk orders."}
             </p>
             <a
               href={whatsappHref(message)}
@@ -94,7 +95,7 @@ const FloatingWhatsApp = ({ hideOnMobile = false }: { hideOnMobile?: boolean }) 
               data-track-item="floating"
               className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] font-body text-sm font-semibold text-white transition-colors hover:bg-[#1fb757]"
             >
-              <WhatsAppIcon className="h-5 w-5" /> Chat with sales
+              <WhatsAppIcon className="h-5 w-5" /> WhatsApp
             </a>
             <a
               href={b.tel}
@@ -102,12 +103,12 @@ const FloatingWhatsApp = ({ hideOnMobile = false }: { hideOnMobile?: boolean }) 
               data-track-item="floating"
               className="mt-2 flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-border font-body text-sm font-semibold transition-colors hover:border-foreground/30"
             >
-              <Phone className="h-4 w-4" /> Call sales · {b.display}
+              <Phone className="h-4 w-4" /> Call
             </a>
-            <p className="mt-3 border-t border-border pt-3 font-body text-xs text-muted-foreground">
-              Not a business?{" "}
+            <p className="mt-3 border-t border-border pt-3 font-body text-[13px] text-muted-foreground">
+              {g.heading}, call{" "}
               <a href={g.tel} data-track="contact_general_call" data-track-item="floating" className="font-semibold text-foreground underline decoration-foreground/30 underline-offset-2">
-                Call {g.display}
+                {g.display}
               </a>
             </p>
           </motion.div>
@@ -126,7 +127,7 @@ const FloatingWhatsApp = ({ hideOnMobile = false }: { hideOnMobile?: boolean }) 
         {/* Pulse ring — throttled: ~2s burst every 12s instead of continuous */}
         {!open && <span aria-hidden className="absolute inset-0 rounded-full bg-[#25D366] opacity-0 animate-wa-pulse" />}
         <WhatsAppIcon className="relative h-7 w-7" />
-        <span className="relative font-body text-sm font-semibold">Bulk orders</span>
+        <span className="relative font-body text-sm font-semibold">{b.label}</span>
       </button>
     </aside>
   );

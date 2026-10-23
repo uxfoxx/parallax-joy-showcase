@@ -6,7 +6,7 @@ import { SALES_TEL, quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget
 /**
  * Mobile-only sticky enquiry bar for product and category pages: one primary
  * "Request a quote" / "Request sourcing" action plus WhatsApp and call — both
- * on the sales line (business and bulk orders; see LANES in lib/contact). On
+ * on the line for bulk enquiries (see LANES in lib/contact). On
  * desktop the in-page CTA card does this job, so the bar is hidden there.
  * Sits below dialogs (z-40 < Radix z-50) so it never covers a quick-view modal.
  * Clicks are tracked by the delegated listener in lib/analytics.
@@ -28,7 +28,7 @@ const EnquiryBar = ({ target }: { target: EnquiryTarget }) => {
           href={whatsappHref(whatsappMessage(target))}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="WhatsApp sales"
+          aria-label="WhatsApp for bulk enquiries"
           data-track="contact_business_whatsapp"
           data-track-item="enquiry_bar"
           className="w-11 h-11 shrink-0 rounded-lg bg-[#25D366] text-white inline-flex items-center justify-center active:scale-95 transition-transform"
@@ -37,7 +37,7 @@ const EnquiryBar = ({ target }: { target: EnquiryTarget }) => {
         </a>
         <a
           href={SALES_TEL}
-          aria-label="Call sales"
+          aria-label="Call for bulk enquiries"
           data-track="contact_business_call"
           data-track-item="enquiry_bar"
           className="w-11 h-11 shrink-0 rounded-lg border border-border bg-background text-foreground inline-flex items-center justify-center active:scale-95 transition-transform"
