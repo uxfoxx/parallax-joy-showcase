@@ -3,6 +3,7 @@ import { ArrowRight, BookOpen, ChevronDown, FileText, Globe2, Snowflake, Truck, 
 import Seo, { SITE_URL } from "@/components/Seo";
 import PageLayout from "@/components/PageLayout";
 import PageHero from "@/components/PageHero";
+import FactSheet from "@/components/FactSheet";
 import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
 import { useBrands, useProducts } from "@/lib/api";
 import { productCategories, useSuppliedCategories } from "@/hooks/useSuppliedCategories";
@@ -10,7 +11,7 @@ import { categorySlug, faqSchema, type Faq } from "@/lib/categories";
 import { isHouseBrand, listOf } from "@/lib/brands";
 import { SECTORS } from "@/lib/sectors";
 import { GUIDES } from "@/lib/guides";
-import { AT_A_GLANCE, IMPORTER_PATH, ORGANIZATION_ID } from "@/lib/site";
+import { IMPORTER_PATH, ORGANIZATION_ID } from "@/lib/site";
 import { PHONE_DISPLAY, SALES_DISPLAY, quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
 
 /**
@@ -81,7 +82,7 @@ const ImporterPage = () => {
     },
     {
       q: "How do I open an account or place an order?",
-      a: `For bulk enquiries, WhatsApp or call ${SALES_DISPLAY}, or send the products and quantities you need through the quote form. For personal enquiries, call ${PHONE_DISPLAY}. The team replies within one business day.`,
+      a: `For bulk enquiries, WhatsApp or call ${SALES_DISPLAY}, or send the products and quantities you need through the quote form. For general enquiries, call ${PHONE_DISPLAY}. The team replies within one business day.`,
     },
   ];
 
@@ -134,19 +135,8 @@ const ImporterPage = () => {
       <div data-navbar-theme="light">
         <section className="relative bg-background py-16 lg:py-24">
           <div className="mx-auto max-w-6xl px-6 lg:px-8">
-            {/* At a glance */}
-            <h2 className="font-display text-2xl font-bold text-foreground md:text-3xl">Olive Foods at a glance</h2>
-            <dl className="mt-6 grid gap-x-10 gap-y-0 border-t border-border sm:grid-cols-2">
-              {[
-                ...(n ? ([["Catalogue", `${n} products in ${categories.length} categories, ${importedBrands.length} imported brands`]] as [string, string][]) : []),
-                ...AT_A_GLANCE.filter(([k]) => k !== "Contact"),
-              ].map(([k, v]) => (
-                <div key={k} className="grid grid-cols-[110px_1fr] gap-4 border-b border-border py-4 sm:grid-cols-[130px_1fr]">
-                  <dt className="pt-0.5 font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{k}</dt>
-                  <dd className="font-body text-sm leading-relaxed text-foreground">{v}</dd>
-                </div>
-              ))}
-            </dl>
+            {/* At a glance — the shared company fact sheet */}
+            <FactSheet />
 
             {/* How supply works */}
             <h2 className="mt-16 font-display text-2xl font-bold text-foreground md:text-3xl">How our supply works</h2>

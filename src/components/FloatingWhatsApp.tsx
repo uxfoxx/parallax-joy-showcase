@@ -16,7 +16,7 @@ export const WhatsAppIcon =({ className = "" }: { className?: string }) => (
  * Floating "Bulk enquiries" button, on every public page. It names who it's
  * for and opens a small panel rather than jumping straight to WhatsApp: "For
  * bulk enquiries" with the sales number (WhatsApp or call), and one line
- * underneath, "For personal enquiries, call +94 11 207 1717", so personal
+ * underneath, "For general enquiries, call +94 11 207 1717", so personal
  * enquiries stop landing on the sales WhatsApp. On a product page the WhatsApp message names the product.
  *
  * `hideOnMobile`: pages that show the sticky EnquiryBar (which has its own

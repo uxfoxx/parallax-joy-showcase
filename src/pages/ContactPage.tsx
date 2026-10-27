@@ -31,7 +31,7 @@ const contactSchema = z.object({
 });
 
 /** Subjects per lane (see LANES in lib/contact). Stored as "Bulk · <subject>"
- *  or "Personal · <subject>", so the admin enquiries list shows at a glance
+ *  or "General · <subject>", so the admin enquiries list shows at a glance
  *  which line it's for. */
 const SUBJECTS: Record<Lane, string[]> = {
   business: ["Request a Quote", "Sourcing Request", "Product Inquiry", "Brand Inquiry", "Distribution", "Partnership"],
@@ -59,7 +59,7 @@ const contactPageSchema = {
       {
         "@type": "ContactPoint",
         contactType: "customer service",
-        name: "Personal enquiries",
+        name: "General enquiries",
         telephone: "+94-11-207-1717",
         email: "info@olivefoods.lk",
         areaServed: "LK",
@@ -129,7 +129,7 @@ const ContactPage = () => {
       return;
     }
     setLoading(true);
-    const laneTag = lane === "business" ? "Bulk" : "Personal";
+    const laneTag = lane === "business" ? "Bulk" : "General";
     const { error } = await supabase.from("contact_submissions").insert({
       name: result.data.name,
       email: result.data.email,
@@ -239,7 +239,7 @@ const ContactPage = () => {
                     {(
                       [
                         { key: "business", icon: Building2, title: "Bulk enquiry", note: "Hotels, restaurants, cafés, caterers, shops, bulk buyers" },
-                        { key: "general", icon: User, title: "Personal enquiry", note: "Personal purchases and all other questions" },
+                        { key: "general", icon: User, title: "General enquiry", note: "Personal purchases and all other questions" },
                       ] as const
                     ).map(({ key, icon: Icon, title, note }) => {
                       const on = lane === key;
@@ -431,7 +431,7 @@ const ContactPage = () => {
                     Reach Out
                   </span>
                   <h2 className="font-display text-2xl font-bold text-foreground tracking-tight mb-2">Contact Details</h2>
-                  <p className="font-body text-muted-foreground text-sm">Bulk enquiries and personal enquiries each have their own number.</p>
+                  <p className="font-body text-muted-foreground text-sm">Bulk enquiries and general enquiries each have their own number.</p>
                 </div>
 
                 <ContactLanes layout="rows" tone="light" source="contact_page" />

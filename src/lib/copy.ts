@@ -12,6 +12,7 @@
  * rows, and the admin pages ask for them raw.
  */
 import productCopy from "@/data/product-descriptions.json";
+import discontinuedBrands from "@/data/discontinued-brands.json";
 import { brandProfile } from "@/lib/brands";
 import type { Brand, Product } from "@/lib/api";
 
@@ -45,5 +46,14 @@ export function withProductCopy<T extends Product>(product: T): T {
   return { ...product, description, brands };
 }
 
-export const selectBrands = (rows: Brand[]) => rows.map(withBrandCopy);
-export const selectProducts = (rows: Product[]) => rows.map(withProductCopy);
+/**
+ * Brands Olive Foods no longer carries (src/data/discontinued-brands.json, by
+ * slug). They and their products stay in the database and the admin, but the
+ * public site, sitemap, prerender and llms.txt leave them out, and nginx
+ * answers their old URLs with 410 Gone. Add a slug here when a brand is dropped.
+ */
+const DISCONTINUED = new Set<string>(discontinuedBrands as string[]);
+export const isDiscontinuedBrand = (slug?: string | null) => !!slug && DISCONTINUED.has(slug);
+
+export const selectBrands = (rows: Brand[]) => rows.filter((b) => !isDiscontinuedBrand(b.slug)).map(withBrandCopy);
+export const selectProducts = (rows: Product[]) => rows.filter((p) => !isDiscontinuedBrand(p.brands?.slug)).map(withProductCopy);

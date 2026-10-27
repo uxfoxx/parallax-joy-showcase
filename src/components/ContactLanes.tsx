@@ -8,7 +8,7 @@ import { EMAIL, LANES, whatsappHref, whatsappMessage, type EnquiryTarget } from 
  * The two ways to reach Olive Foods, always together and always worded the
  * way the client asked (see LANES in lib/contact):
  *  - "For bulk enquiries" → +94 77 330 0700, WhatsApp or call (primary)
- *  - "For personal enquiries" → +94 11 207 1717, call or email (secondary)
+ *  - "For general enquiries" → +94 11 207 1717, call or email (secondary)
  * Each block leads with that sentence and the number, so nobody has to work
  * out which line is which.
  *

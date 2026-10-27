@@ -10,6 +10,7 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
 import ScrollFloatingElement from "@/components/landing/ScrollFloatingElement";
 import SectionTransition from "@/components/landing/SectionTransition";
+import FactSheet from "@/components/FactSheet";
 import LocationsSection from "@/components/landing/LocationsSection";
 import CompanyPhilosophy from "@/components/about/CompanyPhilosophy";
 import CertificationSection from "@/components/about/CertificationSection";
@@ -17,8 +18,7 @@ import PageHero from "@/components/PageHero";
 import Eyebrow from "@/components/ui/eyebrow";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
 import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
-import { useProducts } from "@/lib/api";
-import { AT_A_GLANCE, ORGANIZATION_ID, organizationSchema } from "@/lib/site";
+import { ORGANIZATION_ID, organizationSchema } from "@/lib/site";
 
 const businessActivities = [
   { icon: Package, title: "Import & Brand Representation", desc: "Exclusive brand agency and import operations for leading international brands." },
@@ -240,18 +240,9 @@ const AboutPage = () => {
   const { ref: mouseRef, gradientStyle } = useMouseGradient();
   const { scrollYProgress } = useScroll();
   const bgY = useTransform(scrollYProgress, [0, 1], ["-50px", "50px"]);
-
-  // "At a glance": the shared facts plus the live range.
-  const { data: allProducts = [] } = useProducts();
+  // Categories with products, for the Organization schema's catalogue.
   const suppliedCategories = useSuppliedCategories();
-  const brandCount = new Set(allProducts.map((p) => p.brand_id).filter(Boolean)).size;
-  const glance: [string, string][] = [
-    ...AT_A_GLANCE.slice(0, 2),
-    ...(allProducts.length
-      ? [["Range", `${allProducts.length} products in ${suppliedCategories.length} categories, from ${brandCount} brands`] as [string, string]]
-      : []),
-    ...AT_A_GLANCE.slice(2),
-  ];
+
 
   return (
     <div className="smooth-scroll overflow-x-clip">
@@ -354,19 +345,9 @@ const AboutPage = () => {
               ))}
             </motion.div>
 
-            {/* At a glance — the same facts as plain sentences, plus the live
-                range. Readers skim it; search engines and AI assistants quote it. */}
-            <div className="mt-16 max-w-4xl">
-              <h3 className="font-display text-2xl font-bold text-foreground mb-5">Olive Foods at a glance</h3>
-              <dl className="divide-y divide-border border-y border-border font-body text-sm">
-                {glance.map(([label, value]) => (
-                  <div key={label} className="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-1 sm:gap-6 py-3">
-                    <dt className="text-muted-foreground">{label}</dt>
-                    <dd className="text-foreground">{value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
+            {/* At a glance — the company fact sheet (shared with the importer
+                page); readers skim it, search engines and AI assistants quote it. */}
+            <FactSheet headingLevel="h3" className="mt-16" />
           </div>
         </section>
       </div>

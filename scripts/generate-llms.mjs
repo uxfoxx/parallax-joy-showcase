@@ -19,7 +19,7 @@
 import { writeFileSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
-  DIST, ROOT, SITE, supabaseClient, categorySlug, readSectors, readBrandProfiles, readGuides, readProductCopy, readCategoryIntros, copyApplies,
+  DIST, ROOT, SITE, supabaseClient, categorySlug, readSectors, readBrandProfiles, readDiscontinuedBrands, readGuides, readProductCopy, readCategoryIntros, copyApplies,
 } from "./seo/config.mjs";
 
 const company = JSON.parse(readFileSync(resolve(ROOT, "src/data/company.json"), "utf8"));
@@ -68,7 +68,7 @@ const FACTS = `## At a glance
 ${company.atAGlance.map(([k, v]) => `- ${k}: ${v}`).join("\n")}`;
 
 const HOW_TO_ORDER = `## How to order
-Olive Foods sells to businesses (hotels, restaurants, cafés, caterers, supermarkets, retailers). Send a quote request with the products and quantities you need — ${SITE}/contact, +94 11 207 1717 (phone), +94 77 330 0700 (WhatsApp) or info@olivefoods.lk — and the team replies with trade pricing and delivery details, usually within one business day.`;
+Olive Foods sells to businesses (hotels, restaurants, cafés, caterers, supermarkets, retailers). For bulk enquiries, WhatsApp or call +94 77 330 0700, or send a quote request with the products and quantities you need at ${SITE}/contact; the team replies with trade pricing and delivery details, usually within one business day. For general enquiries, call +94 11 207 1717 or email info@olivefoods.lk.`;
 
 try {
   const [brandsRes, productsRes, categoriesRes] = await Promise.all([
@@ -78,7 +78,10 @@ try {
   ]);
   for (const r of [brandsRes, productsRes, categoriesRes]) if (r.error) throw r.error;
   // The same reviewed copy the pages show (src/lib/copy.ts).
-  const brands = (brandsRes.data ?? []).map((b) => {
+  // Brands no longer carried, and their products, are left out entirely.
+  const gone = readDiscontinuedBrands();
+  const goneIds = new Set((brandsRes.data ?? []).filter((b) => gone.has(b.slug)).map((b) => b.id));
+  const brands = (brandsRes.data ?? []).filter((b) => !gone.has(b.slug)).map((b) => {
     const p = profiles[b.slug] ?? {};
     return {
       ...b,
@@ -87,7 +90,7 @@ try {
     };
   });
   const products = (productsRes.data ?? [])
-    .filter((p) => p.slug)
+    .filter((p) => p.slug && !goneIds.has(p.brand_id))
     .map((p) => {
       const c = productCopy[p.slug];
       return c && copyApplies(p.description, c.replaces) ? { ...p, description: c.description } : p;

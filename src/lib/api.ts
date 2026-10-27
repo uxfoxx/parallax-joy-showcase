@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables, TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
-import { selectBrands, selectProducts, withBrandCopy, withProductCopy } from "@/lib/copy";
+import { isDiscontinuedBrand, selectBrands, selectProducts, withBrandCopy, withProductCopy } from "@/lib/copy";
 
 export type Brand = Tables<"brands">;
 export type Product = Tables<"products"> & { brands?: Brand };
@@ -41,7 +41,8 @@ export const useBrand = (slug: string) =>
       if (error) throw error;
       return data as Brand;
     },
-    select: withBrandCopy,
+    // A discontinued brand reads as "not found" on the public site.
+    select: (b: Brand) => (isDiscontinuedBrand(b.slug) ? null : withBrandCopy(b)),
     enabled: !!slug,
   });
 
@@ -111,7 +112,8 @@ export const useProduct = (slug: string) =>
       if (error) throw error;
       return data as Product;
     },
-    select: withProductCopy,
+    // A discontinued brand's product reads as "not found" on the public site.
+    select: (p: Product) => (isDiscontinuedBrand(p.brands?.slug) ? null : withProductCopy(p)),
     enabled: !!slug,
   });
 
