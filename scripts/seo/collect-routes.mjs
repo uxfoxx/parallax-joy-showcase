@@ -39,14 +39,27 @@ const supabase = supabaseClient();
 if (!supabase) {
   console.warn("[routes] Supabase env not set — fixed pages and sectors only.");
 } else {
+  // Each read is retried; if one still fails the build stops (the live release
+  // stays up). Carrying on without it once dropped every category page from
+  // the sitemap and the prerender after a single "fetch failed".
+  const read = async (name, query) => {
+    for (let attempt = 1; ; attempt++) {
+      const res = await query();
+      if (!res.error) return res;
+      if (attempt >= 4) {
+        console.error(`[routes] ${name} query failed ${attempt} times: ${res.error.message}`);
+        process.exit(1);
+      }
+      console.warn(`[routes] ${name} query failed (${res.error.message}); retrying…`);
+      await new Promise((r) => setTimeout(r, attempt * 1500));
+    }
+  };
   const [products, brands, categories, gallery] = await Promise.all([
-    supabase.from("products").select("id, slug, image_url, category, categories, brand_id, created_at").order("name"),
-    supabase.from("brands").select("id, slug, image_url, created_at").order("name"),
-    supabase.from("categories").select("id, name, created_at").order("name"),
-    supabase.from("product_images").select("product_id, image_url, sort_order").order("sort_order"),
+    read("products", () => supabase.from("products").select("id, slug, image_url, category, categories, brand_id, created_at").order("name")),
+    read("brands", () => supabase.from("brands").select("id, slug, image_url, created_at").order("name")),
+    read("categories", () => supabase.from("categories").select("id, name, created_at").order("name")),
+    read("product_images", () => supabase.from("product_images").select("product_id, image_url, sort_order").order("sort_order")),
   ]);
-  for (const [name, res] of Object.entries({ products, brands, categories, gallery }))
-    if (res.error) console.warn(`[routes] ${name} query failed: ${res.error.message}`);
 
   // Discontinued brands and their products have no pages any more.
   const gone = readDiscontinuedBrands();
