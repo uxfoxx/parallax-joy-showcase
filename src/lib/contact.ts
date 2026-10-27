@@ -3,10 +3,11 @@
  * WhatsApp and call button across the site points at the same place.
  *
  * Two lanes (decided with the client, 2026-10-23): bulk enquiries go to the
- * sales mobile (WhatsApp AND calls), personal enquiries to the office
- * landline. The client wants it worded exactly that way: "+94 77 330 0700
- * for bulk enquiries", "+94 11 207 1717 for personal enquiries". A number is never shown without its lane's label —
- * render them through <ContactLanes> so the wording can't drift.
+ * sales mobile (WhatsApp AND calls), everything else to the office landline.
+ * The client wants it worded exactly that way: "+94 77 330 0700 for bulk
+ * enquiries", "+94 11 207 1717 for general enquiries" (renamed from
+ * "personal enquiries" on 2026-10-27). A number is never shown without its
+ * lane's label — render them through <ContactLanes> so the wording can't drift.
  */
 import { SITE_URL } from "@/components/Seo";
 
@@ -32,8 +33,8 @@ export const LANES: Record<Lane, { label: string; heading: string; who: string; 
     tel: SALES_TEL,
   },
   general: {
-    label: "Personal enquiries",
-    heading: "For personal enquiries",
+    label: "General enquiries",
+    heading: "For general enquiries",
     who: "Personal purchases and all other questions",
     display: PHONE_DISPLAY,
     tel: PHONE_TEL,

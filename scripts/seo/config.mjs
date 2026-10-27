@@ -64,6 +64,16 @@ export const categorySlug = (name) =>
 
 export const readSectors = () => JSON.parse(readFileSync(resolve(ROOT, "src/data/sectors.json"), "utf8"));
 /** Brand profiles keyed by slug (src/data/brand-profiles.json). */
+/** Brands no longer carried (src/data/discontinued-brands.json): left out of the
+ *  sitemap, prerender and llms.txt, with their products (see src/lib/copy.ts). */
+export const readDiscontinuedBrands = () => {
+  try {
+    return new Set(JSON.parse(readFileSync(resolve(ROOT, "src/data/discontinued-brands.json"), "utf8")));
+  } catch {
+    return new Set();
+  }
+};
+
 export const readBrandProfiles = () => {
   try {
     return JSON.parse(readFileSync(resolve(ROOT, "src/data/brand-profiles.json"), "utf8"));

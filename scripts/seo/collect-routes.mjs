@@ -13,7 +13,7 @@
  */
 import { writeFileSync } from "node:fs";
 import {
-  CACHE, ROUTES_FILE, STATIC_PAGES, HUB_PAGES, ensureDir, supabaseClient, categorySlug, readSectors, readBrandProfiles,
+  CACHE, ROUTES_FILE, STATIC_PAGES, HUB_PAGES, ensureDir, supabaseClient, categorySlug, readSectors, readBrandProfiles, readDiscontinuedBrands,
   readGuides,
 } from "./config.mjs";
 
@@ -48,12 +48,18 @@ if (!supabase) {
   for (const [name, res] of Object.entries({ products, brands, categories, gallery }))
     if (res.error) console.warn(`[routes] ${name} query failed: ${res.error.message}`);
 
+  // Discontinued brands and their products have no pages any more.
+  const gone = readDiscontinuedBrands();
+  const goneIds = new Set((brands.data ?? []).filter((b) => gone.has(b.slug)).map((b) => b.id));
+  const liveProducts = (products.data ?? []).filter((p) => !goneIds.has(p.brand_id));
+  if (goneIds.size) console.log(`[routes] discontinued brands left out: ${[...gone].join(", ")} (${(products.data ?? []).length - liveProducts.length} products)`);
+
   const galleryByProduct = {};
   for (const g of gallery.data ?? []) (galleryByProduct[g.product_id] ??= []).push(g.image_url);
 
   // Category landing pages exist only for categories that have products.
   const catCounts = {};
-  for (const p of products.data ?? []) {
+  for (const p of liveProducts) {
     const cats = p.categories?.length ? p.categories : p.category ? [p.category] : [];
     for (const c of cats) catCounts[c] = (catCounts[c] ?? 0) + 1;
   }
@@ -61,7 +67,7 @@ if (!supabase) {
     if (c.name && catCounts[c.name] > 0)
       add({ loc: `/categories/${categorySlug(c.name)}`, kind: "category", id: c.id, seed: c.created_at });
   }
-  for (const p of products.data ?? []) {
+  for (const p of liveProducts) {
     if (!p.slug) continue;
     add({
       loc: `/products/${p.slug}`,
@@ -75,10 +81,10 @@ if (!supabase) {
   // and renders noindex — so it isn't listed or prerendered either. It
   // comes back automatically once it has products or a profile.
   const brandProductCount = {};
-  for (const p of products.data ?? []) if (p.brand_id) brandProductCount[p.brand_id] = (brandProductCount[p.brand_id] ?? 0) + 1;
+  for (const p of liveProducts) if (p.brand_id) brandProductCount[p.brand_id] = (brandProductCount[p.brand_id] ?? 0) + 1;
   const profiles = readBrandProfiles();
   for (const b of brands.data ?? []) {
-    if (!b.slug) continue;
+    if (!b.slug || gone.has(b.slug)) continue;
     if (!brandProductCount[b.id] && !profiles[b.slug]?.about?.trim()) {
       console.log(`[routes] skipping /brands/${b.slug}: no products and no profile (noindex)`);
       continue;

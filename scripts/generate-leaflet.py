@@ -37,7 +37,7 @@ SITE = "https://www.olivefoods.lk"
 
 BRANDS = ["Acroyali", "Albertos", "Azizaa", "Daily Dairy", "Damaco",
           "Dedicato", "Dira", "Donna Chiara", "Hungritos", "Mae Ploy", "Mahachai",
-          "Royal Arm", "Tabasco", "Tiparos", "Wai Wai"]
+          "Tabasco", "Tiparos", "Wai Wai"]
 
 
 # ── colour ──
