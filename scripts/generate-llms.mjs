@@ -71,12 +71,21 @@ const HOW_TO_ORDER = `## How to order
 Olive Foods sells to businesses (hotels, restaurants, cafés, caterers, supermarkets, retailers). For bulk enquiries, WhatsApp or call +94 77 330 0700, or send a quote request with the products and quantities you need at ${SITE}/contact; the team replies with trade pricing and delivery details, usually within one business day. For general enquiries, call +94 11 207 1717 or email info@olivefoods.lk.`;
 
 try {
-  const [brandsRes, productsRes, categoriesRes] = await Promise.all([
-    supabase.from("brands").select("id, name, slug, description, origin, established").order("name"),
-    supabase.from("products").select("name, slug, category, categories, brand_id, description, sku").order("name"),
-    supabase.from("categories").select("name, description").order("name"),
-  ]);
-  for (const r of [brandsRes, productsRes, categoriesRes]) if (r.error) throw r.error;
+  // Retried a few times: a single dropped request shouldn't fall back to the
+  // static file (see the same retry in seo/collect-routes.mjs).
+  let brandsRes, productsRes, categoriesRes;
+  for (let attempt = 1; ; attempt++) {
+    [brandsRes, productsRes, categoriesRes] = await Promise.all([
+      supabase.from("brands").select("id, name, slug, description, origin, established").order("name"),
+      supabase.from("products").select("name, slug, category, categories, brand_id, description, sku").order("name"),
+      supabase.from("categories").select("name, description").order("name"),
+    ]);
+    const failed = [brandsRes, productsRes, categoriesRes].find((r) => r.error);
+    if (!failed) break;
+    if (attempt >= 4) throw failed.error;
+    console.warn(`[llms] query failed (${failed.error.message}); retrying…`);
+    await new Promise((r) => setTimeout(r, attempt * 1500));
+  }
   // The same reviewed copy the pages show (src/lib/copy.ts).
   // Brands no longer carried, and their products, are left out entirely.
   const gone = readDiscontinuedBrands();
