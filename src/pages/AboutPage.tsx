@@ -14,6 +14,7 @@ import FactSheet from "@/components/FactSheet";
 import LocationsSection from "@/components/landing/LocationsSection";
 import CompanyPhilosophy from "@/components/about/CompanyPhilosophy";
 import CertificationSection from "@/components/about/CertificationSection";
+import WhoWeAre from "@/components/about/WhoWeAre";
 import PageHero from "@/components/PageHero";
 import Eyebrow from "@/components/ui/eyebrow";
 import { useMouseGradient } from "@/hooks/useMouseGradient";
@@ -281,75 +282,11 @@ const AboutPage = () => {
 
       {/* Who We Are — Light */}
       <div data-navbar-theme="light">
-        <section className="relative overflow-hidden py-28 lg:py-36 bg-background">
-          <div className="absolute w-[400px] h-[400px] -top-20 -left-20 rounded-full opacity-[0.08]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
-          <div className="absolute w-[300px] h-[300px] bottom-10 right-10 rounded-full opacity-[0.06]" style={{ background: "radial-gradient(circle, hsl(var(--accent)), transparent 70%)" }} />
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
-              {/* Sticky editorial label */}
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="lg:col-span-4 lg:sticky lg:top-28 self-start"
-              >
-                <Eyebrow variant="pill" tone="accent" className="mb-6">
-                  Our Story
-                </Eyebrow>
-                <h2 className="font-display text-4xl sm:text-5xl font-bold text-foreground leading-[1.05] tracking-tight">
-                  Who
-                  <span className="block text-gradient-gold italic">we are.</span>
-                </h2>
-              </motion.div>
-
-              {/* Standfirst + body */}
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-                className="lg:col-span-8"
-              >
-                <p className="font-body text-xl md:text-2xl font-medium text-foreground leading-relaxed">
-                  Olive Foods is built on more than thirty years in the food industry, and on
-                  the supplier relationships that came with it. We import and distribute across
-                  Sri Lanka, supplying the hospitality and retail trade, and we have always put
-                  those relationships first.
-                </p>
-                <div className="mt-7 space-y-5 font-body text-muted-foreground leading-relaxed">
-                  <p>Our focus is frozen lines (french fries, meat, seafood, fruits, vegetables) alongside dairy, grocery staples, edible oils, and specialty imports, with vegan, gluten-free, and organic ranges supported throughout. Suppliers across Europe, Asia, and the Middle East, and growing.</p>
-                  <p>The integrated model covers every step from sourcing and customs through our bonded warehouse, into −18 °C cold-chain storage, and onto the road in our own island-wide delivery fleet, serving hotels, restaurants, cafés, catering operations, and major supermarkets.</p>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Record strip — hairlines, not cards */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-16 grid grid-cols-2 md:grid-cols-4 border-y border-border divide-x divide-border"
-            >
-              {[
-                { value: "30+", label: "Years of trade" },
-                { value: "30+", label: "Source countries" },
-                { value: "25", label: "Districts served" },
-                { value: "−18°C", label: "Cold chain" },
-              ].map((s) => (
-                <div key={s.label} className="py-8 px-5 md:px-8">
-                  <p className="font-display text-3xl md:text-4xl font-bold text-foreground tabular-nums">{s.value}</p>
-                  <p className="mt-1.5 font-body text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{s.label}</p>
-                </div>
-              ))}
-            </motion.div>
-
-            {/* At a glance — the company fact sheet (shared with the importer
-                page); readers skim it, search engines and AI assistants quote it. */}
-            <FactSheet headingLevel="h3" className="mt-16" />
-          </div>
-        </section>
+        <WhoWeAre>
+          {/* At a glance — the company fact sheet (shared with the importer
+              page); readers skim it, search engines and AI assistants quote it. */}
+          <FactSheet headingLevel="h3" className="mt-16" />
+        </WhoWeAre>
       </div>
 
       <SectionTransition />

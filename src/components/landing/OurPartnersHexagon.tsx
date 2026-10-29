@@ -7,6 +7,8 @@ import SplitText from "@/components/motion/SplitText";
 import { useBrands, useProducts } from "@/lib/api";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 import { cdnImg, fallbackToOriginal } from "@/lib/img";
+import { LIGHT_LOGO_BRANDS } from "@/lib/brands";
+import { cn } from "@/lib/utils";
 
 /**
  * "Brands we partner with." — every brand's logo, full colour, in an even
@@ -38,7 +40,10 @@ const LogoTile = ({ logo, index }: { logo: Logo; index: number }) => (
     <Link
       to={`/brands/${logo.slug}`}
       aria-label={logo.name}
-      className="group relative flex aspect-[3/2] items-center justify-center rounded-2xl border border-border/70 bg-white p-3 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_18px_36px_-18px_rgba(0,0,0,0.25)] sm:p-4"
+      className={cn(
+        "group relative flex aspect-[3/2] items-center justify-center rounded-2xl border p-3 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_18px_36px_-18px_rgba(0,0,0,0.25)] sm:p-4",
+        LIGHT_LOGO_BRANDS.has(logo.slug) ? "border-forest-deep bg-forest-deep" : "border-border/70 bg-white",
+      )}
     >
       <img
         src={cdnImg(logo.image_url, 360)}
