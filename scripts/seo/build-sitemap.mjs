@@ -333,7 +333,7 @@ writeFileSync(INDEXNOW_FILE, JSON.stringify({ generatedAt: NOW, urls: indexnow }
 // ─── Coverage: every public app route must be in the sitemap or excluded ───
 try {
   const app = readFileSync(resolve(ROOT, "src/App.tsx"), "utf8");
-  const declared = [...app.matchAll(/<Route\b[^>]*\bpath="(\/[^"]*)"/g)].map((m) => m[1]);
+  const declared = [...app.matchAll(/(?:<Route\b[^>]*\bpath="|\{\s*path:\s*")(\/[^"]*)"/g)].map((m) => m[1]);
   const covered = new Set([...STATIC_PAGES, ...Object.values(ROUTE_PATTERNS), ...Object.values(HUB_PAGES)]);
   for (const path of declared)
     if (!covered.has(path) && !(path in EXCLUDED_ROUTES))
@@ -360,7 +360,7 @@ try {
   } else {
     const served = new RegExp(pattern, "i");
     const samples = new Set([
-      ...[...app.matchAll(/<Route\b[^>]*\bpath="(\/[^"]*)"/g)].map((m) => m[1].replace(/:[^/]+/g, "sample")),
+      ...[...app.matchAll(/(?:<Route\b[^>]*\bpath="|\{\s*path:\s*")(\/[^"]*)"/g)].map((m) => m[1].replace(/:[^/]+/g, "sample")),
       "/admin/products", // nested admin routes are relative in App.tsx
       ...routes.map((r) => r.loc),
       ...Object.keys(redirects),

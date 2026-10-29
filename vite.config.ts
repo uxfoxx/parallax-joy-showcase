@@ -1,7 +1,7 @@
 import { defineConfig, loadEnv, type HtmlTagDescriptor, type Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { readFileSync } from "fs";
+import { cpSync, existsSync, mkdirSync, readFileSync } from "fs";
 import { componentTagger } from "lovable-tagger";
 
 /**
@@ -89,6 +89,56 @@ const contentIndex = (): Plugin => {
   };
 };
 
+/**
+ * Catalogue images served from the site itself (see scripts/build-images.mjs,
+ * which runs before `vite build`):
+ *  - `virtual:image-manifest`: the keys of the images resized for this build,
+ *    so src/lib/img.ts knows which ones are local;
+ *  - build: copies them into dist/img/, keeping their timestamps so the
+ *    deploy hard-links unchanged files rather than uploading them again;
+ *  - dev: serves /img/ straight from the cache.
+ * No manifest (a fresh checkout, no Supabase env) means every image stays on
+ * the transform endpoint, as before.
+ */
+const IMAGE_CACHE = path.resolve(__dirname, ".image-cache");
+const IMAGE_WIDTHS = [128, 256, 400, 600, 800, 1200];
+const imagePipeline = (): Plugin => {
+  const id = "virtual:image-manifest";
+  const manifest = path.join(IMAGE_CACHE, "manifest.json");
+  const keys = (): string[] => (existsSync(manifest) ? JSON.parse(readFileSync(manifest, "utf8")) : []);
+  let outDir = "dist";
+  return {
+    name: "image-pipeline",
+    resolveId: (source) => (source === id ? `\0${id}` : undefined),
+    load(resolved) {
+      if (resolved !== `\0${id}`) return;
+      if (existsSync(manifest)) this.addWatchFile(manifest);
+      return `export default ${JSON.stringify(keys())};\n`;
+    },
+    configResolved(config) {
+      outDir = path.resolve(config.root, config.build.outDir);
+    },
+    configureServer(server) {
+      server.middlewares.use("/img/", (req, res, next) => {
+        const file = path.join(IMAGE_CACHE, "out", path.basename((req.url ?? "").split("?")[0]));
+        if (!existsSync(file)) return next();
+        res.setHeader("Content-Type", "image/webp");
+        res.end(readFileSync(file));
+      });
+    },
+    writeBundle() {
+      const list = keys();
+      if (!list.length) return;
+      mkdirSync(path.join(outDir, "img"), { recursive: true });
+      for (const key of list)
+        for (const w of IMAGE_WIDTHS) {
+          const name = `${key}-${w}.webp`;
+          cpSync(path.join(IMAGE_CACHE, "out", name), path.join(outDir, "img", name), { preserveTimestamps: true });
+        }
+    },
+  };
+};
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "VITE_");
@@ -124,7 +174,7 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    plugins: [react(), siteVerification(env), preloadFonts(), blockLatinFonts(), contentIndex(), mode === "development" && componentTagger()].filter(Boolean),
+    plugins: [react(), siteVerification(env), preloadFonts(), blockLatinFonts(), contentIndex(), imagePipeline(), mode === "development" && componentTagger()].filter(Boolean),
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),

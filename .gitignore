@@ -44,3 +44,6 @@ deploy/server/current
 deploy/insights/.secrets/
 deploy/insights/.data/
 deploy/insights/node_modules/
+
+# Resized catalogue images (scripts/build-images.mjs)
+.image-cache/

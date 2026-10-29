@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
+import ContactLanes from "@/components/ContactLanes";
 import { useParams, Link } from "react-router-dom";
-import { cdnImg, fallbackToOriginal } from "@/lib/img";
+import { cdnImg, cdnSrcSet, fallbackToOriginal } from "@/lib/img";
 import Seo, { SITE_URL } from "@/components/Seo";
 import { categorySlug, faqSchema } from "@/lib/categories";
 import { isHouseBrand } from "@/lib/brands";
@@ -11,7 +12,7 @@ import { ArrowLeft, Package, Share2, Tag, Building2, ChevronLeft, ChevronRight, 
 import { toast } from "sonner";
 import PageLayout from "@/components/PageLayout";
 import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
-import { SALES_DISPLAY, SALES_TEL, quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
+import { SALES_TEL, quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
 import ProductCard from "@/components/ProductCard";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -289,7 +290,7 @@ const ProductDetailPage = () => {
                     <motion.img
                       key={activeImage}
                       src={cdnImg(allImages[activeImage], 800)}
-                      srcSet={[480, 800, 1200].map((w) => `${cdnImg(allImages[activeImage], w)} ${w}w`).join(", ")}
+                      srcSet={cdnSrcSet(allImages[activeImage])}
                       sizes="(min-width: 1024px) 45vw, 100vw"
                       onError={fallbackToOriginal(allImages[activeImage])}
                       fetchpriority={activeImage === 0 ? "high" : undefined}
@@ -558,7 +559,7 @@ const ProductDetailPage = () => {
                     data-track-item={product.name}
                     className="inline-flex items-center gap-2 rounded-lg border border-border bg-background/50 px-4 h-11 text-sm font-body text-muted-foreground hover:text-foreground hover:border-accent/50 transition-all"
                   >
-                    <Phone className="w-4 h-4" /> Bulk enquiries · {SALES_DISPLAY}
+                    <Phone className="w-4 h-4" /> Call
                   </a>
                   <button
                     type="button"
@@ -569,6 +570,9 @@ const ProductDetailPage = () => {
                   >
                     <Share2 className="w-4 h-4" />
                   </button>
+                  {/* Both lines, worded as the client asked: buyers in bulk and
+                      retail customers both land on product pages. */}
+                  <ContactLanes layout="inline" source="product_cta" className="basis-full" />
                 </div>
                 <ul className="relative z-10 flex flex-wrap gap-x-5 gap-y-1.5 font-body text-xs text-muted-foreground">
                   {["Island-wide distribution", "Trade pricing for hospitality & retail", "Reply within one business day"].map((t) => (

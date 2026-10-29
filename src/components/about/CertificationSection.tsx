@@ -14,7 +14,7 @@ import Eyebrow from "@/components/ui/eyebrow";
 import { CERT_NO } from "@/components/FoilSeal";
 import { useBrochureSettings } from "@/lib/api";
 import defaultCertificate from "@/assets/gmp-certificate.webp";
-import { cdnImg, fallbackToOriginal } from "@/lib/img";
+import { cdnImg, cdnSrcSet, fallbackToOriginal } from "@/lib/img";
 
 /* Transcribed from certificate KMC-LK-20100098-OFPL. Verifiable claims. */
 const VERIFY_URL = "https://www.kmcertification.com";
@@ -109,7 +109,7 @@ const CertificationSection = () => {
                 // 400px wide, so ask the transform endpoint for that size. The
                 // dialog below keeps the original for reading the fine print.
                 src={cdnImg(certificate, 800)}
-                srcSet={certificate.includes("/storage/v1/") ? `${cdnImg(certificate, 400)} 400w, ${cdnImg(certificate, 800)} 800w` : undefined}
+                srcSet={cdnSrcSet(certificate, 800)}
                 sizes="(min-width: 640px) 400px, 100vw"
                 onError={fallbackToOriginal(certificate)}
                 alt={`GMP certificate ${CERT_NO} issued to Olive Foods (Pvt) Ltd by Knowledge Mag Certifications`}
