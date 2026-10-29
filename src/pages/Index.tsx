@@ -1,4 +1,5 @@
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
+import { lazyPage } from "@/lib/lazy-page";
 import Seo from "@/components/Seo";
 import { organizationSchema } from "@/lib/site";
 import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
@@ -10,19 +11,27 @@ import Footer from "@/components/landing/Footer";
 import ImmersiveBackground from "@/components/landing/ImmersiveBackground";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
-/* Below-the-fold sections — code-split so the initial bundle drops to
- * the hero + LogoStrip + Featured trio. Each chunk loads on demand as
- * the visitor scrolls; Suspense fallback is null because the sections
- * animate in via whileInView regardless. */
-const OurProductsSection = lazy(() => import("@/components/landing/OurProductsSection"));
-const WhyChooseUs = lazy(() => import("@/components/landing/WhyChooseUs"));
-const CategoriesSection = lazy(() => import("@/components/landing/CategoriesSection"));
-const BrandManifesto = lazy(() => import("@/components/landing/BrandManifesto"));
-const StatsSection = lazy(() => import("@/components/landing/StatsSection"));
-const TeamSection = lazy(() => import("@/components/landing/TeamSection"));
-const OurPartnersHexagon = lazy(() => import("@/components/landing/OurPartnersHexagon"));
-const LocationsSection = lazy(() => import("@/components/landing/LocationsSection"));
-const FAQSection = lazy(() => import("@/components/landing/FAQSection"));
+/* Below-the-fold sections — code-split so the homepage chunk stays the
+ * hero + LogoStrip + Featured trio. On a prerendered load they're all in the
+ * HTML already, so `preload` (awaited by main.tsx before mounting) fetches
+ * them first: mounting without them would blank the page under anyone who
+ * had already scrolled down. On an in-app visit they load on demand behind
+ * a null fallback, since the sections animate in via whileInView anyway. */
+const OurProductsSection = lazyPage(() => import("@/components/landing/OurProductsSection"));
+const WhyChooseUs = lazyPage(() => import("@/components/landing/WhyChooseUs"));
+const CategoriesSection = lazyPage(() => import("@/components/landing/CategoriesSection"));
+const BrandManifesto = lazyPage(() => import("@/components/landing/BrandManifesto"));
+const StatsSection = lazyPage(() => import("@/components/landing/StatsSection"));
+const TeamSection = lazyPage(() => import("@/components/landing/TeamSection"));
+const OurPartnersHexagon = lazyPage(() => import("@/components/landing/OurPartnersHexagon"));
+const LocationsSection = lazyPage(() => import("@/components/landing/LocationsSection"));
+const FAQSection = lazyPage(() => import("@/components/landing/FAQSection"));
+
+const SECTIONS = [
+  OurProductsSection, WhyChooseUs, CategoriesSection, BrandManifesto, StatsSection,
+  TeamSection, OurPartnersHexagon, LocationsSection, FAQSection,
+];
+export const preload = () => Promise.all(SECTIONS.map((s) => s.preload()));
 
 const Index = () => {
   const suppliedCategories = useSuppliedCategories();

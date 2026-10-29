@@ -14,6 +14,7 @@ import Eyebrow from "@/components/ui/eyebrow";
 import { CERT_NO } from "@/components/FoilSeal";
 import { useBrochureSettings } from "@/lib/api";
 import defaultCertificate from "@/assets/gmp-certificate.webp";
+import { cdnImg, fallbackToOriginal } from "@/lib/img";
 
 /* Transcribed from certificate KMC-LK-20100098-OFPL. Verifiable claims. */
 const VERIFY_URL = "https://www.kmcertification.com";
@@ -104,7 +105,13 @@ const CertificationSection = () => {
               className="group relative w-full max-w-[400px] rounded-lg overflow-hidden shadow-[0_40px_90px_-24px_rgba(0,0,0,0.9)] ring-1 ring-white/15 transition-shadow duration-500 hover:shadow-[0_50px_110px_-20px_rgba(0,0,0,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               <img
-                src={certificate}
+                // The admin upload is a full-size photo (~560 KB); shown at most
+                // 400px wide, so ask the transform endpoint for that size. The
+                // dialog below keeps the original for reading the fine print.
+                src={cdnImg(certificate, 800)}
+                srcSet={certificate.includes("/storage/v1/") ? `${cdnImg(certificate, 400)} 400w, ${cdnImg(certificate, 800)} 800w` : undefined}
+                sizes="(min-width: 640px) 400px, 100vw"
+                onError={fallbackToOriginal(certificate)}
                 alt={`GMP certificate ${CERT_NO} issued to Olive Foods (Pvt) Ltd by Knowledge Mag Certifications`}
                 width={618}
                 height={882}
@@ -112,8 +119,10 @@ const CertificationSection = () => {
                  * resolves the lazy-load intersection unreliably — the document
                  * intermittently never loads at all. It's the point of the
                  * section, so a guaranteed 124KB beats an image that sometimes
-                 * isn't there. */
+                 * isn't there. Low priority instead, so it never competes with
+                 * the page's first paint. */
                 decoding="async"
+                fetchpriority="low"
                 className="w-full h-auto block"
               />
               <motion.span

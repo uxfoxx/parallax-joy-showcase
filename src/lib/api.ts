@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { db } from "@/integrations/supabase/db";
 import type { Tables, TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
 import { isDiscontinuedBrand, selectBrands, selectProducts, withBrandCopy, withProductCopy } from "@/lib/copy";
 
@@ -26,6 +26,7 @@ export const useBrands = (opts?: ReadOpts) =>
   useQuery({
     queryKey: ["brands"],
     queryFn: async () => {
+      const supabase = await db();
       const { data, error } = await supabase.from("brands").select("*").order("name");
       if (error) throw error;
       return data as Brand[];
@@ -37,6 +38,7 @@ export const useBrand = (slug: string) =>
   useQuery({
     queryKey: ["brands", slug],
     queryFn: async () => {
+      const supabase = await db();
       const { data, error } = await supabase.from("brands").select("*").eq("slug", slug).single();
       if (error) throw error;
       return data as Brand;
@@ -50,6 +52,7 @@ export const useCreateBrand = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (brand: TablesInsert<"brands">) => {
+      const supabase = await db();
       const { data, error } = await supabase.from("brands").insert(brand).select().single();
       if (error) throw error;
       return data;
@@ -62,6 +65,7 @@ export const useUpdateBrand = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: TablesUpdate<"brands"> & { id: string }) => {
+      const supabase = await db();
       const { data, error } = await supabase.from("brands").update(updates).eq("id", id).select().single();
       if (error) throw error;
       return data;
@@ -74,6 +78,7 @@ export const useDeleteBrand = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await db();
       const { error } = await supabase.from("brands").delete().eq("id", id);
       if (error) throw error;
     },
@@ -86,6 +91,7 @@ export const useProducts = (filters?: { category?: string; brandSlug?: string },
   useQuery({
     queryKey: ["products", filters],
     queryFn: async () => {
+      const supabase = await db();
       let query = supabase.from("products").select("*, brands(*)").order("name");
       // Quote the element: `.contains()` sends {Dry Nuts, Seeds & Dried Fruits}
       // unquoted, which PostgREST splits on the commas into three elements — so
@@ -108,6 +114,7 @@ export const useProduct = (slug: string) =>
   useQuery({
     queryKey: ["products", slug],
     queryFn: async () => {
+      const supabase = await db();
       const { data, error } = await supabase.from("products").select("*, brands(*)").eq("slug", slug).single();
       if (error) throw error;
       return data as Product;
@@ -121,6 +128,7 @@ export const useFeaturedProducts = () =>
   useQuery({
     queryKey: ["products", "featured"],
     queryFn: async () => {
+      const supabase = await db();
       const { data, error } = await supabase.from("products").select("*, brands(*)").eq("featured", true).order("name");
       if (error) throw error;
       return data as Product[];
@@ -132,6 +140,7 @@ export const useOurProducts = () =>
   useQuery({
     queryKey: ["products", "our_products"],
     queryFn: async () => {
+      const supabase = await db();
       const { data, error } = await (supabase.from("products").select("*, brands(*)") as any).eq("our_product", true).order("name");
       if (error) throw error;
       return data as Product[];
@@ -145,6 +154,7 @@ export const useCreateProduct = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (product: TablesInsert<"products">) => {
+      const supabase = await db();
       const { data, error } = await supabase.from("products").insert(product).select().single();
       if (error) throw error;
       return data;
@@ -157,6 +167,7 @@ export const useUpdateProduct = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: TablesUpdate<"products"> & { id: string }) => {
+      const supabase = await db();
       const { data, error } = await supabase.from("products").update(updates).eq("id", id).select().single();
       if (error) throw error;
       return data;
@@ -169,6 +180,7 @@ export const useDeleteProduct = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await db();
       const { error } = await supabase.from("products").delete().eq("id", id);
       if (error) throw error;
     },
@@ -181,6 +193,7 @@ export const useProductImages = (productId: string) =>
   useQuery({
     queryKey: ["product_images", productId],
     queryFn: async () => {
+      const supabase = await db();
       const { data, error } = await supabase
         .from("product_images" as any)
         .select("*")
@@ -196,6 +209,7 @@ export const useAddProductImage = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (image: { product_id: string; image_url: string; sort_order?: number }) => {
+      const supabase = await db();
       const { data, error } = await supabase
         .from("product_images" as any)
         .insert(image)
@@ -212,6 +226,7 @@ export const useDeleteProductImage = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, product_id }: { id: string; product_id: string }) => {
+      const supabase = await db();
       const { error } = await supabase.from("product_images" as any).delete().eq("id", id);
       if (error) throw error;
       return product_id;
@@ -235,6 +250,7 @@ export const usePartnerLogos = (opts?: { onlyActive?: boolean }) =>
   useQuery({
     queryKey: ["partner_logos", opts?.onlyActive ?? false],
     queryFn: async () => {
+      const supabase = await db();
       let q: any = supabase.from("partner_logos" as any).select("*").order("display_order");
       if (opts?.onlyActive) q = q.eq("active", true);
       const { data, error } = await q;
@@ -247,6 +263,7 @@ export const useCreatePartnerLogo = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (logo: Omit<PartnerLogo, "id" | "created_at">) => {
+      const supabase = await db();
       const { data, error } = await supabase.from("partner_logos" as any).insert(logo as any).select().single();
       if (error) throw error;
       return data;
@@ -259,6 +276,7 @@ export const useUpdatePartnerLogo = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<PartnerLogo> & { id: string }) => {
+      const supabase = await db();
       const { data, error } = await supabase.from("partner_logos" as any).update(updates as any).eq("id", id).select().single();
       if (error) throw error;
       return data;
@@ -271,6 +289,7 @@ export const useDeletePartnerLogo = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await db();
       const { error } = await supabase.from("partner_logos" as any).delete().eq("id", id);
       if (error) throw error;
     },
@@ -288,6 +307,7 @@ export const useReorderPartnerLogos = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (orderedIds: string[]) => {
+      const supabase = await db();
       await Promise.all(
         orderedIds.map((id, index) =>
           supabase.from("partner_logos" as any).update({ display_order: index } as any).eq("id", id),
@@ -303,6 +323,7 @@ export const useCategories = () =>
   useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
+      const supabase = await db();
       const { data, error } = await supabase.from("categories").select("*").order("name");
       if (error) throw error;
       return data as Category[];
@@ -313,6 +334,7 @@ export const useCreateCategory = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (cat: TablesInsert<"categories">) => {
+      const supabase = await db();
       const { data, error } = await supabase.from("categories").insert(cat).select().single();
       if (error) throw error;
       return data;
@@ -325,6 +347,7 @@ export const useUpdateCategory = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: TablesUpdate<"categories"> & { id: string }) => {
+      const supabase = await db();
       const { data, error } = await supabase.from("categories").update(updates).eq("id", id).select().single();
       if (error) throw error;
       return data;
@@ -337,6 +360,7 @@ export const useDeleteCategory = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await db();
       const { error } = await supabase.from("categories").delete().eq("id", id);
       if (error) throw error;
     },
@@ -351,6 +375,7 @@ export const useContactSubmissions = () =>
   useQuery({
     queryKey: ["contact_submissions"],
     queryFn: async () => {
+      const supabase = await db();
       const { data, error } = await supabase.from("contact_submissions").select("*").order("created_at", { ascending: false });
       if (error) throw error;
       return data as ContactSubmission[];
@@ -361,6 +386,7 @@ export const useDeleteSubmission = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await db();
       const { error } = await supabase.from("contact_submissions").delete().eq("id", id);
       if (error) throw error;
     },
@@ -373,6 +399,7 @@ export const useIsAdmin = () =>
   useQuery({
     queryKey: ["isAdmin"],
     queryFn: async () => {
+      const { supabase } = await import("@/integrations/supabase/client");
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return false;
       const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin");
@@ -413,6 +440,7 @@ export const useBusinessProfiles = () =>
   useQuery({
     queryKey: ["business_profiles"],
     queryFn: async () => {
+      const supabase = await db();
       const { data, error } = await supabase
         .from("business_profiles" as any)
         .select("*")
@@ -426,6 +454,7 @@ export const useBusinessProfile = (slug: string) =>
   useQuery({
     queryKey: ["business_profiles", slug],
     queryFn: async () => {
+      const supabase = await db();
       const { data, error } = await supabase
         .from("business_profiles" as any)
         .select("*")
@@ -441,6 +470,7 @@ export const useCreateBusinessProfile = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (profile: BusinessProfileInput) => {
+      const supabase = await db();
       const { data, error } = await supabase
         .from("business_profiles" as any)
         .insert(profile as any)
@@ -457,6 +487,7 @@ export const useUpdateBusinessProfile = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<BusinessProfile> & { id: string }) => {
+      const supabase = await db();
       const { data, error } = await supabase
         .from("business_profiles" as any)
         .update({ ...updates, updated_at: new Date().toISOString() } as any)
@@ -474,6 +505,7 @@ export const useDeleteBusinessProfile = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
+      const supabase = await db();
       const { error } = await supabase.from("business_profiles" as any).delete().eq("id", id);
       if (error) throw error;
     },
@@ -501,6 +533,7 @@ export const useBrochureSettings = () =>
   useQuery({
     queryKey: ["brochure_settings"],
     queryFn: async () => {
+      const supabase = await db();
       const { data, error } = await supabase
         .from("brochure_settings" as any)
         .select("*")
@@ -515,6 +548,7 @@ export const useUpdateBrochureSettings = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (patch: SiteSettingsPatch) => {
+      const supabase = await db();
       const { data, error } = await supabase
         .from("brochure_settings" as any)
         .update({ ...patch, updated_at: new Date().toISOString() } as any)

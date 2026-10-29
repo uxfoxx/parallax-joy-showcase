@@ -190,6 +190,30 @@ async function renderOnce(route, waitFor) {
     await page
       .waitForFunction(() => !!document.head.querySelector('[data-rh="true"]'), { timeout: 8000 })
       .catch(() => { throw new Error("head tags (react-helmet) never applied"); });
+    // Bake the data this page rendered with into it, so the client's first
+    // render matches the HTML instead of collapsing to a loading state while
+    // Supabase answers (src/lib/query-client.ts seedFromPrerender). `<` is
+    // escaped so no string in the data can close the <script>.
+    await page.evaluate(() => {
+      const json = window.__oliveDehydrate?.();
+      if (!json) return;
+      const el = document.createElement("script");
+      el.id = "__olive_state__";
+      el.type = "application/json";
+      el.textContent = json.replace(/</g, "\\u003c");
+      document.body.appendChild(el);
+    });
+    // Vite adds a <link rel="modulepreload"> for every chunk the page has
+    // loaded so far, including ones fetched after it settled (toasts, the
+    // quick-view). Keep only those the first render needed (main.tsx records
+    // them), so the preloads in the HTML don't compete with the first paint.
+    await page.evaluate(() => {
+      const boot = window.__oliveBootChunks;
+      if (!boot) return;
+      const keep = new Set(boot);
+      for (const l of document.querySelectorAll('link[rel="modulepreload"]'))
+        if (!keep.has(new URL(l.href).pathname)) l.remove();
+    });
     const html = await page.content();
     const outPath = route === "/" ? join(DIST, "index.html") : join(DIST, route.replace(/^\//, ""), "index.html");
     await mkdir(dirname(outPath), { recursive: true });

@@ -280,11 +280,19 @@ const ProductDetailPage = () => {
                 className="relative aspect-[4/3] lg:aspect-square rounded-2xl overflow-hidden bg-muted/50 group cursor-zoom-in border border-border/50"
                 onClick={() => allImages.length > 0 && setLightboxOpen(true)}
               >
-                <AnimatePresence mode="wait">
+                {/* initial={false}: the first image is already on screen in the
+                    prerendered HTML, so it must not fade in again on mount —
+                    that fade was the page's late LCP. Sized via the transform
+                    endpoint (the original upload ran to ~200 KB). */}
+                <AnimatePresence mode="wait" initial={false}>
                   {allImages.length > 0 ? (
                     <motion.img
                       key={activeImage}
-                      src={allImages[activeImage]}
+                      src={cdnImg(allImages[activeImage], 800)}
+                      srcSet={[480, 800, 1200].map((w) => `${cdnImg(allImages[activeImage], w)} ${w}w`).join(", ")}
+                      sizes="(min-width: 1024px) 45vw, 100vw"
+                      onError={fallbackToOriginal(allImages[activeImage])}
+                      fetchpriority={activeImage === 0 ? "high" : undefined}
                       alt={product.name}
                       className="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-[1.08]"
                       initial={{ opacity: 0, scale: 1.05 }}

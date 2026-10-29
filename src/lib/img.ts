@@ -28,5 +28,7 @@ export const cdnImg = (url: string, width: number, quality = 70): string => {
 export const fallbackToOriginal =
   (original: string) => (e: SyntheticEvent<HTMLImageElement>) => {
     const el = e.currentTarget;
-    if (original && el.src !== original) el.src = original;
+    if (!original || el.src === original) return;
+    el.removeAttribute("srcset"); // a srcset candidate would win over src
+    el.src = original;
   };

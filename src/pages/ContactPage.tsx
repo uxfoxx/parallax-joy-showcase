@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { publicDb } from "@/integrations/supabase/db";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
@@ -130,7 +130,7 @@ const ContactPage = () => {
     }
     setLoading(true);
     const laneTag = lane === "business" ? "Bulk" : "General";
-    const { error } = await supabase.from("contact_submissions").insert({
+    const { error } = await publicDb.from("contact_submissions").insert({
       name: result.data.name,
       email: result.data.email,
       phone: result.data.phone || null,
