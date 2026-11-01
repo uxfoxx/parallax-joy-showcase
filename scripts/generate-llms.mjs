@@ -144,6 +144,8 @@ ${liveCategories.map((c) => `### ${c.name}\n${byCategory.get(c.name).map((p) => 
 - [Home](${SITE}/): Company overview.
 - [About](${SITE}/about): Background, facts and how Olive Foods works.
 - [Food importer & distributor in Sri Lanka](${SITE}/food-importer-distributor-sri-lanka): What Olive Foods imports, the brands, who it supplies, how supply and ordering work.
+- [Exclusive distribution for international brands](${SITE}/exclusive-distributor-sri-lanka): For food manufacturers and brand owners looking for a sole authorised distributor in Sri Lanka: channels, commitments, how to propose a brand.
+- [Company profile (PDF)](${SITE}/olive-foods-company-profile.pdf): The 8-page company profile for prospective brand partners.
 - [Products](${SITE}/products): The full catalogue, filterable by category and brand.
 - [Brands](${SITE}/brands): Every brand Olive Foods imports and distributes.
 - [Categories](${SITE}/categories): Every product category.

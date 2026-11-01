@@ -9,7 +9,7 @@ import { EASE_OUT_EXPO } from "@/lib/motion";
 import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
 import { categorySlug } from "@/lib/categories";
 import { SECTORS } from "@/lib/sectors";
-import { IMPORTER_PATH, SOCIAL_PROFILES } from "@/lib/site";
+import { BRAND_OWNERS_PATH, IMPORTER_PATH, SOCIAL_PROFILES } from "@/lib/site";
 import { GUIDES } from "@/lib/guides";
 import { openStatus, useColomboNow } from "@/lib/hours";
 
@@ -33,6 +33,7 @@ const quickLinks = [
   { label: "About", href: "/about" },
   // Sitewide link with descriptive anchor text to the pillar page.
   { label: "Food importer & distributor", href: IMPORTER_PATH },
+  { label: "For brand owners", href: BRAND_OWNERS_PATH },
   { label: "Products", href: "/products" },
   { label: "Brands", href: "/brands" },
   { label: "Our Products", href: "/products?our=true" },

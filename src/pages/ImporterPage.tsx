@@ -11,7 +11,7 @@ import { categorySlug, faqSchema, type Faq } from "@/lib/categories";
 import { isHouseBrand, listOf } from "@/lib/brands";
 import { SECTORS } from "@/lib/sectors";
 import { GUIDES } from "@/lib/guides";
-import { IMPORTER_PATH, ORGANIZATION_ID } from "@/lib/site";
+import { BRAND_OWNERS_PATH, IMPORTER_PATH, ORGANIZATION_ID } from "@/lib/site";
 import { PHONE_DISPLAY, SALES_DISPLAY, quoteHref, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
 
 /**
@@ -230,7 +230,12 @@ const ImporterPage = () => {
               <div className="flex-1">
                 <p className="font-display text-lg font-semibold text-foreground">Set up wholesale supply</p>
                 <p className="mt-1 font-body text-sm text-muted-foreground">
-                  Tell us the products and volumes you need. Prices are quoted on request; we reply within one business day.
+                  Tell us the products and volumes you need. Prices are quoted on request; we reply within one business day. A manufacturer
+                  looking for a distributor? See{" "}
+                  <Link to={BRAND_OWNERS_PATH} className="text-accent hover:underline">
+                    exclusive distribution in Sri Lanka
+                  </Link>
+                  .
                 </p>
               </div>
               <div className="flex flex-wrap gap-3">
