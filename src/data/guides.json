@@ -83,7 +83,9 @@
         "restaurants",
         "hotels"
       ]
-    }
+    },
+    "published": "2026-10-20",
+    "updated": "2026-10-27"
   },
   {
     "slug": "frozen-food-cold-chain-checklist",
@@ -169,7 +171,8 @@
         "frozen-food",
         "catering"
       ]
-    }
+    },
+    "published": "2026-10-20"
   },
   {
     "slug": "frozen-fruit-purees",
@@ -285,7 +288,8 @@
         "hotels",
         "frozen-food"
       ]
-    }
+    },
+    "published": "2026-10-20"
   },
   {
     "slug": "imported-cheese-guide",
@@ -374,7 +378,8 @@
         "restaurants",
         "supermarkets-and-retail"
       ]
-    }
+    },
+    "published": "2026-10-20"
   },
   {
     "slug": "italian-pasta-for-restaurants",
@@ -485,7 +490,8 @@
         "restaurants",
         "hotels"
       ]
-    }
+    },
+    "published": "2026-10-20"
   },
   {
     "slug": "frozen-fries-potato-products",
@@ -588,7 +594,8 @@
         "hotels",
         "frozen-food"
       ]
-    }
+    },
+    "published": "2026-10-20"
   },
   {
     "slug": "mexican-ingredients-sri-lanka",
@@ -660,7 +667,8 @@
         "restaurants",
         "hotels"
       ]
-    }
+    },
+    "published": "2026-10-20"
   },
   {
     "slug": "buying-imported-food-through-an-importer",
@@ -744,6 +752,272 @@
         "catering",
         "frozen-food"
       ]
-    }
+    },
+    "published": "2026-10-20"
+  },
+  {
+    "slug": "choosing-a-food-distributor-in-sri-lanka",
+    "title": "How to choose a food distributor in Sri Lanka: a guide for international brands",
+    "seoTitle": "How to Choose a Food Distributor in Sri Lanka for Your Brand",
+    "description": "What international food manufacturers should look for in a Sri Lankan importer and distributor: trade channels, island-wide coverage, cold chain, warehousing, sales support and exclusivity.",
+    "summary": "International food brands usually enter Sri Lanka through one local importer and distributor, who imports the products, holds the stock, sells to hotels, restaurants and retailers and delivers across the island. The right partner already sells to the customers your brand needs, covers all three trade channels (HoReCa, modern trade and general trade), keeps an unbroken cold chain for chilled and frozen lines, reaches all 25 districts rather than Colombo alone, and invests in selling your brand, not just stocking it. Olive Foods, based in Colombo, offers international manufacturers exclusive distribution in Sri Lanka, with 800+ trade customers across all three channels.",
+    "sections": [
+      {
+        "heading": "How food brands enter Sri Lanka",
+        "paragraphs": [
+          "Most foreign food manufacturers do not set up their own company in Sri Lanka. They appoint a local importer and distributor, which buys the products, brings them into the country, keeps stock in a warehouse and sells them on to businesses. The brand owner deals with one partner; the distributor deals with shipping, import paperwork, storage, selling, delivery and collecting payment from hundreds of customers.",
+          "Because that partner decides how the brand is priced, where it is sold and how it is presented, choosing the distributor is the most important decision a brand makes about the market."
+        ]
+      },
+      {
+        "heading": "The three channels a distributor should reach",
+        "items": [
+          "HoReCa: hotels, resorts, restaurants, cafés, bakeries and caterers, which buy by the case and need the same products in stock all year.",
+          "Modern trade: supermarket chains, where a brand needs listings, shelf space and a steady supply to the stores.",
+          "General trade: independent grocers and retailers across the island, which carry a brand into towns outside Colombo."
+        ]
+      },
+      {
+        "heading": "What to look for in a distributor",
+        "items": [
+          "Existing customers in the channels you want, so the first orders come from accounts the distributor already serves.",
+          "Island-wide coverage: delivery to all 25 districts, not only Colombo and the western province.",
+          "Cold chain, if your products are chilled or frozen: storage and delivery at the right temperature (−18 °C for frozen lines) from the warehouse to the customer.",
+          "Bonded warehousing, so imported stock can be held before duty is paid and released as it is sold.",
+          "Sales execution: people who visit customers, launch new lines and follow up on repeat orders.",
+          "A portfolio your products fit into, so they reach the same buyers as the brands the distributor already sells.",
+          "Quality systems, such as GMP certification, covering storage, stock rotation and traceability."
+        ]
+      },
+      {
+        "heading": "Questions to ask a prospective distributor",
+        "items": [
+          "Which hotels, restaurants and retailers do you supply today, and in which districts?",
+          "How would you position and price our products against what is already on the market?",
+          "What is the launch plan for the first six to twelve months?",
+          "How are chilled and frozen products stored and delivered?",
+          "How will you report sales, stock and market feedback to us?",
+          "Do you offer exclusive distribution, and on what terms?"
+        ]
+      },
+      {
+        "heading": "Exclusive or non-exclusive?",
+        "paragraphs": [
+          "Many brands appoint one exclusive (sole authorised) distributor for Sri Lanka. It gives the brand one accountable partner and consistent pricing, and gives the distributor a reason to invest in launches and brand building. Our guide to exclusive distribution in Sri Lanka covers what to agree."
+        ]
+      },
+      {
+        "heading": "Working with Olive Foods",
+        "steps": [
+          "Email info@olivefoods.lk with your company, brand, product range and country of origin.",
+          "We look at how the range fits our customers and channels, and how we would position it in Sri Lanka.",
+          "We agree the terms: products, territory, pricing approach and the launch plan.",
+          "We import the first shipment, hold it in our bonded warehouse in Colombo and launch it to our trade customers island-wide."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "q": "Who are the food distributors in Sri Lanka for international brands?",
+        "a": "Sri Lanka has a number of food importers and distributors based mainly in Colombo. Olive Foods (Pvt) Ltd is one of them: it imports food brands from Europe, the Americas and Asia, supplies 800+ hotels, restaurants, cafés, caterers, supermarkets and retailers, and offers international manufacturers exclusive distribution for Sri Lanka."
+      },
+      {
+        "q": "Does a foreign food brand need a local distributor in Sri Lanka?",
+        "a": "In practice most do. A local importer and distributor handles importing, storage, selling and delivery to hundreds of business customers, which a brand owner abroad cannot easily do alone."
+      },
+      {
+        "q": "How do I contact Olive Foods about distributing my brand?",
+        "a": "Email info@olivefoods.lk with your company, brand, product range and country, or WhatsApp +94 77 330 0700. The company profile is on the page for brand owners at olivefoods.lk/exclusive-distributor-sri-lanka."
+      }
+    ],
+    "links": {
+      "brands": [],
+      "categories": [],
+      "products": [],
+      "sectors": [
+        "hotels",
+        "restaurants",
+        "bakeries-and-cafes",
+        "supermarkets-and-retail",
+        "catering",
+        "frozen-food"
+      ]
+    },
+    "published": "2026-11-01"
+  },
+  {
+    "slug": "exclusive-distribution-sri-lanka",
+    "title": "Exclusive distribution in Sri Lanka: what brand owners should agree",
+    "seoTitle": "Exclusive Distribution in Sri Lanka: What Brand Owners Should Agree",
+    "description": "What an exclusive (sole authorised) distribution arrangement in Sri Lanka means for a food brand, why brands choose one distributor, and the points to agree before appointing one.",
+    "summary": "An exclusive distribution arrangement makes one company the sole authorised importer and seller of a brand in Sri Lanka. The brand gets one accountable partner, one price in the market and a distributor with a reason to invest in launches and selling; the distributor gets the certainty to build the brand without competing importers of the same products. Before appointing one, agree the products covered, the territory and channels, the pricing approach, the launch plan, volume goals, how stock and cold chain are handled, reporting, and the term and review points. Olive Foods offers international food manufacturers exclusive distribution for Sri Lanka on these lines.",
+    "sections": [
+      {
+        "heading": "What exclusivity means",
+        "paragraphs": [
+          "Under an exclusive arrangement the brand owner appoints one distributor for a territory, here Sri Lanka, and does not sell the same products to other importers there. Customers buy the brand through that distributor, so prices, availability and the way the brand is presented stay consistent across the island."
+        ]
+      },
+      {
+        "heading": "Why brands choose one distributor",
+        "items": [
+          "One accountable partner for sales, stock and customer service.",
+          "No price competition between importers of the same products.",
+          "A distributor that can justify spending on launches, samples, training and sales visits.",
+          "Clear information about how the brand is performing in the market."
+        ]
+      },
+      {
+        "heading": "What to agree",
+        "items": [
+          "Products: which ranges and pack sizes the appointment covers, and how new lines are added.",
+          "Territory and channels: Sri Lanka as a whole, across HoReCa, modern trade and general trade.",
+          "Pricing approach: how the distributor sets trade prices, and how the brand's recommended prices are kept consistent.",
+          "Launch plan: the customers, channels and activities for the first six to twelve months.",
+          "Volume goals: realistic targets for the first year and how they are reviewed.",
+          "Stock and cold chain: order cycles, minimum stock levels and the storage and delivery temperatures for each product.",
+          "Reporting: what sales, stock and market information the distributor shares, and how often.",
+          "Term and review: how long the appointment runs and when it is reviewed."
+        ]
+      },
+      {
+        "heading": "What the distributor needs from the brand",
+        "items": [
+          "Product specifications, ingredients, allergen information and shelf life.",
+          "Labels and documents that meet Sri Lanka's import and labelling requirements.",
+          "Certificates the market asks for, such as halal certification where it applies.",
+          "Product images, brand guidelines and launch materials.",
+          "Reliable production and shipping lead times."
+        ]
+      },
+      {
+        "heading": "Exclusive and non-exclusive compared",
+        "table": {
+          "head": [
+            "",
+            "Exclusive distributor",
+            "Several importers"
+          ],
+          "rows": [
+            [
+              "Pricing in the market",
+              "One consistent price",
+              "Importers can undercut each other"
+            ],
+            [
+              "Investment in the brand",
+              "The distributor has reason to invest",
+              "Each importer waits for the others"
+            ],
+            [
+              "Accountability",
+              "One partner responsible for results",
+              "Shared, often unclear"
+            ],
+            [
+              "Market information",
+              "One source of sales and stock data",
+              "Fragmented"
+            ]
+          ]
+        }
+      },
+      {
+        "heading": "Take advice on the contract",
+        "paragraphs": [
+          "This guide covers the commercial points. The distribution agreement itself should be drafted with a lawyer who knows Sri Lankan commercial law and the law of your own country."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "q": "What is an exclusive distributor in Sri Lanka?",
+        "a": "The one company a manufacturer appoints to import and sell its products in Sri Lanka. Other importers do not receive the same products from the manufacturer, so the brand has one partner and one price in the market."
+      },
+      {
+        "q": "Does Olive Foods offer exclusive distribution?",
+        "a": "Yes. Olive Foods offers international food manufacturers and brand owners exclusive (sole authorised) distribution for Sri Lanka, covering HoReCa, modern trade and general trade, with bonded warehousing, a −18 °C cold chain and delivery to all 25 districts."
+      },
+      {
+        "q": "Can an exclusive appointment cover only some products?",
+        "a": "Yes. The appointment lists the ranges and pack sizes it covers, and the brand owner and distributor agree how new lines are added."
+      }
+    ],
+    "links": {
+      "brands": [],
+      "categories": [],
+      "products": [],
+      "sectors": [
+        "hotels",
+        "restaurants",
+        "supermarkets-and-retail"
+      ]
+    },
+    "published": "2026-11-01"
+  },
+  {
+    "slug": "sri-lanka-food-trade-channels",
+    "title": "Sri Lanka's food trade channels: HoReCa, modern trade and general trade",
+    "seoTitle": "Sri Lanka Food Trade Channels: HoReCa, Modern Trade, General Trade",
+    "description": "How imported food reaches customers in Sri Lanka through three trade channels: HoReCa (hotels, restaurants, catering), modern trade (supermarkets) and general trade (independent retailers), and what each needs from a supplier.",
+    "summary": "Imported food reaches customers in Sri Lanka through three trade channels. HoReCa covers hotels, resorts, restaurants, cafés, bakeries and caterers, which buy by the case and need consistent supply and product specifications. Modern trade is the supermarket chains, which need listings, barcoded retail packs and reliable store deliveries. General trade is the network of independent grocers and retailers across the island, which carries a brand beyond Colombo. A distributor such as Olive Foods, which supplies 800+ customers across all three channels, lets a brand reach each of them through one partner.",
+    "sections": [
+      {
+        "heading": "HoReCa: hotels, restaurants and catering",
+        "paragraphs": [
+          "HoReCa (hotels, restaurants and catering) includes beach and city hotels, resorts, independent and chain restaurants, cafés, bakeries, caterers and institutional kitchens. These customers buy catering packs by the case, plan menus around products that must stay in stock all year, and often choose on the chef's recommendation, so product specifications, samples and consistent supply matter more than shelf presentation."
+        ],
+        "items": [
+          "Typical products: cheese, cream, frozen fries and vegetables, pasta, sauces, oils, pastry ingredients, meat and seafood.",
+          "What they need: catering pack sizes, specifications and allergen information, reliable delivery, cold chain for frozen lines."
+        ]
+      },
+      {
+        "heading": "Modern trade: supermarket chains",
+        "paragraphs": [
+          "Modern trade means the supermarket chains and larger retail stores. A brand needs to be listed by the chain, delivered to its stores or distribution centre, and kept on the shelf. Retail packs, barcodes, labels that meet local requirements and steady availability are the essentials."
+        ]
+      },
+      {
+        "heading": "General trade: independent retailers",
+        "paragraphs": [
+          "General trade is the large network of independent grocers and retailers in towns across Sri Lanka. Orders are smaller and more frequent, and the distributor's delivery coverage outside Colombo decides how far a brand travels."
+        ]
+      },
+      {
+        "heading": "Reaching all three through one distributor",
+        "paragraphs": [
+          "Few brands can build separate routes to each channel. A distributor that already sells to all three can place a new range with its existing hotel, restaurant and retail customers, and deliver to all 25 districts from one stock. Olive Foods supplies 800+ business customers across HoReCa, modern trade and general trade from its bonded warehouse and cold store in Colombo 11."
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "q": "What does HoReCa mean?",
+        "a": "HoReCa stands for hotels, restaurants and catering (sometimes cafés). It is the trade channel that supplies professional kitchens rather than shoppers."
+      },
+      {
+        "q": "What is the difference between modern trade and general trade?",
+        "a": "Modern trade is supermarket chains and large organised retailers. General trade is independent grocers and small retailers, which together reach towns and villages across the country."
+      },
+      {
+        "q": "Which channels does Olive Foods supply?",
+        "a": "All three: HoReCa (hotels, resorts, restaurants, cafés, bakeries and caterers), modern trade (supermarket chains) and general trade (independent retailers), across all 25 districts of Sri Lanka."
+      }
+    ],
+    "links": {
+      "brands": [],
+      "categories": [],
+      "products": [],
+      "sectors": [
+        "hotels",
+        "restaurants",
+        "bakeries-and-cafes",
+        "supermarkets-and-retail",
+        "catering",
+        "frozen-food"
+      ]
+    },
+    "published": "2026-11-01"
   }
 ]

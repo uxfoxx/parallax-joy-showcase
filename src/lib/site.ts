@@ -75,3 +75,9 @@ export const organizationSchema = (categories: string[]) => ({
 
 /** The pillar page for "food importer / distributor in Sri Lanka" (src/pages/ImporterPage.tsx). */
 export const IMPORTER_PATH = "/food-importer-distributor-sri-lanka";
+
+/** The page for manufacturers looking for a Sri Lankan distributor (src/pages/BrandOwnersPage.tsx). */
+export const BRAND_OWNERS_PATH = "/exclusive-distributor-sri-lanka";
+
+/** The company profile PDF (public/), linked from the brand-owners page, footer and llms.txt. */
+export const PROFILE_PDF_PATH = "/olive-foods-company-profile.pdf";

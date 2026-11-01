@@ -18,6 +18,7 @@ import CategoryPage from "./pages/CategoryPage.tsx";
 import SectorPage from "./pages/SectorPage.tsx";
 import SiteMapPage from "./pages/SiteMapPage.tsx";
 import ImporterPage from "./pages/ImporterPage.tsx";
+import BrandOwnersPage from "./pages/BrandOwnersPage.tsx";
 import GuidesPage from "./pages/GuidesPage.tsx";
 import GuidePage from "./pages/GuidePage.tsx";
 import ProfileLinkPage from "./pages/ProfileLinkPage.tsx";
@@ -135,6 +136,7 @@ const AppRoutes = () => {
               <Route path="/supply/:slug" element={<SectorPage />} />
               <Route path="/site-map" element={<SiteMapPage />} />
               <Route path="/food-importer-distributor-sri-lanka" element={<ImporterPage />} />
+              <Route path="/exclusive-distributor-sri-lanka" element={<BrandOwnersPage />} />
               <Route path="/guides" element={<GuidesPage />} />
               <Route path="/guides/:slug" element={<GuidePage />} />
               <Route path="/profile/:slug" element={<ProfileLinkPage />} />

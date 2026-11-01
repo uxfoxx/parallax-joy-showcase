@@ -14,6 +14,7 @@ const MAIN_PAGES = [
   { label: "Home", to: "/" },
   { label: "About Olive Foods", to: "/about" },
   { label: "Food importer & distributor in Sri Lanka", to: "/food-importer-distributor-sri-lanka" },
+  { label: "Exclusive distribution for international brands", to: "/exclusive-distributor-sri-lanka" },
   { label: "All products", to: "/products" },
   { label: "All brands", to: "/brands" },
   { label: "All categories", to: "/categories" },
