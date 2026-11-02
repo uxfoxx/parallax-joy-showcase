@@ -4,7 +4,8 @@ import Seo, { SITE_URL } from "@/components/Seo";
 import PageLayout from "@/components/PageLayout";
 import PageHero from "@/components/PageHero";
 import FactSheet from "@/components/FactSheet";
-import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
+import ContactLanes from "@/components/ContactLanes";
 import { useBrands, useProducts } from "@/lib/api";
 import { faqSchema, type Faq } from "@/lib/categories";
 import { isHouseBrand } from "@/lib/brands";
@@ -92,7 +93,7 @@ const BrandOwnersPage = () => {
     },
     {
       q: "How do I propose my brand to Olive Foods?",
-      a: `Email ${EMAIL} with your company, brand, product range and country, or WhatsApp ${SALES_DISPLAY}. The company profile (PDF) on this page sets out what Olive Foods commits to as an exclusive distributor.`,
+      a: `Email ${EMAIL} with your company, brand, product range and country, or WhatsApp ${SALES_DISPLAY} (the line for bulk enquiries); for general enquiries, call ${PHONE_DISPLAY}. The company profile (PDF) on this page sets out what Olive Foods commits to as an exclusive distributor.`,
     },
   ];
 
@@ -268,31 +269,37 @@ const BrandOwnersPage = () => {
                   .
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href={`mailto:${EMAIL}?subject=${encodeURIComponent("Distribution in Sri Lanka")}`}
-                  data-track="contact_principal_email"
-                  data-track-item="brand owners footer"
-                  className="inline-flex h-11 items-center gap-2 rounded-lg bg-accent px-5 font-body text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
-                >
-                  <Mail className="h-4 w-4" /> Email us
-                </a>
-                <a
-                  href={whatsappHref(PRINCIPAL_MESSAGE)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-track="contact_principal_whatsapp"
-                  data-track-item="brand owners footer"
-                  className="inline-flex h-11 items-center gap-2 rounded-lg border border-[#25D366]/40 bg-background px-4 font-body text-sm font-medium text-foreground transition-colors hover:border-[#25D366]"
-                >
-                  <WhatsAppIcon className="h-4 w-4 text-[#25D366]" /> WhatsApp
-                </a>
-                <a
-                  href={PHONE_TEL}
-                  className="inline-flex h-11 items-center gap-2 rounded-lg border border-border bg-background px-4 font-body text-sm font-medium text-foreground transition-colors hover:border-foreground/30"
-                >
-                  <Phone className="h-4 w-4" /> {PHONE_DISPLAY}
-                </a>
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-wrap gap-3">
+                  <a
+                    href={`mailto:${EMAIL}?subject=${encodeURIComponent("Distribution in Sri Lanka")}`}
+                    data-track="contact_principal_email"
+                    data-track-item="brand owners footer"
+                    className="inline-flex h-11 items-center gap-2 rounded-lg bg-accent px-5 font-body text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90"
+                  >
+                    <Mail className="h-4 w-4" /> Email us
+                  </a>
+                  <a
+                    href={whatsappHref(PRINCIPAL_MESSAGE)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-track="contact_principal_whatsapp"
+                    data-track-item="brand owners footer"
+                    className="inline-flex h-11 items-center gap-2 rounded-lg border border-[#25D366]/40 bg-background px-4 font-body text-sm font-medium text-foreground transition-colors hover:border-[#25D366]"
+                  >
+                    <WhatsAppIcon className="h-4 w-4 text-[#25D366]" /> WhatsApp
+                  </a>
+                  <a
+                    href={PHONE_TEL}
+                    data-track="contact_general_call"
+                    data-track-item="brand owners footer"
+                    className="inline-flex h-11 items-center gap-2 rounded-lg border border-border bg-background px-4 font-body text-sm font-medium text-foreground transition-colors hover:border-foreground/30"
+                  >
+                    <Phone className="h-4 w-4" /> Call
+                  </a>
+                </div>
+                {/* Never a bare number: both lines, labelled as the client asked. */}
+                <ContactLanes layout="inline" source="brand_owners_cta" />
               </div>
             </div>
 
