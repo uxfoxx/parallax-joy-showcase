@@ -121,8 +121,11 @@ function analyse(html) {
   const text = decode(body.replace(/<[^>]+>/g, " ")).replace(/\d+/g, "#").replace(/\s+/g, " ").trim();
   // Every link on the page, nav and footer included (for the link audit).
   const links = [...html.matchAll(/<a\b[^>]*?\shref="([^"]*)"/gi)].map((m) => decode(m[1]));
+  // In-page anchor targets, so "#section" links can be checked against them.
+  const ids = new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
   return {
     links,
+    ids,
     title: decode((head.match(/<title[^>]*>([\s\S]*?)<\/title>/i) ?? [])[1] ?? "").trim(),
     description: meta("description"),
     robots,
@@ -202,7 +205,7 @@ for (const r of routes) {
   if (status !== "unchanged") changedLocs.push(r.loc);
   statePages[r.loc] = { hash, lastmod, kind: r.kind, ...idPart };
   included.push({ r, lastmod });
-  audited.push({ loc: r.loc, kind: r.kind, links: a.links, text: a.text, group: a.group });
+  audited.push({ loc: r.loc, kind: r.kind, links: a.links, ids: a.ids, text: a.text, group: a.group });
 }
 
 for (const [title, locs] of titles)
@@ -395,7 +398,8 @@ for (const page of audited) {
   for (const href of page.links) {
     if (!href || /^(mailto:|tel:|javascript:)/i.test(href)) continue;
     if (href.startsWith("#")) {
-      flagLink("dead link", href, page.loc);
+      // "#" alone (a placeholder) or an anchor with no target on the page.
+      if (href.length < 2 || !page.ids?.has(decodeURIComponent(href.slice(1)))) flagLink("dead link", href, page.loc);
       continue;
     }
     let u;
