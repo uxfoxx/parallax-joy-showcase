@@ -16,9 +16,22 @@ const AnalyticsConsent = () => {
 
   useEffect(() => {
     if (!tools.length || getConsent() !== null) return;
-    // Let the page settle first; it's a footnote, not a gate.
-    const t = window.setTimeout(() => setOpen(true), 2500);
-    return () => window.clearTimeout(t);
+    // It's a footnote, not a gate: it appears once the visitor starts using
+    // the page (first scroll, tap or key), not on a timer. Shown during
+    // load, its paragraph was the largest thing to paint on /products on a
+    // phone, so PageSpeed timed the page's LCP by it (~7 s). Until an answer,
+    // analytics is cookieless anyway (lib/analytics.ts).
+    let t = 0;
+    const events = ["scroll", "pointerdown", "keydown", "touchstart"] as const;
+    const show = () => {
+      for (const e of events) window.removeEventListener(e, show);
+      t = window.setTimeout(() => setOpen(true), 1200);
+    };
+    for (const e of events) window.addEventListener(e, show, { passive: true, once: true });
+    return () => {
+      for (const e of events) window.removeEventListener(e, show);
+      window.clearTimeout(t);
+    };
   }, [tools]);
 
   if (!open || isPrivatePath(pathname)) return null;
