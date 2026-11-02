@@ -1,29 +1,61 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { BrowserRouter, Route, Routes, matchPath, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { lazy, Suspense, useEffect } from "react";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
-import AboutPage from "./pages/AboutPage.tsx";
-import BrandsPage from "./pages/BrandsPage.tsx";
-import BrandDetailPage from "./pages/BrandDetailPage.tsx";
-import ProductsPage from "./pages/ProductsPage.tsx";
-import ProductDetailPage from "./pages/ProductDetailPage.tsx";
-import CategoriesPage from "./pages/CategoriesPage.tsx";
-import CategoryPage from "./pages/CategoryPage.tsx";
-import SectorPage from "./pages/SectorPage.tsx";
-import SiteMapPage from "./pages/SiteMapPage.tsx";
-import ImporterPage from "./pages/ImporterPage.tsx";
-import BrandOwnersPage from "./pages/BrandOwnersPage.tsx";
-import GuidesPage from "./pages/GuidesPage.tsx";
-import GuidePage from "./pages/GuidePage.tsx";
-import ProfileLinkPage from "./pages/ProfileLinkPage.tsx";
+import { lazy, Suspense, useEffect, useState } from "react";
+import { lazyPage } from "@/lib/lazy-page";
+import { queryClient } from "@/lib/query-client";
 
-import ContactPage from "./pages/ContactPage.tsx";
+/* Every public page is its own chunk, so a visitor downloads the page they
+ * opened rather than the whole site. main.tsx preloads the current route's
+ * chunk before the first render (see lazyPage), so a prerendered page never
+ * flashes the Suspense fallback; the rest load as the visitor navigates. */
+const Index = lazyPage(() => import("./pages/Index.tsx"));
+const NotFound = lazyPage(() => import("./pages/NotFound.tsx"));
+const AboutPage = lazyPage(() => import("./pages/AboutPage.tsx"));
+const BrandsPage = lazyPage(() => import("./pages/BrandsPage.tsx"));
+const BrandDetailPage = lazyPage(() => import("./pages/BrandDetailPage.tsx"));
+const ProductsPage = lazyPage(() => import("./pages/ProductsPage.tsx"));
+const ProductDetailPage = lazyPage(() => import("./pages/ProductDetailPage.tsx"));
+const CategoriesPage = lazyPage(() => import("./pages/CategoriesPage.tsx"));
+const CategoryPage = lazyPage(() => import("./pages/CategoryPage.tsx"));
+const SectorPage = lazyPage(() => import("./pages/SectorPage.tsx"));
+const SiteMapPage = lazyPage(() => import("./pages/SiteMapPage.tsx"));
+const ImporterPage = lazyPage(() => import("./pages/ImporterPage.tsx"));
+const BrandOwnersPage = lazyPage(() => import("./pages/BrandOwnersPage.tsx"));
+const GuidesPage = lazyPage(() => import("./pages/GuidesPage.tsx"));
+const GuidePage = lazyPage(() => import("./pages/GuidePage.tsx"));
+const ProfileLinkPage = lazyPage(() => import("./pages/ProfileLinkPage.tsx"));
+const ContactPage = lazyPage(() => import("./pages/ContactPage.tsx"));
+
+/** Public routes, in match order (the admin's nested routes are below). */
+const PUBLIC_ROUTES = [
+  { path: "/", Page: Index },
+  { path: "/about", Page: AboutPage },
+  { path: "/contact", Page: ContactPage },
+  { path: "/brands", Page: BrandsPage },
+  { path: "/brands/:slug", Page: BrandDetailPage },
+  { path: "/products", Page: ProductsPage },
+  { path: "/products/:slug", Page: ProductDetailPage },
+  // SEO category landing pages — not linked from the main nav (see CategoryPage).
+  { path: "/categories", Page: CategoriesPage },
+  { path: "/categories/:slug", Page: CategoryPage },
+  // SEO buyer-sector landing pages ("hotel food supplier…") — same policy as categories.
+  { path: "/supply/:slug", Page: SectorPage },
+  { path: "/site-map", Page: SiteMapPage },
+  { path: "/food-importer-distributor-sri-lanka", Page: ImporterPage },
+  { path: "/exclusive-distributor-sri-lanka", Page: BrandOwnersPage },
+  { path: "/guides", Page: GuidesPage },
+  { path: "/guides/:slug", Page: GuidePage },
+  { path: "/profile/:slug", Page: ProfileLinkPage },
+];
+
+/** Loads the chunk(s) for the page at `pathname` (main.tsx, before mounting). */
+export function preloadRoute(pathname: string): Promise<void> {
+  if (pathname.startsWith("/admin")) return Promise.resolve();
+  const route = PUBLIC_ROUTES.find((r) => matchPath(r.path, pathname));
+  return (route?.Page ?? NotFound).preload();
+}
 
 // The admin panel is lazy-loaded: it carries SheetJS (xlsx import/export), the
 // TipTap rich-text editor, the image cropper and QR generation — none of which
@@ -41,32 +73,69 @@ const AdminPartners = lazy(() => import("./pages/admin/AdminPartners.tsx"));
 const AdminBusinessProfiles = lazy(() => import("./pages/admin/AdminBusinessProfiles.tsx"));
 const AdminAnalytics = lazy(() => import("./pages/admin/AdminAnalytics.tsx"));
 
+/** True once the browser has gone idle after the first paint. */
+function useIdle() {
+  const [idle, setIdle] = useState(false);
+  useEffect(() => {
+    const go = () => setIdle(true);
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(go, { timeout: 3000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const t = window.setTimeout(go, 1500);
+    return () => window.clearTimeout(t);
+  }, []);
+  return idle;
+}
+
+const Toasters = lazy(() => import("@/components/Toasters"));
+const ProductDetailModal = lazy(() => import("@/components/ProductDetailModal"));
+
+/** The toast hosts and the product quick-view stay out of the entry chunk and
+ *  load once the page has settled: nothing opens them before the visitor has
+ *  done something (a quick-view opened sooner loads it there and then). */
+function DeferredUi() {
+  const idle = useIdle();
+  const { activeSlug } = useProductModal();
+  return idle || activeSlug ? (
+    <Suspense fallback={null}>
+      <Toasters />
+      <ProductDetailModal />
+    </Suspense>
+  ) : null;
+}
+
 const RouteFallback = () => (
   <div className="min-h-screen flex items-center justify-center font-body text-sm text-muted-foreground">Loading…</div>
 );
 import ScrollProgressBar from "@/components/ScrollProgressBar";
-import { ProductModalProvider } from "@/lib/productModal";
-import ProductDetailModal from "@/components/ProductDetailModal";
+import { ProductModalProvider, useProductModal } from "@/lib/productModal";
 import { trackPageView } from "@/lib/analytics";
 import AnalyticsConsent from "@/components/AnalyticsConsent";
 
-/* Cache responses for 5 minutes so navigating between pages doesn't refetch
- * and flash empty/loading states (the visitor's "have to reload twice for
- * images to show" perception was actually React Query refetching on every
- * route mount). */
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
-      refetchOnWindowFocus: false,
-      retry: 1,
-    },
-  },
-});
+/** Starts loading a page's chunk as soon as the visitor points at, touches or
+ *  tabs to a link to it, so by the time the exit fade ends there is rarely
+ *  anything left to wait for (no route fallback flash). */
+function usePrefetchOnIntent() {
+  useEffect(() => {
+    const onIntent = (e: Event) => {
+      const a = (e.target as Element | null)?.closest?.("a[href]");
+      if (!a) return;
+      const url = new URL((a as HTMLAnchorElement).href, window.location.href);
+      if (url.origin !== window.location.origin) return;
+      preloadRoute(url.pathname).catch(() => {});
+    };
+    const opts = { passive: true, capture: true } as const;
+    for (const type of ["pointerover", "touchstart", "focusin"]) document.addEventListener(type, onIntent, opts);
+    return () => {
+      for (const type of ["pointerover", "touchstart", "focusin"]) document.removeEventListener(type, onIntent, opts);
+    };
+  }, []);
+}
 
 const AppRoutes = () => {
   const location = useLocation();
+  usePrefetchOnIntent();
 
   useEffect(() => {
     // The admin panel has its own scroll container (AdminLayout's <main>);
@@ -110,7 +179,7 @@ const AppRoutes = () => {
   return (
     <>
       <ScrollProgressBar />
-      <ProductDetailModal />
+      <DeferredUi />
       <AnalyticsConsent />
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
@@ -122,24 +191,9 @@ const AppRoutes = () => {
         >
           <Suspense fallback={<RouteFallback />}>
             <Routes location={location}>
-              <Route path="/" element={<Index />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/brands" element={<BrandsPage />} />
-              <Route path="/brands/:slug" element={<BrandDetailPage />} />
-              <Route path="/products" element={<ProductsPage />} />
-              <Route path="/products/:slug" element={<ProductDetailPage />} />
-              {/* SEO category landing pages — not linked from the main nav (see CategoryPage). */}
-              <Route path="/categories" element={<CategoriesPage />} />
-              <Route path="/categories/:slug" element={<CategoryPage />} />
-              {/* SEO buyer-sector landing pages ("hotel food supplier…") — same policy as categories. */}
-              <Route path="/supply/:slug" element={<SectorPage />} />
-              <Route path="/site-map" element={<SiteMapPage />} />
-              <Route path="/food-importer-distributor-sri-lanka" element={<ImporterPage />} />
-              <Route path="/exclusive-distributor-sri-lanka" element={<BrandOwnersPage />} />
-              <Route path="/guides" element={<GuidesPage />} />
-              <Route path="/guides/:slug" element={<GuidePage />} />
-              <Route path="/profile/:slug" element={<ProfileLinkPage />} />
+              {PUBLIC_ROUTES.map(({ path, Page }) => (
+                <Route key={path} path={path} element={<Page />} />
+              ))}
 
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminLayout />}>
@@ -165,15 +219,11 @@ const AppRoutes = () => {
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <ProductModalProvider>
-            <AppRoutes />
-          </ProductModalProvider>
-        </BrowserRouter>
-      </TooltipProvider>
+      <BrowserRouter>
+        <ProductModalProvider>
+          <AppRoutes />
+        </ProductModalProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   </HelmetProvider>
 );

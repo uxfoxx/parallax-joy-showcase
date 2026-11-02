@@ -31,6 +31,11 @@ export const brandProfile = (slug: string): BrandProfile => profiles[slug] ?? {}
 /** The brand that lists Olive Foods' own range. */
 export const isHouseBrand = (name: string) => name.trim().toLowerCase() === "olive foods";
 
+/** Brands whose logo artwork is white lettering on a transparent background
+ *  (made for dark packaging): logo tiles show them on the forest tone, since
+ *  on white the name disappears. Checked against every logo 2026-10-27. */
+export const LIGHT_LOGO_BRANDS = new Set(["acroyali"]);
+
 /** "a", "a and b", "a, b and c". */
 export const listOf = (items: string[]) =>
   items.length > 1 ? `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}` : items[0] ?? "";

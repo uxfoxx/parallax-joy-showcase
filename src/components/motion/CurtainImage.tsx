@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { type CSSProperties, type ImgHTMLAttributes } from "react";
+import { type CSSProperties, type ImgHTMLAttributes, type Ref } from "react";
 import { curtainRevealVariants } from "@/lib/motion";
 
 type CurtainImageProps = ImgHTMLAttributes<HTMLImageElement> & {
@@ -7,6 +7,7 @@ type CurtainImageProps = ImgHTMLAttributes<HTMLImageElement> & {
   wrapperStyle?: CSSProperties;
   /** Re-trigger reveal on every scroll-back. */
   retrigger?: boolean;
+  imgRef?: Ref<HTMLImageElement>;
 };
 
 /**
@@ -17,6 +18,7 @@ const CurtainImage = ({
   wrapperClassName,
   wrapperStyle,
   retrigger = false,
+  imgRef,
   className,
   alt,
   ...imgProps
@@ -32,7 +34,7 @@ const CurtainImage = ({
   if (reduced) {
     return (
       <div className={wrapperClassName} style={wrapperStyle}>
-        <img className={className} alt={a11yAlt} {...imgAttrs} />
+        <img ref={imgRef} className={className} alt={a11yAlt} {...imgAttrs} />
       </div>
     );
   }
@@ -46,7 +48,7 @@ const CurtainImage = ({
       viewport={{ once: !retrigger, margin: "-10%" }}
       variants={curtainRevealVariants}
     >
-      <img className={className} alt={a11yAlt} {...imgAttrs} />
+      <img ref={imgRef} className={className} alt={a11yAlt} {...imgAttrs} />
     </motion.div>
   );
 };

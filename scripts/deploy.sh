@@ -69,8 +69,10 @@ fi
 echo "▶  Uploading release ${RELEASE}…"
 "${SSH[@]}" "mkdir -p ${DEPLOY_PATH}/releases/${RELEASE} ${DEPLOY_PATH}/server ${DEPLOY_PATH}/shared/logs"
 # --delete is safe here: the target is a brand new empty directory, not the
-# live site.
-rsync -az --delete -e "$RSYNC_E" \
+# live site. --link-dest hard-links every file that is unchanged from the live
+# release (same size and mtime) instead of uploading it again — chiefly the
+# ~20 MB of resized images in img/, which keep their timestamps build to build.
+rsync -az --delete --link-dest="${DEPLOY_PATH}/current/" -e "$RSYNC_E" \
   "$ROOT/dist/" "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/releases/${RELEASE}/"
 
 echo "▶  Syncing runtime + config…"

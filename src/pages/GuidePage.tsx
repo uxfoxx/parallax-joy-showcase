@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import ContactLanes from "@/components/ContactLanes";
 import { ArrowRight, ChevronDown, FileText } from "lucide-react";
 import Seo, { SITE_URL } from "@/components/Seo";
 import PageLayout from "@/components/PageLayout";
@@ -163,23 +164,27 @@ const GuidePage = () => {
                   Send us the products and quantities. We reply with trade pricing and delivery details within one business day.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  to={enquiry ? quoteHref(enquiry) : "/contact"}
-                  data-track="request_quote"
-                  data-track-item={`guide: ${guide.slug}`}
-                  className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-5 h-11 text-sm font-body font-semibold hover:bg-accent/90 transition-colors"
-                >
-                  <FileText className="w-4 h-4" /> Request a quote
-                </Link>
-                <a
-                  href={whatsappHref(whatsappMessage(enquiry))}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-[#25D366]/40 bg-background px-4 h-11 text-sm font-body font-medium text-foreground hover:border-[#25D366] transition-colors"
-                >
-                  <WhatsAppIcon className="w-4 h-4 text-[#25D366]" /> WhatsApp
-                </a>
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-wrap gap-3">
+                  <Link
+                    to={enquiry ? quoteHref(enquiry) : "/contact"}
+                    data-track="request_quote"
+                    data-track-item={`guide: ${guide.slug}`}
+                    className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-5 h-11 text-sm font-body font-semibold hover:bg-accent/90 transition-colors"
+                  >
+                    <FileText className="w-4 h-4" /> Request a quote
+                  </Link>
+                  <a
+                    href={whatsappHref(whatsappMessage(enquiry))}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg border border-[#25D366]/40 bg-background px-4 h-11 text-sm font-body font-medium text-foreground hover:border-[#25D366] transition-colors"
+                  >
+                    <WhatsAppIcon className="w-4 h-4 text-[#25D366]" /> WhatsApp
+                  </a>
+                </div>
+                {/* WhatsApp is the bulk line; name the general line too. */}
+                <ContactLanes layout="inline" source="guide_cta" />
               </div>
             </div>
 

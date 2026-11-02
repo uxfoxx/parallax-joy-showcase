@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Package, Building2, ChevronLeft, ChevronRight, X, ArrowUpRight,
 } from "lucide-react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useProduct, useProducts, useProductImages } from "@/lib/api";
@@ -321,6 +321,7 @@ const ModalInner = ({ slug, onClose }: { slug: string; onClose: () => void }) =>
       {/* ── Lightbox ── */}
       <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
         <DialogContent className="max-w-[95vw] max-h-[95vh] w-full h-[90vh] p-0 border-none bg-black/96 backdrop-blur-xl [&>button]:text-white [&>button]:hover:text-white/80">
+          <DialogTitle className="sr-only">{product.name} images</DialogTitle>
           <div className="relative w-full h-full flex flex-col items-center justify-center">
             {allImages.length > 1 && (
               <>
@@ -392,6 +393,8 @@ const ProductDetailModal = () => {
         {/* Close button — wrapped in a div so DialogContent's
             [&>button]:hidden (which hides Radix's default close) doesn't also
             hide ours. Without the wrapper this button renders 0×0. */}
+        {/* Screen readers need a dialog name; the visible heading loads with the product. */}
+        <DialogTitle className="sr-only">Product quick view</DialogTitle>
         <div className="absolute top-3.5 right-3.5 z-50">
           <button
             onClick={closeProductModal}

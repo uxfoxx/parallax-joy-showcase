@@ -1,6 +1,7 @@
+import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, FileText, Mail, Phone } from "lucide-react";
-import { WhatsAppIcon } from "@/components/FloatingWhatsApp";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { cn } from "@/lib/utils";
 import { EMAIL, LANES, whatsappHref, whatsappMessage, type EnquiryTarget } from "@/lib/contact";
 
@@ -14,11 +15,15 @@ import { EMAIL, LANES, whatsappHref, whatsappMessage, type EnquiryTarget } from 
  *
  * `layout="cards"`: two side-by-side cards (contact page, landing pages).
  * `layout="rows"`: two compact rows (footer, phone menu).
+ * `layout="compact"`: two tight rows with icon actions (the floating
+ *   Enquiries panel, the phone enquiry bar's call menu).
+ * `layout="inline"`: two short lines under an enquiry block's buttons, so a page
+ *   that offers WhatsApp (the bulk line) still names the general line.
  * `tone` follows the section the block sits on. Every action is tracked as
  * contact_<lane>_<channel> with `source` as the item.
  */
 type Props = {
-  layout?: "cards" | "rows";
+  layout?: "cards" | "rows" | "compact" | "inline";
   tone?: "light" | "dark";
   /** What the visitor is looking at, for the prefilled WhatsApp message. */
   enquiry?: EnquiryTarget;
@@ -75,6 +80,70 @@ export default function ContactLanes({ layout = "cards", tone = "light", enquiry
       <ArrowUpRight className="h-3.5 w-3.5" />
     </Link>
   );
+
+  if (layout === "inline") {
+    const num = cn("font-semibold tabular-nums underline decoration-current/30 underline-offset-2 hover:decoration-current", strong);
+    return (
+      <p className={cn("flex flex-col gap-1 font-body text-[13px]", muted, className)}>
+        <span className="inline-flex items-center gap-1.5">
+          <WhatsAppIcon className="h-3.5 w-3.5 text-[#25D366]" />
+          {b.heading}:{" "}
+          <a href={b.tel} data-track="contact_business_call" data-track-item={source} className={num}>{b.display}</a>
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <Phone className="h-3.5 w-3.5" />
+          {g.heading}:{" "}
+          <a href={g.tel} data-track="contact_general_call" data-track-item={source} className={num}>{g.display}</a>
+        </span>
+      </p>
+    );
+  }
+
+  if (layout === "compact") {
+    const icon = "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors";
+    const lane = (heading: string, display: string, who: string, actions: ReactNode, primary: boolean) => (
+      <div className={cn("rounded-xl border p-3.5", primary ? "border-accent/40 bg-accent/[0.05]" : "border-border bg-card")}>
+        <p className={cn("font-body text-[11px] font-semibold uppercase tracking-[0.16em]", primary ? "text-accent" : "text-muted-foreground")}>{heading}</p>
+        <div className="mt-1 flex items-center justify-between gap-3">
+          <p className="font-display text-lg font-bold tabular-nums text-foreground">{display}</p>
+          <div className="flex gap-1.5">{actions}</div>
+        </div>
+        <p className="mt-0.5 font-body text-xs leading-snug text-muted-foreground">{who}</p>
+      </div>
+    );
+    return (
+      <div className={cn("grid gap-2", className)}>
+        {lane(
+          b.heading,
+          b.display,
+          `${b.who} · WhatsApp or call`,
+          <>
+            <a href={wa} target="_blank" rel="noopener noreferrer" aria-label={`WhatsApp ${b.display}`} data-track="contact_business_whatsapp" data-track-item={source} className={cn(icon, WA_GREEN)}>
+              <WhatsAppIcon className="h-5 w-5" />
+            </a>
+            <a href={b.tel} aria-label={`Call ${b.display}`} data-track="contact_business_call" data-track-item={source} className={cn(icon, outline)}>
+              <Phone className="h-4 w-4" />
+            </a>
+          </>,
+          true,
+        )}
+        {lane(
+          g.heading,
+          g.display,
+          g.who,
+          <>
+            <a href={g.tel} aria-label={`Call ${g.display}`} data-track="contact_general_call" data-track-item={source} className={cn(icon, outline)}>
+              <Phone className="h-4 w-4" />
+            </a>
+            <a href={`mailto:${EMAIL}`} aria-label={`Email ${EMAIL}`} data-track="contact_general_email" data-track-item={source} className={cn(icon, outline)}>
+              <Mail className="h-4 w-4" />
+            </a>
+          </>,
+          false,
+        )}
+      </div>
+    );
+  }
 
   if (layout === "rows") {
     return (

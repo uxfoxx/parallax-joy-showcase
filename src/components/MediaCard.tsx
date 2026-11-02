@@ -1,11 +1,11 @@
-import { useState, type ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Tilt from "react-parallax-tilt";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import { staggerGrid, EASE_OUT_EXPO } from "@/lib/motion";
 import CurtainImage from "@/components/motion/CurtainImage";
-import { cdnImg } from "@/lib/img";
+import { cdnImg, cdnSrcSet } from "@/lib/img";
 
 type MediaCardProps = {
   /** URL the card links to. */
@@ -65,6 +65,12 @@ const MediaCard = ({
   // and without a fallback the card would sit on an endless loading pulse. The
   // original object URL always works, so we retry with it before giving up.
   const [srcTier, setSrcTier] = useState(0); // 0 = optimized, 1 = original, 2 = failed
+  // An image that's already in memory (the page was prerendered with it, or
+  // it was shown a moment ago) counts as loaded straight away, so it doesn't
+  // blink out and fade back in when React mounts.
+  const markIfComplete = useCallback((el: HTMLImageElement | null) => {
+    if (el?.complete && el.naturalWidth > 0) setImgLoaded(true);
+  }, []);
   const isDark = variant === "dark";
   const hasImage = !!image && srcTier < 2;
 
@@ -102,11 +108,16 @@ const MediaCard = ({
               // isolates the image, so a blend on it has nothing to blend with.
               wrapperClassName={`${imageInset ? "absolute inset-[14%]" : "absolute inset-[9%]"} ${isDark ? "" : "mix-blend-multiply"}`}
               wrapperStyle={{ width: "auto", height: "auto" }}
+              imgRef={markIfComplete}
               src={srcTier === 0 ? cdnImg(image!, 600) : image!}
+              srcSet={srcTier === 0 ? cdnSrcSet(image!, 800) : undefined}
+              sizes={`(min-width: 1024px) ${Math.round(100 / Math.max(columns, 1))}vw, (min-width: 640px) 33vw, 50vw`}
               alt={title}
               onLoad={() => setImgLoaded(true)}
               onError={() => setSrcTier((t) => t + 1)}
-              className={`absolute inset-0 w-full h-full object-contain transition-[transform,opacity] duration-[900ms] ease-out group-hover:scale-[1.05] ${
+              // Quick fade in once loaded; the slow ease is only for the hover zoom.
+              style={{ transition: "transform 900ms ease-out, opacity 250ms ease-out" }}
+              className={`absolute inset-0 w-full h-full object-contain group-hover:scale-[1.05] ${
                 imgLoaded ? "opacity-100" : "opacity-0"
               }`}
             />

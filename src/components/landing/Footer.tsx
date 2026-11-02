@@ -8,9 +8,8 @@ import ContactLanes from "@/components/ContactLanes";
 import { EASE_OUT_EXPO } from "@/lib/motion";
 import { useSuppliedCategories } from "@/hooks/useSuppliedCategories";
 import { categorySlug } from "@/lib/categories";
-import { SECTORS } from "@/lib/sectors";
 import { BRAND_OWNERS_PATH, IMPORTER_PATH, SOCIAL_PROFILES } from "@/lib/site";
-import { GUIDES } from "@/lib/guides";
+import { HAS_GUIDES, SECTOR_LINKS } from "virtual:content-index";
 import { openStatus, useColomboNow } from "@/lib/hours";
 
 /**
@@ -38,13 +37,13 @@ const quickLinks = [
   { label: "Brands", href: "/brands" },
   { label: "Our Products", href: "/products?our=true" },
   { label: "Contact", href: "/contact" },
-  ...(GUIDES.length ? [{ label: "Guides", href: "/guides" }] : []),
+  ...(HAS_GUIDES ? [{ label: "Guides", href: "/guides" }] : []),
   { label: "Site map", href: "/site-map" },
 ];
 
 // Sector + category landing pages aren't in the main nav; these footer links
 // are their sitewide internal links (crawl paths + link equity).
-const sectorLinks = SECTORS.map((s) => ({ label: s.name, href: `/supply/${s.slug}` }));
+const sectorLinks = SECTOR_LINKS.map((s) => ({ label: s.name, href: `/supply/${s.slug}` }));
 
 const TOP_CATEGORY_COUNT = 6;
 

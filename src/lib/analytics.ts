@@ -176,10 +176,9 @@ function startGa(id: string, consent: Consent | null) {
   window.gtag("js", new Date());
   window.gtag("config", id, { send_page_view: false }); // SPA: we send page_view per route
 
-  const s = document.createElement("script");
-  s.async = true;
-  s.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
-  document.head.appendChild(s);
+  // gtag.js (~176 KB) loads once the page has settled; the dataLayer above
+  // queues everything sent before then, page_view included.
+  whenSettled(() => loadScript(`https://www.googletagmanager.com/gtag/js?id=${id}`));
   gaStarted = true;
 }
 
@@ -197,18 +196,26 @@ function startClarity(id: string, consent: Consent | null) {
   });
   clarityStarted = true;
 
-  // Load the recorder once the page has settled, so it never competes with
-  // the first paint (PageSpeed) — the queue above keeps anything said earlier.
-  const load = () => {
-    const s = document.createElement("script");
-    s.async = true;
-    s.src = `https://www.clarity.ms/tag/${id}`;
-    document.head.appendChild(s);
-  };
+  // Load the recorder once the page has settled too — the queue above keeps
+  // anything said earlier.
+  whenSettled(() => loadScript(`https://www.clarity.ms/tag/${id}`));
+}
+
+function loadScript(src: string) {
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = src;
+  document.head.appendChild(s);
+}
+
+/** Runs `fn` after window load, when the browser is idle — so third-party
+ *  tags never compete with the first paint or the app's own boot (PageSpeed
+ *  counted ~350 ms of main-thread time to GA + Clarity). */
+function whenSettled(fn: () => void) {
   const idle = () => {
     // Safari has no requestIdleCallback.
-    if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(load, { timeout: 4000 });
-    else globalThis.setTimeout(load, 1500);
+    if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(fn, { timeout: 4000 });
+    else globalThis.setTimeout(fn, 1500);
   };
   if (document.readyState === "complete") idle();
   else window.addEventListener("load", idle, { once: true });
